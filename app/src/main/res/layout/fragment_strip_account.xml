@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/bank_ico"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/black"
+            android:text="You have not added Bank \nAccount yet. Please add."/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:text="@string/first_name_req" />
+
+        <EditText
+            android:id="@+id/ed_firstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/My_Edittext.GrayBroder"
+            android:layout_marginTop="5dp"
+            android:maxLines="1"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:text="Last Name*"
+
+            />
+
+        <EditText
+            android:id="@+id/ed_lastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/My_Edittext.GrayBroder"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <!--<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:text="Date of Birth*"
+             />
+
+        <TextView
+            android:id="@+id/tv_dob"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            style="@style/My_Edittext.GrayBroder"
+            android:gravity="center_vertical"
+            android:text="dd-mm-yyyy"/>-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:text="Sort code*"
+
+
+            />
+
+        <EditText
+            android:id="@+id/ed_sortCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/My_Edittext.GrayBroder"
+            android:inputType="number"
+            android:maxLines="1"
+            android:maxLength="15"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:text="Account Number*" />
+
+        <EditText
+            android:id="@+id/ed_accountNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/My_Edittext.GrayBroder"
+            android:inputType="number"
+            android:maxLines="1"
+            android:maxLength="25"
+            android:singleLine="true"/>
+
+       <!-- <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:text="Confirm Account Number*" />
+
+        <EditText
+            android:id="@+id/ed_cnfAccountNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/My_Edittext.GrayBroder"
+            android:inputType="numberPassword"
+            android:maxLines="1"
+            android:maxLength="25"
+            android:singleLine="true"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView.Invert"
+                    android:text="Country Code*" />
+
+                <RelativeLayout
+                    android:id="@+id/country_code_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    style="@style/My_Edittext.GrayBroder"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/sp_countryCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:entries="@array/countryName" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView.Invert"
+                    android:text="Postal Code*"
+                     />
+
+                <EditText
+                    android:id="@+id/ed_postalCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    style="@style/My_Edittext.GrayBroder"
+                    android:layout_marginTop="5dp"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:text="SSN Last*" />
+
+        <EditText
+            android:id="@+id/ed_ssnLast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/My_Edittext.GrayBroder"
+            android:layout_marginTop="5sp"
+            android:maxLines="1"
+            android:maxLength="10"
+            android:singleLine="true"/>
+-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextView.Invert"
+            android:layout_marginTop="10dp"
+            android:text="This Bank Details will be securely saved for a faster payment experience."
+            android:visibility="visible" />
+
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_addAccount"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            style="@style/My_Button.Invert"
+            android:layout_marginTop="25dp"
+            android:text="@string/continue_txt" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="16dp" />
+
+    </LinearLayout>
+
+
+</ScrollView>
+
+

@@ -1,0 +1,79 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="none"
+    tools:context=".activity.profile.fragment.UploadCertificationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/margin_left"
+        android:paddingRight="@dimen/margin_right"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <com.yarolegovich.discretescrollview.DiscreteScrollView
+            android:id="@+id/item_picker"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            app:dsv_orientation="horizontal"
+            android:overScrollMode="never"/>
+
+        <views.dotsview.DotsView
+            android:id="@+id/dotsView"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:visibility="invisible"/>
+
+        <EditText
+            android:id="@+id/edBio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/My_Edittext.GrayBroder"
+            android:lines="4"
+            android:maxLines="8"
+            android:padding="5dp"
+            android:gravity="top|left"
+            android:hint="Bio"
+            android:layout_marginTop="16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnAddMore"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_weight="1"
+                style="@style/My_Button.Invert"
+                android:layout_marginRight="30dp"
+                android:text="Add More"
+                android:visibility="gone"/>
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnNext"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_weight="1"
+                style="@style/My_Button.Invert"
+                android:text="@string/next" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"/>
+
+
+    </LinearLayout>
+
+</ScrollView>

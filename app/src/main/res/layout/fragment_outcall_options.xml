@@ -1,0 +1,335 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F2F2F2"
+    android:fitsSystemWindows="true"
+    android:focusable="false"
+    android:scrollbars="none"
+    tools:context=".activity.profile.fragment.OutcallOptionsFragmentCreation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingLeft="@dimen/margin_left"
+        android:paddingRight="@dimen/margin_right"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextView"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="Your Business Address"/>
+
+            <ImageView
+                android:id="@+id/iv_editLocation"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_edit_location"/>
+
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"/>
+
+        <TextView
+            android:id="@+id/tv_placeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            style="@style/TextView"
+            android:textColor="@color/dark_gray" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_marginTop="10dp"
+            style="@style/TextView"
+            android:textColor="@color/gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray"/>
+
+        <RadioGroup
+            android:id="@+id/rg_serviceType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_inCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/checkbox_selector"
+                android:button="@color/transparent"
+                android:fontFamily="@font/roboto_regular"
+                android:background="@null"
+                android:checked="true"
+                android:text="@string/in_call"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/rb_outCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:drawableTop="@drawable/checkbox_selector"
+                android:button="@color/transparent"
+                android:text="@string/out_call"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/rb_both"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:drawableTop="@drawable/checkbox_selector"
+                android:button="@color/transparent"
+                android:text="@string/both"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            style="@style/TextView"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:text="@string/prepration_time"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll_incall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/in_call"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tvIncallPreprationTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView"
+                    android:textColor="@color/gray"
+                    android:padding="5dp"
+                    android:text="@string/hh_mm"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_outCallInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/out_call"/>
+
+                <TextView
+                    android:id="@+id/tvOutcallPreprationTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView"
+                    android:textColor="@color/gray"
+                    android:padding="5dp"
+                    android:text="@string/hh_mm"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+       <LinearLayout
+           android:id="@+id/ll_radious"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="16dp"
+           android:orientation="vertical">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               style="@style/TextView"
+               android:textColor="@color/black"
+               android:textSize="16sp"
+               android:layout_gravity="center"
+               android:text="Radius"/>
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:gravity="right"
+               android:orientation="vertical">
+
+               <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                   android:id="@+id/seekBarRadius"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="-5dp"
+                   app:dsb_min="1"
+                   app:dsb_max="21"
+                   app:dsb_progressColor="@color/colorPrimary"
+                   app:dsb_indicatorColor="@color/colorPrimary"
+                   app:dsb_trackColor="@color/colorPrimary" />
+
+               <TextView
+                   android:id="@+id/tv_mileIndicater1"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="15dp"
+                   android:layout_marginRight="15dp"
+                   style="@style/TextView.Small"
+                   android:textColor="@color/black"
+                   android:text="3 miles"/>
+
+           </LinearLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="180dp"
+               android:layout_marginTop="5dp">
+
+               <views.MyMapView
+                   android:id="@+id/mapview"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent" />
+
+               <de.hdodenhof.circleimageview.CircleImageView
+                   android:layout_width="15dp"
+                   android:layout_height="15dp"
+                   android:layout_centerInParent="true"
+                   android:src="@color/colorPrimaryDark"/>
+
+               <de.hdodenhof.circleimageview.CircleImageView
+                   android:layout_width="160dp"
+                   android:layout_height="160dp"
+                   app:civ_border_width="1dp"
+                   android:layout_centerInParent="true"
+                   app:civ_border_color="@color/colorPrimary"
+                   android:src="#30f83272" />
+
+           </RelativeLayout>
+
+
+           <!--<RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="16dp"
+               android:layout_marginLeft="10dp"
+               android:layout_marginRight="15dp">
+
+
+               <android.support.design.widget.TextInputLayout
+                   android:id="@+id/input_layout_radius"
+                   style="@style/tvStyle"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   app:errorTextAppearance="@style/txtinputError_appearance"
+                   android:textColorHint="@color/dark_gray">
+
+                   <EditText
+                       android:id="@+id/ed_radius"
+                       style="@style/My_Edittext"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:textColor="@color/dark_gray"
+                       android:hint="Type Radius"
+                       android:digits="0123456789"
+                       android:inputType="number"
+                       android:textColorHint="@color/dark_gray"
+                       android:backgroundTint="@color/gray"
+                       android:maxLength="3"
+                       android:imeOptions="actionDone"/>
+               </android.support.design.widget.TextInputLayout>
+
+               <TextView
+                   android:id="@+id/tv_mileIndicater2"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   style="@style/TextView.Small"
+                   android:layout_alignParentRight="true"
+                   android:layout_below="@+id/input_layout_radius"
+                   android:layout_marginTop="-25dp"
+                   android:textColor="@color/dark_gray"
+                   android:text="3 miles"/>
+           </RelativeLayout>-->
+
+       </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_countinue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            style="@style/My_Button.Invert"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/continue_txt" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

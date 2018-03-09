@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="countryName" >
+        <item>UK</item>
+        <item>US</item>
+    </string-array>
+
+    <string-array name="currencyName" >
+        <item>CAD</item>
+        <item>USD</item>
+    </string-array>
+
+    <string-array name="CurrencyCode" >
+        <item>Albania ALL Lek</item>
+        <item>Afghanistan AFN ؋</item>
+        <item>Argentina ARS $</item>
+        <item>Aruba AWG ƒ</item>
+        <item>Australia AUD $</item>
+        <item>Azerbaijan AZN ₼</item>
+        <item>Bahamas BSD $</item>
+        <item>Barbados BBD $</item>
+        <item>Belarus BYR p.</item>
+        <item>Belize BZD BZ$</item>
+        <item>Bermuda BMD $</item>
+        <item>Bolivia BOB $b</item>
+        <item>BosniaandHerzegovina BAM KM</item>
+        <item>Botswana BWP P</item>
+        <item>Bulgaria BGN лв</item>
+        <item>Brazil BRL R$</item>
+        <item>Brunei BND $</item>
+        <item>Cambodia KHR ៛</item>
+        <item>Canada CAD $</item>
+        <item>Cayman KYD $</item>
+        <item>Chile CLP $</item>
+        <item>China CNY ¥</item>
+        <item>Colombia COP $</item>
+        <item>Costa Rica CRC ₡</item>
+        <item>Croatia HRK kn</item>
+        <item>Cuba CUP ₱</item>
+        <item>CzechRepublic CZK Kč</item>
+        <item>Denmark DKK kr</item>
+        <item>DominicanRepublic DOP RD$</item>
+        <item>EastCaribbean XCD $</item>
+        <item>Egypt EGP £</item>
+        <item>ElSalvador SVC $</item>
+        <item>Estonia EEK kr</item>
+        <item>EuroMember EUR €</item>
+        <item>FalklandIslands FKP £</item>
+        <item>Fiji FJD $</item>
+        <item>Georgia GEL ₾</item>
+        <item>Ghana GHC ¢</item>
+        <item>Gibraltar GIP £</item>
+        <item>Guatemala GTQ Q</item>
+        <item>Guernsey GGP £</item>
+        <item>Guyana GYD $</item>
+        <item>Honduras HNL L</item>
+        <item>HongKong HKD $</item>
+        <item>Hungary HUF Ft</item>
+        <item>Iceland ISK kr</item>
+        <item>India INR ₹</item>
+        <item>Indonesia IDR Rp</item>
+        <item>Iran IRR ﷼</item>
+        <item>IsleofMan IMP £</item>
+        <item>Israel ILS ₪</item>
+        <item>Jamaica JMD J$</item>
+        <item>Japan JPY ¥</item>
+        <item>Jersey JEP £</item>
+        <item>Kazakhstan KZT лв</item>
+        <item>Korea(North) KPW ₩</item>
+        <item>Korea(South) KRW ₩</item>
+        <item>Kyrgyzstan KGS лв</item>
+        <item>Laos LAK ₭</item>
+        <item>Latvia LVL Ls</item>
+        <item>Lebanon LBP £</item>
+        <item>Liberia LRD $</item>
+        <item>Lithuania	 LTL Lt</item>
+        <item>Macedonia MKD ден</item>
+        <item>Malaysia MYR RM</item>
+        <item>Mauritius MUR ₨</item>
+        <item>Mexico MXN $</item>
+        <item>Mongolia MNT ₮</item>
+        <item>Mozambique MZN MT</item>
+        <item>Namibia NAD $</item>
+        <item>Nepal NPR ₨</item>
+        <item>Netherlands ANG ƒ</item>
+        <item>NewZealand NZD $</item>
+        <item>Nicaragua NIO C$</item>
+        <item>Nigeria NGN ₦</item>
+        <item>Norway NOK kr</item>
+        <item>Oman OMR ﷼</item>
+        <item>Pakistan PKR ₨</item>
+        <item>Panama PAB B/.</item>
+        <item>Paraguay PYG Gs</item>
+        <item>Peru PEN S/.</item>
+        <item>Philippines PHP ₱</item>
+        <item>Poland PLN zł</item>
+        <item>Qatar QAR ﷼</item>
+        <item>Romania RON lei</item>
+        <item>Russia RUB ₽</item>
+        <item>SaintHelena SHP £</item>
+        <item>SaudiArabia SAR ﷼</item>
+        <item>Serbia RSD Дин.</item>
+        <item>Seychelles SCR ₨</item>
+        <item>Singapore SGD $</item>
+        <item>SolomonIslands SBD $</item>
+        <item>Somalia SOS S</item>
+        <item>SouthAfrica ZAR S</item>
+        <item>SriLanka LKR ₨</item>
+        <item>Sweden SEK kr</item>
+        <item>Switzerland CHF CHF</item>
+        <item>Suriname SRD $</item>
+        <item>Syria SYP £</item>
+        <item>Taiwan TWD NT$</item>
+        <item>Thailand THB ฿</item>
+        <item>TrinidadandTobago TTD TT$</item>
+        <item>Turkey TRL ₺</item>
+        <item>Tuvalu TVD $</item>
+        <item>Ukraine UAH ₴</item>
+        <item>UnitedKingdom	GBP £</item>
+        <item>UnitedStates USD $</item>
+        <item>Uruguay UYU $U</item>
+        <item>Uzbekistan UZS лв</item>
+        <item>Venezuela VEF Bs</item>
+        <item>VietNam VND ₫</item>
+        <item>Yemen YER ﷼</item>
+        <item>Zimbabwe ZWD Z$</item>
+    </string-array>
+
+
+
+
+</resources>

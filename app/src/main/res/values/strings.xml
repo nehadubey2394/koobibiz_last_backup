@@ -1,0 +1,210 @@
+<resources>
+    <string name="app_name">MualabBIZ</string>
+    <string name="fb_app_id">1950251375263506</string>
+    <string name="fb_app_secret">565aa2c50ec9a753713890245f08fb8f</string>
+    <string name="consumer_key">7z5xrHH8AgQieg4JxUavnu434</string>
+    <string name="consumer_secret">5ybeRqkBsxUpgxivX6ao4zD7vEkbUasUNbPzbNP1N9fUUL2oB1</string>
+    <string name="fb_app">com.facebook.app.FacebookContentProvider{1950251375263506}</string>
+
+    <!--LoginActivity-->
+    <string name="signup_as_service_provider"><b>SignUp</b> as <b>Service Provider</b></string>
+    <string name="email_or_username">Email Or Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="or">OR</string>
+    <string name="don_t_have_an_account">Don\'t have an account? <b>Sign up</b></string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="success">Success!</string>
+
+    <!--Forgot password screen-->
+    <string name="remind_my_password">Remind My Password</string>
+    <string name="forgot_pwd_remind_txt">We will send you a message with a link to reset your password.</string>
+    <string name="enter_the_email">Enter the e-mail</string>
+    <string name="send_password_reset">Send password reset</string>
+    <string name="reset_password">Reset Password</string>
+
+    <!--Registration Activity-->
+    <string name="independent">Independent</string>
+    <string name="business">Business</string>
+    <string name="email_id">Email Id</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="continue_txt">Continue</string>
+    <string name="country_activity">Choose a country</string>
+    <string name="search">Search</string>
+    <!--Registration view2-->
+    <string name="welcome_to">Welcome to\n<b>Mualab</b></string>
+    <string name="verify_phone_no">Verify Phone Number</string>
+    <string name="need_otp_verification">You need to enter your 4 digit verification code to create your account.</string>
+    <!--Registration view3-->
+    <string name="create_profile">Create Profile</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="business_name">Business Name</string>
+    <string name="choose_username">Choose a User Name</string>
+    <!--Registration view4-->
+    <string name="create_password">Create Password</string>
+    <string name="confirm_password">Confirm Password</string>
+
+    <!--OTP verification Activity-->
+    <string name="resent_code">Resend Code</string>
+    <string name="verify">Verify</string>
+    <string name="submit">Submit</string>
+    <string name="need_four_digite_code">You need to enter your 4 digit verification \n code to create your account.</string>
+    <string name="_0"><b>0</b></string>
+    <string name="_1"><b>1</b></string>
+    <string name="_2"><b>2</b>\n<font size="12">ABC</font></string>
+    <string name="_3"><b>3</b>\n<font size="12">DEF</font></string>
+    <string name="_4"><b>4</b>\n<font size="12">GHI</font></string>
+    <string name="_5"><b>5</b>\n<font size="12">JKL</font></string>
+    <string name="_6"><b>6</b>\n<font size="12">MNO</font></string>
+    <string name="_7"><b>7</b>\n<font size="12">PQRS</font></string>
+    <string name="_8"><b>8</b>\n<font size="12">TUV</font></string>
+    <string name="_9"><b>9</b>\n<font size="12">WXYZ</font></string>
+    <string name="blank_string">\n</string>
+
+    <!--Validation text-->
+    <string name="error_required_field">Please enter required field</string>
+    <string name="error_email_or_username_required">Please enter email or username</string>
+    <string name="error_username_required">Please enter username</string>
+    <string name="error_username_contain_space">User name cannot contains blank space.</string>
+    <string name="error_username_length">Username must be at least 4 characters long.</string>
+    <string name="error_user_name_exist">That username is already being used.</string>
+
+    <string name="error_firstname_required">Please enter first name</string>
+    <string name="error_lastname_required">Please enter last name</string>
+
+    <string name="error_businessname_required">Please enter business name.</string>
+    <string name="error_businessname_length">Business name must be at least 4 characters long.</string>
+
+    <string name="error_email_required">Please enter your email address.</string>
+    <string name="error_invalid_email">Please enter a valid email address.</string>
+    <string name="error_invalid_email2">This email address is invalid</string>
+
+    <string name="error_password_required">Please enter your password.</string>
+    <string name="error_invalid_password_length">Passwords must be at least 8 characters long.</string>
+    <string name="error_invalid_password">Use at least 8 character, include both one uppercase letter and one number.</string>
+    <string name="error_invalid_password_capital">Your password must have at least one capital character and one number.</string>
+    <string name="error_invalid_password_number">Your password must have at least one number.</string>
+    <string name="error_invalid_password_special_character">Your password must have at least one special character.</string>
+    <string name="error_confirm_password_not_match">Password and confirm password do not match.</string>
+
+    <string name="error_phone_no_reuired">Please enter a phone number</string>
+    <string name="error_phone_no_length">Phone number min 4 and max 15</string>
+    <string name="error_phone_no_invalid">Please enter a valid phone number</string>
+    <string name="error_phone_no_exist">Phone number already exist</string>
+
+    <string name="error_otp_reuired">Please enter OTP</string>
+    <string name="error_otp_invalid">Please enter valid OTP</string>
+    <string name="error_otp_send">New otp has been sent to you</string>
+    <string name="error_otp_varified">You have successfully verified your phone number</string>
+
+    <string name="error_address_required">Please enter address</string>
+    <string name="error_current_address_required">Enter your current address</string>
+    <string name="error_profile_image">Select or take profile image</string>
+    <string name="text_login_email_error">Enter your email or register number first</string>
+    <string name="error_timeslot_intersect">Time slot in the same day can\'t intersect</string>
+
+    <!--Click action message-->
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="click_again_to_exit">Click again to exit</string>
+
+    <!-- Strings related to network connection -->
+    <string name="error_msg_network">Check your network connection</string>
+    <string name="msg_some_thing_went_wrong">Some thing went wrong, please try again later.</string>
+    <string name="retry">Retry</string>
+    <string name="no_conncetion">No Connection</string>
+    <string name="no_conncetion_msg">There\'s no network connection. Make sure the you\'re connected to a Wi-fi or mobile network and try again.</string>
+
+    <string name="error_session_expired">Alert message</string>
+    <string name="error_session_expired_msg">Your session is expired please login again</string>
+    <string name="under_development">Under Development…</string>
+
+
+    <!--Picker text-->
+    <string name="crop_image_activity_title">Crop Image</string>
+    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
+    <string name="crop_image_menu_rotate_right">Rotate</string>
+    <string name="crop_image_menu_crop">Crop</string>
+    <string name="pick_image_intent_chooser_title">Select source</string>
+    <string name="result_image_desc">crop result</string>
+    <string name="pick_image_intent_text">Choose an image</string>
+    <string name="click_here_for_social_app">Click <b>Here</b> For <b>Social</b> App</string>
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="frieday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="not_working">not working</string>
+    <string name="in_call">In call</string>
+    <string name="out_call">Out call</string>
+    <string name="both">Both</string>
+    <string name="next">Next</string>
+
+    <!--Add address-->
+    <string name="address_activity">Add Business Address</string>
+    <string name="business_address">Business address</string>
+    <string name="error_business_address">Input Business address</string>
+    <string name="pick_your_business_place">Pick Your Business Place</string>
+    <string name="pick_your_place">Pick Your Place</string>
+    <string name="city">City*</string>
+    <string name="town_city">Town/City*</string>
+    <string name="state">State*</string>
+    <string name="country">Country*</string>
+    <string name="postal_code">Postal Code*</string>
+    <string name="locality">Locality, area or street*</string>
+    <string name="line_of_address1">1st line of address*</string>
+    <string name="line_of_address2">2nd line of address (Optional)</string>
+    <string name="save">Save</string>
+    <string name="logout">Logout</string>
+    <string name="loading">Loading…</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="time">Time : </string>
+    <string name="time_set">Set time</string>
+
+    <string name="time_for_completion">Time for completion</string>
+    <string name="prepration_time">Buffer time</string>
+    <string name="incall_prepration_time">In call buffer time</string>
+    <string name="outcall_prepration_time">Out call buffer time</string>
+    <string name="tag_name">Tag Name</string>
+    <string name="type_subcategory_name">Type Subcategory name</string>
+    <string name="hh_mm">HH:MM</string>
+    <string name="next_service">Next Service</string>
+    <string name="txt_visitor_msg"><b>If you're site vistor</b>\nIf you immediate assistance, please send as an email instead. We apologize for any inconvenience.</string>
+    <string name="txt_owner_msg"><b>If you're site owner</b>\nThe</string>
+    <string name="done">Done</string>
+
+    <string name="select_incall_preparation_time">Please select incall buffer time.</string>
+    <string name="select_outcall_preparation_time">Please select outcall buffer time.</string>
+    <string name="select_in_and_outcall_preparation_time">Please select incall and outcall buffer time.</string>
+
+    <!--Geo codeing-->
+    <string name="no_geocoder_available">No geocoder available</string>
+    <string name="fetch_address">Fetch address</string>
+    <string name="address_found">Address found</string>
+    <string name="no_address_found">Sorry, no address found</string>
+    <string name="no_location_data_provided">No location data provided</string>
+    <string name="service_not_available">Sorry, the service is not available</string>
+    <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
+    <string name="settings">Settings</string>
+    <string name="first_name_req">First Name*</string>
+
+    <!--Dialog server maintenence-->
+    <string name="txt_under_maintenance">The web server mualab.com is currently undergoing some maintenance</string>
+    <string name="temporary_maintenance">Temporary Maintenance</string>
+    <string name="what_happened">What happened?</string>
+    <string name="txt_description_maintenance">Server and website need regular maintenance just like a car to keep them up and running smoothly.</string>
+
+</resources>
