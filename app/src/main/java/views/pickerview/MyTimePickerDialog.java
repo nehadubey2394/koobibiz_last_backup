@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -51,8 +49,9 @@ public class MyTimePickerDialog extends AlertDialog implements OnClickListener {
     public MyTimePickerDialog(Context context,
                               OnTimeSetListener callBack, String title, int hours, int minute) {
 
-        this(context, 0, callBack,title, hours, minute, 1);
+        this(context, 0, callBack,title, hours, minute, 1, 23);
     }
+
     /**
      * @param context      Parent.
      * @param callBack     How parent is notified.
@@ -60,7 +59,18 @@ public class MyTimePickerDialog extends AlertDialog implements OnClickListener {
     public MyTimePickerDialog(Context context,
                               OnTimeSetListener callBack, String title, int hours, int minute, int intervel) {
 
-        this(context, 0, callBack,title, hours, minute, intervel);
+        this(context, 0, callBack,title, hours, minute, intervel, 23);
+    }
+
+
+    /**
+     * @param context      Parent.
+     * @param callBack     How parent is notified.
+     */
+    public MyTimePickerDialog(Context context,
+                              OnTimeSetListener callBack, String title, int hours, int minute, int intervel, int mMaxHours) {
+
+        this(context, 0, callBack,title, hours, minute, intervel, mMaxHours);
     }
 
 
@@ -71,13 +81,14 @@ public class MyTimePickerDialog extends AlertDialog implements OnClickListener {
      */
     public MyTimePickerDialog(Context context,
                               int theme,
-                              OnTimeSetListener callBack, String title, int hours, int minute, int intervel) {
+                              OnTimeSetListener callBack, String title, int hours, int minute, int intervel, int mMaxHours) {
         super(context, theme);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mCallback = callBack;
         mInitialHourOfDay = hours;
         mIntervel = intervel;
         mInitialMinute = minute/mIntervel;
+        TimePicker.mMaxHours = mMaxHours;
         updateTitle(title);
         setButton(context.getText(R.string.time_set), this);
         setButton2(context.getText(R.string.cancel), (OnClickListener) null);

@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         session = new Session(this);
+        //getBusinessProfile();
+
 
         if(!session.isBusinessProfileComplete()){
             startActivity(new Intent(this, BusinessProfileActivity.class));
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         }else {
             getBusinessProfile();
         }
-
 
         final NoConnectionDialog network =  new NoConnectionDialog(MainActivity.this, new NoConnectionDialog.Listner() {
             @Override

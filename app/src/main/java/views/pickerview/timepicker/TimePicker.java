@@ -38,6 +38,7 @@ public class TimePicker extends FrameLayout {
     // state
     private int mCurrentHour = 0; // 0-23
     private int mCurrentMinute = 0; // 0-59
+    public static int mMaxHours = 23; // 0- 23
 
     // ui components
     private final NumberPicker mHourPicker;
@@ -90,7 +91,7 @@ public class TimePicker extends FrameLayout {
 
     private void configurePickerRanges() {
         mHourPicker.setMinValue(0);
-        mHourPicker.setMaxValue(23);
+        mHourPicker.setMaxValue(mMaxHours);
         mHourPicker.setFormatter(TWO_DIGIT_FORMATTER);
 
         mMinutePicker.setMinValue(0);

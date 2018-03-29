@@ -89,6 +89,7 @@
     <string name="error_invalid_password_number">Your password must have at least one number.</string>
     <string name="error_invalid_password_special_character">Your password must have at least one special character.</string>
     <string name="error_confirm_password_not_match">Password and confirm password do not match.</string>
+    <string name="error_password_vailidation">Use at least 8 character, include both one uppercase letter and one number.</string>
 
     <string name="error_phone_no_reuired">Please enter a phone number</string>
     <string name="error_phone_no_length">Phone number min 4 and max 15</string>
@@ -202,9 +203,12 @@
     <string name="first_name_req">First Name*</string>
 
     <!--Dialog server maintenence-->
-    <string name="txt_under_maintenance">The web server mualab.com is currently undergoing some maintenance</string>
+    <string name="txt_under_maintenance">The web server koobi.co.uk is currently undergoing some maintenance</string>
     <string name="temporary_maintenance">Temporary Maintenance</string>
     <string name="what_happened">What happened?</string>
     <string name="txt_description_maintenance">Server and website need regular maintenance just like a car to keep them up and running smoothly.</string>
+    <string name="enter_post_code">Enter post code</string>
+    <string name="house_building_flat_number">House/Building/Flat number *</string>
+    <string name="skip">Skip</string>
 
 </resources>
