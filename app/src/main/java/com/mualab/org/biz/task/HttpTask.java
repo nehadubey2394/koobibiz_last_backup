@@ -2,6 +2,7 @@ package com.mualab.org.biz.task;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -58,7 +59,8 @@ public class HttpTask {
 
     public static class Builder {
 
-        private static String BASE_URL = API.BASE_URL; //"http://koobi.co.uk/api/";
+        //private static String BASE_URL = API.BASE_URL;//"http://koobi.co.uk/api/";
+        private String BASE_URL_2;//"http://koobi.co.uk/api/";
         //Required
         private String api;
         private Context context;
@@ -93,7 +95,7 @@ public class HttpTask {
         }
 
         public Builder setBaseURL(String baseURL){
-            this.BASE_URL = baseURL;
+            this.BASE_URL_2 = baseURL;
             return this;
         }
 
@@ -156,7 +158,10 @@ public class HttpTask {
 
     public HttpTask(Builder builder){
         this.context = builder.context;
-        this.api = builder.BASE_URL+builder.api;
+
+        if(!TextUtils.isEmpty(builder.BASE_URL_2))
+            this.api = builder.BASE_URL_2+builder.api;
+        else this.api = API.BASE_URL+builder.api;
         this.listener = builder.listener;
         this.method = builder.method;
         this.bodyContentType = builder.bodyContentType;

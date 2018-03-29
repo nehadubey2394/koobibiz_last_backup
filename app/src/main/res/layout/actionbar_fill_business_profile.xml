@@ -27,18 +27,30 @@
         android:text="Business Hours"/>
 
 
-    <ImageView
+    <ImageButton
         android:id="@+id/iv_next"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:padding="2dp"
         android:background="?selectableItemBackgroundBorderless"
-        android:src="@drawable/back_icon"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:rotation="180"
         android:visibility="gone"
         android:tint="@color/white"/>
+
+    <TextView
+        android:id="@+id/tv_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/skip"
+        style="@style/TextView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:padding="8dp"/>
+
 
 </RelativeLayout>

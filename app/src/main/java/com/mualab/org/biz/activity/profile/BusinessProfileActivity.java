@@ -61,7 +61,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
     private List<MyViews> views = new ArrayList<>();
     private ProgressView progressView;
 
-    private TextView tvHeaderText;
+    private TextView tvHeaderText,tv_skip;
     private ImageView iv_back;
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -112,6 +112,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
     @Override
     public void onFinish() {
+        Mualab.getInstance().getSessionManager().setBusinessProfileComplete(true);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -134,6 +135,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
 
         iv_back = findViewById(R.id.iv_back);
+        tv_skip = findViewById(R.id.tv_skip);
         iv_back.setVisibility(View.GONE);
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +166,14 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         }else {
             getBusinessProfile();
         }
+
+        tv_skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(views.size()>mPager.getCurrentItem())
+                    mPager.setCurrentItem(mPager.getCurrentItem() + 1);
+            }
+        });
 
     }
 
@@ -196,9 +206,14 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
             public void onPageSelected(int position) {
 
                 iv_back.setVisibility(position==0?View.GONE:View.VISIBLE);
+
                 progressView.setProgressIndex(position);
                 tvHeaderText.setText(views.get(position).title);
                 KeyboardUtil.hideKeyboard(mPager,BusinessProfileActivity.this);
+
+                if(views.get(position).title.equals("Banking Details"))
+                    tv_skip.setVisibility(View.VISIBLE);
+                else tv_skip.setVisibility(View.GONE);
             }
 
             @Override

@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class Address implements Serializable{
     int id;
+    public String houseNumber;
     public String city;
     public String state;
     public String country;

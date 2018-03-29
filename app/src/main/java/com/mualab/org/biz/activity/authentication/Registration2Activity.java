@@ -265,6 +265,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
                 params.put("city", address.city);
                 params.put("state", address.state);
                 params.put("country", address.country);
+                params.put("buildingNo", address.houseNumber);
                 params.put("businessPostCode", address.postalCode);
                 params.put("latitude", address.latitude);
                 params.put("longitude", address.longitude);

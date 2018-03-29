@@ -336,7 +336,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
             public void onTimeSet(TimePicker view, int hours, int minute) {
                 tvTime.setText(String.format("%02d", hours)+ ":" + String.format("%02d", minute));
             }
-        }, title, hours, 00, 10);
+        }, title, hours, 00, 10, 3);
         mTimePicker.show();
     }
 
