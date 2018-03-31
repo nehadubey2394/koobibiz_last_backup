@@ -270,7 +270,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
                 params.put("latitude", address.latitude);
                 params.put("longitude", address.longitude);
                 params.put("userType", "artist");
-                params.put("businessType", user.userType);
+                params.put("businessType", user.businessType);
                 params.put("deviceType", "2");
                 params.put("deviceToken", deviceToken);
                 params.put("firebaseToken", deviceToken);

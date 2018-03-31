@@ -215,7 +215,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
                 if(views.get(position).title.equals("Banking Details"))
                     tv_skip.setVisibility(View.VISIBLE);
                 else if(views.get(position).title.equals("Add Staff") &&
-                        Mualab.getInstance().getSessionManager().getUser().userType.equals(Constants.INDEPENDENT)){
+                        Mualab.getInstance().getSessionManager().getUser().businessType.equals(Constants.INDEPENDENT)){
                     onFinish();
                 }
             }

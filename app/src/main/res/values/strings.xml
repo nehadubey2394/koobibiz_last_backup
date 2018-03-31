@@ -84,12 +84,12 @@
 
     <string name="error_password_required">Please enter your password.</string>
     <string name="error_invalid_password_length">Passwords must be at least 8 characters long.</string>
-    <string name="error_invalid_password">Use at least 8 character, include both one uppercase letter and one number.</string>
+    <string name="error_invalid_password">Use at least 8 characters, include both one uppercase letter and one number.</string>
     <string name="error_invalid_password_capital">Your password must have at least one capital character and one number.</string>
     <string name="error_invalid_password_number">Your password must have at least one number.</string>
     <string name="error_invalid_password_special_character">Your password must have at least one special character.</string>
     <string name="error_confirm_password_not_match">Password and confirm password do not match.</string>
-    <string name="error_password_vailidation">Use at least 8 character, include both one uppercase letter and one number.</string>
+    <string name="error_password_vailidation">Use at least 8 characters, include both one uppercase letter and one number.</string>
 
     <string name="error_phone_no_reuired">Please enter a phone number</string>
     <string name="error_phone_no_length">Phone number min 4 and max 15</string>
