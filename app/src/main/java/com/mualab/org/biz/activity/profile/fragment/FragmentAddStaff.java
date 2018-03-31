@@ -53,7 +53,8 @@ public class FragmentAddStaff extends ProfileCreationBaseFragment{
         view.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Mualab.getInstance().getSessionManager().logout();
+                //Mualab.getInstance().getSessionManager().logout();
+                showToast(R.string.under_development);
             }
         });
 
