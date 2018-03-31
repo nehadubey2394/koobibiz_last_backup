@@ -1,47 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".activity.MainActivity">
 
-
-    <LinearLayout
+    <include
+        android:id="@+id/topLayout1"
+        layout="@layout/header_layout_for_allscreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/margin_left"
-        android:layout_marginRight="@dimen/margin_right"
-        android:layout_centerInParent="true">
+        android:visibility="visible"
+        android:layout_alignParentTop="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextView.Invert"
-            android:textSize="20dp"
-            android:text="@string/under_development"/>
+    <FrameLayout
+        android:id="@+id/fragment_place"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topLayout1"
+        android:background="@color/screen_bg_color"
+        android:layout_above="@+id/bottomMenuLayout"/>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btnLogout"
-            style="@style/My_Button"
-            android:layout_width="match_parent"
-            android:layout_marginTop="30dp"
-            android:layout_height="35dp"
-            android:text="@string/logout" />
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/lyCoordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottomMenuLayout" />
 
-    </LinearLayout>
-
-
-
-   <!-- <include
+    <include
         android:id="@+id/bottomMenuLayout"
         layout="@layout/bottom_menu_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />-->
+        android:layout_alignParentBottom="true" />
 
+   <!-- <include
+        layout="@layout/layout_inner_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_centerInParent="true"/>-->
 
 </RelativeLayout>
