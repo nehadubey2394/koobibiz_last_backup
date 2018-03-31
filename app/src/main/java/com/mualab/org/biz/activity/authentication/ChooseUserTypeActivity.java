@@ -45,10 +45,10 @@ public class ChooseUserTypeActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnIndependent:
-                geNextActivity(Constants.BUSINESS);
+                geNextActivity(Constants.INDEPENDENT);
                 break;
             case R.id.btnBusiness:
-                geNextActivity(Constants.INDEPENDENT);
+                geNextActivity(Constants.BUSINESS);
                 break;
         }
     }

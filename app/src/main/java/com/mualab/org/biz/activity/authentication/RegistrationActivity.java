@@ -81,7 +81,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if(intent.getExtras()!=null){
             user.socialId = intent.getStringExtra(Constants.SOCIAL_ID);
             user.email = intent.getStringExtra(Constants.EMAIL_ID);
-            user.userType = intent.getStringExtra(Constants.registrationType);
+            user.businessType = intent.getStringExtra(Constants.registrationType);
         }
 
         smsVerifyCatcher = new SmsVerifyCatcher(this, new OnSmsCatchListener<String>() {
