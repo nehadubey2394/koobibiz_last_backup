@@ -35,6 +35,7 @@ import com.mualab.org.biz.activity.profile.fragment.ZoomOutPageTransformer;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
@@ -204,7 +205,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
             @Override
             public void onPageSelected(int position) {
-
+                tv_skip.setVisibility(View.GONE);
                 iv_back.setVisibility(position==0?View.GONE:View.VISIBLE);
 
                 progressView.setProgressIndex(position);
@@ -213,7 +214,10 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
                 if(views.get(position).title.equals("Banking Details"))
                     tv_skip.setVisibility(View.VISIBLE);
-                else tv_skip.setVisibility(View.GONE);
+                else if(views.get(position).title.equals("Add Staff") &&
+                        Mualab.getInstance().getSessionManager().getUser().userType.equals(Constants.INDEPENDENT)){
+                    onFinish();
+                }
             }
 
             @Override
