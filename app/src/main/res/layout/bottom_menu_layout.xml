@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:cardCornerRadius="0dp"
-    android:layout_gravity="bottom"
     app:cardElevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
         android:background="@color/white"
+        android:orientation="horizontal"
         android:weightSum="5">
 
         <LinearLayout
@@ -21,11 +24,11 @@
             android:gravity="center">
 
             <ImageButton
-                android:id="@+id/ib_leaderBoard"
+                android:id="@+id/ibtnBookings"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_wifi_black" />
+                android:src="@drawable/inactive_calender_ico" />
 
         </LinearLayout>
 
@@ -36,11 +39,11 @@
             android:gravity="center">
 
             <ImageButton
-                android:id="@+id/ib_feed"
+                android:id="@+id/ibtnChart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_wifi_black" />
+                android:src="@drawable/inactive_chart_ico" />
 
         </LinearLayout>
 
@@ -51,11 +54,10 @@
             android:gravity="center">
 
             <ImageButton
-                android:id="@+id/ib_addFeed"
+                android:id="@+id/ibtnAdd"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_wifi_black" />
+                android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/inactive_add_ico" />
 
         </LinearLayout>
 
@@ -66,11 +68,10 @@
             android:gravity="center">
 
             <ImageButton
-                android:id="@+id/ib_search"
+                android:id="@+id/ibtnLogo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_wifi_black" />
+                android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/inactive_logo_ico" />
 
         </LinearLayout>
 
@@ -81,11 +82,10 @@
             android:gravity="center">
 
             <ImageButton
-                android:id="@+id/ib_notification"
+                android:id="@+id/ibtnUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_wifi_black" />
+                android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/inactive_user_ico" />
 
         </LinearLayout>
 

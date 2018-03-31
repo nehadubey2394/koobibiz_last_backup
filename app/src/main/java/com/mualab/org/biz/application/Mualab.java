@@ -12,6 +12,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.mualab.org.biz.BuildConfig;
 import com.mualab.org.biz.db.AppDatabase;
+import com.mualab.org.biz.model.Location;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 
@@ -26,6 +27,7 @@ public class Mualab extends Application {
     public static final String authToken = "authToken";
 
     private static Mualab mInstance;
+    public static Location currentLocation;
 
     private  DatabaseReference ref;
     private  Session session;
