@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:overScrollMode="never"
-        android:layout_above="@+id/btnNewAppointment"
+        android:layout_marginBottom="10dp"
         >
 
         <LinearLayout
@@ -25,8 +25,9 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnToday"
                 style="@style/My_Button_Small.Invert"
-                android:layout_width="76dp"
-                android:layout_height="26dp" android:text="@string/text_today" android:layout_gravity="center_vertical"
+                android:layout_width="75dp"
+                android:layout_height="25dp"
+                android:text="@string/text_today" android:layout_gravity="center_vertical"
                 android:padding="2dp"
                 android:gravity="center"
                 android:textSize="12sp"
@@ -104,7 +105,7 @@
                         android:textColor="@color/text_color"
                         android:textSize="13sp"
                         android:visibility="gone"
-                         />
+                        />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -178,7 +179,7 @@
                             android:clickable="true"
                             >
                             <TextView
-                              android:layout_width="match_parent" android:layout_height="match_parent"
+                                android:layout_width="match_parent" android:layout_height="match_parent"
                                 android:id="@+id/tvToday"
                                 android:paddingLeft="5dp"
                                 android:gravity="center"
@@ -263,35 +264,22 @@
 
             </LinearLayout>
 
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnNewAppointment"
+                style="@style/My_Button_Small.Invert"
+                android:layout_width="162dp"
+                android:layout_height="32dp"
+                android:text="@string/new_appointment"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="13sp"
+                />
+
         </LinearLayout>
 
-
     </android.support.v4.widget.NestedScrollView>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btnNewAppointment"
-        style="@style/My_Button_Small.Invert"
-        android:layout_width="162dp"
-        android:layout_height="32dp"
-        android:text="@string/new_appointment"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:textSize="13sp"
-        android:layout_alignParentBottom="true"
-        />
-
-    <TextView
-        android:id="@+id/tv_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/TextView"
-        android:text="@string/loading"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:visibility="gone" />
 
 </RelativeLayout>

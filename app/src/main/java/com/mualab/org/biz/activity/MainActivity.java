@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,6 +29,7 @@ import com.mualab.org.biz.activity.profile.BusinessProfileActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.helper.Constants;
+import com.mualab.org.biz.helper.MySnackBar;
 import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
@@ -370,5 +373,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         }
     }
+
+    private boolean doubleBackToExitPressedOnce;
+    private Runnable runnable;
+    @Override
+    public void onBackPressed() {
+          /* Handle double click to finish activity*/
+        Handler handler = new Handler();
+        FragmentManager fm = getSupportFragmentManager();
+        int i = fm.getBackStackEntryCount();
+        if (i > 0) {
+            fm.popBackStack();
+        } else if (!doubleBackToExitPressedOnce) {
+
+            doubleBackToExitPressedOnce = true;
+            //Toast.makeText(this, "Click again to exit", Toast.LENGTH_SHORT).show();
+            MySnackBar.showSnackbar(this, findViewById(R.id.lyCoordinatorLayout), "Click again to exit");
+            handler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+
+        } else {
+            handler.removeCallbacks(runnable);
+            super.onBackPressed();
+        }
+    }
+
 
 }

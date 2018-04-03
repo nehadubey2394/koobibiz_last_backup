@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -90,7 +91,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     private View rootView;
     private boolean isToday = true;
 
-
     public BookingsFragment() {
         // Required empty public constructor
     }
@@ -108,7 +108,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-      //     mParam1 = getArguments().getString(ARG_PARAM1);
+            //     mParam1 = getArguments().getString(ARG_PARAM1);
         }
     }
 
@@ -157,6 +157,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     }
 
     private void setViewId(){
+
         tabToday = rootView.findViewById(R.id.tabToday);
         tabPending = rootView.findViewById(R.id.tabPending);
         tvPending = rootView.findViewById(R.id.tvPending);
@@ -521,6 +522,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                             item.pendingBookingInfos.add(bookingInfo);
                                         }
                                         else {
+                                            tvBookingCount.setVisibility(View.GONE);
                                             item.todayBookingInfos.add(bookingInfo);
                                         }
                                     }
@@ -535,6 +537,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 }
                             }
                         }else {
+                            tvBookingCount.setVisibility(View.GONE);
                             rycToday.setVisibility(View.GONE);
                             rycPending.setVisibility(View.GONE);
                             tvNoData.setVisibility(View.VISIBLE);
@@ -604,7 +607,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
 
         task.execute(this.getClass().getName());
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -759,4 +761,21 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         Mualab.getInstance().cancelAllPendingRequests();
         super.onDestroyView();
     }
+
+    private boolean checkPermission(String permission){
+        if (Build.VERSION.SDK_INT >= 23) {
+            int result = ContextCompat.checkSelfPermission(mContext, permission);
+            if (result == PackageManager.PERMISSION_GRANTED){
+
+                return true;
+            } else {
+
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+
 }
