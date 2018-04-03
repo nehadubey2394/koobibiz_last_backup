@@ -41,10 +41,9 @@ import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.booking.Bookings;
 import com.mualab.org.biz.model.booking.BookingInfo;
 import com.mualab.org.biz.model.booking.BookingTimeSlot;
-import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.model.booking.Bookings;
 import com.mualab.org.biz.model.booking.UserDetail;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -52,7 +51,6 @@ import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
-
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -77,7 +75,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
-    private String mParam1,selectedDate,sMonth= "",sDay,currentTime,lat="22.7196",lng="75.8577";
+    private String selectedDate,sMonth= "",sDay,currentTime,lat="22.7196",lng="75.8577";
     private Context mContext;
     private LinearLayout tabToday,tabPending;
     private TextView tvPending,tvToday,tvBookingCount;
@@ -110,7 +108,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+      //     mParam1 = getArguments().getString(ARG_PARAM1);
         }
     }
 
@@ -208,6 +206,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnToday:
+                Mualab.getInstance().cancelAllPendingRequests();
                 MyFlexibleCalendar viewCalendar =  rootView.findViewById(R.id.calendar);
                 viewCalendar.isFirstimeLoad = true;
                 Calendar cal = Calendar.getInstance();
@@ -229,7 +228,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 isToday = true;
                 tabToday.setBackgroundResource(R.drawable.bg_tab_selected);
                 tabPending.setBackgroundResource(R.drawable.bg_tab_unselected);
-                tvPending.setTextColor(getResources().getColor(R.color.text_color));
+                tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvToday.setTextColor(getResources().getColor(R.color.white));
               /*  rycPending.setVisibility(View.GONE);
                 rycToday.setVisibility(View.VISIBLE);
@@ -238,10 +237,11 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 break;
 
             case R.id.tabPending:
+                Mualab.getInstance().cancelAllPendingRequests();
                 isToday = false;
                 tabPending.setBackgroundResource(R.drawable.bg_second_tab_selected);
                 tabToday.setBackgroundResource(R.drawable.bg_second_tab_unselected);
-                tvToday.setTextColor(getResources().getColor(R.color.text_color));
+                tvToday.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvPending.setTextColor(getResources().getColor(R.color.white));
               /*  rycPending.setVisibility(View.VISIBLE);
                 rycToday.setVisibility(View.GONE);
@@ -440,9 +440,9 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 try {
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
-                    String message = js.getString("massage");
 
                     if (status.equalsIgnoreCase("success")) {
+                        String message = js.getString("massage");
                         count = 0;
                         todayBookings.clear();
                         pendingBookings.clear();
@@ -558,6 +558,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 rycPending.setVisibility(View.VISIBLE);
                             }
                             else {
+                                tvBookingCount.setVisibility(View.GONE);
                                 tvNoData.setVisibility(View.VISIBLE);
                                 rycToday.setVisibility(View.GONE);
                                 rycPending.setVisibility(View.GONE);
@@ -571,6 +572,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
 
                     }else {
                         rycTimeSlot.setVisibility(View.GONE);
+                        tvNoSlot.setVisibility(View.VISIBLE);
                         tvNoData.setVisibility(View.VISIBLE);
                     }
                     //  showToast(message);
@@ -596,6 +598,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
             }})
                 .setAuthToken(user.authToken)
                 .setProgress(true)
+                //  .setParam(params));
                 .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
         //.setBody(params, "application/x-www-form-urlencoded"));
 
@@ -669,7 +672,8 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         }
     }
 
-    private void apiForBookingAction(final String type,final Bookings bookings,final String serviceId ,final String subServiceId ,final String artistServiceId){
+    private void apiForBookingAction(final String type,final Bookings bookings,final String
+            serviceId ,final String subServiceId ,final String artistServiceId){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
@@ -750,4 +754,9 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         task.execute(this.getClass().getName());
     }
 
+    @Override
+    public void onDestroyView() {
+        Mualab.getInstance().cancelAllPendingRequests();
+        super.onDestroyView();
+    }
 }

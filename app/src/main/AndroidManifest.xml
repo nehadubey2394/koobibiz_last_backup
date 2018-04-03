@@ -42,12 +42,18 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.authentication.LoginActivity" />
-        <activity android:name=".activity.authentication.OtpVerificationActivity" />
-        <activity android:name=".activity.authentication.ChooseUserTypeActivity" />
-        <activity android:name=".activity.authentication.RegistrationActivity" />
-        <activity android:name=".activity.authentication.Registration2Activity" />
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.authentication.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.authentication.OtpVerificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.authentication.ChooseUserTypeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.authentication.RegistrationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.authentication.Registration2Activity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.authentication.AddAddressActivity"
             android:label="@string/address_activity"
             android:theme="@style/AppTheme.DarkActionBar"
@@ -65,8 +71,11 @@
         <activity
             android:name=".activity.profile.BusinessProfileActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BaseActivity" />
 
-
+        <activity
+            android:name=".activity.booking.activity.StaffActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- Meta data -->
         <meta-data

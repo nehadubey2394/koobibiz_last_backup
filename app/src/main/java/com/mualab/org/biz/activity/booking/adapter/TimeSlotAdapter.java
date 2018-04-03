@@ -13,7 +13,6 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.activity.booking.listner.TimeSlotClickListener;
 import com.mualab.org.biz.model.booking.BookingTimeSlot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,10 +32,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
         this.context = context;
         this.itemList = itemList;
     }
-    /* public void setCustomListener(TimeSlotClickListener customButtonListener){
-         this.customButtonListener = customButtonListener;
-     }
- */
+
     // get the size of the list
     @Override
     public int getItemCount() {
@@ -58,14 +54,6 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
 
         holder.tvTime.setText(bookingTimeSlot.time);
 
-      /*  if (bookingTimeSlot.isSelected.equals("1")){
-            holder.rlTimeSlot.setBackground(context.getResources().getDrawable(R.drawable.bg_green_background));
-
-        } else {
-            holder.rlTimeSlot.setBackground(context.getResources().getDrawable(R.drawable.circle_gray_background));
-
-        }*/
-
     }
 
     // Static inner class to initialize the views of rows
@@ -80,7 +68,6 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
             itemView.setOnClickListener(this);
 
         }
-
 
         @Override
         public void onClick(View view) {

@@ -42,10 +42,11 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/defoult_user_img"
-                app:civ_border_width="0.5dp"
+                app:civ_border_width="1.5dp"
                 android:background="@drawable/gradient_circle_img"
                 app:civ_border_color="@color/transparent"
                 />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,11 +72,13 @@
                     android:textSize="14sp" />
 
                 <LinearLayout
+                    android:id="@+id/lyStaff"
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:layout_marginTop="4dp"
+                    android:padding="1dp"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/bg_pink_strock_circle"
                     >
@@ -86,7 +89,7 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:padding="1dp"
-                        android:maxWidth="150dp"
+                        android:maxWidth="220dp"
                         android:minWidth="50dp"
                         android:minHeight="16dp"
                         android:text="NA"
@@ -151,7 +154,7 @@
                 android:layout_gravity="center_vertical"
                 android:ems="10"
                 android:ellipsize="end"
-                android:fontFamily="@font/roboto_regular"
+                android:fontFamily="@font/roboto_medium"
                 android:maxLines="2"
                 android:maxWidth="180dp"
                 android:padding="2dp"
@@ -162,53 +165,55 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="52dp"
             android:layout_marginBottom="4dp"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:padding="2dp"
+            android:gravity="center"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingRight="2dp"
+            android:paddingLeft="20dp"
             >
 
             <android.support.v7.widget.AppCompatButton
                 style="@style/My_Button_Small.Invert"
-                android:layout_width="70dp"
-                android:layout_height="25dp"
+                android:layout_width="62dp"
+                android:layout_height="24dp"
                 android:id="@+id/btnAccept"
                 android:text="@string/text_accept" android:layout_gravity="center_vertical"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
                 android:padding="2dp"
                 android:textSize="10sp"
+                android:layout_marginRight="12dp"
+                android:layout_marginLeft="10dp"
                 />
 
 
             <android.support.v7.widget.AppCompatButton
                 style="@style/My_Button_Small.Invert"
-                android:layout_width="70dp"
-                android:layout_height="25dp"
+                android:layout_width="62dp"
+                android:layout_height="24dp"
                 android:id="@+id/btnReject"
                 android:text="@string/text_reject"
                 android:padding="2dp"
                 android:textSize="10sp"
-                android:layout_centerInParent="true"
+                android:layout_marginRight="12dp"
                 android:layout_gravity="center_vertical"
                 />
 
             <android.support.v7.widget.AppCompatButton
                 style="@style/My_Button_Small.Invert"
-                android:layout_width="70dp"
-                android:layout_height="25dp"
+                android:layout_width="62dp"
+                android:layout_height="24dp"
                 android:id="@+id/btnCounter"
                 android:text="@string/counter" android:layout_gravity="center_vertical"
                 android:padding="2dp"
                 android:textSize="10sp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
                 />
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

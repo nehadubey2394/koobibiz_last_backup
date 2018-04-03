@@ -7,14 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.model.booking.BookingInfo;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Bookings;
+import com.mualab.org.biz.session.Session;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -61,6 +63,17 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         holder.tvTime.setText(item.bookingTime);
         holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
 
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+        if (user.businessType.equals("independent")) {
+            holder.tvStaffName.setVisibility(View.GONE);
+            holder.lyStaff.setVisibility(View.GONE);
+        }
+        else {
+            holder.tvStaffName.setVisibility(View.VISIBLE);
+            holder.lyStaff.setVisibility(View.VISIBLE);
+        }
+
         if (!item.userDetail.profileImage.equals("")){
             Picasso.with(context).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).
                     fit().into(holder.ivProfilePic);
@@ -71,6 +84,7 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     {
         TextView tvStaffName,tvUserName,tvServices,tvBookingStatus,tvTime;
         ImageView ivProfilePic;
+        LinearLayout lyStaff;
         private ViewHolder(View itemView)
         {
             super(itemView);
@@ -81,6 +95,7 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tvBookingStatus = itemView.findViewById(R.id.tvBookingStatus);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvStaffName = itemView.findViewById(R.id.tvStaffName);
+            lyStaff = itemView.findViewById(R.id.lyStaff);
 
             itemView.setOnClickListener(this);
         }

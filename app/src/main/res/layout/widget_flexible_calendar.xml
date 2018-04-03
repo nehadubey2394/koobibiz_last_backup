@@ -23,8 +23,8 @@
 
             <RelativeLayout
                 android:id="@+id/btn_prev_month"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:gravity="center"
                 android:layout_centerVertical="true"
                 android:padding="5dp"
@@ -35,8 +35,8 @@
                 >
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_centerInParent="true"
                     android:src="@drawable/white_back_ico"
@@ -46,19 +46,19 @@
 
             <RelativeLayout
                 android:id="@+id/btn_next_month"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:gravity="center"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:padding="5dp"
+                android:padding="7dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/bg_pink_circle_background"
                 >
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_navigate_next_white"
@@ -78,8 +78,8 @@
 
             <RelativeLayout
                 android:id="@+id/btn_prev_week"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:gravity="center"
                 android:layout_centerVertical="true"
                 android:padding="5dp"
@@ -90,8 +90,8 @@
                 >
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_centerInParent="true"
                     android:src="@drawable/white_back_ico"
@@ -100,19 +100,19 @@
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/btn_next_week"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:gravity="center"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:padding="5dp"
+                android:padding="7dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/bg_pink_circle_background"
                 >
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_centerInParent="true" android:background="@drawable/ic_navigate_next_white"
                     />
