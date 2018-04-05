@@ -34,6 +34,7 @@ import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -81,6 +82,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
 
     private void setViewId(){
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
+        ImageView ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
         ivHeaderBack.setVisibility(View.VISIBLE);
         TextView  tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvBookingDate = findViewById(R.id.tvBookingDate);
@@ -99,6 +101,11 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
 
         llBottom = findViewById(R.id.llBottom);
         llBottom2 = findViewById(R.id.llBottom2);
+
+        if (!item.userDetail.profileImage.equals("")){
+            Picasso.with(BookingDetailActivity.this).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).
+                    fit().into(ivHeaderProfile);
+        }
 
         RecyclerView rycServices = findViewById(R.id.rycServices);
         LinearLayoutManager layoutManager = new LinearLayoutManager(BookingDetailActivity.this);
