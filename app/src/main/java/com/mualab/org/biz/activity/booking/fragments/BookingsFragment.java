@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -30,6 +29,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.MainActivity;
 import com.mualab.org.biz.activity.booking.activity.StaffActivity;
 import com.mualab.org.biz.activity.booking.adapter.PendingBookingAdapter;
 import com.mualab.org.biz.activity.booking.adapter.TimeSlotAdapter;
@@ -42,9 +42,10 @@ import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.model.booking.Bookings;
 import com.mualab.org.biz.model.booking.BookingInfo;
 import com.mualab.org.biz.model.booking.BookingTimeSlot;
-import com.mualab.org.biz.model.booking.Bookings;
+import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.model.booking.UserDetail;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -52,6 +53,7 @@ import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -76,7 +78,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
-    private String selectedDate,sMonth= "",sDay,currentTime,lat="22.7196",lng="75.8577";
+    private String mParam1,selectedDate,sMonth= "",sDay,currentTime,lat="22.7196",lng="75.8577";
     private Context mContext;
     private LinearLayout tabToday,tabPending;
     private TextView tvPending,tvToday,tvBookingCount;
@@ -90,6 +92,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     private int dayId,count = 0;
     private View rootView;
     private boolean isToday = true;
+
 
     public BookingsFragment() {
         // Required empty public constructor
@@ -108,7 +111,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //     mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam1 = getArguments().getString(ARG_PARAM1);
         }
     }
 
@@ -157,7 +160,10 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     }
 
     private void setViewId(){
-
+        if(mContext instanceof MainActivity) {
+            ((MainActivity) mContext).setTitle(getString(R.string.title_bookings));
+            ((MainActivity) mContext).setBackButtonVisibility(8);
+        }
         tabToday = rootView.findViewById(R.id.tabToday);
         tabPending = rootView.findViewById(R.id.tabPending);
         tvPending = rootView.findViewById(R.id.tvPending);
@@ -207,7 +213,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnToday:
-                Mualab.getInstance().cancelAllPendingRequests();
                 MyFlexibleCalendar viewCalendar =  rootView.findViewById(R.id.calendar);
                 viewCalendar.isFirstimeLoad = true;
                 Calendar cal = Calendar.getInstance();
@@ -229,7 +234,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 isToday = true;
                 tabToday.setBackgroundResource(R.drawable.bg_tab_selected);
                 tabPending.setBackgroundResource(R.drawable.bg_tab_unselected);
-                tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
+                tvPending.setTextColor(getResources().getColor(R.color.text_color));
                 tvToday.setTextColor(getResources().getColor(R.color.white));
               /*  rycPending.setVisibility(View.GONE);
                 rycToday.setVisibility(View.VISIBLE);
@@ -238,11 +243,10 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 break;
 
             case R.id.tabPending:
-                Mualab.getInstance().cancelAllPendingRequests();
                 isToday = false;
                 tabPending.setBackgroundResource(R.drawable.bg_second_tab_selected);
                 tabToday.setBackgroundResource(R.drawable.bg_second_tab_unselected);
-                tvToday.setTextColor(getResources().getColor(R.color.colorPrimary));
+                tvToday.setTextColor(getResources().getColor(R.color.text_color));
                 tvPending.setTextColor(getResources().getColor(R.color.white));
               /*  rycPending.setVisibility(View.VISIBLE);
                 rycToday.setVisibility(View.GONE);
@@ -441,9 +445,9 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 try {
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
+                    String message = js.getString("massage");
 
                     if (status.equalsIgnoreCase("success")) {
-                        String message = js.getString("massage");
                         count = 0;
                         todayBookings.clear();
                         pendingBookings.clear();
@@ -522,7 +526,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                             item.pendingBookingInfos.add(bookingInfo);
                                         }
                                         else {
-                                            tvBookingCount.setVisibility(View.GONE);
                                             item.todayBookingInfos.add(bookingInfo);
                                         }
                                     }
@@ -537,7 +540,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 }
                             }
                         }else {
-                            tvBookingCount.setVisibility(View.GONE);
                             rycToday.setVisibility(View.GONE);
                             rycPending.setVisibility(View.GONE);
                             tvNoData.setVisibility(View.VISIBLE);
@@ -561,7 +563,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 rycPending.setVisibility(View.VISIBLE);
                             }
                             else {
-                                tvBookingCount.setVisibility(View.GONE);
                                 tvNoData.setVisibility(View.VISIBLE);
                                 rycToday.setVisibility(View.GONE);
                                 rycPending.setVisibility(View.GONE);
@@ -575,7 +576,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
 
                     }else {
                         rycTimeSlot.setVisibility(View.GONE);
-                        tvNoSlot.setVisibility(View.VISIBLE);
                         tvNoData.setVisibility(View.VISIBLE);
                     }
                     //  showToast(message);
@@ -601,81 +601,13 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
             }})
                 .setAuthToken(user.authToken)
                 .setProgress(true)
-                //  .setParam(params));
                 .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
         //.setBody(params, "application/x-www-form-urlencoded"));
 
         task.execute(this.getClass().getName());
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        getDeviceLocation();
-                    }
-
-                } else {
-                    //Toast.makeText(mContext, "Permission Denied", Toast.LENGTH_LONG).show();
-                    apiForGetFreeSlots();
-                }
-            }
-
-        }
-    }
-
-    @Override
-    public void onButtonClick(int position, String buttonText, int selectedCount) {
-        BookingTimeSlot item =  bookingTimeSlots.get(position);
-        for (int i = 0;i<bookingTimeSlots.size();i++){
-            BookingTimeSlot timeSlot = bookingTimeSlots.get(i);
-            timeSlot.isSelected = "0";
-        }
-        timeSlotAdapter.notifyDataSetChanged();
-        // if (item.isSelected.equals("0"))
-        item.isSelected = "1";
-        //  else
-        //     item.isSelected = "0";
-        timeSlotAdapter.notifyItemChanged(position);
-    }
-
-    @Override
-    public void onActionClick(int position, Bookings bookings,String text) {
-        String serviceId = "",subServiceId = "",artistServiceId="";
-        if (bookings.pendingBookingInfos.size()!=0){
-            for (int i=0; i<bookings.pendingBookingInfos.size(); i++){
-                BookingInfo bookingInfo = bookings.pendingBookingInfos.get(i);
-                if (serviceId.equals("")){
-                    serviceId = bookingInfo.serviceId;
-                }else {
-                    if (!serviceId.contains(bookingInfo.serviceId))
-                        serviceId = serviceId + ","+bookingInfo.serviceId;
-                }
-                if (subServiceId.equals("")){
-                    subServiceId = bookingInfo.subServiceId;
-                }else {
-                    if (!subServiceId.contains(bookingInfo.subServiceId))
-                        subServiceId = subServiceId + ","+bookingInfo.subServiceId;
-                }
-
-                if (artistServiceId.equals("")){
-                    artistServiceId = bookingInfo.artistServiceId;
-                }else {
-                    if (!artistServiceId.contains(bookingInfo.artistServiceId))
-                        artistServiceId = artistServiceId + ","+bookingInfo.artistServiceId;
-                }
-
-            }
-            apiForBookingAction(text,bookings,serviceId,subServiceId,artistServiceId);
-        }
-    }
-
-    private void apiForBookingAction(final String type,final Bookings bookings,final String
-            serviceId ,final String subServiceId ,final String artistServiceId){
+    private void apiForBookingAction(final String type,final Bookings bookings,final String serviceId ,final String subServiceId ,final String artistServiceId){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
@@ -757,25 +689,69 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     }
 
     @Override
-    public void onDestroyView() {
-        Mualab.getInstance().cancelAllPendingRequests();
-        super.onDestroyView();
+    public void onButtonClick(int position, String buttonText, int selectedCount) {
+        BookingTimeSlot item =  bookingTimeSlots.get(position);
+        for (int i = 0;i<bookingTimeSlots.size();i++){
+            BookingTimeSlot timeSlot = bookingTimeSlots.get(i);
+            timeSlot.isSelected = "0";
+        }
+        timeSlotAdapter.notifyDataSetChanged();
+        // if (item.isSelected.equals("0"))
+        item.isSelected = "1";
+        //  else
+        //     item.isSelected = "0";
+        timeSlotAdapter.notifyItemChanged(position);
     }
 
-    private boolean checkPermission(String permission){
-        if (Build.VERSION.SDK_INT >= 23) {
-            int result = ContextCompat.checkSelfPermission(mContext, permission);
-            if (result == PackageManager.PERMISSION_GRANTED){
+    @Override
+    public void onActionClick(int position, Bookings bookings,String text) {
+        String serviceId = "",subServiceId = "",artistServiceId="";
+        if (bookings.pendingBookingInfos.size()!=0){
+            for (int i=0; i<bookings.pendingBookingInfos.size(); i++){
+                BookingInfo bookingInfo = bookings.pendingBookingInfos.get(i);
+                if (serviceId.equals("")){
+                    serviceId = bookingInfo.serviceId;
+                }else {
+                    if (!serviceId.contains(bookingInfo.serviceId))
+                        serviceId = serviceId + ","+bookingInfo.serviceId;
+                }
+                if (subServiceId.equals("")){
+                    subServiceId = bookingInfo.subServiceId;
+                }else {
+                    if (!subServiceId.contains(bookingInfo.subServiceId))
+                        subServiceId = subServiceId + ","+bookingInfo.subServiceId;
+                }
 
-                return true;
-            } else {
+                if (artistServiceId.equals("")){
+                    artistServiceId = bookingInfo.artistServiceId;
+                }else {
+                    if (!artistServiceId.contains(bookingInfo.artistServiceId))
+                        artistServiceId = artistServiceId + ","+bookingInfo.artistServiceId;
+                }
 
-                return false;
             }
-        } else {
-            return true;
+            apiForBookingAction(text,bookings,serviceId,subServiceId,artistServiceId);
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        getDeviceLocation();
+                    }
+
+                } else {
+                    //Toast.makeText(mContext, "Permission Denied", Toast.LENGTH_LONG).show();
+                    apiForGetFreeSlots();
+                }
+            }
+
+        }
+    }
 
 }

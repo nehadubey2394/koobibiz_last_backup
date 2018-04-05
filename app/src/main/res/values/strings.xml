@@ -226,6 +226,7 @@
     <string name="no_data_available">No data available!</string>
     <string name="there_are_no_available_slots_please_select_another_day">There are no available slots. Please select another day.</string>
     <string name="appoinment_info">Appointment Info :</string>
+    <string name="appoinment">Appointment</string>
     <string name="today">Today</string>
     <string name="pending">Pending</string>
     <string name="new_appointment">New Appointment</string>
@@ -239,5 +240,11 @@
     <string name="text_accept">Accept</string>
     <string name="title_bookings">Bookings</string>
     <string name="add">Add</string>
+
+    <!--Booking detail-->
+    <string name="text_location">Location</string>
+    <string name="text_services">Services</string>
+    <string name="text_date_and_time">Appointment Date And Time</string>
+    <string name="change_staff">Change Staff</string>
 
 </resources>
