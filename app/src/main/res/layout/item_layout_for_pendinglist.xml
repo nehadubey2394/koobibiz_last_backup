@@ -12,6 +12,7 @@
     app:cardElevation="2dp"
     >
     <RelativeLayout
+        android:id="@+id/rlContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -86,7 +87,7 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:padding="1dp"
-                        android:maxWidth="150dp"
+                        android:maxWidth="200dp"
                         android:minWidth="50dp"
                         android:minHeight="16dp"
                         android:text="NA"
@@ -116,7 +117,6 @@
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:ems="10"
                 android:ellipsize="end"
                 android:fontFamily="@font/roboto_regular"
@@ -125,14 +125,14 @@
                 android:padding="2dp"
                 android:text="16 March 2018"
                 android:textColor="@color/grey"
-                android:gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="end|center_vertical"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvBookingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:ems="10"
                 android:ellipsize="end"
                 android:fontFamily="@font/roboto_medium"
@@ -141,14 +141,14 @@
                 android:padding="2dp"
                 android:text="19:00 pm - 20:00 pm"
                 android:textColor="@color/text_color"
-                android:gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="end|center_vertical"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvServices"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:ems="10"
                 android:ellipsize="end"
                 android:fontFamily="@font/roboto_regular"
@@ -157,7 +157,8 @@
                 android:padding="2dp"
                 android:text="Makeup"
                 android:textColor="@color/text_color"
-                android:gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="end|center_vertical"
                 android:textSize="12sp" />
 
         </LinearLayout>

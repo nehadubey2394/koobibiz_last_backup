@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.MainActivity;
 import com.mualab.org.biz.activity.booking.activity.StaffActivity;
 import com.mualab.org.biz.activity.booking.adapter.PendingBookingAdapter;
 import com.mualab.org.biz.activity.booking.adapter.TimeSlotAdapter;
@@ -159,6 +160,10 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     }
 
     private void setViewId(){
+        if(mContext instanceof MainActivity) {
+            ((MainActivity) mContext).setTitle(getString(R.string.title_bookings));
+            ((MainActivity) mContext).setBackButtonVisibility(8);
+        }
         tabToday = rootView.findViewById(R.id.tabToday);
         tabPending = rootView.findViewById(R.id.tabPending);
         tvPending = rootView.findViewById(R.id.tvPending);
@@ -602,73 +607,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         task.execute(this.getClass().getName());
     }
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        getDeviceLocation();
-                    }
-
-                } else {
-                    //Toast.makeText(mContext, "Permission Denied", Toast.LENGTH_LONG).show();
-                    apiForGetFreeSlots();
-                }
-            }
-
-        }
-    }
-
-    @Override
-    public void onButtonClick(int position, String buttonText, int selectedCount) {
-        BookingTimeSlot item =  bookingTimeSlots.get(position);
-        for (int i = 0;i<bookingTimeSlots.size();i++){
-            BookingTimeSlot timeSlot = bookingTimeSlots.get(i);
-            timeSlot.isSelected = "0";
-        }
-        timeSlotAdapter.notifyDataSetChanged();
-        // if (item.isSelected.equals("0"))
-        item.isSelected = "1";
-        //  else
-        //     item.isSelected = "0";
-        timeSlotAdapter.notifyItemChanged(position);
-    }
-
-    @Override
-    public void onActionClick(int position, Bookings bookings,String text) {
-        String serviceId = "",subServiceId = "",artistServiceId="";
-        if (bookings.pendingBookingInfos.size()!=0){
-            for (int i=0; i<bookings.pendingBookingInfos.size(); i++){
-                BookingInfo bookingInfo = bookings.pendingBookingInfos.get(i);
-                if (serviceId.equals("")){
-                    serviceId = bookingInfo.serviceId;
-                }else {
-                    if (!serviceId.contains(bookingInfo.serviceId))
-                        serviceId = serviceId + ","+bookingInfo.serviceId;
-                }
-                if (subServiceId.equals("")){
-                    subServiceId = bookingInfo.subServiceId;
-                }else {
-                    if (!subServiceId.contains(bookingInfo.subServiceId))
-                        subServiceId = subServiceId + ","+bookingInfo.subServiceId;
-                }
-
-                if (artistServiceId.equals("")){
-                    artistServiceId = bookingInfo.artistServiceId;
-                }else {
-                    if (!artistServiceId.contains(bookingInfo.artistServiceId))
-                        artistServiceId = artistServiceId + ","+bookingInfo.artistServiceId;
-                }
-
-            }
-            apiForBookingAction(text,bookings,serviceId,subServiceId,artistServiceId);
-        }
-    }
-
     private void apiForBookingAction(final String type,final Bookings bookings,final String serviceId ,final String subServiceId ,final String artistServiceId){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
@@ -748,6 +686,72 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         //.setBody(params, "application/x-www-form-urlencoded"));
 
         task.execute(this.getClass().getName());
+    }
+
+    @Override
+    public void onButtonClick(int position, String buttonText, int selectedCount) {
+        BookingTimeSlot item =  bookingTimeSlots.get(position);
+        for (int i = 0;i<bookingTimeSlots.size();i++){
+            BookingTimeSlot timeSlot = bookingTimeSlots.get(i);
+            timeSlot.isSelected = "0";
+        }
+        timeSlotAdapter.notifyDataSetChanged();
+        // if (item.isSelected.equals("0"))
+        item.isSelected = "1";
+        //  else
+        //     item.isSelected = "0";
+        timeSlotAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void onActionClick(int position, Bookings bookings,String text) {
+        String serviceId = "",subServiceId = "",artistServiceId="";
+        if (bookings.pendingBookingInfos.size()!=0){
+            for (int i=0; i<bookings.pendingBookingInfos.size(); i++){
+                BookingInfo bookingInfo = bookings.pendingBookingInfos.get(i);
+                if (serviceId.equals("")){
+                    serviceId = bookingInfo.serviceId;
+                }else {
+                    if (!serviceId.contains(bookingInfo.serviceId))
+                        serviceId = serviceId + ","+bookingInfo.serviceId;
+                }
+                if (subServiceId.equals("")){
+                    subServiceId = bookingInfo.subServiceId;
+                }else {
+                    if (!subServiceId.contains(bookingInfo.subServiceId))
+                        subServiceId = subServiceId + ","+bookingInfo.subServiceId;
+                }
+
+                if (artistServiceId.equals("")){
+                    artistServiceId = bookingInfo.artistServiceId;
+                }else {
+                    if (!artistServiceId.contains(bookingInfo.artistServiceId))
+                        artistServiceId = artistServiceId + ","+bookingInfo.artistServiceId;
+                }
+
+            }
+            apiForBookingAction(text,bookings,serviceId,subServiceId,artistServiceId);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        getDeviceLocation();
+                    }
+
+                } else {
+                    //Toast.makeText(mContext, "Permission Denied", Toast.LENGTH_LONG).show();
+                    apiForGetFreeSlots();
+                }
+            }
+
+        }
     }
 
 }

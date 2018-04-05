@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MualabBIZ.iml" filepath="$PROJECT_DIR$/MualabBIZ.iml" />
+      <module fileurl="file://F:\workspace\MualabNew\KoobiBiz\koobiBiz\MualabBIZ.iml" filepath="F:\workspace\MualabNew\KoobiBiz\koobiBiz\MualabBIZ.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/koobiBiz.iml" filepath="$PROJECT_DIR$/koobiBiz.iml" />
     </modules>
   </component>
 </project>

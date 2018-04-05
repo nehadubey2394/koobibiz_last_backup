@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,10 +48,22 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Session session;
     private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnLogo,ibtnUser;
+    private ImageView ivHeaderBack;
+    private TextView tvHeaderTitle;
     private int clickedId = 0;
     //private TextView tv_msg;
     private String lat="",lng="";
    // private ProgressBar progress_bar;
+
+    public void setBackButtonVisibility(int visibility){
+        if(ivHeaderBack!=null)
+            ivHeaderBack.setVisibility(visibility);
+    }
+
+    public void setTitle(String text){
+        if(tvHeaderTitle!=null)
+            tvHeaderTitle.setText(text);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +107,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ibtnAdd = findViewById(R.id.ibtnAdd);
         ibtnLogo = findViewById(R.id.ibtnLogo);
         ibtnUser = findViewById(R.id.ibtnUser);
+        ivHeaderBack = findViewById(R.id.ivHeaderBack);
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
        // tv_msg = findViewById(R.id.tv_msg);
         ibtnBookings.setImageResource(R.drawable.active_calender_ico);
 

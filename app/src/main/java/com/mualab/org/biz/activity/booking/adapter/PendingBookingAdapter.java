@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.MainActivity;
+import com.mualab.org.biz.activity.booking.fragments.BookingDetailFragment;
 import com.mualab.org.biz.activity.booking.listner.PendingBookingListener;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.booking.Bookings;
@@ -86,6 +89,7 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TextView tvUserName,tvStaffName,tvDate,tvBookingTime,tvServices;
         ImageView ivProfilePic;
         AppCompatButton btnCounter,btnReject,btnAccept;
+        RelativeLayout rlContainer;
         private ViewHolder(View itemView)
         {
             super(itemView);
@@ -103,6 +107,7 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             btnCounter.setOnClickListener(this);
             btnReject.setOnClickListener(this);
             btnAccept.setOnClickListener(this);
+            rlContainer.setOnClickListener(this);
         }
 
         @Override
@@ -122,6 +127,11 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     break;
                 case R.id.btnCounter :
                     MyToast.getInstance(context).showDasuAlert("Under development...");
+                    break;
+
+                case R.id.rlContainer :
+                    Bookings infoBookings = artistsList.get(getAdapterPosition());
+                    ((MainActivity) context).addFragment(BookingDetailFragment.newInstance(infoBookings._id), true);
                     break;
             }
         }

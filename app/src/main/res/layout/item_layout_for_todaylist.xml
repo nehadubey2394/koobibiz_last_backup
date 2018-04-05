@@ -103,7 +103,7 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:padding="1dp"
-                        android:maxWidth="150dp"
+                        android:maxWidth="200dp"
                         android:minWidth="50dp"
                         android:minHeight="16dp"
                         android:text="NA"
@@ -134,7 +134,6 @@
                 android:id="@+id/tvBookingStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:ems="10"
                 android:ellipsize="end"
                 android:fontFamily="@font/roboto_medium"
@@ -143,14 +142,14 @@
                 android:padding="2dp"
                 android:text="Confirmed"
                 android:textColor="@color/green"
-                android:gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="end|center_vertical"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:ems="10"
                 android:ellipsize="end"
                 android:fontFamily="@font/roboto_medium"
@@ -159,7 +158,8 @@
                 android:padding="2dp"
                 android:text="10:00"
                 android:textColor="@color/grey"
-                android:gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="end|center_vertical"
                 android:textSize="11sp" />
 
         </LinearLayout>

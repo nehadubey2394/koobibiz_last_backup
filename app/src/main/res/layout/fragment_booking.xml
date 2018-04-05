@@ -38,7 +38,10 @@
                 android:id="@+id/cardv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
                 android:clickable="true"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
@@ -130,7 +133,7 @@
                         android:text="@string/appoinment_info"
                         android:textColor="@color/text_color"
                         android:fontFamily="@font/roboto_medium"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
 
                     <android.support.v7.widget.AppCompatButton
                         style="@style/My_Button_Small.Invert"
@@ -272,6 +275,7 @@
         android:text="@string/new_appointment"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:fontFamily="@font/roboto_regular"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
         android:textSize="14sp"

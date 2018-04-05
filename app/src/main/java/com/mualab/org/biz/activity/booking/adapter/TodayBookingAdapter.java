@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.MainActivity;
+import com.mualab.org.biz.activity.booking.fragments.BookingDetailFragment;
 import com.mualab.org.biz.model.booking.BookingInfo;
 import com.mualab.org.biz.model.booking.Bookings;
 import com.squareup.picasso.Picasso;
@@ -87,7 +89,8 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick(View view) {
-
+            Bookings info = artistsList.get(getAdapterPosition());
+            ((MainActivity) context).addFragment(BookingDetailFragment.newInstance(info._id), true);
 
         }
     }
