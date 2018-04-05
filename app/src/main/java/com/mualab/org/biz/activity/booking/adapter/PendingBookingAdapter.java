@@ -8,16 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.MainActivity;
+import com.mualab.org.biz.activity.booking.fragments.BookingDetailFragment;
 import com.mualab.org.biz.activity.booking.listner.PendingBookingListener;
-import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
-import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Bookings;
-import com.mualab.org.biz.session.Session;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -79,17 +78,6 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         holder.tvBookingTime.setText(item.bookingTime);
         holder.tvServices.setText(item.artistServiceName);
 
-        Session session = Mualab.getInstance().getSessionManager();
-        User user = session.getUser();
-        if (user.businessType.equals("independent")) {
-            holder.tvStaffName.setVisibility(View.GONE);
-            holder.lyStaff.setVisibility(View.GONE);
-        }
-        else {
-            holder.tvStaffName.setVisibility(View.VISIBLE);
-            holder.lyStaff.setVisibility(View.VISIBLE);
-        }
-
         if (!item.userDetail.profileImage.equals("")){
             Picasso.with(context).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).
                     fit().into(holder.ivProfilePic);
@@ -101,7 +89,7 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TextView tvUserName,tvStaffName,tvDate,tvBookingTime,tvServices;
         ImageView ivProfilePic;
         AppCompatButton btnCounter,btnReject,btnAccept;
-        LinearLayout lyStaff;
+        RelativeLayout rlContainer;
         private ViewHolder(View itemView)
         {
             super(itemView);
@@ -115,11 +103,11 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             btnCounter = itemView.findViewById(R.id.btnCounter);
             btnReject = itemView.findViewById(R.id.btnReject);
             btnAccept = itemView.findViewById(R.id.btnAccept);
-            lyStaff = itemView.findViewById(R.id.lyStaff);
 
             btnCounter.setOnClickListener(this);
             btnReject.setOnClickListener(this);
             btnAccept.setOnClickListener(this);
+            rlContainer.setOnClickListener(this);
         }
 
         @Override
@@ -140,7 +128,13 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 case R.id.btnCounter :
                     MyToast.getInstance(context).showDasuAlert("Under development...");
                     break;
+
+                case R.id.rlContainer :
+                    Bookings infoBookings = artistsList.get(getAdapterPosition());
+                    ((MainActivity) context).addFragment(BookingDetailFragment.newInstance(infoBookings._id), true);
+                    break;
             }
         }
     }
+
 }

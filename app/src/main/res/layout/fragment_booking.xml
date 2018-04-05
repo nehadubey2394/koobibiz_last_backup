@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:overScrollMode="never"
-        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/btnNewAppointment"
         >
 
         <LinearLayout
@@ -25,9 +25,8 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnToday"
                 style="@style/My_Button_Small.Invert"
-                android:layout_width="75dp"
-                android:layout_height="25dp"
-                android:text="@string/text_today" android:layout_gravity="center_vertical"
+                android:layout_width="80dp"
+                android:layout_height="26dp" android:text="@string/text_today" android:layout_gravity="center_vertical"
                 android:padding="2dp"
                 android:gravity="center"
                 android:textSize="12sp"
@@ -39,10 +38,10 @@
                 android:id="@+id/cardv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginLeft="12dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginRight="12dp"
                 android:clickable="true"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
@@ -83,10 +82,10 @@
                         android:id="@+id/rycTimeSlot"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
                         android:layout_marginLeft="6dp"
                         android:layout_marginRight="6dp"
                         android:layout_marginTop="2dp"
-                        android:layout_marginBottom="4dp"
                         android:nestedScrollingEnabled="true"
                         android:overScrollMode="never"
                         android:scrollbars="none" />
@@ -105,7 +104,7 @@
                         android:textColor="@color/text_color"
                         android:textSize="13sp"
                         android:visibility="gone"
-                        />
+                         />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -121,8 +120,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:layout_marginRight="6dp"
                     android:layout_marginLeft="6dp"
                     android:orientation="horizontal">
@@ -139,8 +137,8 @@
 
                     <android.support.v7.widget.AppCompatButton
                         style="@style/My_Button_Small.Invert"
-                        android:layout_width="68dp"
-                        android:layout_height="25dp"
+                        android:layout_width="70dp"
+                        android:layout_height="24dp"
                         android:id="@+id/btnStaff"
                         android:fontFamily="@font/roboto_regular"
                         android:text="@string/text_staff"
@@ -179,7 +177,7 @@
                             android:clickable="true"
                             >
                             <TextView
-                                android:layout_width="match_parent" android:layout_height="match_parent"
+                              android:layout_width="match_parent" android:layout_height="match_parent"
                                 android:id="@+id/tvToday"
                                 android:paddingLeft="5dp"
                                 android:gravity="center"
@@ -204,7 +202,7 @@
                                 android:cursorVisible="true"
                                 android:paddingLeft="5dp"
                                 android:gravity="center"
-                                android:text="@string/pending" android:textColor="@color/colorPrimary"
+                                android:text="@string/pending" android:textColor="@color/text_color"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -264,22 +262,34 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btnNewAppointment"
-                style="@style/My_Button_Small.Invert"
-                android:layout_width="162dp"
-                android:layout_height="32dp"
-                android:text="@string/new_appointment"
-                android:fontFamily="@font/roboto_regular"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="13sp"
-                />
-
         </LinearLayout>
 
+
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnNewAppointment"
+        style="@style/My_Button_Small.Invert"
+        android:layout_width="180dp"
+        android:layout_height="30dp"
+        android:text="@string/new_appointment"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:fontFamily="@font/roboto_regular"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:textSize="14sp"
+        android:layout_alignParentBottom="true"
+        />
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextView"
+        android:text="@string/loading"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:visibility="gone" />
 
 </RelativeLayout>
