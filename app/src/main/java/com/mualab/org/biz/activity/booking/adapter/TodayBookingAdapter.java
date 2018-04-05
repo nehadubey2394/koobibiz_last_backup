@@ -2,6 +2,8 @@ package com.mualab.org.biz.activity.booking.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,24 +12,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.activity.MainActivity;
-import com.mualab.org.biz.activity.booking.fragments.BookingDetailFragment;
-import com.mualab.org.biz.model.booking.BookingInfo;
+import com.mualab.org.biz.activity.booking.activity.BookingDetailActivity;
 import com.mualab.org.biz.model.booking.Bookings;
+import com.mualab.org.biz.model.booking.Staff;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 
 public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<Bookings> artistsList;
+    private List<Staff> staffList;
 
     // Constructor of the class
-    public TodayBookingAdapter(Context context, List<Bookings> artistsList) {
+    public TodayBookingAdapter(Context context, List<Bookings> artistsList,List<Staff> Staff) {
         this.context = context;
         this.artistsList = artistsList;
+        this.staffList = staffList;
     }
 
     @Override
@@ -90,7 +93,12 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public void onClick(View view) {
             Bookings info = artistsList.get(getAdapterPosition());
-            ((MainActivity) context).addFragment(BookingDetailFragment.newInstance(info._id), true);
+            Intent intent = new Intent(context, BookingDetailActivity.class);
+            Bundle args = new Bundle();
+            args.putSerializable("ARRAYLIST",(Serializable)staffList);
+            intent.putExtra("BUNDLE",args);
+            intent.putExtra("bookingId",info._id);
+            context.startActivity(intent);
 
         }
     }

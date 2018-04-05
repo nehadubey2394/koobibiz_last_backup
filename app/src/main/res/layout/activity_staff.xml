@@ -44,4 +44,16 @@
         android:layout_alignParentBottom="true"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvoData"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/no_data_available"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

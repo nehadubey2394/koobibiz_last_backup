@@ -58,6 +58,7 @@ import com.mualab.org.biz.util.LocationDetector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,6 +85,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     private TextView tvPending,tvToday,tvBookingCount;
     private List<BookingTimeSlot> bookingTimeSlots;
     private List<Bookings> todayBookings,pendingBookings;
+    private List<Staff> staffList;
     private TimeSlotAdapter timeSlotAdapter;
     private TodayBookingAdapter todayBookingAdapter;
     private PendingBookingAdapter pendingBookingAdapter;
@@ -138,13 +140,14 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         CalendarAdapter adapter = new CalendarAdapter(mContext, cal);
         viewCalendar.setAdapter(adapter);
 
+        staffList = new ArrayList<>();
         bookingTimeSlots = new ArrayList<>();
         todayBookings = new ArrayList<>();
         pendingBookings = new ArrayList<>();
 
         timeSlotAdapter = new TimeSlotAdapter(mContext, bookingTimeSlots);
-        todayBookingAdapter = new TodayBookingAdapter(mContext, todayBookings);
-        pendingBookingAdapter = new PendingBookingAdapter(mContext, pendingBookings);
+        todayBookingAdapter = new TodayBookingAdapter(mContext, todayBookings,staffList);
+        pendingBookingAdapter = new PendingBookingAdapter(mContext, pendingBookings,staffList);
 
         setCalenderClickListner(viewCalendar);
 
@@ -227,14 +230,18 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 break;
 
             case R.id.btnStaff:
-                startActivity(new Intent(mContext, StaffActivity.class));
+                Intent intent = new Intent(mContext, StaffActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("ARRAYLIST",(Serializable)staffList);
+                intent.putExtra("BUNDLE",args);
+                startActivity(intent);
                 break;
 
             case R.id.tabToday:
                 isToday = true;
                 tabToday.setBackgroundResource(R.drawable.bg_tab_selected);
                 tabPending.setBackgroundResource(R.drawable.bg_tab_unselected);
-                tvPending.setTextColor(getResources().getColor(R.color.text_color));
+                tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvToday.setTextColor(getResources().getColor(R.color.white));
               /*  rycPending.setVisibility(View.GONE);
                 rycToday.setVisibility(View.VISIBLE);
@@ -246,7 +253,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 isToday = false;
                 tabPending.setBackgroundResource(R.drawable.bg_second_tab_selected);
                 tabToday.setBackgroundResource(R.drawable.bg_second_tab_unselected);
-                tvToday.setTextColor(getResources().getColor(R.color.text_color));
+                tvToday.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvPending.setTextColor(getResources().getColor(R.color.white));
               /*  rycPending.setVisibility(View.VISIBLE);
                 rycToday.setVisibility(View.GONE);
@@ -448,6 +455,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                     String message = js.getString("massage");
 
                     if (status.equalsIgnoreCase("success")) {
+                        staffList.clear();
                         count = 0;
                         todayBookings.clear();
                         pendingBookings.clear();
@@ -471,11 +479,24 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                             tvNoSlot.setVisibility(View.VISIBLE);
                         }
 
+                        //parsing for getting staff
+                        JSONArray arrStaffDetail= js.getJSONArray("staffDetail");
+                        if (arrStaffDetail!=null && arrStaffDetail.length()!=0) {
+                            for (int l=0; l<arrStaffDetail.length(); l++){
+                                JSONObject object = arrStaffDetail.getJSONObject(l);
+                                Staff staff = new Staff();
+                                staff.staffId = object.getString("staffId");
+                                staff.staffName = object.getString("staffName");
+                                staff.staffImage = object.getString("staffImage");
+                                staff.job = object.getString("job");
+                                staffList.add(staff);
+                            }
+                        }
+
                         JSONArray array = js.getJSONArray("booking");
                         if (array!=null && array.length()!=0) {
                             for (int j=0; j<array.length(); j++){
                                 String serviceName = "";
-
                                 JSONObject object = array.getJSONObject(j);
                                 Bookings item = new Bookings();
                                 item._id = object.getString("_id");
@@ -485,6 +506,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 item.paymentType = object.getString("paymentType");
                                 item.totalPrice = object.getString("totalPrice");
 
+                                //parsing for user detail
                                 JSONArray arrUserDetail = object.getJSONArray("userDetail");
                                 if (arrUserDetail!=null && arrUserDetail.length()!=0) {
                                     for (int k=0; k<arrUserDetail.length(); k++){
@@ -493,7 +515,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                         item.userDetail = gson.fromJson(String.valueOf(userObj), UserDetail.class);
                                     }
                                 }
-
+                                //parsing for getting booking Info
                                 JSONArray arrBookingInfo = object.getJSONArray("bookingInfo");
                                 if (arrBookingInfo!=null && arrBookingInfo.length()!=0) {
                                     for (int l=0; l<arrBookingInfo.length(); l++){
@@ -517,17 +539,17 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                         }/*else {
                                             serviceName = serviceName + ","+bookingInfo.artistServiceName;
                                         }*/
-                                        bookingInfo.bookingStatus = item.bookStatus;
-
-                                        bookingInfo.userDetail = item.userDetail;
-
+                                        //bookingInfo.bookingStatus = item.bookStatus;
+                                        // bookingInfo.userDetail = item.userDetail;
                                         if (item.bookStatus.equals("0")) {
                                             tvBookingCount.setVisibility(View.VISIBLE);
                                             item.pendingBookingInfos.add(bookingInfo);
                                         }
                                         else {
+                                            tvBookingCount.setVisibility(View.GONE);
                                             item.todayBookingInfos.add(bookingInfo);
                                         }
+                                        bookingInfo.bookingDetail = item;
                                     }
                                     item.artistServiceName = serviceName;
                                 }
@@ -563,6 +585,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 rycPending.setVisibility(View.VISIBLE);
                             }
                             else {
+                                tvBookingCount.setVisibility(View.GONE);
                                 tvNoData.setVisibility(View.VISIBLE);
                                 rycToday.setVisibility(View.GONE);
                                 rycPending.setVisibility(View.GONE);
@@ -654,7 +677,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                             }else {
                                 count--;
                             }
-                            tvBookingCount.setText(""+count);
+                            tvBookingCount.setText(count);
                         }
                         MyToast.getInstance(mContext).showDasuAlert(message);
                     }else {

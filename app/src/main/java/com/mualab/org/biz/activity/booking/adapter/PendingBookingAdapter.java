@@ -2,6 +2,8 @@ package com.mualab.org.biz.activity.booking.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,13 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.activity.MainActivity;
-import com.mualab.org.biz.activity.booking.fragments.BookingDetailFragment;
+import com.mualab.org.biz.activity.booking.activity.BookingDetailActivity;
 import com.mualab.org.biz.activity.booking.listner.PendingBookingListener;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.booking.Bookings;
+import com.mualab.org.biz.model.booking.Staff;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,15 +32,17 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private Context context;
     private List<Bookings> artistsList;
     private PendingBookingListener bookingListener = null;
+    private List<Staff> staffList;
 
     public void setCustomListener(PendingBookingListener bookingListener){
         this.bookingListener = bookingListener;
     }
 
     // Constructor of the class
-    public PendingBookingAdapter(Context context, List<Bookings> artistsList) {
+    public PendingBookingAdapter(Context context, List<Bookings> artistsList,List<Staff> staffList) {
         this.context = context;
         this.artistsList = artistsList;
+        this.staffList = staffList;
     }
 
     @Override
@@ -103,6 +108,7 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             btnCounter = itemView.findViewById(R.id.btnCounter);
             btnReject = itemView.findViewById(R.id.btnReject);
             btnAccept = itemView.findViewById(R.id.btnAccept);
+            rlContainer = itemView.findViewById(R.id.rlContainer);
 
             btnCounter.setOnClickListener(this);
             btnReject.setOnClickListener(this);
@@ -131,7 +137,13 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 case R.id.rlContainer :
                     Bookings infoBookings = artistsList.get(getAdapterPosition());
-                    ((MainActivity) context).addFragment(BookingDetailFragment.newInstance(infoBookings._id), true);
+                 //   ((MainActivity) context).addFragment(BookingDetailFragment.newInstance(infoBookings._id), true);
+                    Intent intent = new Intent(context, BookingDetailActivity.class);
+                    Bundle args = new Bundle();
+                    args.putSerializable("ARRAYLIST",(Serializable)staffList);
+                    intent.putExtra("BUNDLE",args);
+                    intent.putExtra("bookingId",infoBookings._id);
+                    context.startActivity(intent);
                     break;
             }
         }

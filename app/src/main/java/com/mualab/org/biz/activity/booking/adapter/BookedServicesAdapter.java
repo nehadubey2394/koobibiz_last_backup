@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.booking.listner.OnStaffChangeListener;
 import com.mualab.org.biz.model.booking.BookingInfo;
 
 import java.util.List;
@@ -18,11 +19,15 @@ import java.util.List;
 public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<BookingInfo> artistsList;
+    private OnStaffChangeListener listener = null;
 
     // Constructor of the class
     public BookedServicesAdapter(Context context, List<BookingInfo> artistsList) {
         this.context = context;
         this.artistsList = artistsList;
+    }
+    public void setListener(OnStaffChangeListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -70,8 +75,16 @@ public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         @Override
         public void onClick(View view) {
 
-
+            switch (view.getId()){
+                case R.id.btnChangeStaff:
+                    BookingInfo bookingInfo = artistsList.get(getAdapterPosition());
+                    if (listener != null) {
+                        listener.onStaffSelect(getAdapterPosition(),bookingInfo);
+                    }
+                    break;
+            }
         }
+
     }
 
 }
