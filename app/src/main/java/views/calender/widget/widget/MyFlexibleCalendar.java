@@ -22,14 +22,11 @@ import views.calender.data.CalendarAdapter;
 import views.calender.data.Day;
 import views.calender.data.Event;
 
-/**
- * Created by neha on 15/2/18.
- */
+
 public class MyFlexibleCalendar extends MyUICalendar {
 
     private CalendarAdapter mAdapter;
     private CalendarListener mListener;
-    private String sCurrentDay = "";
     private int mInitHeight = 0;
     public boolean isFirstimeLoad = true;
     public boolean isTodayLoad = true;
@@ -161,7 +158,7 @@ public class MyFlexibleCalendar extends MyUICalendar {
 
                 // set today's item
                 if (isToady(day)) {
-                    // mTxtTitle.setText(sCurrentDay +" " + day.getDay()+" "+ dateFormat.format(mAdapter.getCalendar().getTime()));
+
                     mTxtTitle.setText(dateFormat.format(mAdapter.getCalendar().getTime()));
                     txtDay.setBackgroundDrawable(getTodayItemBackgroundDrawable());
                     txtDay.setTextColor(getTodayItemTextColor());
@@ -186,14 +183,14 @@ public class MyFlexibleCalendar extends MyUICalendar {
 
                         if (year>=cYear && month>=cMonth){
                             if (year==cYear && month==cMonth && dayOfMonth<cDay){
-                                MyToast.getInstance(mContext).showDasuAlert("You can't select previous date for booking.");
+                                MyToast.getInstance(mContext).showDasuAlert("You can't select previous date");
                             }else {
                                 mTxtTitle.setText(dateFormat.format(mAdapter.getCalendar().getTime()));
                                 txtDay.setBackgroundDrawable(getSelectedItemBackgroundDrawable());
                                 txtDay.setTextColor(getSelectedItemTextColor());
                             }
                         }else {
-                            MyToast.getInstance(mContext).showDasuAlert("You can't select previous date for booking.");
+                            MyToast.getInstance(mContext).showDasuAlert("You can't select previous date");
                         }
                     }
                 }
@@ -235,7 +232,6 @@ public class MyFlexibleCalendar extends MyUICalendar {
                 View view = mInflater.inflate(R.layout.layout_day_of_week, null);
                 TextView txtDayOfWeek = view.findViewById(R.id.txt_day_of_week);
                 txtDayOfWeek.setText(dayOfWeekIds[(i + getFirstDayOfWeek()) % 7]);
-                sCurrentDay = txtDayOfWeek.getText().toString();
                 txtDayOfWeek.setTextColor(getResources().getColor(R.color.colorPrimary));
 
                 view.setLayoutParams(new TableRow.LayoutParams(

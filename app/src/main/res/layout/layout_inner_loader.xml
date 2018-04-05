@@ -10,7 +10,9 @@
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/gredienTop"
+        android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/tv_msg"
@@ -19,6 +21,7 @@
         style="@style/TextView"
         android:text="@string/loading"
         android:gravity="center"
+        android:layout_gravity="center"
         android:textColor="@color/black"
         android:visibility="gone" />
 </LinearLayout>
