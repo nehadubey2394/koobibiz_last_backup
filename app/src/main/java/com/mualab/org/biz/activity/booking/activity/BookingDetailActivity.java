@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -117,6 +118,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         ivAccept.setOnClickListener(this);
         ivReject.setOnClickListener(this);
         ivCounter.setOnClickListener(this);
+        ivCancle.setOnClickListener(this);
     }
 
     @Override
@@ -136,7 +138,8 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
             case R.id.ivReject:
                 actionForBooking("reject");
                 break;
-            case R.id.ivCounter:
+            case R.id.ivCancle:
+                showCancleDialog();
                 break;
         }
     }
@@ -302,7 +305,12 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         if (status.equals("0")){
             llBottom2.setVisibility(View.VISIBLE);
             llBottom.setVisibility(View.GONE);
-        }else {
+        }else if (status.equals("2")){
+            llBottom2.setVisibility(View.GONE);
+            llBottom.setVisibility(View.VISIBLE);
+            ivCancle.setVisibility(View.GONE);
+        }
+        else {
             llBottom2.setVisibility(View.GONE);
             llBottom.setVisibility(View.VISIBLE);
         }
@@ -365,6 +373,36 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
 
         sheetDialog.show();
     }
+
+    public void showCancleDialog() {
+        View DialogView = View.inflate(BookingDetailActivity.this, R.layout.dialog_layout_cancle_booking, null);
+
+        final Dialog sheetDialog = new BottomSheetDialog(BookingDetailActivity.this);
+        sheetDialog.setCanceledOnTouchOutside(true);
+        sheetDialog.setCancelable(true);
+        sheetDialog.setContentView(DialogView);
+
+        AppCompatButton btnYes = DialogView.findViewById(R.id.btnYes);
+        AppCompatButton btnNo = DialogView.findViewById(R.id.btnNo);
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sheetDialog.dismiss();
+                actionForBooking("reject");
+            }
+        });
+
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sheetDialog.dismiss();
+            }
+        });
+
+        sheetDialog.show();
+    }
+
 
     private void apiForBookingAction(final String type,final Bookings bookings,final String serviceId ,final String subServiceId ,final String artistServiceId){
         Session session = Mualab.getInstance().getSessionManager();
