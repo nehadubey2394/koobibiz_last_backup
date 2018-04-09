@@ -238,6 +238,7 @@
     <string name="counter">Counter</string>
     <string name="text_accept">Accept</string>
     <string name="title_bookings">Bookings</string>
+    <string name="title_buisness_admin">Business Admin</string>
     <string name="add">Add</string>
 
     <!--Booking detail-->
@@ -253,5 +254,10 @@
     <string name="are_you_sure_want_to_cancel_the_appointment">Are you sure want to cancel the appointment</string>
     <string name="assigned_staff">Assigned Staff</string>
     <string name="confirmed">Confirmed</string>
+    <string name="profile">Profile</string>
+    <string name="working_hours">Working Hours</string>
+    <string name="categories">Categories</string>
+    <string name="staff_planner">Staff Planner</string>
+    <string name="voucher_code">Voucher Code</string>
 
 </resources>

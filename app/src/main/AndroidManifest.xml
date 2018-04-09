@@ -116,7 +116,8 @@
             android:name=".service.FetchAddressIntentService"
             android:exported="false" />
 
-        <activity android:name=".activity.booking.activity.BookingDetailActivity"></activity>
+        <activity android:name=".activity.booking.activity.BookingDetailActivity" />
+        <activity android:name=".activity.add_staff.AddStaffActivity"></activity>
     </application>
 
 </manifest>

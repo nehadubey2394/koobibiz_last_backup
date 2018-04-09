@@ -24,6 +24,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.add_staff.ArtistSettingsFragment;
 import com.mualab.org.biz.activity.booking.fragments.AddFragment;
 import com.mualab.org.biz.activity.booking.fragments.BookingsFragment;
 import com.mualab.org.biz.activity.booking.listner.OnRefreshListener;
@@ -57,7 +58,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     private int clickedId = 0;
     //private TextView tv_msg;
     private String lat="",lng="";
-   // private ProgressBar progress_bar;
+    // private ProgressBar progress_bar;
 
     public void setBackButtonVisibility(int visibility){
         if(ivHeaderBack!=null)
@@ -74,7 +75,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         session = new Session(this);
-       // progress_bar = findViewById(R.id.progress_bar);
+        // progress_bar = findViewById(R.id.progress_bar);
         initView();
 
         if(!session.isBusinessProfileComplete()){
@@ -113,7 +114,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         ibtnUser = findViewById(R.id.ibtnUser);
         ivHeaderBack = findViewById(R.id.ivHeaderBack);
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
-       // tv_msg = findViewById(R.id.tv_msg);
+        // tv_msg = findViewById(R.id.tv_msg);
         ibtnBookings.setImageResource(R.drawable.active_calender_ico);
 
         ibtnBookings.setOnClickListener(this);
@@ -129,7 +130,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             @Override
             public void onResponse(String response, String apiName) {
                 try {
-                   // progress_bar.setVisibility(View.GONE);
+                    // progress_bar.setVisibility(View.GONE);
 
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonArray = jsonObject.getJSONArray("artistRecord");
@@ -310,7 +311,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     setInactiveTab();
                     clickedId = 5;
                     ibtnUser.setImageResource(R.drawable.active_user_ico);
-                    replaceFragment(new AddFragment(), false);
+                    replaceFragment(new ArtistSettingsFragment(), false);
                 }
                 break;
         }
@@ -357,13 +358,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     });
 
                 }else {
-                  //  tv_msg.setText(R.string.gps_permission_alert);
+                    //  tv_msg.setText(R.string.gps_permission_alert);
                     locationDetector.showLocationSettingDailod(MainActivity.this);
                 }
             }
         }else {
             LocationDetector locationDetector = new LocationDetector();
-           // tv_msg.setText(R.string.gps_permission_alert);
+            // tv_msg.setText(R.string.gps_permission_alert);
             locationDetector.showLocationSettingDailod(MainActivity.this);
         }
         replaceFragment(BookingsFragment.newInstance(""), false);
