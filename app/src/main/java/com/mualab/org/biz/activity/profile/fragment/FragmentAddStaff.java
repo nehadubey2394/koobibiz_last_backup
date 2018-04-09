@@ -61,13 +61,13 @@ public class FragmentAddStaff extends ProfileCreationBaseFragment{
         view.findViewById(R.id.btnSkip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                completProfile();
+                listener.onFinish();
             }
         });
     }
 
 
-    private void completProfile(){
+    /*private void completProfile(){
         Map<String,String> body = new HashMap<>();
         body.put("artistId", ""+user.id);
         new HttpTask(new HttpTask.Builder(mContext, "skipPage", new HttpResponceListner.Listener() {
@@ -85,5 +85,5 @@ public class FragmentAddStaff extends ProfileCreationBaseFragment{
                 .setBody(body)
                 .setProgress(true)
                 .setAuthToken(user.authToken)).execute("skip");
-    }
+    }*/
 }
