@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.activity.booking.fragments.AddFragment;
 import com.mualab.org.biz.activity.booking.fragments.BookingsFragment;
+import com.mualab.org.biz.activity.booking.listner.OnRefreshListener;
 import com.mualab.org.biz.activity.profile.BusinessProfileActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
@@ -48,7 +49,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener,OnRefreshListener {
     private Session session;
     private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnLogo,ibtnUser;
     private ImageView ivHeaderBack;
@@ -418,4 +419,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
+    @Override
+    public void onRequestChanged(boolean isShow) {
+        BookingsFragment frag = ((BookingsFragment) getSupportFragmentManager().findFragmentByTag("com.mualab.org.biz.activity.booking.fragments.BookingFragment2"));
+        frag.refreshData(true);
+    }
 }

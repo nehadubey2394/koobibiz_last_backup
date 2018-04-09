@@ -14,11 +14,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.MainActivity;
 import com.mualab.org.biz.activity.booking.activity.BookingDetailActivity;
+import com.mualab.org.biz.activity.booking.listner.OnBookingListListener;
 import com.mualab.org.biz.activity.booking.listner.PendingBookingListener;
+import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Bookings;
 import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.session.Session;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
@@ -33,6 +38,11 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private List<Bookings> artistsList;
     private PendingBookingListener bookingListener = null;
     private List<Staff> staffList;
+    private OnBookingListListener bookingListListener;
+
+    public  void setBookingClickListner(OnBookingListListener bookingListListener){
+        this.bookingListListener = bookingListListener;
+    }
 
     public void setCustomListener(PendingBookingListener bookingListener){
         this.bookingListener = bookingListener;
@@ -66,7 +76,7 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         final Bookings item = artistsList.get(position);
 
         SimpleDateFormat input,output;
-        output = new SimpleDateFormat("d MMMM yyyy");
+        output = new SimpleDateFormat("dd MMMM yyyy");
         input = new SimpleDateFormat("yyyy-MM-dd");
         String date = item.bookingDate;
         try {
@@ -83,6 +93,13 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         holder.tvBookingTime.setText(item.bookingTime);
         holder.tvServices.setText(item.artistServiceName);
 
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+        if (user.businessType.equals("independent"))
+            holder.rlStaffName.setVisibility(View.GONE);
+        else
+            holder.rlStaffName.setVisibility(View.VISIBLE);
+
         if (!item.userDetail.profileImage.equals("")){
             Picasso.with(context).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).
                     fit().into(holder.ivProfilePic);
@@ -94,7 +111,7 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TextView tvUserName,tvStaffName,tvDate,tvBookingTime,tvServices;
         ImageView ivProfilePic;
         AppCompatButton btnCounter,btnReject,btnAccept;
-        RelativeLayout rlContainer;
+        RelativeLayout rlContainer,rlStaffName;
         private ViewHolder(View itemView)
         {
             super(itemView);
@@ -109,6 +126,7 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             btnReject = itemView.findViewById(R.id.btnReject);
             btnAccept = itemView.findViewById(R.id.btnAccept);
             rlContainer = itemView.findViewById(R.id.rlContainer);
+            rlStaffName = itemView.findViewById(R.id.rlStaffName);
 
             btnCounter.setOnClickListener(this);
             btnReject.setOnClickListener(this);
@@ -137,13 +155,17 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 case R.id.rlContainer :
                     Bookings infoBookings = artistsList.get(getAdapterPosition());
-                 //   ((MainActivity) context).addFragment(BookingDetailFragment.newInstance(infoBookings._id), true);
-                    Intent intent = new Intent(context, BookingDetailActivity.class);
+                    if (bookingListListener!=null){
+                        bookingListListener.onItemClick(getAdapterPosition(),staffList,infoBookings._id);
+                    }
+                    //   ((MainActivity) context).addFragment(BookingDetailFragment.newInstance(infoBookings._id), true);
+                  /*  Intent intent = new Intent(context, BookingDetailActivity.class);
                     Bundle args = new Bundle();
                     args.putSerializable("ARRAYLIST",(Serializable)staffList);
                     intent.putExtra("BUNDLE",args);
                     intent.putExtra("bookingId",infoBookings._id);
-                    context.startActivity(intent);
+                    ((MainActivity)context).startActivityForResult(intent,2);*/
+
                     break;
             }
         }

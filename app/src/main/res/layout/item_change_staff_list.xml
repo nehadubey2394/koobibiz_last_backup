@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/llChStaff"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:gravity="center"
     android:orientation="vertical"
@@ -14,12 +15,13 @@
         android:layout_gravity="center"
         android:textColor="@color/text_color"
         android:textSize="14sp"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:fontFamily="@font/roboto_regular"
         />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="2dp"
         android:background="@color/gray2"/>
+
 </LinearLayout>

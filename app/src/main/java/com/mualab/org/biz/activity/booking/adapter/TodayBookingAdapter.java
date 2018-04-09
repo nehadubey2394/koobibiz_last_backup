@@ -9,12 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.MainActivity;
 import com.mualab.org.biz.activity.booking.activity.BookingDetailActivity;
+import com.mualab.org.biz.activity.booking.listner.OnBookingListListener;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Bookings;
 import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.session.Session;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
@@ -25,14 +31,18 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context;
     private List<Bookings> artistsList;
     private List<Staff> staffList;
+    private OnBookingListListener bookingListListener;
 
     // Constructor of the class
-    public TodayBookingAdapter(Context context, List<Bookings> artistsList,List<Staff> Staff) {
+    public TodayBookingAdapter(Context context, List<Bookings> artistsList,List<Staff> staffList) {
         this.context = context;
         this.artistsList = artistsList;
         this.staffList = staffList;
     }
 
+    public  void setBookingClickListner(OnBookingListListener bookingListListener){
+        this.bookingListListener = bookingListListener;
+    }
     @Override
     public int getItemCount() {
         return artistsList.size();
@@ -66,6 +76,13 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         holder.tvTime.setText(item.bookingTime);
         holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
 
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+        if (user.businessType.equals("independent"))
+            holder.rlStaffName.setVisibility(View.GONE);
+        else
+            holder.rlStaffName.setVisibility(View.VISIBLE);
+
         if (!item.userDetail.profileImage.equals("")){
             Picasso.with(context).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).
                     fit().into(holder.ivProfilePic);
@@ -76,6 +93,7 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     {
         TextView tvStaffName,tvUserName,tvServices,tvBookingStatus,tvTime;
         ImageView ivProfilePic;
+        RelativeLayout rlStaffName;
         private ViewHolder(View itemView)
         {
             super(itemView);
@@ -86,6 +104,7 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tvBookingStatus = itemView.findViewById(R.id.tvBookingStatus);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvStaffName = itemView.findViewById(R.id.tvStaffName);
+            rlStaffName = itemView.findViewById(R.id.rlStaffName);
 
             itemView.setOnClickListener(this);
         }
@@ -93,12 +112,16 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public void onClick(View view) {
             Bookings info = artistsList.get(getAdapterPosition());
-            Intent intent = new Intent(context, BookingDetailActivity.class);
+            if (bookingListListener!=null){
+                bookingListListener.onItemClick(getAdapterPosition(),staffList,info._id);
+            }
+
+           /* Intent intent = new Intent(context, BookingDetailActivity.class);
             Bundle args = new Bundle();
             args.putSerializable("ARRAYLIST",(Serializable)staffList);
             intent.putExtra("BUNDLE",args);
             intent.putExtra("bookingId",info._id);
-            context.startActivity(intent);
+            ((MainActivity)context).startActivityForResult(intent,2);*/
 
         }
     }

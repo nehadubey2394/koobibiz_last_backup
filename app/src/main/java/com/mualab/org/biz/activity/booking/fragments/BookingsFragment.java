@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,10 +31,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.activity.MainActivity;
+import com.mualab.org.biz.activity.booking.activity.BookingDetailActivity;
 import com.mualab.org.biz.activity.booking.activity.StaffActivity;
 import com.mualab.org.biz.activity.booking.adapter.PendingBookingAdapter;
 import com.mualab.org.biz.activity.booking.adapter.TimeSlotAdapter;
 import com.mualab.org.biz.activity.booking.adapter.TodayBookingAdapter;
+import com.mualab.org.biz.activity.booking.listner.OnBookingListListener;
 import com.mualab.org.biz.activity.booking.listner.PendingBookingListener;
 import com.mualab.org.biz.activity.booking.listner.TimeSlotClickListener;
 import com.mualab.org.biz.application.Mualab;
@@ -74,7 +77,7 @@ import views.calender.data.Day;
 import views.calender.widget.widget.MyFlexibleCalendar;
 
 
-public class BookingsFragment extends Fragment implements View.OnClickListener,TimeSlotClickListener,PendingBookingListener {
+public class BookingsFragment extends Fragment implements View.OnClickListener,TimeSlotClickListener,PendingBookingListener,OnBookingListListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
@@ -188,6 +191,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         rycToday.setLayoutManager(layoutManager2);
         rycToday.setNestedScrollingEnabled(false);
         rycToday.setAdapter(todayBookingAdapter);
+        todayBookingAdapter.setBookingClickListner(BookingsFragment.this);
 
         rycPending = rootView.findViewById(R.id.rycPending);
         LinearLayoutManager layoutManager3 = new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL, false);
@@ -195,6 +199,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         rycToday.setNestedScrollingEnabled(false);
         rycPending.setAdapter(pendingBookingAdapter);
         pendingBookingAdapter.setCustomListener(BookingsFragment.this);
+        pendingBookingAdapter.setBookingClickListner(BookingsFragment.this);
 
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
@@ -488,6 +493,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 staff.staffId = object.getString("staffId");
                                 staff.staffName = object.getString("staffName");
                                 staff.staffImage = object.getString("staffImage");
+                                staff.isSelected = false;
                                 staff.job = object.getString("job");
                                 staffList.add(staff);
                             }
@@ -546,7 +552,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                             item.pendingBookingInfos.add(bookingInfo);
                                         }
                                         else {
-                                            tvBookingCount.setVisibility(View.GONE);
                                             item.todayBookingInfos.add(bookingInfo);
                                         }
                                         bookingInfo.bookingDetail = item;
@@ -777,4 +782,30 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         }
     }
 
+    public  void refreshData(boolean isRefresh){
+        if (isRefresh)
+            apiForGetFreeSlots();
+    }
+
+    @Override
+    public void onItemClick(int position, List<Staff> staffList, String id) {
+        Intent intent = new Intent(mContext, BookingDetailActivity.class);
+        Bundle args = new Bundle();
+        args.putSerializable("ARRAYLIST",(Serializable)staffList);
+        intent.putExtra("BUNDLE",args);
+        intent.putExtra("bookingId",id);
+        startActivityForResult(intent,2);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        //  Handle activity result here
+        if (requestCode==2 && resultCode!=0){
+            if (data!=null){
+                String isChangedOccured = data.getStringExtra("isChangedOccured");
+                apiForGetFreeSlots();
+            }
+        }
+
+    }
 }

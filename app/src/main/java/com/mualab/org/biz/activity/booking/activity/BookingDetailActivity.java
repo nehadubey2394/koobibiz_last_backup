@@ -3,6 +3,7 @@ package com.mualab.org.biz.activity.booking.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +19,11 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.activity.MainActivity;
 import com.mualab.org.biz.activity.booking.adapter.BookedServicesAdapter;
 import com.mualab.org.biz.activity.booking.adapter.ChangeStaffListAdapter;
+import com.mualab.org.biz.activity.booking.listner.OnRefreshListener;
+import com.mualab.org.biz.activity.booking.listner.OnStaffChangeAndDoneClickListener;
 import com.mualab.org.biz.activity.booking.listner.OnStaffChangeListener;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
@@ -48,15 +52,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BookingDetailActivity extends AppCompatActivity implements OnStaffChangeListener,View.OnClickListener {
+public class BookingDetailActivity extends AppCompatActivity implements OnStaffChangeListener,View.OnClickListener ,OnStaffChangeAndDoneClickListener{
     private String bookingId;
     private BookedServicesAdapter adapter;
     private TextView tvBookingDate,tvBookingTime,tvBookingLoc,tvUserName;
     private List<BookingInfo> bookingInfoList;
-    private ImageView ivChat,ivCall,ivLocation,ivCancle;
+    private ImageView ivChat,ivCall,ivLocation,ivCancle,ivHeaderProfile,ivReject;
     private LinearLayout llBottom2,llBottom;
     private List<Staff> staffList;
     private Bookings item;
+    private int selectedStaffPos;
+    private boolean isChangedOccured = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +89,8 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
 
     private void setViewId(){
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
-        ImageView ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
+
+        ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
         ivHeaderBack.setVisibility(View.VISIBLE);
         TextView  tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvBookingDate = findViewById(R.id.tvBookingDate);
@@ -97,16 +104,13 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         ivCancle = findViewById(R.id.ivCancle);
 
         ImageView ivCounter = findViewById(R.id.ivCounter);
+
         ImageView ivAccept = findViewById(R.id.ivAccept);
-        ImageView ivReject = findViewById(R.id.ivReject);
+
+        ivReject = findViewById(R.id.ivReject);
 
         llBottom = findViewById(R.id.llBottom);
         llBottom2 = findViewById(R.id.llBottom2);
-
-        if (!item.userDetail.profileImage.equals("")){
-            Picasso.with(BookingDetailActivity.this).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).
-                    fit().into(ivHeaderProfile);
-        }
 
         RecyclerView rycServices = findViewById(R.id.rycServices);
         LinearLayoutManager layoutManager = new LinearLayoutManager(BookingDetailActivity.this);
@@ -119,12 +123,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         ivReject.setOnClickListener(this);
         ivCounter.setOnClickListener(this);
         ivCancle.setOnClickListener(this);
-    }
-
-    @Override
-    public void onStaffSelect(int position, BookingInfo bookingInfo) {
-        if (staffList!=null)
-            showStaffList();
+        ivHeaderBack.setOnClickListener(this);
     }
 
     @Override
@@ -132,19 +131,23 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         switch (view.getId()){
             case R.id.ivAccept:
                 if (item.bookStatus.equals("0")){
-                    actionForBooking("accept");
+                    actionForBooking("accept",false);
                 }
                 break;
             case R.id.ivReject:
-                actionForBooking("reject");
+                // showCancleDialog();
+                actionForBooking("reject",false);
                 break;
             case R.id.ivCancle:
                 showCancleDialog();
                 break;
+            case R.id.ivHeaderBack:
+                onBackPressed();
+                break;
         }
     }
 
-    private void actionForBooking(String type){
+    private void actionForBooking(String type,boolean isCancelled){
         String serviceId = "",subServiceId = "",artistServiceId="";
         if (item.pendingBookingInfos.size()!=0){
             for (int i=0; i<item.pendingBookingInfos.size(); i++){
@@ -170,7 +173,34 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                 }
 
             }
-            apiForBookingAction(type,item,serviceId,subServiceId,artistServiceId);
+            apiForBookingAction(type,item,serviceId,subServiceId,artistServiceId,isCancelled);
+        }else {
+            if (item.todayBookingInfos.size()!=0){
+                for (int i=0; i<item.pendingBookingInfos.size(); i++){
+                    BookingInfo bookingInfo = item.pendingBookingInfos.get(i);
+                    if (serviceId.equals("")){
+                        serviceId = bookingInfo.serviceId;
+                    }else {
+                        if (!serviceId.contains(bookingInfo.serviceId))
+                            serviceId = serviceId + ","+bookingInfo.serviceId;
+                    }
+                    if (subServiceId.equals("")){
+                        subServiceId = bookingInfo.subServiceId;
+                    }else {
+                        if (!subServiceId.contains(bookingInfo.subServiceId))
+                            subServiceId = subServiceId + ","+bookingInfo.subServiceId;
+                    }
+
+                    if (artistServiceId.equals("")){
+                        artistServiceId = bookingInfo.artistServiceId;
+                    }else {
+                        if (!artistServiceId.contains(bookingInfo.artistServiceId))
+                            artistServiceId = artistServiceId + ","+bookingInfo.artistServiceId;
+                    }
+
+                }
+                apiForBookingAction(type,item,serviceId,subServiceId,artistServiceId,isCancelled);
+            }
         }
 
     }
@@ -299,24 +329,32 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
     private void upDateUI(Bookings bookingInfo,String status){
         tvBookingDate.setText(bookingInfo.bookingDate);
         tvBookingLoc.setText(bookingInfo.location);
-        tvBookingTime.setText(bookingInfo.bookingDate);
+        tvBookingTime.setText(bookingInfo.bookingTime);
         tvUserName.setText(bookingInfo.userDetail.userName);
 
-        if (status.equals("0")){
-            llBottom2.setVisibility(View.VISIBLE);
-            llBottom.setVisibility(View.GONE);
-        }else if (status.equals("2")){
-            llBottom2.setVisibility(View.GONE);
-            llBottom.setVisibility(View.VISIBLE);
-            ivCancle.setVisibility(View.GONE);
+        if (!item.userDetail.profileImage.equals("")){
+            Picasso.with(BookingDetailActivity.this).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).fit().into(ivHeaderProfile);
         }
-        else {
-            llBottom2.setVisibility(View.GONE);
-            llBottom.setVisibility(View.VISIBLE);
+
+
+        switch (status) {
+            case "0":
+                llBottom2.setVisibility(View.VISIBLE);
+                llBottom.setVisibility(View.GONE);
+                break;
+            case "2":
+                llBottom2.setVisibility(View.GONE);
+                llBottom.setVisibility(View.VISIBLE);
+                ivCancle.setVisibility(View.GONE);
+                break;
+            default:
+                llBottom2.setVisibility(View.GONE);
+                llBottom.setVisibility(View.VISIBLE);
+                break;
         }
 
         SimpleDateFormat dfInput = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat dfOutput = new SimpleDateFormat("d MMMM yyyy");
+        SimpleDateFormat dfOutput = new SimpleDateFormat("dd MMMM yyyy");
         Date formatedDate = null;
         try {
             formatedDate = dfInput.parse(bookingInfo.bookingDate);
@@ -326,7 +364,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         }
     }
 
-    public void showStaffList() {
+    public void showStaffList(final int position, final BookingInfo bookingInfo) {
         View DialogView = View.inflate(BookingDetailActivity.this, R.layout.dialog_layout_change_staff, null);
 
         final Dialog sheetDialog = new BottomSheetDialog(BookingDetailActivity.this);
@@ -338,7 +376,9 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         TextView tvCancle = DialogView.findViewById(R.id.tvCancle);
         TextView tvoData = DialogView.findViewById(R.id.tvoData);
 
-        ChangeStaffListAdapter listAdapter = new ChangeStaffListAdapter(BookingDetailActivity.this, staffList);
+        final ChangeStaffListAdapter listAdapter = new ChangeStaffListAdapter(BookingDetailActivity.this, staffList);
+
+        listAdapter.setChangeListener(BookingDetailActivity.this);
 
         RecyclerView rycvStaff = DialogView.findViewById(R.id.rycvStaff);
         LinearLayoutManager layoutManager = new LinearLayoutManager(BookingDetailActivity.this);
@@ -353,13 +393,12 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         tvDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sheetDialog.dismiss();
-            }
-        });
+                bookingInfo.staffName = staffList.get(selectedStaffPos).staffName;
+                bookingInfoList.set(position,bookingInfo);
+                adapter.notifyDataSetChanged();
 
-        tvDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                staffList.get(selectedStaffPos).isSelected = false;
+                listAdapter.notifyDataSetChanged();
                 sheetDialog.dismiss();
             }
         });
@@ -377,10 +416,11 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
     public void showCancleDialog() {
         View DialogView = View.inflate(BookingDetailActivity.this, R.layout.dialog_layout_cancle_booking, null);
 
-        final Dialog sheetDialog = new BottomSheetDialog(BookingDetailActivity.this);
-        sheetDialog.setCanceledOnTouchOutside(true);
-        sheetDialog.setCancelable(true);
-        sheetDialog.setContentView(DialogView);
+        final Dialog dialog = new Dialog(BookingDetailActivity.this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(DialogView);
 
         AppCompatButton btnYes = DialogView.findViewById(R.id.btnYes);
         AppCompatButton btnNo = DialogView.findViewById(R.id.btnNo);
@@ -388,23 +428,31 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sheetDialog.dismiss();
-                actionForBooking("reject");
+                dialog.dismiss();
+                actionForBooking("reject",true);
             }
         });
 
         btnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sheetDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
-        sheetDialog.show();
+        dialog.show();
+    }
+
+    @Override
+    public void onStaffSelect(int position, BookingInfo bookingInfo) {
+        if (staffList.size()!=0)
+            showStaffList(position,bookingInfo);
+        else
+            MyToast.getInstance(BookingDetailActivity.this).showDasuAlert("No staff available");
     }
 
 
-    private void apiForBookingAction(final String type,final Bookings bookings,final String serviceId ,final String subServiceId ,final String artistServiceId){
+    private void apiForBookingAction(final String type,final Bookings bookings,final String serviceId ,final String subServiceId ,final String artistServiceId,final  boolean isCancelled){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
@@ -414,7 +462,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                 public void onNetworkChange(Dialog dialog, boolean isConnected) {
                     if(isConnected){
                         dialog.dismiss();
-                        apiForBookingAction(type,bookings,serviceId,subServiceId,artistServiceId);
+                        apiForBookingAction(type,bookings,serviceId,subServiceId,artistServiceId,isCancelled);
                     }
                 }
             }).show();
@@ -439,7 +487,17 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                     String message = js.getString("message");
 
                     if (status.equalsIgnoreCase("success")) {
-                        MyToast.getInstance(BookingDetailActivity.this).showDasuAlert(message);
+                        llBottom.setVisibility(View.VISIBLE);
+                        llBottom2.setVisibility(View.GONE);
+                        isChangedOccured = true;
+                        if (type.equals("reject")){
+                            ivReject.setVisibility(View.GONE);
+                            ivCancle.setVisibility(View.GONE);
+                        }
+                        if (isCancelled)
+                            MyToast.getInstance(BookingDetailActivity.this).showDasuAlert("Request has been cancelled");
+                        else
+                            MyToast.getInstance(BookingDetailActivity.this).showDasuAlert(message);
                     }else {
                         MyToast.getInstance(BookingDetailActivity.this).showDasuAlert(message);
                     }
@@ -469,5 +527,37 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         //.setBody(params, "application/x-www-form-urlencoded"));
 
         task.execute(this.getClass().getName());
+    }
+
+    @Override
+    public void onClick(int position, Staff bookingInfo) {
+        selectedStaffPos = position;
+    }
+
+    @Override
+    public void onBackPressed() {
+       /* OnRefreshListener listener = null;
+        listener = new OnRefreshListener() {
+            @Override
+            public void onRequestChanged(boolean isShow) {
+
+            }
+        };
+
+        if(listener!=null)
+            listener.onServiceAdded(true);*/
+       if (!isChangedOccured)
+           finish();
+       else {
+           Intent intent = new Intent();
+           intent.putExtra("isChangedOccured", "true");
+           setResult(RESULT_OK, intent);
+           finish();
+
+          /* Intent intent = new Intent(BookingDetailActivity.this, MainActivity.class);
+           intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+           startActivity(intent);*/
+       }
+        super.onBackPressed();
     }
 }

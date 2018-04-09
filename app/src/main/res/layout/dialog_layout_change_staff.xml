@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_centerHorizontal="true"
@@ -57,7 +57,7 @@
             android:orientation="horizontal"
             android:scrollbars="none"
             android:layout_margin="5dp"
-            android:minHeight="250dp"
+            android:minHeight="200dp"
             />
         <TextView
             android:layout_width="wrap_content"
