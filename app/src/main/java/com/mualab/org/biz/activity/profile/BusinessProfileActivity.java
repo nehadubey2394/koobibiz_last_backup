@@ -42,6 +42,7 @@ import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.SubCategory;
 import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.session.PreRegistrationSession;
+import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
@@ -52,7 +53,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import views.progressview.ProgressView;
 
 public class BusinessProfileActivity extends BaseActivity implements FragmentListner {
@@ -85,6 +89,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         }
     }
 
+    private Session session;
 
     @Override
     public void onNext() {
@@ -113,17 +118,14 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
     @Override
     public void onFinish() {
-        Mualab.getInstance().getSessionManager().setBusinessProfileComplete(true);
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+        completProfile();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_profile);
+        session = Mualab.getInstance().getSessionManager();
         tvHeaderText = findViewById(R.id.tvHeaderText);
         progressView = findViewById(R.id.progressView);
 
@@ -215,7 +217,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
                 if(views.get(position).title.equals("Banking Details"))
                     tv_skip.setVisibility(View.VISIBLE);
                 else if(views.get(position).title.equals("Add Staff") &&
-                        Mualab.getInstance().getSessionManager().getUser().businessType.equals(Constants.INDEPENDENT)){
+                        session.getUser().businessType.equals(Constants.INDEPENDENT)){
                     onFinish();
                 }
             }
@@ -442,5 +444,29 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         public int getCount() {
             return views.size();
         }
+    }
+
+    private void completProfile(){
+        Map<String,String> body = new HashMap<>();
+        body.put("artistId", ""+Mualab.getInstance().getSessionManager().getUser().id);
+        new HttpTask(new HttpTask.Builder(this, "skipPage", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                session.setBusinessProfileComplete(true);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+
+            }
+        }).setMethod(Request.Method.POST)
+                .setBodyContentType( HttpTask.ContentType.APPLICATION_JSON)
+                .setBody(body)
+                .setProgress(true)
+                .setAuthToken(session.getUser().authToken)).execute("skip");
     }
 }
