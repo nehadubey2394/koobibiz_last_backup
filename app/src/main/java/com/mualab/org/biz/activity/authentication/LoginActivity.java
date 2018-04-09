@@ -90,7 +90,7 @@ public class LoginActivity extends BaseActivity {
                 String appPackageName = "com.mualab.org.user";//getPackageName(); // getPackageName() from Context or Activity object
                 if(isPackageExisted(appPackageName)){
                     Intent intent = new Intent();
-                    intent.setComponent(new ComponentName(appPackageName, appPackageName+".SplashActivity"));
+                    intent.setComponent(new ComponentName(appPackageName, appPackageName+".activity.SplashActivity"));
                     startActivity(intent);
                 }else {
 
