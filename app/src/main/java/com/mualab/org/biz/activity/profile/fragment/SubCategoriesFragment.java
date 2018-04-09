@@ -166,11 +166,11 @@ public class SubCategoriesFragment extends ProfileCreationBaseFragment {
 
 
     private boolean validateInputData(){
-        String tagName = edTagName.getText().toString();
-        String description = edDescription.getText().toString();
-        String inCallPrice = edIncallPrice.getText().toString();
-        String outCallPrice = edOutcallPrice.getText().toString();
-        String completionTime = tvCompletionTime.getText().toString();
+        String tagName = edTagName.getText().toString().trim();
+        String description = edDescription.getText().toString().trim();
+        String inCallPrice = edIncallPrice.getText().toString().trim();
+        String outCallPrice = edOutcallPrice.getText().toString().trim();
+        String completionTime = tvCompletionTime.getText().toString().trim();
 
         if(TextUtils.isEmpty(tagName)){
             edTagName.requestFocus();

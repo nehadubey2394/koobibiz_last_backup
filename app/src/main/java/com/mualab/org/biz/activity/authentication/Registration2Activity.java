@@ -419,15 +419,18 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
 
         String password = edPwd.getText().toString().trim();
         if (TextUtils.isEmpty(password)) {
-            inputLayout.setError(getString(R.string.error_password_required));
+            showToast(getString(R.string.error_password_required));
+            //inputLayout.setError(getString(R.string.error_password_required));
             edPwd.requestFocus();
             return false;
         }else if(!PASSWORD_PATTERN_UPERCASE.matcher(password).matches()){
-            inputLayout.setError(getString(R.string.error_invalid_password));
+            showToast(getString(R.string.error_invalid_password));
+            //inputLayout.setError(getString(R.string.error_invalid_password));
             edPwd.requestFocus();
             return false;
         }else if(password.length()<8){
-            inputLayout.setError(getString(R.string.error_invalid_password));
+            showToast(getString(R.string.error_invalid_password));
+            //inputLayout.setError(getString(R.string.error_invalid_password));
             edPwd.requestFocus();
             return false;
         }else {
@@ -438,7 +441,8 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
 
     private boolean matchPassword(){
         if(!edPwd.getText().toString().equals(edConfirmPwd.getText().toString())){
-            input_layout_cnfPwd.setError(getString(R.string.error_confirm_password_not_match));
+            showToast(getString(R.string.error_confirm_password_not_match));
+            //input_layout_cnfPwd.setError(getString(R.string.error_confirm_password_not_match));
             return false;
         }
         return true;
@@ -447,15 +451,18 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
     private boolean validUserName(EditText editText, TextInputLayout inputLayout) {
         String text = editText.getText().toString().trim();
         if (TextUtils.isEmpty(text)) {
-            inputLayout.setError(getString(R.string.error_required_field));
+            showToast(getString(R.string.error_required_field));
+            //inputLayout.setError(getString(R.string.error_required_field));
             editText.requestFocus();
             return false;
         } else if (text.contains(" ")) {
-            inputLayout.setError(getString(R.string.error_username_contain_space));
+            showToast(getString(R.string.error_username_contain_space));
+            //inputLayout.setError(getString(R.string.error_username_contain_space));
             editText.requestFocus();
             return false;
         } else if (text.length() < 4) {
-            inputLayout.setError(getString(R.string.error_username_length));
+            showToast(getString(R.string.error_username_length));
+            //inputLayout.setError(getString(R.string.error_username_length));
             editText.requestFocus();
             return false;
         } else {
@@ -469,11 +476,13 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
     private boolean validInputField(EditText editText, TextInputLayout inputLayout, int id) {
         String text = editText.getText().toString().trim();
         if (TextUtils.isEmpty(text)) {
-            inputLayout.setError(getString(R.string.error_required_field));
+            showToast(getString(R.string.error_required_field));
+            //inputLayout.setError(getString(R.string.error_required_field));
             editText.requestFocus();
             return false;
         } else if (text.length() < 4) {
-            inputLayout.setError(getString(id));
+            showToast(getString(id));
+            //inputLayout.setError(getString(id));
             editText.requestFocus();
             return false;
         } else {
@@ -485,7 +494,8 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
     private boolean checkNotempty(EditText editText, TextInputLayout inputLayout) {
         String text = editText.getText().toString().trim();
         if (TextUtils.isEmpty(text)) {
-            inputLayout.setError(getString(R.string.error_required_field));
+            showToast(getString(R.string.error_required_field));
+            //inputLayout.setError(getString(R.string.error_required_field));
             editText.requestFocus();
             return false;
         }else {
@@ -496,7 +506,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
 
     private void showToast(String msg){
         if (!TextUtils.isEmpty(msg)){
-            MyToast.getInstance(this).showSmallCustomToast(msg);
+            MyToast.getInstance(this).showDasuAlert(msg);
         }
     }
 

@@ -1,7 +1,10 @@
 package com.mualab.org.biz.activity.authentication;
 
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
@@ -85,11 +88,18 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String appPackageName = "com.mualab.org.user";//getPackageName(); // getPackageName() from Context or Activity object
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    showToast(getString(R.string.under_development));
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                if(isPackageExisted(appPackageName)){
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName(appPackageName, appPackageName+".SplashActivity"));
+                    startActivity(intent);
+                }else {
+
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        showToast(getString(R.string.under_development));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    }
                 }
             }
         });
@@ -153,6 +163,16 @@ public class LoginActivity extends BaseActivity {
                 if (dialog != null)
                     dialog.show();
         }
+    }
+
+    public boolean isPackageExisted(String targetPackage){
+        PackageManager pm = getPackageManager();
+        try {
+            PackageInfo info=pm.getPackageInfo(targetPackage,PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+        return true;
     }
 
     private void loginProcess(){
@@ -246,7 +266,8 @@ public class LoginActivity extends BaseActivity {
 
     private boolean validateName() {
         if (ed_username.getText().toString().trim().isEmpty()) {
-            input_layout_UserName.setError(getString(R.string.error_email_or_username_required));
+            showToast(getString(R.string.error_email_or_username_required));
+            //input_layout_UserName.setError(getString(R.string.error_email_or_username_required));
             ed_username.requestFocus();
             return false;
         } else {
@@ -259,11 +280,13 @@ public class LoginActivity extends BaseActivity {
     private boolean validatePassword() {
         String password = ed_password.getText().toString().trim();
         if (TextUtils.isEmpty(password)) {
-            input_layout_password.setError(getString(R.string.error_password_required));
+            showToast(getString(R.string.error_password_required));
+           // input_layout_password.setError(getString(R.string.error_password_required));
             ed_password.requestFocus();
             return false;
         } else if (password.length() < 6) {
-            input_layout_password.setError(getString(R.string.error_invalid_password_length));
+            showToast(getString(R.string.error_invalid_password_length));
+            //input_layout_password.setError(getString(R.string.error_invalid_password_length));
             ed_password.requestFocus();
             return false;
         } else {

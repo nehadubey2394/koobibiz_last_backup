@@ -9,7 +9,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -63,8 +62,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     private SmsVerifyCatcher smsVerifyCatcher;
     private boolean isResendOTP;
-    private CountDownTimer countDownTimer;
-    private boolean timerIsRunning;
+    //private CountDownTimer countDownTimer;
+    //private boolean timerIsRunning;
 
 
     @Override
@@ -148,7 +147,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
                     if(user.countryCode!=null && user.countryCode.equals(countryCode) &&  user.email.equals(email)
                             && user.contactNo.equals(contactNo)
-                            && countDownTimer!=null && timerIsRunning){
+                            /*&& countDownTimer!=null && timerIsRunning*/){
                         nextScreen();
                     }else {
                         isResendOTP = false;
@@ -178,7 +177,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
             case R.id.tv_resend_otp:
                 isResendOTP = true;
-                timerIsRunning = false;
+                //timerIsRunning = false;
                 resetOTP();
                 apiCallForDataVerify();
                 break;
@@ -237,12 +236,14 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private boolean validateEmail() {
         String email = ed_email.getText().toString().trim();
         if (TextUtils.isEmpty(email)) {
-            input_layout_email.setError(getString(R.string.error_email_required));
+            showToast(getString(R.string.error_email_required));
+            //input_layout_email.setError(getString(R.string.error_email_required));
             ed_email.requestFocus();
             return false;
         }
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            input_layout_email.setError(getString(R.string.error_invalid_email));
+            showToast(getString(R.string.error_invalid_email));
+            //input_layout_email.setError(getString(R.string.error_invalid_email));
             ed_email.requestFocus();
             return false;
         } else {
@@ -255,11 +256,13 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private boolean validatePhone() {
         String phone = edPhoneNumber.getText().toString().trim();
         if (TextUtils.isEmpty(phone)) {
-            input_layout_phone.setError(getString(R.string.error_phone_no_reuired));
+            showToast(getString(R.string.error_phone_no_reuired));
+            //input_layout_phone.setError(getString(R.string.error_phone_no_reuired));
             edPhoneNumber.requestFocus();
             return false;
         } else if (phone.length() < 4 || phone.length()>15) {
-            input_layout_phone.setError(getString(R.string.error_phone_no_length));
+            showToast(getString(R.string.error_phone_no_length));
+            //input_layout_phone.setError(getString(R.string.error_phone_no_length));
             edPhoneNumber.requestFocus();
             return false;
         } else {
@@ -572,7 +575,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void startTimear(){
+    /*private void startTimear(){
         final AppCompatButton btnResendOtp = findViewById(R.id.tv_resend_otp);
         btnResendOtp.setEnabled(false);
         if(countDownTimer!=null)
@@ -589,5 +592,5 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 btnResendOtp.setEnabled(true);
             }
         }.start();
-    }
+    }*/
 }
