@@ -1,5 +1,6 @@
 package com.mualab.org.biz.activity.booking.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -25,7 +26,11 @@ public class StaffActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff);
 
-        staffList = new ArrayList<>();
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        staffList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
+
+        // staffList = new ArrayList<>();
         staffListAdapter = new StaffListAdapter(StaffActivity.this,staffList);
 
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
@@ -33,12 +38,18 @@ public class StaffActivity extends AppCompatActivity {
         TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvHeaderTitle.setText(R.string.text_staff);
 
+        TextView tvoData = findViewById(R.id.tvoData);
         RecyclerView rycvStaff = findViewById(R.id.rycvStaff);
         GridLayoutManager linearLayoutManager = new GridLayoutManager(StaffActivity.this,3);
         rycvStaff.setItemAnimator(new DefaultItemAnimator());
         rycvStaff.setLayoutManager(linearLayoutManager);
         rycvStaff.setAdapter(staffListAdapter);
-        showStaff();
+
+        if (staffList.size()==0){
+            rycvStaff.setVisibility(View.GONE);
+            tvoData.setVisibility(View.VISIBLE);
+        }
+        //  showStaff();
 
         ivHeaderBack.setOnClickListener(new View.OnClickListener() {
             @Override

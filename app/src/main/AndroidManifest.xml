@@ -19,9 +19,15 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!-- All nesassery hardware -->
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
-    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <application
         android:name=".application.Mualab"
@@ -33,55 +39,56 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/AppTheme.Splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.authentication.LoginActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.authentication.OtpVerificationActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.authentication.ChooseUserTypeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.authentication.RegistrationActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.authentication.Registration2Activity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.authentication.AddAddressActivity"
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.authentication.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.authentication.OtpVerificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.authentication.ChooseUserTypeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.authentication.RegistrationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.authentication.Registration2Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.authentication.AddAddressActivity"
             android:label="@string/address_activity"
             android:theme="@style/AppTheme.DarkActionBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.authentication.ChooseCountryActivity"
             android:label="@string/country_activity"
             android:theme="@style/AppTheme.DarkActionBar" />
-
         <activity
             android:name="com.image.cropper.CropImageActivity"
             android:theme="@style/AppTheme.DarkActionBar" />
-
         <activity
             android:name=".activity.profile.BusinessProfileActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.BaseActivity" />
-
         <activity
             android:name=".activity.booking.activity.StaffActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!-- Meta data -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBnFGTrGe8dJKMnrcinn1edleHCB_yZI5U" />
@@ -95,7 +102,6 @@
             </intent-filter>
         </receiver>
 
-
         <provider
             android:name=".application.GenericFileProvider"
             android:authorities="${applicationId}.provider"
@@ -103,12 +109,14 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <service
             android:name=".service.FetchAddressIntentService"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <activity android:name=".activity.booking.activity.BookingDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -184,7 +184,6 @@
     <string name="next_service">Next Service</string>
     <string name="txt_visitor_msg"><b>If you're site vistor</b>\nIf you immediate assistance, please send as an email instead. We apologize for any inconvenience.</string>
     <string name="txt_owner_msg"><b>If you're site owner</b>\nThe</string>
-    <string name="done">Done</string>
 
     <string name="select_incall_preparation_time">Please select incall buffer time.</string>
     <string name="select_outcall_preparation_time">Please select outcall buffer time.</string>
@@ -246,5 +245,13 @@
     <string name="text_services">Services</string>
     <string name="text_date_and_time">Appointment Date And Time</string>
     <string name="change_staff">Change Staff</string>
+    <string name="done">Done</string>
+    <string name="cancle">Cancel</string>
+    <string name="alert">Alert</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="are_you_sure_want_to_cancel_the_appointment">Are you sure want to cancel the appointment</string>
+    <string name="assigned_staff">Assigned Staff</string>
+    <string name="confirmed">Confirmed</string>
 
 </resources>

@@ -9,11 +9,12 @@ import java.util.List;
  */
 
 public class Bookings implements Serializable {
-    public  String _id,bookingDate,bookingTime,bookStatus,paymentType,paymentStatus,totalPrice,artistServiceName;
+    public  String _id,bookingDate,bookingTime,bookStatus,paymentType,paymentStatus,totalPrice,artistServiceName,location;
 
     public UserDetail userDetail;
     public List<BookingInfo>todayBookingInfos = new ArrayList<>();
     public List<BookingInfo>pendingBookingInfos = new ArrayList<>();
+    public List<Staff>staffList = new ArrayList<>();
     /*{
 booking":[
 {

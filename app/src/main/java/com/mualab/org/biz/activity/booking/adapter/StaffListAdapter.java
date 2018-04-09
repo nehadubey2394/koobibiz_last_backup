@@ -46,9 +46,9 @@ public class StaffListAdapter extends RecyclerView.Adapter<StaffListAdapter.View
         Staff staff =  staffArrayList.get(listPosition);
         holder.tvStaffName.setText(staff.staffName);
 
-       /* if (!catImg.equals("")){
-            Picasso.with(context).load(catImg).fit().into(holder.ivSelectedCat);
-        }*/
+        if (!staff.staffImage.equals("")){
+            Picasso.with(context).load(staff.staffImage).fit().into(holder.ivProfilePic);
+        }
 
     }
 

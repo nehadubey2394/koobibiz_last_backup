@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,10 +31,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.activity.MainActivity;
+import com.mualab.org.biz.activity.booking.activity.BookingDetailActivity;
 import com.mualab.org.biz.activity.booking.activity.StaffActivity;
 import com.mualab.org.biz.activity.booking.adapter.PendingBookingAdapter;
 import com.mualab.org.biz.activity.booking.adapter.TimeSlotAdapter;
 import com.mualab.org.biz.activity.booking.adapter.TodayBookingAdapter;
+import com.mualab.org.biz.activity.booking.listner.OnBookingListListener;
 import com.mualab.org.biz.activity.booking.listner.PendingBookingListener;
 import com.mualab.org.biz.activity.booking.listner.TimeSlotClickListener;
 import com.mualab.org.biz.application.Mualab;
@@ -58,6 +61,7 @@ import com.mualab.org.biz.util.LocationDetector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,7 +77,7 @@ import views.calender.data.Day;
 import views.calender.widget.widget.MyFlexibleCalendar;
 
 
-public class BookingsFragment extends Fragment implements View.OnClickListener,TimeSlotClickListener,PendingBookingListener {
+public class BookingsFragment extends Fragment implements View.OnClickListener,TimeSlotClickListener,PendingBookingListener,OnBookingListListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
@@ -84,6 +88,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     private TextView tvPending,tvToday,tvBookingCount;
     private List<BookingTimeSlot> bookingTimeSlots;
     private List<Bookings> todayBookings,pendingBookings;
+    private List<Staff> staffList;
     private TimeSlotAdapter timeSlotAdapter;
     private TodayBookingAdapter todayBookingAdapter;
     private PendingBookingAdapter pendingBookingAdapter;
@@ -138,13 +143,14 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         CalendarAdapter adapter = new CalendarAdapter(mContext, cal);
         viewCalendar.setAdapter(adapter);
 
+        staffList = new ArrayList<>();
         bookingTimeSlots = new ArrayList<>();
         todayBookings = new ArrayList<>();
         pendingBookings = new ArrayList<>();
 
         timeSlotAdapter = new TimeSlotAdapter(mContext, bookingTimeSlots);
-        todayBookingAdapter = new TodayBookingAdapter(mContext, todayBookings);
-        pendingBookingAdapter = new PendingBookingAdapter(mContext, pendingBookings);
+        todayBookingAdapter = new TodayBookingAdapter(mContext, todayBookings,staffList);
+        pendingBookingAdapter = new PendingBookingAdapter(mContext, pendingBookings,staffList);
 
         setCalenderClickListner(viewCalendar);
 
@@ -185,6 +191,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         rycToday.setLayoutManager(layoutManager2);
         rycToday.setNestedScrollingEnabled(false);
         rycToday.setAdapter(todayBookingAdapter);
+        todayBookingAdapter.setBookingClickListner(BookingsFragment.this);
 
         rycPending = rootView.findViewById(R.id.rycPending);
         LinearLayoutManager layoutManager3 = new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL, false);
@@ -192,6 +199,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         rycToday.setNestedScrollingEnabled(false);
         rycPending.setAdapter(pendingBookingAdapter);
         pendingBookingAdapter.setCustomListener(BookingsFragment.this);
+        pendingBookingAdapter.setBookingClickListner(BookingsFragment.this);
 
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
@@ -227,14 +235,18 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 break;
 
             case R.id.btnStaff:
-                startActivity(new Intent(mContext, StaffActivity.class));
+                Intent intent = new Intent(mContext, StaffActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("ARRAYLIST",(Serializable)staffList);
+                intent.putExtra("BUNDLE",args);
+                startActivity(intent);
                 break;
 
             case R.id.tabToday:
                 isToday = true;
                 tabToday.setBackgroundResource(R.drawable.bg_tab_selected);
                 tabPending.setBackgroundResource(R.drawable.bg_tab_unselected);
-                tvPending.setTextColor(getResources().getColor(R.color.text_color));
+                tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvToday.setTextColor(getResources().getColor(R.color.white));
               /*  rycPending.setVisibility(View.GONE);
                 rycToday.setVisibility(View.VISIBLE);
@@ -246,7 +258,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 isToday = false;
                 tabPending.setBackgroundResource(R.drawable.bg_second_tab_selected);
                 tabToday.setBackgroundResource(R.drawable.bg_second_tab_unselected);
-                tvToday.setTextColor(getResources().getColor(R.color.text_color));
+                tvToday.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvPending.setTextColor(getResources().getColor(R.color.white));
               /*  rycPending.setVisibility(View.VISIBLE);
                 rycToday.setVisibility(View.GONE);
@@ -448,6 +460,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                     String message = js.getString("massage");
 
                     if (status.equalsIgnoreCase("success")) {
+                        staffList.clear();
                         count = 0;
                         todayBookings.clear();
                         pendingBookings.clear();
@@ -471,11 +484,25 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                             tvNoSlot.setVisibility(View.VISIBLE);
                         }
 
+                        //parsing for getting staff
+                        JSONArray arrStaffDetail= js.getJSONArray("staffDetail");
+                        if (arrStaffDetail!=null && arrStaffDetail.length()!=0) {
+                            for (int l=0; l<arrStaffDetail.length(); l++){
+                                JSONObject object = arrStaffDetail.getJSONObject(l);
+                                Staff staff = new Staff();
+                                staff.staffId = object.getString("staffId");
+                                staff.staffName = object.getString("staffName");
+                                staff.staffImage = object.getString("staffImage");
+                                staff.isSelected = false;
+                                staff.job = object.getString("job");
+                                staffList.add(staff);
+                            }
+                        }
+
                         JSONArray array = js.getJSONArray("booking");
                         if (array!=null && array.length()!=0) {
                             for (int j=0; j<array.length(); j++){
                                 String serviceName = "";
-
                                 JSONObject object = array.getJSONObject(j);
                                 Bookings item = new Bookings();
                                 item._id = object.getString("_id");
@@ -485,6 +512,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 item.paymentType = object.getString("paymentType");
                                 item.totalPrice = object.getString("totalPrice");
 
+                                //parsing for user detail
                                 JSONArray arrUserDetail = object.getJSONArray("userDetail");
                                 if (arrUserDetail!=null && arrUserDetail.length()!=0) {
                                     for (int k=0; k<arrUserDetail.length(); k++){
@@ -493,7 +521,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                         item.userDetail = gson.fromJson(String.valueOf(userObj), UserDetail.class);
                                     }
                                 }
-
+                                //parsing for getting booking Info
                                 JSONArray arrBookingInfo = object.getJSONArray("bookingInfo");
                                 if (arrBookingInfo!=null && arrBookingInfo.length()!=0) {
                                     for (int l=0; l<arrBookingInfo.length(); l++){
@@ -517,10 +545,8 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                         }/*else {
                                             serviceName = serviceName + ","+bookingInfo.artistServiceName;
                                         }*/
-                                        bookingInfo.bookingStatus = item.bookStatus;
-
-                                        bookingInfo.userDetail = item.userDetail;
-
+                                        //bookingInfo.bookingStatus = item.bookStatus;
+                                        // bookingInfo.userDetail = item.userDetail;
                                         if (item.bookStatus.equals("0")) {
                                             tvBookingCount.setVisibility(View.VISIBLE);
                                             item.pendingBookingInfos.add(bookingInfo);
@@ -528,6 +554,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                         else {
                                             item.todayBookingInfos.add(bookingInfo);
                                         }
+                                        bookingInfo.bookingDetail = item;
                                     }
                                     item.artistServiceName = serviceName;
                                 }
@@ -563,6 +590,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 rycPending.setVisibility(View.VISIBLE);
                             }
                             else {
+                                tvBookingCount.setVisibility(View.GONE);
                                 tvNoData.setVisibility(View.VISIBLE);
                                 rycToday.setVisibility(View.GONE);
                                 rycPending.setVisibility(View.GONE);
@@ -654,7 +682,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                             }else {
                                 count--;
                             }
-                            tvBookingCount.setText(""+count);
+                            tvBookingCount.setText(count);
                         }
                         MyToast.getInstance(mContext).showDasuAlert(message);
                     }else {
@@ -754,4 +782,30 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         }
     }
 
+    public  void refreshData(boolean isRefresh){
+        if (isRefresh)
+            apiForGetFreeSlots();
+    }
+
+    @Override
+    public void onItemClick(int position, List<Staff> staffList, String id) {
+        Intent intent = new Intent(mContext, BookingDetailActivity.class);
+        Bundle args = new Bundle();
+        args.putSerializable("ARRAYLIST",(Serializable)staffList);
+        intent.putExtra("BUNDLE",args);
+        intent.putExtra("bookingId",id);
+        startActivityForResult(intent,2);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        //  Handle activity result here
+        if (requestCode==2 && resultCode!=0){
+            if (data!=null){
+                String isChangedOccured = data.getStringExtra("isChangedOccured");
+                apiForGetFreeSlots();
+            }
+        }
+
+    }
 }

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:overScrollMode="never"
-        android:layout_above="@+id/btnNewAppointment"
+        android:layout_marginBottom="15dp"
         >
 
         <LinearLayout
@@ -26,9 +26,11 @@
                 android:id="@+id/btnToday"
                 style="@style/My_Button_Small.Invert"
                 android:layout_width="80dp"
-                android:layout_height="26dp" android:text="@string/text_today" android:layout_gravity="center_vertical"
+                android:layout_height="27dp"
+                android:text="@string/text_today" android:layout_gravity="center_vertical"
                 android:padding="2dp"
                 android:gravity="center"
+                android:fontFamily="@font/roboto_regular"
                 android:textSize="12sp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="10dp"
@@ -38,10 +40,10 @@
                 android:id="@+id/cardv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="12dp"
                 android:layout_marginLeft="12dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginRight="12dp"
+                android:layout_marginTop="10dp"
                 android:clickable="true"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
@@ -104,7 +106,7 @@
                         android:textColor="@color/text_color"
                         android:textSize="13sp"
                         android:visibility="gone"
-                         />
+                        />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -113,15 +115,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginRight="6dp"
+                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="6dp"
                     android:orientation="horizontal">
 
@@ -133,7 +134,7 @@
                         android:text="@string/appoinment_info"
                         android:textColor="@color/text_color"
                         android:fontFamily="@font/roboto_medium"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <android.support.v7.widget.AppCompatButton
                         style="@style/My_Button_Small.Invert"
@@ -151,7 +152,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginRight="6dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="4dp"
                     android:layout_marginLeft="6dp">
 
                     <LinearLayout
@@ -162,8 +164,8 @@
                         android:layout_gravity="center"
                         android:layout_centerVertical="true"
                         android:orientation="horizontal"
+                        android:layout_marginRight="6dp"
                         android:weightSum="2"
-                        android:layout_margin="2dp"
                         android:clickable="true"
                         android:background="@drawable/bg_tab_layout"
                         android:baselineAligned="false">
@@ -177,7 +179,7 @@
                             android:clickable="true"
                             >
                             <TextView
-                              android:layout_width="match_parent" android:layout_height="match_parent"
+                                android:layout_width="match_parent" android:layout_height="match_parent"
                                 android:id="@+id/tvToday"
                                 android:paddingLeft="5dp"
                                 android:gravity="center"
@@ -198,11 +200,14 @@
                             >
 
                             <TextView
-                                android:id="@+id/tvPending" android:layout_width="match_parent" android:layout_height="match_parent" android:fontFamily="@font/roboto_light"
+                                android:id="@+id/tvPending"
+                                android:layout_width="match_parent" android:layout_height="match_parent"
+                                android:fontFamily="@font/roboto_light"
                                 android:cursorVisible="true"
                                 android:paddingLeft="5dp"
                                 android:gravity="center"
-                                android:text="@string/pending" android:textColor="@color/text_color"
+                                android:text="@string/pending"
+                                android:textColor="@color/colorPrimary"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -228,8 +233,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="2dp"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp">
+                    android:layout_marginRight="8dp">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rycToday"
@@ -262,25 +268,23 @@
 
             </LinearLayout>
 
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnNewAppointment"
+                style="@style/My_Button_Small.Invert"
+                android:layout_width="160dp"
+                android:layout_height="30dp"
+                android:text="@string/new_appointment"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="14sp"
+                />
+
         </LinearLayout>
 
 
     </android.support.v4.widget.NestedScrollView>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btnNewAppointment"
-        style="@style/My_Button_Small.Invert"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
-        android:text="@string/new_appointment"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
-        android:textSize="14sp"
-        android:layout_alignParentBottom="true"
-        />
 
     <TextView
         android:id="@+id/tv_msg"

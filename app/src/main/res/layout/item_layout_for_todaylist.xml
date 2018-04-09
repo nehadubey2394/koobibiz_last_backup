@@ -41,7 +41,7 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/defoult_user_img"
-                app:civ_border_width="0.5dp"
+                app:civ_border_width="1.5dp"
                 android:background="@drawable/gradient_circle_img"
                 app:civ_border_color="@color/transparent"
                 />
@@ -58,13 +58,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:ems="10"
+                    android:ems="11"
                     android:ellipsize="end"
                     android:fontFamily="@font/roboto_medium"
                     android:gravity="center_vertical"
                     android:maxLines="2"
                     android:maxWidth="180dp"
-                    android:padding="2dp"
                     android:layout_marginTop="1dp"
                     android:text="Jamie Bloggs"
                     android:textColor="@color/text_color"
@@ -74,27 +73,25 @@
                     android:id="@+id/tvServices"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:ems="10"
+                    android:ems="11"
                     android:ellipsize="end"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="1dp"
+                    android:fontFamily="@font/roboto_medium"
                     android:maxLines="2"
                     android:maxWidth="180dp"
-                    android:layout_marginTop="1dp"
-                    android:padding="2dp"
                     android:textColor="@color/grey"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/rlStaffName"
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_gravity="center_vertical" android:background="@drawable/bg_pink_strock_circle"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:padding="2dp"
+                    android:visibility="gone" android:background="@drawable/bg_pink_strock_circle"
                     >
                     <TextView
                         android:id="@+id/tvStaffName"
@@ -102,18 +99,16 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textSize="10sp"
-                        android:padding="1dp"
                         android:maxWidth="200dp"
                         android:minWidth="50dp"
                         android:minHeight="16dp"
                         android:text="NA"
-                        android:fontFamily="@font/roboto_regular"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/colorPrimary"
+                      android:fontFamily="@font/roboto_medium"
+                        android:layout_centerInParent="true" android:textColor="@color/colorPrimary"
                         android:maxLines="1"
                         />
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -122,12 +117,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
+            android:layout_gravity="end|center_vertical"
+            android:gravity="end|center_vertical"
             android:layout_marginRight="5dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="5dp"
+            android:padding="2dp"
             android:orientation="vertical">
 
             <TextView
@@ -139,12 +135,11 @@
                 android:fontFamily="@font/roboto_medium"
                 android:maxLines="2"
                 android:maxWidth="180dp"
-                android:padding="2dp"
-                android:text="Confirmed"
+                android:text="@string/confirmed"
                 android:textColor="@color/green"
-                android:layout_gravity="end|center_vertical"
-                android:gravity="end|center_vertical"
-                android:textSize="12sp" />
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tvTime"
@@ -155,12 +150,11 @@
                 android:fontFamily="@font/roboto_medium"
                 android:maxLines="2"
                 android:maxWidth="180dp"
-                android:padding="2dp"
                 android:text="10:00"
                 android:textColor="@color/grey"
-                android:layout_gravity="end|center_vertical"
-                android:gravity="end|center_vertical"
-                android:textSize="11sp" />
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

@@ -7,6 +7,8 @@ import java.io.Serializable;
  */
 
 public class BookingInfo implements Serializable{
-    public UserDetail userDetail;
-    public String _Id,bookingPrice,serviceId,subServiceId,artistServiceId,biBookingDate,startTime,endTime,staffId,staffName,staffImage,artistServiceName,bookingDate,bookingStatus;
+    public String _Id,bookingPrice,serviceId,subServiceId,artistServiceId,location,startTime,endTime,staffId,staffName,staffImage,artistServiceName,bookingDate,bookingStatus;
+
+    public Bookings bookingDetail;
+
 }
