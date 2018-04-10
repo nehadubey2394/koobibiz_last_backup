@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,12 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/app_logo_500x333" />
+            android:src="@drawable/app_logo_500x333"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tvHeader"
@@ -47,7 +50,7 @@
             android:id="@+id/input_layout_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/tvStyle"
+            android:theme="@style/tvStyle"
             app:errorTextAppearance="@style/txtinputError_appearance">
 
             <EditText
@@ -72,9 +75,11 @@
                 android:id="@+id/input_layout_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/tvStyle"
+                android:theme="@style/tvStyle"
                 android:paddingLeft="60dp"
-                app:errorTextAppearance="@style/txtinputError_appearance">
+                app:errorTextAppearance="@style/txtinputError_appearance"
+                android:paddingStart="60dp"
+                tools:ignore="RtlSymmetry">
 
                 <EditText
                     android:id="@+id/edPhoneNumber"
@@ -82,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/phone_number"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:maxLength="16"
                     android:maxLines="1"
                     android:background="@null"/>

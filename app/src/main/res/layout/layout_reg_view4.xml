@@ -44,7 +44,7 @@
             android:id="@+id/input_layout_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/tvStyle"
+            android:theme="@style/tvStyle"
             app:passwordToggleEnabled="true"
             android:textColorHint="@color/white"
             app:passwordToggleTint="@color/white"
@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            style="@style/tvStyle"
+            android:theme="@style/tvStyle"
             android:textColorHint="@color/white"
             app:errorTextAppearance="@style/txtinputError_appearance">
 
@@ -87,7 +87,8 @@
                 style="@style/My_Edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/confirm_password"
+                android:hint=
+                    "@string/confirm_password"
                 android:inputType="textPassword"
                 android:maxLength="20"
                 android:maxLines="1" />

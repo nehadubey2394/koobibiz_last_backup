@@ -148,7 +148,7 @@
     <string name="next">Next</string>
 
     <!--Add address-->
-    <string name="address_activity">Add Business Address</string>
+    <string name="address_activity">Add Business Location</string>
     <string name="business_address">Business address</string>
     <string name="error_business_address">Input Business address</string>
     <string name="pick_your_business_place">Pick Your Business Place</string>
@@ -238,7 +238,6 @@
     <string name="counter">Counter</string>
     <string name="text_accept">Accept</string>
     <string name="title_bookings">Bookings</string>
-    <string name="title_buisness_admin">Business Admin</string>
     <string name="add">Add</string>
 
     <!--Booking detail-->
@@ -254,6 +253,11 @@
     <string name="are_you_sure_want_to_cancel_the_appointment">Are you sure want to cancel the appointment</string>
     <string name="assigned_staff">Assigned Staff</string>
     <string name="confirmed">Confirmed</string>
+    <string name="service_description_and_pricing"><![CDATA[Service description & pricing]]></string>
+    <string name="euro_sign">₤</string>
+    <string name="add_more">Add More</string>
+    <string name="price">Price</string>
+    <string name="description">Description</string>
     <string name="profile">Profile</string>
     <string name="working_hours">Working Hours</string>
     <string name="categories">Categories</string>

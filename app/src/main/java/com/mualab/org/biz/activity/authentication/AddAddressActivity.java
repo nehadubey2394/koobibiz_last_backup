@@ -142,7 +142,7 @@ public class AddAddressActivity extends AppCompatActivity {
                         new GioAddress(AddAddressActivity.this, lat, lng).execute();
 
                     }else MyToast.getInstance(AddAddressActivity.this)
-                            .showSmallMessage(getString(R.string.msg_some_thing_went_wrong));
+                            .showDasuAlert(getString(R.string.msg_some_thing_went_wrong));
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -203,7 +203,7 @@ public class AddAddressActivity extends AppCompatActivity {
                     address.latitude = latitude;
                     address.longitude = longitude;
                     setResult(address);
-                }else MyToast.getInstance(this).showSmallCustomToast(getString(R.string.error_required_field));
+                }else MyToast.getInstance(this).showDasuAlert(getString(R.string.error_required_field));
 
                 return true;
             default:

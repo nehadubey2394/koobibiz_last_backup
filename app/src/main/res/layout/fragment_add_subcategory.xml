@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/margin_left"
     android:paddingRight="@dimen/margin_right"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    android:paddingEnd="@dimen/margin_right"
+    android:paddingStart="@dimen/margin_left">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +20,7 @@
             style="@style/TextView"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:text="Service description &amp; pricing"/>
+            android:text="@string/service_description_and_pricing"/>
 
         <TextView
             android:id="@+id/tv_categoryName"
@@ -72,10 +74,10 @@
                 android:maxLines="5"
                 android:maxLength="250"
                 android:padding="5dp"
-                android:gravity="left|top"
+                android:gravity="start|top"
                 android:textColor="@color/dark_gray"
                 android:imeOptions="actionNext"
-                android:hint="Description" />
+                android:hint="@string/description" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +97,7 @@
                     style="@style/TextView"
                     android:gravity="center"
                     android:textColor="@color/black"
-                    android:text="Price"/>
+                    android:text="@string/price"/>
 
                 <View
                     android:layout_width="0dp"
@@ -116,7 +118,7 @@
                         android:layout_height="wrap_content"
                         style="@style/TextView"
                         android:textColor="@color/black"
-                        android:text="In call"/>
+                        android:text="@string/in_call"/>
 
                     <EditText
                         android:id="@+id/edIncallPrice"
@@ -125,7 +127,7 @@
                         style="@style/My_Edittext.Invert"
                         android:layout_marginTop="8dp"
                         android:maxLength="7"
-                        android:hint="₤"
+                        android:hint="@string/euro_sign"
                         android:imeOptions="actionNext"
                         android:textColor="@color/dark_gray"
                         android:inputType="numberDecimal" />
@@ -150,7 +152,7 @@
                         android:layout_height="wrap_content"
                         style="@style/TextView"
                         android:textColor="@color/black"
-                        android:text="Out call"/>
+                        android:text="@string/out_call"/>
 
                     <EditText
                         android:id="@+id/edOutcallPrice"
@@ -159,7 +161,7 @@
                         style="@style/My_Edittext.Invert"
                         android:layout_marginTop="8dp"
                         android:maxLength="7"
-                        android:hint="₤"
+                        android:hint="@string/euro_sign"
                         android:textColor="@color/dark_gray"
                         android:imeOptions="actionDone"
                         android:inputType="numberDecimal" />
@@ -286,7 +288,7 @@
                 android:layout_height="35dp"
                 android:layout_weight="1"
                 style="@style/My_Button.Invert"
-                android:text="Add More"/>
+                android:text="@string/add_more"/>
 
             <View
                 android:layout_width="0dp"
