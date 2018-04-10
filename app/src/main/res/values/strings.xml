@@ -263,5 +263,6 @@
     <string name="categories">Categories</string>
     <string name="staff_planner">Staff Planner</string>
     <string name="voucher_code">Voucher Code</string>
+    <string name="title_buisness_admin">Business Admin</string>
 
 </resources>

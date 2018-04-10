@@ -6,7 +6,7 @@
     android:paddingRight="@dimen/margin_right"
     android:paddingEnd="@dimen/margin_right"
     android:paddingStart="@dimen/margin_left"
-    tools:context=".activity.profile.fragment.ServicesFragmentCreation">
+    tools:context=".module.profile.fragment.ServicesFragmentCreation">
 
     <LinearLayout
         android:layout_width="match_parent"

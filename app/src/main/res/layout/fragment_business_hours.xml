@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F2F2F2"
-    tools:context=".activity.profile.fragment.BusinessHoursFragmentCreation">
+    tools:context=".module.profile.fragment.BusinessHoursFragmentCreation">
 
     <LinearLayout
         android:layout_width="match_parent"
