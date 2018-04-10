@@ -73,7 +73,7 @@ public final class CropImage {
     public static final String CROP_IMAGE_EXTRA_RESULT = "CROP_IMAGE_EXTRA_RESULT";
 
     /**
-     * The request code used to start pick image activity to be used on result to identify the this specific request.
+     * The request code used to start pick image module to be used on result to identify the this specific request.
      */
     public static final int PICK_IMAGE_CHOOSER_REQUEST_CODE = 200;
 
@@ -131,11 +131,11 @@ public final class CropImage {
     }
 
     /**
-     * Start an activity to get image for cropping using chooser intent that will have all the available
+     * Start an module to get image for cropping using chooser intent that will have all the available
      * applications for the device like camera (MyCamera), galery (Photos), store apps (Dropbox), etc.<br>
      * Use "pick_image_intent_chooser_title" string resource to override pick chooser title.
      *
-     * @param activity the activity to be used to start activity from
+     * @param activity the module to be used to start module from
      */
     public static void startPickImageActivity(@NonNull Activity activity) {
         activity.startActivityForResult(getPickImageChooserIntent(activity), PICK_IMAGE_CHOOSER_REQUEST_CODE);
@@ -147,7 +147,7 @@ public final class CropImage {
      * All possible sources are added to the intent chooser.<br>
      * Use "pick_image_intent_chooser_title" string resource to override chooser title.
      *
-     * @param context used to access Android APIs, like content resolve, it is your activity/fragment/widget.
+     * @param context used to access Android APIs, like content resolve, it is your module/fragment/widget.
      */
     public static Intent getPickImageChooserIntent(@NonNull Context context) {
         return getPickImageChooserIntent(context, context.getString(R.string.pick_image_intent_chooser_title), false);
@@ -158,9 +158,9 @@ public final class CropImage {
      * The source can be camera's  (ACTION_IMAGE_CAPTURE) or gallery's (ACTION_GET_CONTENT).<br>
      * All possible sources are added to the intent chooser.
      *
-     * @param context          used to access Android APIs, like content resolve, it is your activity/fragment/widget.
+     * @param context          used to access Android APIs, like content resolve, it is your module/fragment/widget.
      * @param title            the title to use for the chooser UI
-     * @param includeDocuments if to include KitKat documents activity containing all sources
+     * @param includeDocuments if to include KitKat documents module containing all sources
      */
     public static Intent getPickImageChooserIntent(@NonNull Context context, CharSequence title, boolean includeDocuments) {
 
@@ -202,7 +202,7 @@ public final class CropImage {
      * you will be able to get the pictureUri using {@link #getPickImageResultUri(Context, Intent)}. Otherwise, it is just you use
      * the Uri passed to this method.
      *
-     * @param context       used to access Android APIs, like content resolve, it is your activity/fragment/widget.
+     * @param context       used to access Android APIs, like content resolve, it is your module/fragment/widget.
      * @param outputFileUri the Uri where the picture will be placed.
      */
     public static Intent getCameraIntent(@NonNull Context context, Uri outputFileUri) {
@@ -307,7 +307,7 @@ public final class CropImage {
     /**
      * Get URI to image received from capture  by camera.
      *
-     * @param context used to access Android APIs, like content resolve, it is your activity/fragment/widget.
+     * @param context used to access Android APIs, like content resolve, it is your module/fragment/widget.
      */
     public static Uri getCaptureImageOutputUri(@NonNull Context context) {
         Uri outputFileUri = null;
@@ -322,8 +322,8 @@ public final class CropImage {
      * Get the URI of the selected image from {@link #getPickImageChooserIntent(Context)}.<br>
      * Will return the correct URI for camera and gallery image.
      *
-     * @param context used to access Android APIs, like content resolve, it is your activity/fragment/widget.
-     * @param data    the returned data of the  activity result
+     * @param context used to access Android APIs, like content resolve, it is your module/fragment/widget.
+     * @param data    the returned data of the  module result
      */
     public static Uri getPickImageResultUri(@NonNull Context context, @Nullable Intent data) {
         boolean isCamera = true;
@@ -340,7 +340,7 @@ public final class CropImage {
      * implementation of the app that was used for picking the image. So we just test if we can open the stream or
      * do we get an exception when we try, Android is awesome.
      *
-     * @param context used to access Android APIs, like content resolve, it is your activity/fragment/widget.
+     * @param context used to access Android APIs, like content resolve, it is your module/fragment/widget.
      * @param uri     the result URI of image pick.
      * @return true - required permission are not granted, false - either no need for permissions or they are granted
      */
@@ -354,7 +354,7 @@ public final class CropImage {
      * Test if we can open the given Android URI to test if permission required error is thrown.<br>
      * Only relevant for API version 23 and above.
      *
-     * @param context used to access Android APIs, like content resolve, it is your activity/fragment/widget.
+     * @param context used to access Android APIs, like content resolve, it is your module/fragment/widget.
      * @param uri     the result URI of image pick.
      */
     public static boolean isUriRequiresPermissions(@NonNull Context context, @NonNull Uri uri) {
@@ -381,7 +381,7 @@ public final class CropImage {
     }
 
     /**
-     * Get {@link CropImageActivity} result data object for crop image activity started using {@link #activity(Uri)}.
+     * Get {@link CropImageActivity} result data object for crop image module started using {@link #activity(Uri)}.
      *
      * @param data result data intent as received in {@link Activity#onActivityResult(int, int, Intent)}.
      * @return Crop Image Activity Result object or null if none exists
@@ -414,14 +414,14 @@ public final class CropImage {
         }
 
         /**
-         * Get {@link CropImageActivity} intent to start the activity.
+         * Get {@link CropImageActivity} intent to start the module.
          */
         public Intent getIntent(@NonNull Context context) {
             return getIntent(context, CropImageActivity.class);
         }
 
         /**
-         * Get {@link CropImageActivity} intent to start the activity.
+         * Get {@link CropImageActivity} intent to start the module.
          */
         public Intent getIntent(@NonNull Context context, @Nullable Class<?> cls) {
             mOptions.validate();
@@ -436,7 +436,7 @@ public final class CropImage {
         /**
          * Start {@link CropImageActivity}.
          *
-         * @param activity activity to receive result
+         * @param activity module to receive result
          */
         public void start(@NonNull Activity activity) {
             mOptions.validate();
@@ -446,7 +446,7 @@ public final class CropImage {
         /**
          * Start {@link CropImageActivity}.
          *
-         * @param activity activity to receive result
+         * @param activity module to receive result
          */
         public void start(@NonNull Activity activity, @Nullable Class<?> cls) {
             mOptions.validate();
@@ -770,7 +770,7 @@ public final class CropImage {
         }
 
         /**
-         * if the result of crop image activity should not save the cropped image bitmap.<br>
+         * if the result of crop image module should not save the cropped image bitmap.<br>
          * Used if you want to crop the image manually and need only the crop rectangle and rotation data.<br>
          * <i>Default: false</i>
          */

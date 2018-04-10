@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Base64;
 
 import com.google.gson.Gson;
-import com.mualab.org.biz.activity.authentication.LoginActivity;
+import com.mualab.org.biz.module.authentication.LoginActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.User;

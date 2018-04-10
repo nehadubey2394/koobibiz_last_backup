@@ -258,5 +258,11 @@
     <string name="add_more">Add More</string>
     <string name="price">Price</string>
     <string name="description">Description</string>
+    <string name="profile">Profile</string>
+    <string name="working_hours">Working Hours</string>
+    <string name="categories">Categories</string>
+    <string name="staff_planner">Staff Planner</string>
+    <string name="voucher_code">Voucher Code</string>
+    <string name="title_buisness_admin">Business Admin</string>
 
 </resources>

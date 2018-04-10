@@ -38,7 +38,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".module.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
@@ -48,41 +48,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".module.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.authentication.LoginActivity"
+            android:name=".module.authentication.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.authentication.OtpVerificationActivity"
+            android:name=".module.authentication.OtpVerificationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.authentication.ChooseUserTypeActivity"
+            android:name=".module.authentication.ChooseUserTypeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.authentication.RegistrationActivity"
+            android:name=".module.authentication.RegistrationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.authentication.Registration2Activity"
+            android:name=".module.authentication.Registration2Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.authentication.AddAddressActivity"
+            android:name=".module.authentication.AddAddressActivity"
             android:label="@string/address_activity"
             android:theme="@style/AppTheme.DarkActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activity.authentication.ChooseCountryActivity"
+            android:name=".module.authentication.ChooseCountryActivity"
             android:label="@string/country_activity"
             android:theme="@style/AppTheme.DarkActionBar" />
         <activity
             android:name="com.image.cropper.CropImageActivity"
             android:theme="@style/AppTheme.DarkActionBar" />
         <activity
-            android:name=".activity.profile.BusinessProfileActivity"
+            android:name=".module.profile.BusinessProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.BaseActivity" />
+        <activity android:name=".module.BaseActivity" />
         <activity
-            android:name=".activity.booking.activity.StaffActivity"
+            android:name=".module.booking.activity.StaffActivity"
             android:screenOrientation="portrait" />
 
         <!-- Meta data -->
@@ -116,7 +116,8 @@
             android:name=".service.FetchAddressIntentService"
             android:exported="false" />
 
-        <activity android:name=".activity.booking.activity.BookingDetailActivity"></activity>
+        <activity android:name=".module.booking.activity.BookingDetailActivity" />
+        <activity android:name=".module.add_staff.AddStaffActivity"></activity>
     </application>
 
 </manifest>
