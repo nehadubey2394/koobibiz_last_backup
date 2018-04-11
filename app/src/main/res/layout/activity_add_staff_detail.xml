@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg_color"
+    tools:context=".module.add_staff.activity.AddStaffDetailActivity">
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_layout_bookingdetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/llDetail"
+        android:layout_below="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:background="@drawable/gray_broder_white_bg">
+
+        <TextView
+            android:id="@+id/tvJobTitle"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="@string/enter_job_title"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="12sp"
+            android:gravity="center_vertical"
+            android:drawableTint="@color/text_color"
+            android:drawableRight="@drawable/down_arrow_ico"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray"/>
+
+        <TextView
+            android:id="@+id/tvServices"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="@string/text_services"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:drawableTint="@color/text_color"
+            android:drawableRight="@drawable/down_arrow_ico"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray"/>
+
+        <TextView
+            android:id="@+id/tvSocialMedia"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="@string/social_media_access"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:drawableTint="@color/text_color"
+            android:drawableRight="@drawable/down_arrow_ico"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray"/>
+
+        <TextView
+            android:id="@+id/tvHoliday"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="@string/holiday_allocation"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/llDetail"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/gray_broder_white_bg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_working_hours"
+            android:textSize="14sp"
+            android:paddingLeft="10dp"
+            android:ems="15"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/roboto_medium"
+            />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnEditWhs"
+            android:layout_width="70dp"
+            android:layout_height="26dp"
+            style="@style/My_Button_Small.Invert"
+            android:text="@string/edit"
+            android:layout_gravity="center_vertical"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -116,9 +116,15 @@
             android:name=".service.FetchAddressIntentService"
             android:exported="false" />
 
-        <activity android:name=".module.booking.activity.BookingDetailActivity" />
-        <activity android:name=".module.add_staff.activity.AddStaffActivity" />
-        <activity android:name=".module.add_staff.SearchStaffActivity"></activity>
+        <activity
+            android:name=".module.booking.activity.BookingDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".module.add_staff.activity.AddStaffActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".module.add_staff.activity.AddStaffDetailActivity"></activity>
     </application>
 
 </manifest>

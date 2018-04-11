@@ -25,7 +25,6 @@
             android:layout_below="@+id/tvSelectStaff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:overScrollMode="never"
@@ -38,15 +37,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rvArtistStaff"
         android:orientation="horizontal"
-        android:layout_margin="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
         android:padding="4dp"
         android:gravity="center"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="10dp">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:background="@drawable/staff_add_ico"
             />
 

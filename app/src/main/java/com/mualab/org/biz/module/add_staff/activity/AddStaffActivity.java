@@ -40,14 +40,14 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
         ivHeaderBack = findViewById(R.id.ivHeaderBack);
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvHeaderTitle.setText(getString(R.string.text_staff));
-
+        ivHeaderBack.setVisibility(View.VISIBLE);
         ivHeaderBack.setOnClickListener(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        replaceFragment(new ArtistStaffFragment(), false);
+        addFragment(new ArtistStaffFragment(), true);
     }
 
     @Override
@@ -74,28 +74,10 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void replaceFragment(Fragment fragment, boolean addToBackStack) {
-        String backStackName = fragment.getClass().getName();
-        FragmentManager fm = getSupportFragmentManager();
-        int i = fm.getBackStackEntryCount();
-        while (i > 0) {
-            fm.popBackStackImmediate();
-            i--;
-        }
-        boolean fragmentPopped = getFragmentManager().popBackStackImmediate(backStackName, 0);
-        if (!fragmentPopped) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.flStffContainer, fragment, backStackName).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            if (addToBackStack)
-                transaction.addToBackStack(backStackName);
-            transaction.commit();
-        }
-    }
-
 
     @Override
     public void onBackPressed() {
-       // Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flStffContainer);
+        // Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flStffContainer);
 
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();

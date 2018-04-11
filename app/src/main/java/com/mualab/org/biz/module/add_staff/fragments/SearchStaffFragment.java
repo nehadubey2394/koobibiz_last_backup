@@ -8,10 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -20,10 +23,10 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.listner.EndlessRecyclerViewScrollListener;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.booking.Staff;
-import com.mualab.org.biz.module.add_staff.activity.AddStaffActivity;
-import com.mualab.org.biz.module.add_staff.adapter.ArtistStaffAdapter;
+import com.mualab.org.biz.model.add_staff.AllArtist;
+import com.mualab.org.biz.module.add_staff.adapter.AllStaffAdapter;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -39,25 +42,28 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ArtistStaffFragment extends Fragment implements View.OnClickListener{
+public class SearchStaffFragment extends Fragment implements View.OnClickListener{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private TextView tvNoDataFound;
     private Context mContext;
-    private List<Staff>artistStaffs;
-    private ArtistStaffAdapter staffAdapter;
-    private RecyclerView rvArtistStaff;
+    private TextView tvNoDataFound;
+    private List<AllArtist> artistStaffs;
+    private AllStaffAdapter staffAdapter;
+    private RecyclerView rvAllStaff;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private EditText etSearch;
+    private ProgressBar progress_bar;
 
-    public ArtistStaffFragment() {
+    public SearchStaffFragment() {
         // Required empty public constructor
     }
 
 
-    public static ArtistStaffFragment newInstance(String param1, String param2) {
-        ArtistStaffFragment fragment = new ArtistStaffFragment();
+    public static SearchStaffFragment newInstance(String param1) {
+        SearchStaffFragment fragment = new SearchStaffFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -83,7 +89,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_staff, container, false);
+        return inflater.inflate(R.layout.fragment_search_staff, container, false);
     }
 
     @Override
@@ -95,33 +101,76 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
     private void initView(View rootView){
         // if(mContext instanceof AddStaffActivity) {
         //   ((AddStaffActivity) mContext).setTitle();
-        artistStaffs = new ArrayList<>();
-        staffAdapter = new ArtistStaffAdapter(mContext, artistStaffs);
 
-        rvArtistStaff = rootView.findViewById(R.id.rvArtistStaff);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        rvArtistStaff.setLayoutManager(layoutManager);
-        rvArtistStaff.setAdapter(staffAdapter);
+        artistStaffs = new ArrayList<>();
+        staffAdapter = new AllStaffAdapter(mContext, artistStaffs);
+
+        rvAllStaff = rootView.findViewById(R.id.rvAllStaff);
+        etSearch = rootView.findViewById(R.id.etSearch);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        rvAllStaff.setLayoutManager(layoutManager);
+        rvAllStaff.setAdapter(staffAdapter);
 
         tvNoDataFound = rootView.findViewById(R.id.tvNoDataFound);
-        LinearLayout llAddStaff = rootView.findViewById(R.id.llAddStaff);
+        progress_bar = rootView.findViewById(R.id.progress_bar);
 
-        llAddStaff.setOnClickListener(this);
-        apiForGetArtistStaff();
+        if(scrollListener==null) {
+            scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+                @Override
+                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                    staffAdapter.showLoading(true);
+                    apiForGetAllStaff(page, "");
+                    //apiForLoadMoreArtist(page);
+                }
+            };
+        }
+
+        // Adds the scroll listener to RecyclerView
+        //  rvAllStaff.addOnScrollListener(scrollListener);
+
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                String s = etSearch.getText().toString().trim();
+                filterSearch(s);
+
+            }
+        });
+
+        if(artistStaffs.size()==0) {
+            progress_bar.setVisibility(View.VISIBLE);
+            apiForGetAllStaff(0,"");
+        }
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.llAddStaff:
-                //startActivity(new Intent(mContext, SearchStaffActivity.class));
-                ((AddStaffActivity)mContext).addFragment(
-                        SearchStaffFragment.newInstance(""), true);
-                break;
+
+    }
+
+    private void filterSearch(String s){
+        if (!s.equals("")) {
+            progress_bar.setVisibility(View.GONE);
+            artistStaffs.clear();
+            apiForGetAllStaff(0,s);
+        }else {
+            artistStaffs.clear();
+            apiForGetAllStaff(0, "");
         }
     }
 
-    private void apiForGetArtistStaff(){
+    private void apiForGetAllStaff(final int page,final String search){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
@@ -131,7 +180,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
                 public void onNetworkChange(Dialog dialog, boolean isConnected) {
                     if(isConnected){
                         dialog.dismiss();
-                        apiForGetArtistStaff();
+                        apiForGetAllStaff(page,search);
                     }
                 }
             }).show();
@@ -139,59 +188,42 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
 
         Map<String, String> params = new HashMap<>();
         params.put("artistId", String.valueOf(user.id));
+        params.put("search", search);
+        //  params.put("page", ""+page);
+        //  params.put("limit", "10");
 
-        HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "artistStaff", new HttpResponceListner.Listener() {
+        HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "allArtist", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
                 try {
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
                     String message = js.getString("message");
+                    progress_bar.setVisibility(View.GONE);
 
                     if (status.equalsIgnoreCase("success")) {
-                        artistStaffs.clear();
-                        rvArtistStaff.setVisibility(View.VISIBLE);
+                        staffAdapter.showLoading(false);
+                        //  artistStaffs.clear();
+                        rvAllStaff.setVisibility(View.VISIBLE);
                         tvNoDataFound.setVisibility(View.GONE);
 
-                        JSONArray jsonArray = js.getJSONArray("staffList");
+                        JSONArray jsonArray = js.getJSONArray("artistList");
                         if (jsonArray!=null && jsonArray.length()!=0) {
                             for (int i=0; i<jsonArray.length(); i++){
-                                // Staff item = new Staff();
                                 Gson gson = new Gson();
                                 JSONObject object = jsonArray.getJSONObject(i);
-                                Staff item = gson.fromJson(String.valueOf(object), Staff.class);
+                                AllArtist item = gson.fromJson(String.valueOf(object), AllArtist.class);
 
-                              /*  item._id = object.getString("_id");
-                                item.staffId = object.getString("_id");
-                                item.staffName = object.getString("staffName");
-                                item.staffImage = object.getString("staffImage");
-                                item.job = object.getString("job");
-*/
                                 artistStaffs.add(item);
                             }
                         }else {
-                            rvArtistStaff.setVisibility(View.GONE);
+                            rvAllStaff.setVisibility(View.GONE);
                             tvNoDataFound.setVisibility(View.VISIBLE);
                         }
                         staffAdapter.notifyDataSetChanged();
 
-                     /*   //parsing for getting staff
-                        JSONArray arrStaffDetail= js.getJSONArray("staffDetail");
-                        if (arrStaffDetail!=null && arrStaffDetail.length()!=0) {
-                            for (int l=0; l<arrStaffDetail.length(); l++){
-                                JSONObject object = arrStaffDetail.getJSONObject(l);
-                                Staff staff = new Staff();
-                                staff.staffId = object.getString("_id");
-                                staff.staffName = object.getString("staffName");
-                                staff.staffImage = object.getString("staffImage");
-                                staff.isSelected = false;
-                                staff.job = object.getString("job");
-                                staffList.add(staff);
-                            }
-                        }*/
-
                     }else {
-                        rvArtistStaff.setVisibility(View.GONE);
+                        rvAllStaff.setVisibility(View.GONE);
                         tvNoDataFound.setVisibility(View.VISIBLE);
                     }
                     //  showToast(message);
@@ -203,11 +235,11 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void ErrorListener(VolleyError error) {
+                progress_bar.setVisibility(View.GONE);
                 try{
                     Helper helper = new Helper();
                     if (helper.error_Messages(error).contains("Session")){
                         Mualab.getInstance().getSessionManager().logout();
-                        //      MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -216,11 +248,12 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
 
             }})
                 .setAuthToken(user.authToken)
-                .setProgress(true)
+                .setProgress(false)
                 .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
         //.setBody(params, "application/x-www-form-urlencoded"));
 
         task.execute(this.getClass().getName());
     }
+
 
 }

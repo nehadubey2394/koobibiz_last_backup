@@ -349,8 +349,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                             if (location != null) {
                                 double latitude = location.getLatitude();
                                 double longitude = location.getLongitude();
-                                Mualab.currentLocation.lat = latitude;
-                                Mualab.currentLocation.lng = longitude;
+                                Mualab.currentLng = latitude;
+                                Mualab.currentLng = longitude;
 
                                 if (lng.equals("") && lat.equals("")){
                                     lat = String.valueOf(latitude);
@@ -399,7 +399,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
     @Override
     public void onBackPressed() {
-          /* Handle double click to finish module*/
+        /* Handle double click to finish module*/
         Handler handler = new Handler();
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();

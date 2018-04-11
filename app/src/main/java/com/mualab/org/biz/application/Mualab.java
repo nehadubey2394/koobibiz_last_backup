@@ -27,7 +27,7 @@ public class Mualab extends Application {
     public static final String authToken = "authToken";
 
     private static Mualab mInstance;
-    public static Location currentLocation;
+    public static double currentLat,currentLng;
 
     private  DatabaseReference ref;
     private  Session session;

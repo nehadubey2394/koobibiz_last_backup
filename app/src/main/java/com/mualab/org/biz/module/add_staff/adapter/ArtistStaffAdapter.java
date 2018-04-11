@@ -2,6 +2,8 @@ package com.mualab.org.biz.module.add_staff.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.module.add_staff.activity.AddStaffActivity;
+import com.mualab.org.biz.module.add_staff.activity.AddStaffDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -73,7 +77,9 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Override
         public void onClick(View view) {
             Staff artistStaff = staffList.get(getAdapterPosition());
-
+            Intent intent = new Intent(context, AddStaffDetailActivity.class);
+            context.startActivity(intent);
+            ((AddStaffActivity)context).finish();
         }
     }
 

@@ -269,5 +269,11 @@
     <string name="groups">Groups</string>
     <string name="inbox">Inbox</string>
     <string name="add_new_user">Add new user</string>
+    <string name="search_users_by_username_and_email">Search users by username and email</string>
+    <string name="enter_job_title">Enter Job Title</string>
+    <string name="social_media_access">Social Media Access</string>
+    <string name="holiday_allocation">Holiday Allocation</string>
+    <string name="set_working_hours">Set Working Hours :</string>
+    <string name="edit">Edit</string>
 
 </resources>

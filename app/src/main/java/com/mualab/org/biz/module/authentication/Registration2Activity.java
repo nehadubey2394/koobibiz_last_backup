@@ -158,7 +158,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
               /*  if(profileImageBitmap==null){
                     showToast(getString(R.string.error_profile_image));
                 }else */
-              if(checkNotempty(ed_firstName, input_layout_firstName)
+                if(checkNotempty(ed_firstName, input_layout_firstName)
                         && checkNotempty(ed_lastName, input_layout_lastName)
                         && validInputField(ed_businessName , input_layout_businessName, R.string.error_businessname_length)
                         && validUserName(ed_userName, input_layout_userName)){
@@ -273,9 +273,9 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
                 params.put("deviceType", "2");
                 params.put("deviceToken", deviceToken);
                 params.put("firebaseToken", deviceToken);
-              //  params.put("socialId", user.socialId);
-               // Progress.show(Registration2Activity.this);
-               // api.signUpTask(params, profileImageBitmap);
+                //  params.put("socialId", user.socialId);
+                // Progress.show(Registration2Activity.this);
+                // api.signUpTask(params, profileImageBitmap);
 
                 HttpTask task = new HttpTask(new HttpTask.Builder(this, "artistRegistration", new HttpResponceListner.Listener() {
                     @Override
@@ -316,7 +316,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
                         Log.d("log", error.getLocalizedMessage());
                     }
                 }).setParam(params)
-                .setProgress(true));
+                        .setProgress(true));
                 task.postImage("profileImage", profileImageBitmap);
                 break;
         }
