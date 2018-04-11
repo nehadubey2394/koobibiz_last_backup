@@ -117,7 +117,8 @@
             android:exported="false" />
 
         <activity android:name=".module.booking.activity.BookingDetailActivity" />
-        <activity android:name=".module.add_staff.AddStaffActivity"></activity>
+        <activity android:name=".module.add_staff.activity.AddStaffActivity" />
+        <activity android:name=".module.add_staff.SearchStaffActivity"></activity>
     </application>
 
 </manifest>

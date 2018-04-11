@@ -264,5 +264,10 @@
     <string name="staff_planner">Staff Planner</string>
     <string name="voucher_code">Voucher Code</string>
     <string name="title_buisness_admin">Business Admin</string>
+    <string name="no_staff_added">No staff added</string>
+    <string name="booking_history">Booking History</string>
+    <string name="groups">Groups</string>
+    <string name="inbox">Inbox</string>
+    <string name="add_new_user">Add new user</string>
 
 </resources>

@@ -122,7 +122,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-          rootView = inflater.inflate(R.layout.fragment_booking, container, false);
+        rootView = inflater.inflate(R.layout.fragment_booking, container, false);
         initView(rootView);
         // Inflate the layout for this fragment
         return rootView;

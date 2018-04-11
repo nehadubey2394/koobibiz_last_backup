@@ -23,7 +23,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.module.add_staff.ArtistSettingsFragment;
+import com.mualab.org.biz.module.add_staff.fragments.ArtistSettingsFragment;
 import com.mualab.org.biz.module.booking.fragments.AddFragment;
 import com.mualab.org.biz.module.booking.fragments.BookingsFragment;
 import com.mualab.org.biz.module.booking.listner.OnRefreshListener;

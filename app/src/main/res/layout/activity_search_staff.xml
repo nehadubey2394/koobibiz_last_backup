@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/screen_bg_color"
     tools:context="com.mualab.org.biz.module.add_staff.activity.AddStaffActivity">
 
     <include
@@ -14,14 +15,16 @@
         android:visibility="visible"
         android:layout_alignParentTop="true" />
 
-    <FrameLayout
-        android:id="@+id/flStffContainer"
-        android:layout_below="@+id/actionbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/screen_bg_color"
-        >
+    <TextView
+        style="@style/TextView.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorPrimary"
+        android:layout_centerInParent="true"
+        android:text="@string/under_development"/>
 
-    </FrameLayout>
 
 </RelativeLayout>
