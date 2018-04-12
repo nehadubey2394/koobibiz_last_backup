@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg_color"
+    tools:context="com.mualab.org.biz.module.add_staff.activity.AddStaffActivity">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvSearch"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardUseCompatPadding="true"
+        android:layout_gravity="center_vertical"
+        android:layout_below="@+id/actionbar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+
+        >
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:hint="@string/search_users_by_username_and_email"
+            android:textColorHint="@color/grey"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="11sp"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:background="@null"
+            android:drawableRight="@drawable/search_ico"
+            android:drawableEnd="@drawable/search_ico"
+            android:inputType="textNoSuggestions" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvAllStaff"
+        android:layout_below="@+id/cvSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp"
+        android:overScrollMode="never"
+        android:layout_marginTop="4dp"
+        android:padding="2dp"
+        android:background="@color/screen_bg_color"
+        />
+
+    <TextView
+        android:id="@+id/tvNoDataFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_data_available"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_regular"
+        android:layout_marginStart="10dp" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorPrimary"
+       />
+
+
+</RelativeLayout>

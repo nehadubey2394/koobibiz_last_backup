@@ -86,14 +86,14 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
 
     private void setViewId(){
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
-
         ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
         ivHeaderBack.setVisibility(View.VISIBLE);
         TextView  tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        tvUserName = findViewById(R.id.tvUserName);
+
         tvBookingDate = findViewById(R.id.tvBookingDate);
         tvBookingTime = findViewById(R.id.tvBookingTime);
         tvBookingLoc = findViewById(R.id.tvBookingLoc);
-        tvUserName = findViewById(R.id.tvUserName);
 
         ivChat = findViewById(R.id.ivChat);
         ivCall = findViewById(R.id.ivCall);

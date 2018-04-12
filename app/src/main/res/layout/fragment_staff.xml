@@ -5,30 +5,76 @@
     android:layout_height="match_parent"
     android:background="@color/screen_bg_color"
     android:focusable="true"
+    android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/tvSelectStaff"
+        <TextView
+            android:id="@+id/tvSelectStaff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_staff"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginStart="10dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvArtistStaff"
+            android:layout_below="@+id/tvSelectStaff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:overScrollMode="never"
+            android:background="@color/screen_bg_color"
+            android:padding="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/llAddStaff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_staff"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_marginStart="10dp" />
+        android:layout_below="@+id/rvArtistStaff"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
+        android:padding="4dp"
+        android:gravity="center"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="10dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvAddStaff"
-        android:layout_below="@+id/tvSelectStaff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:overScrollMode="never"
-        android:background="@color/screen_bg_color"
-        android:padding="5dp"/>
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/staff_add_ico"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_new_user"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/roboto_regular"
+            />
+
+    </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvNoDataFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_staff_added"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginStart="10dp" />
 
 </RelativeLayout>

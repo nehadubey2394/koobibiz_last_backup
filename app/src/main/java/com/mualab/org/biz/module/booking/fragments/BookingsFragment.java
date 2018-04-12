@@ -53,6 +53,7 @@ import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Constant;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
 
@@ -81,7 +82,12 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
-    private String mParam1,selectedDate,sMonth= "",sDay,currentTime,lat="22.7196",lng="75.8577";
+    private String mParam1;
+    private String selectedDate;
+    private String sMonth= "";
+    private String sDay;
+    private String lat="22.7196";
+    private String lng="75.8577";
     private Context mContext;
     private LinearLayout tabToday,tabPending;
     private TextView tvPending,tvToday,tvBookingCount;
@@ -122,7 +128,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-          rootView = inflater.inflate(R.layout.fragment_booking, container, false);
+        rootView = inflater.inflate(R.layout.fragment_booking, container, false);
         initView(rootView);
         // Inflate the layout for this fragment
         return rootView;
@@ -154,7 +160,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         setCalenderClickListner(viewCalendar);
 
         selectedDate = getCurrentDate();
-        currentTime = getCurrentTime();
         dayId = cal.get(GregorianCalendar.DAY_OF_WEEK)-2;
     }
 
@@ -207,8 +212,8 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         else
             btnStaff.setVisibility(View.VISIBLE);
 
-        // getDeviceLocation();
-        apiForGetFreeSlots();
+        getDeviceLocation();
+        //apiForGetFreeSlots();
 
         tabToday.setOnClickListener(this);
         tabPending.setOnClickListener(this);
@@ -312,9 +317,8 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                             Log.i("","can't select previous date");
                         }else {
                             if (dayOfMonth==cDay){
-                                currentTime = getCurrentTime();
                             }else
-                                currentTime = "12:00 AM";
+                                ;
 
                             apiForGetFreeSlots();
                         }
@@ -386,7 +390,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
 
             if (mContext.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        Constants.MY_PERMISSIONS_REQUEST_LOCATION);
+                        Constant.MY_PERMISSIONS_REQUEST_LOCATION);
             } else {
                 LocationDetector locationDetector = new LocationDetector();
                 FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
@@ -398,14 +402,13 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                         public void onSuccess(Location location) {
                             // Got last known location. In some rare situations this can be null.
                             if (location != null) {
-                                double latitude = location.getLatitude();
-                                double longitude = location.getLongitude();
-                                Mualab.currentLocation.lat = latitude;
-                                Mualab.currentLocation.lng = longitude;
+
+                                Mualab.currentLat = location.getLatitude();
+                                Mualab.currentLng = location.getLongitude();
 
                                 if (lng.equals("") && lat.equals("")){
-                                    lat = String.valueOf(latitude);
-                                    lng = String.valueOf(longitude);
+                                    lat = String.valueOf(location.getLatitude());
+                                    lng = String.valueOf(location.getLongitude());
                                 }
                                 apiForGetFreeSlots();
                             }
@@ -413,20 +416,16 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                     });
 
                 }else {
+                    //   progress_bar.setVisibility(View.GONE);
                     tv_msg.setText(R.string.gps_permission_alert);
-                    tvNoData.setVisibility(View.VISIBLE);
                     locationDetector.showLocationSettingDailod(getActivity());
                 }
             }
         }else {
-            LocationDetector locationDetector = new LocationDetector();
-            tv_msg.setText(R.string.gps_permission_alert);
-            tvNoData.setVisibility(View.VISIBLE);
-            locationDetector.showLocationSettingDailod(getActivity());
+            apiForGetFreeSlots();
         }
 
     }
-
     private void apiForGetFreeSlots(){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();

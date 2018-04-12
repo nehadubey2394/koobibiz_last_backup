@@ -1,18 +1,20 @@
-package com.mualab.org.biz.module.add_staff;
+package com.mualab.org.biz.module.add_staff.activity;
 
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.helper.MySnackBar;
-import com.mualab.org.biz.module.BaseActivity;
-import com.mualab.org.biz.module.add_staff.fragments.AddStaffFragment;
+import com.mualab.org.biz.module.add_staff.fragments.ArtistStaffFragment;
 
-public class AddStaffActivity extends BaseActivity implements View.OnClickListener{
+public class AddStaffActivity extends AppCompatActivity implements View.OnClickListener{
     private ImageView ivHeaderBack;
     private TextView tvHeaderTitle;
 
@@ -38,14 +40,14 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
         ivHeaderBack = findViewById(R.id.ivHeaderBack);
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvHeaderTitle.setText(getString(R.string.text_staff));
-
+        ivHeaderBack.setVisibility(View.VISIBLE);
         ivHeaderBack.setOnClickListener(this);
     }
 
     @Override
     protected void onStart() {
-        replaceFragment(new AddStaffFragment(), false);
         super.onStart();
+        addFragment(new ArtistStaffFragment(), true);
     }
 
     @Override
@@ -57,33 +59,33 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    /* frangment replace code */
+    public void addFragment(Fragment fragment, boolean addToBackStack) {
+        String backStackName = fragment.getClass().getName();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStackName, 0);
+        if (!fragmentPopped) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_in,0,0);
+            transaction.add(R.id.flStffContainer, fragment, backStackName);
+            if (addToBackStack)
+                transaction.addToBackStack(backStackName);
+            transaction.commit();
+        }
+    }
 
-    private boolean doubleBackToExitPressedOnce;
-    private Runnable runnable;
 
     @Override
     public void onBackPressed() {
-          /* Handle double click to finish module*/
-        Handler handler = new Handler();
+        // Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flStffContainer);
+
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();
         if (i > 0) {
             fm.popBackStack();
-        } else if (!doubleBackToExitPressedOnce) {
-
-            doubleBackToExitPressedOnce = true;
-            //Toast.makeText(this, "Click again to exit", Toast.LENGTH_SHORT).show();
-            MySnackBar.showSnackbar(this, findViewById(R.id.lyCoordinatorLayout), "Click again to exit");
-            handler.postDelayed(runnable = new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
-
-        } else {
-            handler.removeCallbacks(runnable);
+        }else  {
             super.onBackPressed();
         }
     }
+
 }

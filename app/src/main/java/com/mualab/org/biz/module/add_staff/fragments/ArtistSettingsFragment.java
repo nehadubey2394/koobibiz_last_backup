@@ -1,4 +1,4 @@
-package com.mualab.org.biz.module.add_staff;
+package com.mualab.org.biz.module.add_staff.fragments;
 
 
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.module.MainActivity;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.module.add_staff.activity.AddStaffActivity;
 
 
 public class ArtistSettingsFragment extends Fragment implements View.OnClickListener {
