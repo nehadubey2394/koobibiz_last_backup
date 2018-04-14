@@ -222,7 +222,7 @@
 
     <string name="text_today">Today</string>
     <string name="text_available_time">Available Time</string>
-    <string name="no_data_available">No data available!</string>
+    <string name="no_data_available">No data found</string>
     <string name="there_are_no_available_slots_please_select_another_day">There are no available slots. Please select another day.</string>
     <string name="appoinment_info">Appointment Info :</string>
     <string name="appoinment">Appointment</string>
@@ -280,5 +280,13 @@
     <string name="completion_time">Completion time</string>
     <string name="incall">Incall</string>
     <string name="outcall">Outcall</string>
+
+
+    <string name="admin">Admin</string>
+    <string name="editor">Editor</string>
+    <string name="moderator">Moderator</string>
+    <string name="moderate">Moderate</string>
+    <string name="beginner">Beginner</string>
+    <string name="expert">Expert</string>
 
 </resources>

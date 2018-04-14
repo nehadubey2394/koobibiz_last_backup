@@ -29,7 +29,6 @@ public class AllStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private List<AllArtist> staffList;
     private boolean showLoader;
-    private String text;
 
     private  final int VIEWTYPE_ITEM = 1;
     private  final int VIEWTYPE_LOADER = 2;

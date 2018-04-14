@@ -426,6 +426,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         }
 
     }
+
     private void apiForGetFreeSlots(){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();

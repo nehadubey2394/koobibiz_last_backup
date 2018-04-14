@@ -1,16 +1,22 @@
 package com.mualab.org.biz.modules.add_staff.fragments;
 
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
@@ -18,15 +24,17 @@ import com.mualab.org.biz.model.add_staff.ArtistServices;
 import com.mualab.org.biz.model.add_staff.SubServices;
 import com.mualab.org.biz.modules.add_staff.activity.AllServicesActivity;
 import com.mualab.org.biz.modules.add_staff.adapter.ArtistServiceLastAdapter;
+import com.mualab.org.biz.modules.add_staff.listner.OnServiceSelectListener;
 
 import java.util.ArrayList;
 
 
-public class ArtistLastServicesFragment extends Fragment {
+public class ArtistLastServicesFragment extends Fragment implements OnServiceSelectListener {
     private ArtistServiceLastAdapter adapter;
     private Context mContext;
     // TODO: Rename and change types of parameters
     private SubServices subServices;
+
     public ArtistLastServicesFragment() {
         // Required empty public constructor
     }
@@ -78,7 +86,7 @@ public class ArtistLastServicesFragment extends Fragment {
 
         arrayList = subServices.artistservices;
 
-        adapter = new ArtistServiceLastAdapter(mContext, arrayList,subServices);
+        adapter = new ArtistServiceLastAdapter(mContext, arrayList);
 
     }
 
@@ -93,6 +101,7 @@ public class ArtistLastServicesFragment extends Fragment {
         rvLastService.setLayoutManager(layoutManager);
 
         rvLastService.setAdapter(adapter);
+        adapter.setListener(ArtistLastServicesFragment.this);
     }
 
     @Override
@@ -105,5 +114,50 @@ public class ArtistLastServicesFragment extends Fragment {
     public void onDestroy() {
         Mualab.getInstance().cancelAllPendingRequests();
         super.onDestroy();
+    }
+
+    @Override
+    public void onItemClick(int position, ArtistServices artistServices) {
+        showDetailDialog(artistServices);
+    }
+
+    private void showDetailDialog(ArtistServices artistServices){
+        View DialogView = View.inflate(mContext, R.layout.dialog_layout_service_detail, null);
+
+
+        final Dialog dialog = new Dialog(mContext);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(DialogView);
+        EditText etInCallPrice = DialogView.findViewById(R.id.etInCallPrice);
+        EditText etOutCallPrice = DialogView.findViewById(R.id.etOutCallPrice);
+        TextView tvCTime = DialogView.findViewById(R.id.tvCTime);
+        TextView tvTile = DialogView.findViewById(R.id.tvTile);
+        AppCompatButton btnDone = DialogView.findViewById(R.id.btnDone);
+        AppCompatButton btnCancel = DialogView.findViewById(R.id.btnCancel);
+
+        tvTile.setText(artistServices.title);
+        etInCallPrice.setText(artistServices.inCallPrice);
+        etOutCallPrice.setText(artistServices.outCallPrice);
+        tvCTime.setText(artistServices.completionTime);
+        etInCallPrice.clearFocus();
+        etOutCallPrice.clearFocus();
+
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 }

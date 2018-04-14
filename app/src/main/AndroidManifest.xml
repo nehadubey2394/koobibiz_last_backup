@@ -125,8 +125,14 @@
             android:name=".modules.add_staff.activity.AddStaffActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".modules.add_staff.activity.AddStaffDetailActivity" />
-        <activity android:name=".modules.add_staff.activity.AllServicesActivity"></activity>
+        <activity android:name=".modules.add_staff.activity.AddStaffDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".modules.add_staff.activity.AllServicesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+
+        </activity>
     </application>
 
 </manifest>

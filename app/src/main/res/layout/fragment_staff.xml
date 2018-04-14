@@ -68,7 +68,7 @@
             android:id="@+id/tvNoDataFound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_staff_added"
+            android:text="@string/no_data_available"
             android:textColor="@color/grey"
             android:textSize="14sp"
             android:layout_marginLeft="10dp"

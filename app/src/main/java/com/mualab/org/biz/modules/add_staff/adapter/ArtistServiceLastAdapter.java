@@ -13,8 +13,9 @@ import android.widget.TextView;
 import com.daimajia.swipe.SwipeLayout;
 import com.loopeer.shadow.ShadowView;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.add_staff.ArtistServices;
-import com.mualab.org.biz.model.add_staff.SubServices;
+import com.mualab.org.biz.modules.add_staff.listner.OnServiceSelectListener;
 
 import java.util.ArrayList;
 
@@ -22,12 +23,15 @@ import java.util.ArrayList;
 public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private ArrayList<ArtistServices> artistsList;
-    private SubServices subServices;
+    private OnServiceSelectListener serviceSelectListener = null;
     // Constructor of the class
-    public ArtistServiceLastAdapter(Context context, ArrayList<ArtistServices> artistsList, SubServices subServices) {
+    public ArtistServiceLastAdapter(Context context, ArrayList<ArtistServices> artistsList) {
         this.context = context;
         this.artistsList = artistsList;
-        this.subServices = subServices;
+    }
+
+    public void setListener(OnServiceSelectListener listener){
+        this.serviceSelectListener = listener;
     }
 
     @Override
@@ -111,109 +115,19 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void onClick(View view) {
-         /*   switch (view.getId()){
+            switch (view.getId()){
                 case R.id.lyRemove:
-                    if (fromConfirmBooking){
-                        ArtistLastServicesFragment mServices3 = artistsList.get(getAdapterPosition());
-                        mServices3.setBooked(false);
-                        notifyDataSetChanged();
 
-                        for (BookingInfo bookingInfo : BookingFragment4.arrayListbookingInfo) {
-                            if (mServices3._id.equals(bookingInfo.msId)){
-                                bookingId = bookingInfo.bookingId;
-                                BookingFragment4.arrayListbookingInfo.remove(bookingInfo);
-                                break;
-                            }
-                        }
-
-                        apiForDeleteBookedService();
-                    }
                     break;
 
                 case R.id.lyServiceDetail:
-                    if(isClicked){
-                        return;
+                    ArtistServices artistServices = artistsList.get(getAdapterPosition()) ;
+                    if (serviceSelectListener != null) {
+                        serviceSelectListener.onItemClick(getAdapterPosition(),artistServices);
                     }
-                    isClicked = true;
-
-                    Session session = Mualab.getInstance().getSessionManager();
-                    User user = session.getUser();
-                    BookingServices3 services3 = artistsList.get(getAdapterPosition());
-                    services3.setBooked(true);
-
-                    BookingInfo bookingInfo = new BookingInfo();
-                    //add data from artist main services
-                    bookingInfo.artistService = services3.title;
-                    bookingInfo.msId = services3._id;
-                    bookingInfo.time = services3.completionTime;
-
-                    //data from subservices
-                    bookingInfo.sServiceName = subServices.subServiceName;
-                    bookingInfo.ssId = subServices.subServiceId;
-                    bookingInfo.sId = subServices.serviceId;
-                    bookingInfo.subServices = subServices;
-                    bookingInfo.isOutCallSelect = isOutCallSelect;
-                    //       subServices.bookedArtistServices.addAll(artistsList);
-
-                    //add data from services
-                    bookingInfo.artistName = item.userName;
-                    bookingInfo.profilePic = item.profileImage;
-                    bookingInfo.artistId = item._id;
-                    bookingInfo.artistAddress = item.address;
-                    bookingInfo.item = item;
-                    bookingInfo.userId = String.valueOf(user.id);
-
-                    if (isOutCallSelect) {
-                        bookingInfo.preperationTime = item.outCallpreprationTime;
-                        bookingInfo.serviceType = "2";
-                        bookingInfo.price = Double.parseDouble(services3.outCallPrice);
-                    }else {
-                        bookingInfo.price = Double.parseDouble(services3.inCallPrice);
-                        bookingInfo.preperationTime = item.inCallpreprationTime;
-                        bookingInfo.serviceType = "1";
-                    }
-
-                    int ctMinuts = 0,ptMinuts;
-
-                    if (services3.completionTime.contains(":")){
-                        String hours,min;
-                        String[] separated = services3.completionTime.split(":");
-                        hours = separated[0];
-                        min = separated[1];
-                        ctMinuts = utility.getTimeInMin(Integer.parseInt(hours),Integer.parseInt(min));
-                    }
-
-                    if (bookingInfo.preperationTime.contains(":")){
-                        String hours,min;
-                        String[] separated = bookingInfo.preperationTime.split(":");
-                        hours = separated[0];
-                        min = separated[1];
-                        ptMinuts = utility.getTimeInMin(Integer.parseInt(hours),Integer.parseInt(min));
-
-                        bookingInfo.serviceTime = "00:"+(ptMinuts+ctMinuts);
-                        bookingInfo.endTime = ""+(ptMinuts+ctMinuts);
-                        bookingInfo.editEndTime = ""+(ptMinuts+ctMinuts);
-
-                    }
-
-                    if (item.businessType.equals("independent")){
-                        if (fromConfirmBooking){
-                            ((BookingActivity)context).addFragment(
-                                    BookingFragment4.newInstance(subServices.subServiceName,true,bookingInfo), true, R.id.flBookingContainer);
-                        }else {
-                            ((BookingActivity)context).addFragment(
-                                    BookingFragment4.newInstance(subServices.subServiceName,false,bookingInfo), true, R.id.flBookingContainer);
-                        }
-
-
-                    }else {
-                        ((BookingActivity)context).addFragment(
-                                BookingFragment1.newInstance(serviceTitle,item, bookingInfo,fromConfirmBooking), true, R.id.flBookingContainer);
-
-                    }
+                    MyToast.getInstance(context).showDasuAlert("Under development");
                     break;
-
-            }*/
+            }
         }
     }
 
