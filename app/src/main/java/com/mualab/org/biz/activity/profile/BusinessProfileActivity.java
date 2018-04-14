@@ -186,7 +186,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         views.add(new MyViews("Outcall Options", OutcallOptionsFragmentCreation.newInstance()));
         views.add(new MyViews("Services", ServicesFragmentCreation.newInstance()));
         views.add(new MyViews("Categories", CategoriesFragmentCreation.newInstance()));
-        views.add(new MyViews("Sub Categories", SubCategoriesFragment.newInstance()));
+        views.add(new MyViews("Sub Category", SubCategoriesFragment.newInstance()));
         views.add(new MyViews("Upload Certification", UploadCertificationFragment.newInstance()));
 
         if(Mualab.getInstance().getBusinessProfileSession().getBankStatus()!=1)
