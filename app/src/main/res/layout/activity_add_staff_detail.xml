@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_bg_color"
-    tools:context=".module.add_staff.activity.AddStaffDetailActivity">
+    tools:context=".modules.add_staff.activity.AddStaffDetailActivity">
     <include
         android:id="@+id/header"
         layout="@layout/header_layout_bookingdetail"

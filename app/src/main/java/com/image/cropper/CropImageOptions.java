@@ -234,7 +234,7 @@ public class CropImageOptions implements Parcelable {
     public CropImageView.RequestSizeOptions outputRequestSizeOptions;
 
     /**
-     * if the result of crop image module should not save the cropped image bitmap
+     * if the result of crop image modules should not save the cropped image bitmap
      */
     public boolean noOutputImage;
 
@@ -249,12 +249,12 @@ public class CropImageOptions implements Parcelable {
     public int initialRotation;
 
     /**
-     * if to allow (all) rotation during cropping (module)
+     * if to allow (all) rotation during cropping (modules)
      */
     public boolean allowRotation;
 
     /**
-     * if to allow counter-clockwise rotation during cropping (module)
+     * if to allow counter-clockwise rotation during cropping (modules)
      */
     public boolean allowCounterRotation;
 

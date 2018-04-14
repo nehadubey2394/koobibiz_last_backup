@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#F2F2F2"
     android:orientation="vertical"
-    tools:context=".module.profile.BusinessProfileActivity">
+    tools:context=".modules.profile.BusinessProfileActivity">
 
     <ImageView
         android:id="@+id/bg_header"

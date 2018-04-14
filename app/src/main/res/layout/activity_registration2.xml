@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/mLyout"
-    tools:context="module.authentication.Registration2Activity">
+    tools:context="modules.authentication.Registration2Activity">
 
     <LinearLayout
         android:id="@+id/llHeader"
