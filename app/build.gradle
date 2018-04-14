@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.mualab.org.biz"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -40,6 +40,10 @@ dependencies {
 
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'org.adw.library:discrete-seekbar:1.0.1'
+
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
+    compile 'com.loopeer.lib:shadow:0.0.4-beta2'
+
     // Facebook Login only
     //compile 'com.facebook.android:facebook-login:4.+'
     // Facebook Share only

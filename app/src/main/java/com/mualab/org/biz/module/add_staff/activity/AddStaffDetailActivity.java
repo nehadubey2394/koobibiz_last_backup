@@ -10,13 +10,19 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.model.add_staff.AllArtist;
+import com.mualab.org.biz.model.add_staff.StaffDetail;
+import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.module.add_staff.cv_popup.CustomPopupWindow;
 import com.mualab.org.biz.module.add_staff.listner.PoppupWithListListner;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class AddStaffDetailActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView tvJobTitle,tvSocialMedia,tvHoliday;
+    private StaffDetail staffDetail;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +38,10 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
 
     private void initView(){
         Intent intent = getIntent();
-     /*   if (intent!=null){
-            bookingId =  intent.getStringExtra("bookingId");
+        if (intent!=null){
             Bundle args = intent.getBundleExtra("BUNDLE");
-            staffList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
-        }else {
-            staffList = new ArrayList<>();
-        }*/
+            staffDetail = (StaffDetail) args.getSerializable("staff");
+        }
 
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         ivHeaderBack.setVisibility(View.VISIBLE);
@@ -47,13 +50,20 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvHeaderTitle.setText(getString(R.string.text_staff));
         TextView tvUserName = findViewById(R.id.tvUserName);
-        tvUserName.setText("Staff");
+        tvUserName.setText(staffDetail.userName);
+
+        if (!staffDetail.profileImage.equals("")){
+            Picasso.with(AddStaffDetailActivity.this).load(staffDetail.profileImage).placeholder(R.drawable.defoult_user_img).
+                    fit().into(ivHeaderProfile);
+        }
 
         TextView tvServices = findViewById(R.id.tvServices);
         AppCompatButton btnEditWhs = findViewById(R.id.btnEditWhs);
         tvJobTitle = findViewById(R.id.tvJobTitle);
         tvSocialMedia = findViewById(R.id.tvSocialMedia);
         tvHoliday = findViewById(R.id.tvHoliday);
+
+        setView();
 
         ivHeaderBack.setOnClickListener(this);
         tvHoliday.setOnClickListener(this);
@@ -63,6 +73,14 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         tvJobTitle.setOnClickListener(this);
     }
 
+    private void setView(){
+        if (staffDetail.job != null){
+            tvJobTitle.setText(staffDetail.job);
+            tvSocialMedia.setText(staffDetail.mediaAccess);
+            if (!staffDetail.holiday.equals(""))
+                tvHoliday.setText(staffDetail.holiday);
+        }
+    }
     @Override
     public void onClick(View view) {
         CustomPopupWindow dialogsClass = new CustomPopupWindow();
@@ -73,9 +91,9 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.tvJobTitle:
                 final ArrayList<String>arrayList = new ArrayList<>();
+                arrayList.add("Beginner");
+                arrayList.add("Moderate");
                 arrayList.add("Expert");
-                arrayList.add("Intermediate");
-                arrayList.add("Bignner");
 
                 if (arrayList.size() > 0) {
                     //   showFilterDialog(years);
@@ -90,9 +108,9 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.tvSocialMedia:
                 final ArrayList<String>socialMediaList = new ArrayList<>();
-                socialMediaList.add("Facebook");
-                socialMediaList.add("Twitter");
-                socialMediaList.add("Instagram");
+                socialMediaList.add("Admin");
+                socialMediaList.add("Editor");
+                socialMediaList.add("Moderator");
 
                 if (socialMediaList.size() > 0) {
                     //   showFilterDialog(years);
@@ -106,7 +124,11 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.tvServices:
-
+                Intent intent = new Intent(AddStaffDetailActivity.this,AllServicesActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("staffDetail", staffDetail);
+                intent.putExtra("BUNDLE", args);
+                startActivity(intent);
                 break;
 
             case R.id.btnEditWhs:

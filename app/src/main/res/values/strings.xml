@@ -231,6 +231,7 @@
     <string name="new_appointment">New Appointment</string>
     <string name="all_staff">All Staff</string>
     <string name="text_staff">Staff</string>
+    <string name="text_category">Categories</string>
     <string name="no_booking_available">No data found</string>
     <string name="text_cancelled">Cancelled</string>
     <string name="text_confirmed">Confirmed</string>
@@ -261,19 +262,23 @@
     <string name="profile">Profile</string>
     <string name="working_hours">Working Hours</string>
     <string name="categories">Categories</string>
-    <string name="staff_planner">Staff Planner</string>
+    <string name="staff_planner">Staff Management</string>
     <string name="voucher_code">Voucher Code</string>
     <string name="title_buisness_admin">Business Admin</string>
     <string name="no_staff_added">No staff added</string>
     <string name="booking_history">Booking History</string>
     <string name="groups">Groups</string>
     <string name="inbox">Inbox</string>
-    <string name="add_new_user">Add new user</string>
+    <string name="add_new_user">Add new staff</string>
     <string name="search_users_by_username_and_email">Search users by username and email</string>
     <string name="enter_job_title">Enter Job Title</string>
     <string name="social_media_access">Social Media Access</string>
     <string name="holiday_allocation">Holiday Allocation</string>
     <string name="set_working_hours">Set Working Hours :</string>
+    <string name="text_remove">Remove</string>
     <string name="edit">Edit</string>
+    <string name="completion_time">Completion time</string>
+    <string name="incall">Incall</string>
+    <string name="outcall">Outcall</string>
 
 </resources>

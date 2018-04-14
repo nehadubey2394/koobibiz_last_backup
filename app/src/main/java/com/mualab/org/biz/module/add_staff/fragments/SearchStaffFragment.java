@@ -56,6 +56,7 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
     private EndlessRecyclerViewScrollListener scrollListener;
     private EditText etSearch;
     private ProgressBar progress_bar;
+    private boolean isSearch;
 
     public SearchStaffFragment() {
         // Required empty public constructor
@@ -119,7 +120,7 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
                 @Override
                 public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                     staffAdapter.showLoading(true);
-                    apiForGetAllStaff(page, "");
+                    apiForGetAllStaff(page, "",isSearch);
                     //apiForLoadMoreArtist(page);
                 }
             };
@@ -150,7 +151,7 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
 
         if(artistStaffs.size()==0) {
             progress_bar.setVisibility(View.VISIBLE);
-            apiForGetAllStaff(0,"");
+            apiForGetAllStaff(0,"",isSearch);
         }
     }
 
@@ -163,14 +164,16 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
         if (!s.equals("")) {
             progress_bar.setVisibility(View.GONE);
             artistStaffs.clear();
-            apiForGetAllStaff(0,s);
+            apiForGetAllStaff(0,s,true);
+            isSearch = true;
         }else {
             artistStaffs.clear();
-            apiForGetAllStaff(0, "");
+            apiForGetAllStaff(0, "",false);
+            isSearch = false;
         }
     }
 
-    private void apiForGetAllStaff(final int page,final String search){
+    private void apiForGetAllStaff(final int page, final String search, final boolean isSearch){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
@@ -180,7 +183,7 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
                 public void onNetworkChange(Dialog dialog, boolean isConnected) {
                     if(isConnected){
                         dialog.dismiss();
-                        apiForGetAllStaff(page,search);
+                        apiForGetAllStaff(page,search,isSearch);
                     }
                 }
             }).show();
@@ -203,7 +206,9 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
 
                     if (status.equalsIgnoreCase("success")) {
                         staffAdapter.showLoading(false);
-                        //  artistStaffs.clear();
+                        if (search.equals(""))
+                            artistStaffs.clear();
+
                         rvAllStaff.setVisibility(View.VISIBLE);
                         tvNoDataFound.setVisibility(View.GONE);
 

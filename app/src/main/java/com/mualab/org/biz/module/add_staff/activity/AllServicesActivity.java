@@ -1,5 +1,6 @@
 package com.mualab.org.biz.module.add_staff.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,17 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.module.add_staff.fragments.ArtistStaffFragment;
+import com.mualab.org.biz.model.add_staff.StaffDetail;
+import com.mualab.org.biz.module.add_staff.fragments.AllServiesFragment;
 
-public class AddStaffActivity extends AppCompatActivity implements View.OnClickListener{
+public class AllServicesActivity extends AppCompatActivity {
+    public  StaffDetail staffDetail;
+    private ImageView ivHeaderBack;
     private TextView tvHeaderTitle;
 
-
- /*   public void setBackButtonVisibility(int visibility){
+    public void setBackButtonVisibility(int visibility){
         if(ivHeaderBack!=null)
             ivHeaderBack.setVisibility(visibility);
     }
-*/
+
     public void setTitle(String text){
         if(tvHeaderTitle!=null)
             tvHeaderTitle.setText(text);
@@ -29,27 +32,34 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_staff);
-        initView();
+        setContentView(R.layout.activity_all_services);
+        init();
     }
 
-    private void initView() {
-        ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
-        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
-        tvHeaderTitle.setText(getString(R.string.text_staff));
-        ivHeaderBack.setVisibility(View.VISIBLE);
-        ivHeaderBack.setOnClickListener(this);
-        addFragment(ArtistStaffFragment.newInstance(""), false,R.id.flStffContainer);
-
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ivHeaderBack:
-                onBackPressed();
-                break;
+    private void init(){
+        Intent intent = getIntent();
+        if (intent!=null){
+            Bundle args = intent.getBundleExtra("BUNDLE");
+            staffDetail = (StaffDetail) args.getSerializable("staffDetail");
         }
+
+        ivHeaderBack = findViewById(R.id.ivHeaderBack);
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        tvHeaderTitle.setText(getString(R.string.text_category));
+        ivHeaderBack.setVisibility(View.VISIBLE);
+
+        ivHeaderBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        addFragment(AllServiesFragment.newInstance(""), true,R.id.flServiceContainer);
+    }
+
+    public StaffDetail getStaffDetail(){
+        return staffDetail;
     }
 
     /* frangment replace code */
@@ -68,10 +78,10 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-
     @Override
     public void onBackPressed() {
         // Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flStffContainer);
+
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();
         if (i > 0) {

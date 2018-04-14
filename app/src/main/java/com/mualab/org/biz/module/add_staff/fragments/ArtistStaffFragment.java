@@ -20,6 +20,7 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.module.add_staff.activity.AddStaffActivity;
@@ -40,11 +41,6 @@ import java.util.Map;
 
 
 public class ArtistStaffFragment extends Fragment implements View.OnClickListener{
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
     private TextView tvNoDataFound;
     private Context mContext;
     private List<Staff>artistStaffs;
@@ -56,10 +52,10 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
     }
 
 
-    public static ArtistStaffFragment newInstance(String param1, String param2) {
+    public static ArtistStaffFragment newInstance(String param1) {
         ArtistStaffFragment fragment = new ArtistStaffFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString("param1", param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,7 +64,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+          String  mParam1 = getArguments().getString("param1");
         }
     }
 
@@ -116,7 +112,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
             case R.id.llAddStaff:
                 //startActivity(new Intent(mContext, SearchStaffActivity.class));
                 ((AddStaffActivity)mContext).addFragment(
-                        SearchStaffFragment.newInstance(""), true);
+                        SearchStaffFragment.newInstance(""), true,R.id.flStffContainer);
                 break;
         }
     }
@@ -161,12 +157,6 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 Staff item = gson.fromJson(String.valueOf(object), Staff.class);
 
-                              /*  item._id = object.getString("_id");
-                                item.staffId = object.getString("_id");
-                                item.staffName = object.getString("staffName");
-                                item.staffImage = object.getString("staffImage");
-                                item.job = object.getString("job");
-*/
                                 artistStaffs.add(item);
                             }
                         }else {
@@ -174,22 +164,6 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
                             tvNoDataFound.setVisibility(View.VISIBLE);
                         }
                         staffAdapter.notifyDataSetChanged();
-
-                     /*   //parsing for getting staff
-                        JSONArray arrStaffDetail= js.getJSONArray("staffDetail");
-                        if (arrStaffDetail!=null && arrStaffDetail.length()!=0) {
-                            for (int l=0; l<arrStaffDetail.length(); l++){
-                                JSONObject object = arrStaffDetail.getJSONObject(l);
-                                Staff staff = new Staff();
-                                staff.staffId = object.getString("_id");
-                                staff.staffName = object.getString("staffName");
-                                staff.staffImage = object.getString("staffImage");
-                                staff.isSelected = false;
-                                staff.job = object.getString("job");
-                                staffList.add(staff);
-                            }
-                        }*/
-
                     }else {
                         rvArtistStaff.setVisibility(View.GONE);
                         tvNoDataFound.setVisibility(View.VISIBLE);
@@ -207,7 +181,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
                     Helper helper = new Helper();
                     if (helper.error_Messages(error).contains("Session")){
                         Mualab.getInstance().getSessionManager().logout();
-                        //      MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                             // MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
                     }
                 }catch (Exception e){
                     e.printStackTrace();

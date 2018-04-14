@@ -1,0 +1,38 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg_color"
+    android:orientation="vertical"
+    android:layout_centerHorizontal="true"
+    android:layout_marginRight="5dp"
+    android:layout_marginLeft="5dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ExpandableListView
+        android:id="@+id/lvExpandable"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:divider="@null"
+        android:dividerHeight="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/tvNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/no_data_available"
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="visible"
+        android:fontFamily="@font/roboto_regular"/>
+
+</LinearLayout>

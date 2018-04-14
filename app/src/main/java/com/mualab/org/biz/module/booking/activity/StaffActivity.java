@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StaffActivity extends AppCompatActivity {
-    private StaffListAdapter staffListAdapter;
-    private List<Staff>staffList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +26,10 @@ public class StaffActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
-        staffList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
+        List<Staff> staffList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
 
         // staffList = new ArrayList<>();
-        staffListAdapter = new StaffListAdapter(StaffActivity.this,staffList);
+        StaffListAdapter staffListAdapter = new StaffListAdapter(StaffActivity.this, staffList);
 
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         ivHeaderBack.setVisibility(View.VISIBLE);
@@ -57,15 +55,5 @@ public class StaffActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void showStaff(){
-        staffList.clear();
-        for (int i = 0;i<12;i++){
-            Staff staff = new Staff();
-            staff.staffName = "Benjamin";
-            staffList.add(staff);
-        }
-        staffListAdapter.notifyDataSetChanged();
     }
 }
