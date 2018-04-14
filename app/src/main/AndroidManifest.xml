@@ -36,9 +36,10 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        >
         <activity
-            android:name=".module.SplashActivity"
+            android:name=".modules.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
@@ -48,41 +49,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".module.MainActivity"
+            android:name=".modules.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".module.authentication.LoginActivity"
+            android:name=".modules.authentication.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".module.authentication.OtpVerificationActivity"
+            android:name=".modules.authentication.OtpVerificationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".module.authentication.ChooseUserTypeActivity"
+            android:name=".modules.authentication.ChooseUserTypeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".module.authentication.RegistrationActivity"
+            android:name=".modules.authentication.RegistrationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".module.authentication.Registration2Activity"
+            android:name=".modules.authentication.Registration2Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".module.authentication.AddAddressActivity"
+            android:name=".modules.authentication.AddAddressActivity"
             android:label="@string/address_activity"
             android:theme="@style/AppTheme.DarkActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".module.authentication.ChooseCountryActivity"
+            android:name=".modules.authentication.ChooseCountryActivity"
             android:label="@string/country_activity"
             android:theme="@style/AppTheme.DarkActionBar" />
         <activity
             android:name="com.image.cropper.CropImageActivity"
             android:theme="@style/AppTheme.DarkActionBar" />
         <activity
-            android:name=".module.profile.BusinessProfileActivity"
+            android:name=".modules.profile.BusinessProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".module.BaseActivity" />
+        <activity android:name=".modules.BaseActivity" />
         <activity
-            android:name=".module.booking.activity.StaffActivity"
+            android:name=".modules.booking.activity.StaffActivity"
             android:screenOrientation="portrait" />
 
         <!-- Meta data -->
@@ -117,14 +118,15 @@
             android:exported="false" />
 
         <activity
-            android:name=".module.booking.activity.BookingDetailActivity"
+            android:name=".modules.booking.activity.BookingDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".module.add_staff.activity.AddStaffActivity"
+            android:name=".modules.add_staff.activity.AddStaffActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".module.add_staff.activity.AddStaffDetailActivity"></activity>
+        <activity android:name=".modules.add_staff.activity.AddStaffDetailActivity" />
+        <activity android:name=".modules.add_staff.activity.AllServicesActivity"></activity>
     </application>
 
 </manifest>

@@ -36,13 +36,13 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Built-in module for image cropping.<br>
- * Use {@link CropImage#activity(Uri)} to create a builder to start this module.
+ * Built-in modules for image cropping.<br>
+ * Use {@link CropImage#activity(Uri)} to create a builder to start this modules.
  */
 public class CropImageActivity extends AppCompatActivity implements CropImageView.OnSetImageUriCompleteListener, CropImageView.OnCropImageCompleteListener {
 
     /**
-     * The crop image view library widget used in the module
+     * The crop image view library widget used in the modules
      */
     private CropImageView mCropImageView;
 
@@ -80,7 +80,7 @@ public class CropImageActivity extends AppCompatActivity implements CropImageVie
                 // request permissions and handle the result in onRequestPermissionsResult()
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
             } else {
-                // no permissions required or already grunted, can start crop image module
+                // no permissions required or already grunted, can start crop image modules
                 mCropImageView.setImageUriAsync(mCropImageUri);
             }
         }
@@ -186,7 +186,7 @@ public class CropImageActivity extends AppCompatActivity implements CropImageVie
                     // request permissions and handle the result in onRequestPermissionsResult()
                     requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
                 } else {
-                    // no permissions required or already grunted, can start crop image module
+                    // no permissions required or already grunted, can start crop image modules
                     mCropImageView.setImageUriAsync(mCropImageUri);
                 }
             }
@@ -197,7 +197,7 @@ public class CropImageActivity extends AppCompatActivity implements CropImageVie
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
             if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // required permissions granted, start crop image module
+                // required permissions granted, start crop image modules
                 mCropImageView.setImageUriAsync(mCropImageUri);
             } else {
                 Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
@@ -285,7 +285,7 @@ public class CropImageActivity extends AppCompatActivity implements CropImageVie
     }
 
     /**
-     * Cancel of cropping module.
+     * Cancel of cropping modules.
      */
     protected void setResultCancel() {
         setResult(RESULT_CANCELED);
@@ -293,7 +293,7 @@ public class CropImageActivity extends AppCompatActivity implements CropImageVie
     }
 
     /**
-     * Get intent instance to be used for the result of this module.
+     * Get intent instance to be used for the result of this modules.
      */
     protected Intent getResultIntent(Uri uri, Exception error, int sampleSize) {
         CropImage.ActivityResult result = new CropImage.ActivityResult(null,

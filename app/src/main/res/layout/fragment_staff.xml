@@ -14,11 +14,11 @@
             android:layout_height="wrap_content"
             android:text="@string/text_staff"
             android:textColor="@color/colorPrimary"
-            android:textSize="15sp"
-            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_regular"
-            android:layout_marginStart="10dp" />
+            android:layout_marginStart="12dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvArtistStaff"
@@ -47,8 +47,8 @@
         android:layout_marginEnd="10dp">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:background="@drawable/staff_add_ico"
             />
 
@@ -58,7 +58,7 @@
             android:text="@string/add_new_user"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="4dp"
             android:fontFamily="@font/roboto_regular"
             />
 

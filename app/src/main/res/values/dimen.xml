@@ -14,4 +14,6 @@
     <dimen name="item_width">300dp</dimen>
     <dimen name="padding_item_width">300dp</dimen>
 
+    <dimen name="shadow_width">2.5dp</dimen>
+
 </resources>

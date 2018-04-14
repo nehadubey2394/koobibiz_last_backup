@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_bg_color"
-    tools:context="com.mualab.org.biz.module.add_staff.activity.AddStaffActivity">
+    tools:context="com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvSearch"
@@ -32,10 +32,12 @@
             android:textColorHint="@color/grey"
             android:textColor="@color/text_color"
             android:fontFamily="@font/roboto_light"
-            android:textSize="11sp"
+            android:textSize="13sp"
             android:layout_gravity="center"
+            android:paddingLeft="1dp"
             android:maxLines="1"
             android:background="@null"
+            android:imeOptions="actionSearch"
             android:drawableRight="@drawable/search_ico"
             android:drawableEnd="@drawable/search_ico"
             android:inputType="textNoSuggestions" />
