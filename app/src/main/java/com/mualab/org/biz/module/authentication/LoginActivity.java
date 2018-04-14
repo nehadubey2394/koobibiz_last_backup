@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity {
         ed_password = findViewById(R.id.ed_password);
         input_layout_UserName = findViewById(R.id.input_layout_UserName);
         input_layout_password = findViewById(R.id.input_layout_password);
-        ed_password.addTextChangedListener(new MyTextWatcher(ed_password));
+        //ed_password.addTextChangedListener(new MyTextWatcher(ed_password));
     }
 
     @Override
@@ -388,7 +388,7 @@ public class LoginActivity extends BaseActivity {
                 });
     }*/
 
-    private class MyTextWatcher implements TextWatcher {
+    /*private class MyTextWatcher implements TextWatcher {
 
         private View view;
 
@@ -412,5 +412,5 @@ public class LoginActivity extends BaseActivity {
                     break;
             }
         }
-    }
+    }*/
 }
