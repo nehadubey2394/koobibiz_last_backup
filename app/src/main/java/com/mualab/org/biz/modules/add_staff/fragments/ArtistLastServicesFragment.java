@@ -39,6 +39,7 @@ import com.mualab.org.biz.model.add_staff.SubServices;
 import com.mualab.org.biz.modules.add_staff.activity.AllServicesActivity;
 import com.mualab.org.biz.modules.add_staff.adapter.ArtistServiceLastAdapter;
 import com.mualab.org.biz.modules.add_staff.listner.OnServiceSelectListener;
+import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
@@ -111,6 +112,9 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     }
 
     private void initView(){
+        Session session = Mualab.getInstance().getSessionManager();
+        user = session.getUser();
+
         ArrayList<ArtistServices> arrayList;
 
         arrayList = subServices.artistservices;

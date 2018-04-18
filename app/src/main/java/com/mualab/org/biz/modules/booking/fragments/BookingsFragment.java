@@ -795,6 +795,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 tabPending.setBackgroundResource(R.drawable.bg_tab_unselected);
                 tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvToday.setTextColor(getResources().getColor(R.color.white));
+                isToday = true;
                 String isChangedOccured = data.getStringExtra("isChangedOccured");
                 apiForGetFreeSlots();
             }

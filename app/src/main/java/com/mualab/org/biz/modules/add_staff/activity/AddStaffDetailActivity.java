@@ -15,6 +15,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
@@ -22,12 +24,14 @@ import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.BusinessDay;
+import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.AllArtist;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.add_staff.cv_popup.CustomPopupWindow;
 import com.mualab.org.biz.modules.add_staff.listner.PoppupWithListListner;
+import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -114,10 +118,11 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
 
         switch (view.getId()) {
             case R.id.btnSave:
-                Session session = Mualab.getInstance().getSessionManager();
-                User user = session.getUser();
-                List<BusinessDay> businessDays =  user.getBusinessProfie().businessDays;
-                MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Under developement");
+                PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
+                List<BusinessDay> businessDays = pSession.getBusinessProfile().businessDays;
+                Gson gson = new GsonBuilder().create();
+                JsonArray jsonArray = gson.toJsonTree(businessDays).getAsJsonArray();
+                apiForAddStaff(jsonArray);
                 break;
             case R.id.ivHeaderBack:
                 onBackPressed();
