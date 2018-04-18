@@ -204,7 +204,7 @@ public class AllServiesFragment extends Fragment {
                                         subServices.subServiceId = jObj.getString("subServiceId");
                                         subServices.subServiceName = jObj.getString("subServiceName");*/
 
-                                        JSONArray artistservices = jObj.getJSONArray("artistService");
+                                        JSONArray artistservices = jObj.getJSONArray("artistservices");
                                         for (int m=0; m<artistservices.length(); m++){
                                             JSONObject jsonObject3 = artistservices.getJSONObject(m);
                                             Gson gson2 = new Gson();

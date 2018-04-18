@@ -9,7 +9,7 @@ public class StaffDetail implements Serializable {
 
     public List<StaffHours>staffHoursList = new ArrayList<>();
 
-    public List<SelectedServices> staffServices = new ArrayList<>();
+    public List<AddedStaffServices> staffServices = new ArrayList<>();
 
 
     /*{

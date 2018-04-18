@@ -187,6 +187,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
 
         rycTimeSlot = rootView.findViewById(R.id.rycTimeSlot);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL, false);
+        layoutManager.scrollToPositionWithOffset(0, 0);
         rycTimeSlot.setLayoutManager(layoutManager);
         rycTimeSlot.setAdapter(timeSlotAdapter);
 
@@ -801,6 +802,10 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         //  Handle modules result here
         if (requestCode==2 && resultCode!=0){
             if (data!=null){
+                tabToday.setBackgroundResource(R.drawable.bg_tab_selected);
+                tabPending.setBackgroundResource(R.drawable.bg_tab_unselected);
+                tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
+                tvToday.setTextColor(getResources().getColor(R.color.white));
                 String isChangedOccured = data.getStringExtra("isChangedOccured");
                 apiForGetFreeSlots();
             }

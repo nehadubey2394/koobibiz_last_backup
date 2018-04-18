@@ -24,14 +24,5 @@ public class ArtistServices implements Serializable{
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
-
-    public boolean isBooked() {
-        return isBooked;
-    }
-
-    public void setBooked(boolean booked) {
-        isBooked = booked;
-    }
-    private boolean isBooked;
     public boolean isOutCall3;
 }

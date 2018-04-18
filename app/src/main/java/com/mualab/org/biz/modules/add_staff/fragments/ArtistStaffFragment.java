@@ -64,7 +64,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-          String  mParam1 = getArguments().getString("param1");
+            String  mParam1 = getArguments().getString("param1");
         }
     }
 
@@ -181,7 +181,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
                     Helper helper = new Helper();
                     if (helper.error_Messages(error).contains("Session")){
                         Mualab.getInstance().getSessionManager().logout();
-                             // MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                        // MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
                     }
                 }catch (Exception e){
                     e.printStackTrace();

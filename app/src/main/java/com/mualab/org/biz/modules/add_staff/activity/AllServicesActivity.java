@@ -1,10 +1,12 @@
 package com.mualab.org.biz.modules.add_staff.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.modules.add_staff.fragments.AllServiesFragment;
+import com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment;
 
 public class AllServicesActivity extends AppCompatActivity {
     public  StaffDetail staffDetail;
@@ -78,13 +81,41 @@ public class AllServicesActivity extends AppCompatActivity {
 
     }
 
+    private void showAlertDailog(final FragmentManager fm,final int fCont){
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllServicesActivity.this, R.style.MyDialogTheme);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Alert!");
+        alertDialog.setMessage("Are you sure you want to permanently remove all selected services?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                ArtistLastServicesFragment.selectedServicesList.clear();
+                dialog.cancel();
+                finish();
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+
+    }
+
     @Override
     public void onBackPressed() {
         // Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flStffContainer);
 
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();
-        if (i > 0) {
+
+        if (i>0 && ArtistLastServicesFragment.selectedServicesList.size()>0){
+            showAlertDailog(fm,i);
+        }else if (i==0 && ArtistLastServicesFragment.selectedServicesList.size()>0){
+            showAlertDailog(fm,i);
+        }
+        else if (i > 0) {
             fm.popBackStack();
         }else  {
             super.onBackPressed();

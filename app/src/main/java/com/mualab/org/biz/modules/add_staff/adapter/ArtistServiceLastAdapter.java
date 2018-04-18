@@ -74,6 +74,15 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         holder.tvOutCallPrice.setText("£"+outCallPrice);
         holder.tvInCallPrice.setText("£"+inCallPrice);
 
+        if (item.isSelected()) {
+            holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.shadow_green));
+            holder.sample1.setSwipeEnabled(true);
+        }
+        else {
+            holder.sample1.setSwipeEnabled(false);
+            holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.gray2));
+        }
+
       /*  if (fromConfirmBooking){
             if (item.isBooked()) {
                 holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.shadow_green));
@@ -125,7 +134,6 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
                     if (serviceSelectListener != null) {
                         serviceSelectListener.onItemClick(getAdapterPosition(),artistServices);
                     }
-                    MyToast.getInstance(context).showDasuAlert("Under development");
                     break;
             }
         }

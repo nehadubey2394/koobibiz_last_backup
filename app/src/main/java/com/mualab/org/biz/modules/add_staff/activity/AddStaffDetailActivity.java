@@ -14,16 +14,33 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.google.gson.JsonArray;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
+import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.BusinessDay;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.AllArtist;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.add_staff.cv_popup.CustomPopupWindow;
 import com.mualab.org.biz.modules.add_staff.listner.PoppupWithListListner;
+import com.mualab.org.biz.session.Session;
+import com.mualab.org.biz.task.HttpResponceListner;
+import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Helper;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AddStaffDetailActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView tvJobTitle,tvSocialMedia,tvHoliday;
@@ -90,12 +107,16 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 tvHoliday.setText(staffDetail.holiday);
         }
     }
+
     @Override
     public void onClick(View view) {
         CustomPopupWindow dialogsClass = new CustomPopupWindow();
 
         switch (view.getId()) {
             case R.id.btnSave:
+                Session session = Mualab.getInstance().getSessionManager();
+                User user = session.getUser();
+                List<BusinessDay> businessDays =  user.getBusinessProfie().businessDays;
                 MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Under developement");
                 break;
             case R.id.ivHeaderBack:
@@ -198,6 +219,67 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
             alert.show();
         }
     }
+
+    private void apiForAddStaff(final JsonArray jsonArray){
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(AddStaffDetailActivity.this, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        apiForAddStaff(jsonArray);
+                    }
+                }
+            }).show();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("artistId", staffDetail.staffId);
+        params.put("staffId", staffDetail.staffId);
+        params.put("businessId", String.valueOf(user.id));
+        params.put("staffService", "");
+        params.put("job", tvJobTitle.getText().toString().trim());
+        params.put("mediaAccess", tvSocialMedia.getText().toString().trim());
+        params.put("staffHours", jsonArray.toString());
+        params.put("type", "");
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(AddStaffDetailActivity.this, "addStaff", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+
+                } catch (Exception e) {
+                    Progress.hide(AddStaffDetailActivity.this);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                try{
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")){
+                        Mualab.getInstance().getSessionManager().logout();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }})
+                .setAuthToken(user.authToken)
+                .setProgress(true)
+                .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
+        //.setBody(params, "application/x-www-form-urlencoded"));
+
+        task.execute(this.getClass().getName());
+    }
+
 
     @Override
     public void onBackPressed() {
