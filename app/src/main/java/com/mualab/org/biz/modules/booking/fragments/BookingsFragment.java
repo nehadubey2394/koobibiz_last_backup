@@ -450,6 +450,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         params.put("latitude", lat);
         params.put("longitude", lng);
         params.put("date", selectedDate);
+        params.put("staffId", "");
 
         HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "artistFreeSlot", new HttpResponceListner.Listener() {
             @Override
@@ -796,7 +797,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                 tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvToday.setTextColor(getResources().getColor(R.color.white));
                 isToday = true;
-                String isChangedOccured = data.getStringExtra("isChangedOccured");
+                // String isChangedOccured = data.getStringExtra("isChangedOccured");
                 apiForGetFreeSlots();
             }
         }

@@ -21,8 +21,8 @@ import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.AddedStaffServices;
+import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.model.add_staff.StaffHours;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.mualab.org.biz.session.Session;
@@ -154,7 +154,7 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 for (int j=0; j<staffHoursArray.length(); j++){
                                     JSONObject object2 = staffHoursArray.getJSONObject(j);
                                     Gson gson = new Gson();
-                                    StaffHours item2 = gson.fromJson(String.valueOf(object2), StaffHours.class);
+                                    BusinessDayForStaff item2 = gson.fromJson(String.valueOf(object2), BusinessDayForStaff.class);
                                     item.staffHoursList.add(item2);
                                 }
 

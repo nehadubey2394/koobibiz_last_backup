@@ -7,7 +7,7 @@ import java.util.List;
 public class StaffDetail implements Serializable {
     public String _id,job,mediaAccess,holiday,userName,profileImage,staffId,businessId;
 
-    public List<StaffHours>staffHoursList = new ArrayList<>();
+    public List<BusinessDayForStaff>staffHoursList = new ArrayList<>();
 
     public List<AddedStaffServices> staffServices = new ArrayList<>();
 

@@ -23,6 +23,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.modules.add_staff.fragments.ArtistSettingsFragment;
 import com.mualab.org.biz.modules.booking.fragments.AddFragment;
 import com.mualab.org.biz.modules.booking.fragments.BookingsFragment;
@@ -173,18 +174,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                         pSession.updateServiceType(bsp.serviceType);
                         pSession.updateBankStatus(bsp.bankStatus);
 
+                        // List<BusinessDayForStaff>dayArrayList = new ArrayList<>();
 
                         JSONArray businessArray = obj.getJSONArray("businessHour");
                         bsp.businessDays = getBusinessDay();
+
                         for(int i =0; i<businessArray.length();  i++){
+                            BusinessDayForStaff businessDayForStaff = new BusinessDayForStaff();
                             JSONObject objSlots = businessArray.getJSONObject(i);
                             int dayId = objSlots.getInt("day");
-
                             TimeSlot slot = new TimeSlot(dayId);
                             slot.id = objSlots.getInt("_id");
                             slot.startTime = objSlots.getString("startTime");
                             slot.endTime = objSlots.getString("endTime");
                             slot.status = objSlots.getInt("status");
+
+                            businessDayForStaff.dayId = objSlots.getInt("day");
+                            businessDayForStaff.startTime = objSlots.getString("startTime");
+                            businessDayForStaff.endTime = objSlots.getString("endTime");
+                            bsp.dayForStaffs.add(businessDayForStaff);
 
                             for(BusinessDay tmpDay : bsp.businessDays){
                                 if(tmpDay.dayId == dayId){

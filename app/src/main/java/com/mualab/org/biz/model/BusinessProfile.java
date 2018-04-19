@@ -1,5 +1,7 @@
 package com.mualab.org.biz.model;
 
+import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,5 +26,6 @@ public class BusinessProfile {
     public User user;
     public Address address;
     public List<BusinessDay> businessDays;
+    public List<BusinessDayForStaff> dayForStaffs = new ArrayList<>();;
     public List<SubCategory> subCategories = new ArrayList<>();
 }
