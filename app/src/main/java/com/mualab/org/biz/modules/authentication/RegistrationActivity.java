@@ -540,7 +540,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 SharedPreferanceUtils.setParam(RegistrationActivity.this, "OTP", jsonObject.toString());
                 //startTimear();
 
-                if(IS_DEBUG_MODE){
+                /*if(IS_DEBUG_MODE){
 
                   new CountDownTimer(10000, 1000) {
                         public void onTick(long millisUntilFinished) {
@@ -559,7 +559,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                            // MyToast.getInstance(RegistrationActivity.this).showDasuAlert("Development Mode","otp are automatic fill ");
                         }
                     }.start();
-                }
+                }*/
 
                 if(!isResendOTP)
                     nextScreen();

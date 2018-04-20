@@ -70,7 +70,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     public static List<SelectedServices> selectedServicesList = new ArrayList<>();
     private StaffDetail staffDetail;
     private User user;
-
+    private ArrayList<ArtistServices> arrayList;
 
     public ArtistLastServicesFragment() {
         // Required empty public constructor
@@ -119,8 +119,6 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     private void initView(){
         Session session = Mualab.getInstance().getSessionManager();
         user = session.getUser();
-
-        ArrayList<ArtistServices> arrayList;
 
         arrayList = subServices.artistservices;
 
@@ -210,11 +208,11 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         if (artistServices.isSelected()){
             MyToast.getInstance(mContext).showDasuAlert("This service is already added,Select another service");
         }else {
-            showDetailDialog(artistServices);
+            showDetailDialog(artistServices,position);
         }
     }
 
-    private void showDetailDialog(final ArtistServices artistServices){
+    private void showDetailDialog(final ArtistServices artistServices, final int position){
         final View DialogView = View.inflate(mContext, R.layout.dialog_layout_service_detail, null);
 
 
@@ -261,6 +259,13 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                 services.outCallPrice = artistServices.outCallPrice;
                 services.completionTime = cTime;
                 selectedServicesList.add(services);
+
+                ArtistServices newService = arrayList.get(position);
+                newService.completionTime = services.completionTime;
+                newService.inCallPrice = services.inCallPrice;
+                newService.outCallPrice = services.outCallPrice;
+                arrayList.set(position,newService);
+                adapter.notifyDataSetChanged();
                 KeyboardUtil.hideKeyboard(DialogView,mContext);
                 dialog.cancel();
             }
