@@ -70,7 +70,6 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     public static List<SelectedServices> selectedServicesList = new ArrayList<>();
     private StaffDetail staffDetail;
     private User user;
-    private ArrayList<ArtistServices> arrayList;
 
     public ArtistLastServicesFragment() {
         // Required empty public constructor
@@ -120,7 +119,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         Session session = Mualab.getInstance().getSessionManager();
         user = session.getUser();
 
-        arrayList = subServices.artistservices;
+        ArrayList<ArtistServices> arrayList = subServices.artistservices;
 
         if (staffDetail.staffServices.size()!=0 && selectedServicesList.size()==0){
             if (arrayList.size()!=0){
@@ -138,6 +137,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                             services.inCallPrice = staffServices.inCallPrice;
                             services.outCallPrice = staffServices.outCallPrice;
                             services.completionTime = staffServices.completionTime;
+                            services._id = staffServices._id;
                             selectedServicesList.add(services);
                         }
                     }
@@ -156,6 +156,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                 services.inCallPrice = staffServices.inCallPrice;
                 services.outCallPrice = staffServices.outCallPrice;
                 services.completionTime = staffServices.completionTime;
+                services._id = staffServices._id;
                 selectedServicesList.add(services);
             }
         }
@@ -215,14 +216,13 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     private void showDetailDialog(final ArtistServices artistServices, final int position){
         final View DialogView = View.inflate(mContext, R.layout.dialog_layout_service_detail, null);
 
-
         final Dialog dialog = new Dialog(mContext);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(DialogView);
-        EditText etInCallPrice = DialogView.findViewById(R.id.etInCallPrice);
-        EditText etOutCallPrice = DialogView.findViewById(R.id.etOutCallPrice);
+        final EditText etInCallPrice = DialogView.findViewById(R.id.etInCallPrice);
+        final EditText etOutCallPrice = DialogView.findViewById(R.id.etOutCallPrice);
         final TextView tvCTime = DialogView.findViewById(R.id.tvCTime);
         TextView tvTile = DialogView.findViewById(R.id.tvTile);
         LinearLayout llCtime = DialogView.findViewById(R.id.llCtime);
@@ -247,8 +247,14 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
             @Override
             public void onClick(View view) {
                 String cTime = tvCTime.getText().toString().trim();
+                String inCallPrice = etInCallPrice.getText().toString().trim();
+                String outCallPrice = etOutCallPrice.getText().toString().trim();
+                artistServices.completionTime = cTime;
+                artistServices.inCallPrice = inCallPrice;
+                artistServices.outCallPrice = outCallPrice;
                 artistServices.setSelected(true);
                 adapter.notifyDataSetChanged();
+
                 SelectedServices services = new SelectedServices();
                 services.serviceId = subServices.serviceId;
                 services.subserviceId = subServices.subServiceId;
@@ -258,14 +264,9 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                 services.inCallPrice = artistServices.inCallPrice;
                 services.outCallPrice = artistServices.outCallPrice;
                 services.completionTime = cTime;
+                services._id = "#";
                 selectedServicesList.add(services);
 
-                ArtistServices newService = arrayList.get(position);
-                newService.completionTime = services.completionTime;
-                newService.inCallPrice = services.inCallPrice;
-                newService.outCallPrice = services.outCallPrice;
-                arrayList.set(position,newService);
-                adapter.notifyDataSetChanged();
                 KeyboardUtil.hideKeyboard(DialogView,mContext);
                 dialog.cancel();
             }
@@ -303,9 +304,6 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnDone:
-                LinkedHashSet<SelectedServices> listToSet = new LinkedHashSet<>(selectedServicesList);
-                selectedServicesList.clear();
-                selectedServicesList.addAll(listToSet);
 
                 String[] sIds = new String[selectedServicesList.size()];
                 for (int i = 0;i<selectedServicesList.size();i++){
