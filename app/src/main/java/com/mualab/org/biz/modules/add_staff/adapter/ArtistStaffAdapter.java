@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +20,10 @@ import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.add_staff.SelectedServices;
+import com.mualab.org.biz.model.add_staff.AddedStaffServices;
+import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.model.add_staff.StaffHours;
 import com.mualab.org.biz.model.booking.Staff;
-import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -156,7 +154,7 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 for (int j=0; j<staffHoursArray.length(); j++){
                                     JSONObject object2 = staffHoursArray.getJSONObject(j);
                                     Gson gson = new Gson();
-                                    StaffHours item2 = gson.fromJson(String.valueOf(object2), StaffHours.class);
+                                    BusinessDayForStaff item2 = gson.fromJson(String.valueOf(object2), BusinessDayForStaff.class);
                                     item.staffHoursList.add(item2);
                                 }
 
@@ -164,7 +162,7 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 for (int k=0; k<staffServiceArray.length(); k++){
                                     JSONObject object3 = staffServiceArray.getJSONObject(k);
                                     Gson gson = new Gson();
-                                    SelectedServices item3 = gson.fromJson(String.valueOf(object3), SelectedServices.class);
+                                    AddedStaffServices item3 = gson.fromJson(String.valueOf(object3), AddedStaffServices.class);
                                     item.staffServices.add(item3);
                                 }
                             }

@@ -187,6 +187,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
 
         rycTimeSlot = rootView.findViewById(R.id.rycTimeSlot);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL, false);
+        layoutManager.scrollToPositionWithOffset(0, 0);
         rycTimeSlot.setLayoutManager(layoutManager);
         rycTimeSlot.setAdapter(timeSlotAdapter);
 
@@ -426,6 +427,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         }
 
     }
+
     private void apiForGetFreeSlots(){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
@@ -448,6 +450,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         params.put("latitude", lat);
         params.put("longitude", lng);
         params.put("date", selectedDate);
+        params.put("staffId", "");
 
         HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "artistFreeSlot", new HttpResponceListner.Listener() {
             @Override
@@ -524,35 +527,20 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                                 if (arrBookingInfo!=null && arrBookingInfo.length()!=0) {
                                     for (int l=0; l<arrBookingInfo.length(); l++){
                                         JSONObject bInfoObj = arrBookingInfo.getJSONObject(l);
-                                        BookingInfo bookingInfo = new BookingInfo();
-                                        bookingInfo._Id = bInfoObj.getString("_id");
-                                        bookingInfo.bookingPrice = bInfoObj.getString("bookingPrice");
-                                        bookingInfo.serviceId = bInfoObj.getString("serviceId");
-                                        bookingInfo.subServiceId = bInfoObj.getString("subServiceId");
-                                        bookingInfo.artistServiceId = bInfoObj.getString("artistServiceId");
-                                        bookingInfo.bookingDate = bInfoObj.getString("bookingDate");
-                                        bookingInfo.startTime = bInfoObj.getString("startTime");
-                                        bookingInfo.endTime = bInfoObj.getString("endTime");
-                                        bookingInfo.staffId = bInfoObj.getString("staffId");
-                                        bookingInfo.staffName = bInfoObj.getString("staffName");
-                                        bookingInfo.staffImage = bInfoObj.getString("staffImage");
-                                        bookingInfo.artistServiceName = bInfoObj.getString("artistServiceName");
+                                        Gson gson2 = new Gson();
+                                        BookingInfo bookingInfo = gson2.fromJson(String.valueOf(bInfoObj), BookingInfo.class);
 
                                         if (serviceName.equals("")){
                                             serviceName = bookingInfo.artistServiceName;
-                                        }/*else {
-                                            serviceName = serviceName + ","+bookingInfo.artistServiceName;
-                                        }*/
-                                        //bookingInfo.bookingStatus = item.bookStatus;
-                                        // bookingInfo.userDetail = item.userDetail;
+                                        }//else
+                                        //serviceName = serviceName + ","+bookingInfo.artistServiceName;
+
                                         if (item.bookStatus.equals("0")) {
-                                            tvBookingCount.setVisibility(View.VISIBLE);
                                             item.pendingBookingInfos.add(bookingInfo);
                                         }
                                         else {
                                             item.todayBookingInfos.add(bookingInfo);
                                         }
-                                        bookingInfo.bookingDetail = item;
                                     }
                                     item.artistServiceName = serviceName;
                                 }
@@ -568,8 +556,8 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                             rycToday.setVisibility(View.GONE);
                             rycPending.setVisibility(View.GONE);
                             tvNoData.setVisibility(View.VISIBLE);
-                            //  MyToast.getInstance(mContext).showDasuAlert(message);
                         }
+
                         if (isToday) {
                             if (todayBookings.size()!=0) {
                                 rycToday.setVisibility(View.VISIBLE);
@@ -583,16 +571,20 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
                         }
                         else {
                             if (pendingBookings.size()!=0) {
-                                tvBookingCount.setVisibility(View.VISIBLE);
                                 rycToday.setVisibility(View.GONE);
                                 rycPending.setVisibility(View.VISIBLE);
                             }
                             else {
-                                tvBookingCount.setVisibility(View.GONE);
                                 tvNoData.setVisibility(View.VISIBLE);
                                 rycToday.setVisibility(View.GONE);
                                 rycPending.setVisibility(View.GONE);
                             }
+                        }
+
+                        if (count>0){
+                            tvBookingCount.setVisibility(View.VISIBLE);
+                        }else {
+                            tvBookingCount.setVisibility(View.GONE);
                         }
 
                         tvBookingCount.setText(""+count);
@@ -800,7 +792,12 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         //  Handle modules result here
         if (requestCode==2 && resultCode!=0){
             if (data!=null){
-                String isChangedOccured = data.getStringExtra("isChangedOccured");
+                tabToday.setBackgroundResource(R.drawable.bg_tab_selected);
+                tabPending.setBackgroundResource(R.drawable.bg_tab_unselected);
+                tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
+                tvToday.setTextColor(getResources().getColor(R.color.white));
+                isToday = true;
+                // String isChangedOccured = data.getStringExtra("isChangedOccured");
                 apiForGetFreeSlots();
             }
         }

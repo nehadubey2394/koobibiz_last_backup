@@ -147,6 +147,7 @@ public class AllServiesFragment extends Fragment {
 
         apiForGetAllServices();
     }
+
     private void onChildClickListener(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l){
         Services servicesItem = servicesList.get(groupPosition);
         SubServices subServices = servicesItem.arrayList.get(childPosition);
@@ -196,15 +197,15 @@ public class AllServiesFragment extends Fragment {
                                 if (subServiesArray!=null) {
                                     for (int k=0; k<subServiesArray.length(); k++){
                                         JSONObject jObj = subServiesArray.getJSONObject(k);
-                                        Gson gson = new Gson();
-                                        SubServices subServices = gson.fromJson(String.valueOf(jObj), SubServices.class);
-                                       /* SubServices subServices = new SubServices();
+                                        //   Gson gson = new Gson();
+                                        //  SubServices subServices = gson.fromJson(String.valueOf(jObj), SubServices.class);
+                                        SubServices subServices = new SubServices();
                                         subServices._id = jObj.getString("_id");
                                         subServices.serviceId = jObj.getString("serviceId");
                                         subServices.subServiceId = jObj.getString("subServiceId");
-                                        subServices.subServiceName = jObj.getString("subServiceName");*/
+                                        subServices.subServiceName = jObj.getString("subServiceName");
 
-                                        JSONArray artistservices = jObj.getJSONArray("artistService");
+                                        JSONArray artistservices = jObj.getJSONArray("artistservices");
                                         for (int m=0; m<artistservices.length(); m++){
                                             JSONObject jsonObject3 = artistservices.getJSONObject(m);
                                             Gson gson2 = new Gson();
@@ -214,20 +215,6 @@ public class AllServiesFragment extends Fragment {
                                                 subServices.isOutCall2 = true;
                                                 services.isOutCall = true;
                                             }
-                                          /*  ArtistServices services3 = new ArtistServices();
-                                            services3._id = jsonObject3.getString("_id");
-                                            services3.setSelected(false);
-                                            services3.setBooked(false);
-                                            services3.title = jsonObject3.getString("title");
-                                            services3.completionTime = jsonObject3.getString("completionTime");
-                                            services3.outCallPrice = jsonObject3.getString("outCallPrice");
-                                            services3.inCallPrice = jsonObject3.getString("inCallPrice");
-
-                                            if (!services3.outCallPrice.equals("0") || !services3.outCallPrice.equals("null")){
-                                                services3.isOutCall3 = true;
-                                                subServices.isOutCall2 = true;
-                                                services.isOutCall = true;
-                                            }*/
                                             subServices.artistservices.add(services3);
                                         }
 

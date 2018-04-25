@@ -9,6 +9,6 @@ import java.io.Serializable;
 public class BookingInfo implements Serializable{
     public String _Id,bookingPrice,serviceId,subServiceId,artistServiceId,location,startTime,endTime,staffId,staffName,staffImage,artistServiceName,bookingDate,bookingStatus;
 
-    public Bookings bookingDetail;
+    //public Bookings bookingDetail;
 
 }

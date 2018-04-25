@@ -47,7 +47,6 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
     private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
     private Context mContext;
     private TextView tvNoDataFound;
     private List<AllArtist> artistStaffs;
@@ -56,7 +55,6 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
     private EndlessRecyclerViewScrollListener scrollListener;
     private EditText etSearch;
     private ProgressBar progress_bar;
-    private boolean isSearch;
 
     public SearchStaffFragment() {
         // Required empty public constructor
@@ -74,9 +72,9 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
+        // if (getArguments() != null) {
+        //     mParam1 = getArguments().getString(ARG_PARAM1);
+        // }
     }
 
     @Override
@@ -138,13 +136,15 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                artistStaffs.clear();
+                Mualab.getInstance().cancelAllPendingRequests();
+                String s = etSearch.getText().toString().trim();
+                filterSearch(s);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 //after the change calling the method and passing the search input
-                String s = etSearch.getText().toString().trim();
-                filterSearch(s);
 
             }
         });
@@ -163,13 +163,9 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
     private void filterSearch(String s){
         if (!s.equals("")) {
             progress_bar.setVisibility(View.GONE);
-            artistStaffs.clear();
             apiForGetAllStaff(0,s);
-            isSearch = true;
         }else {
-            artistStaffs.clear();
             apiForGetAllStaff(0, "");
-            isSearch = false;
         }
     }
 
@@ -206,8 +202,10 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
 
                     if (status.equalsIgnoreCase("success")) {
                         staffAdapter.showLoading(false);
-                        if (search.equals(""))
+
+                        if (page==0) {
                             artistStaffs.clear();
+                        }
 
                         rvAllStaff.setVisibility(View.VISIBLE);
                         tvNoDataFound.setVisibility(View.GONE);

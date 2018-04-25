@@ -83,7 +83,8 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         holder.tvUserName.setText(item.userDetail.userName);
-        holder.tvStaffName.setText(item.pendingBookingInfos.get(0).staffName);
+        if (item.pendingBookingInfos.size()!=0)
+            holder.tvStaffName.setText(item.pendingBookingInfos.get(0).staffName);
         holder.tvDate.setText(date);
         holder.tvBookingTime.setText(item.bookingTime);
         holder.tvServices.setText(item.artistServiceName);

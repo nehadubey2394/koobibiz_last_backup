@@ -11,9 +11,12 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
+import com.mualab.org.biz.session.Session;
 
 
 public class ArtistSettingsFragment extends Fragment implements View.OnClickListener {
@@ -70,6 +73,14 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         RelativeLayout rlStaffPlanner = rootView.findViewById(R.id.rlStaffPlanner);
         RelativeLayout rlVoucherCode = rootView.findViewById(R.id.rlVoucherCode);
 
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+        if (user.businessType.equals("independent")){
+            rlStaffPlanner.setVisibility(View.GONE);
+            rlStaff.setVisibility(View.GONE);
+        }
+
+
         rlStaff.setOnClickListener(this);
         rlWorkinhHrs.setOnClickListener(this);
         rlCategories.setOnClickListener(this);
@@ -82,6 +93,7 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         switch (view.getId()){
             case R.id.rlStaff:
                 startActivity(new Intent(mContext,AddStaffActivity.class));
+               // MyToast.getInstance(mContext).showDasuAlert("Under development");
                 break;
             case R.id.rlWorkinhHrs:
                 MyToast.getInstance(mContext).showDasuAlert("Under development");

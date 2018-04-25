@@ -213,7 +213,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
                 tvHeaderText.setText(views.get(position).title);
                 KeyboardUtil.hideKeyboard(mPager,BusinessProfileActivity.this);
 
-                if(views.get(position).title.equals("Banking Details"))
+                if(views.get(position).title.equals("Banking Details") || views.get(position).title.equals("Upload Certification"))
                     tv_skip.setVisibility(View.VISIBLE);
                 else if(views.get(position).title.equals("Add Staff") &&
                         session.getUser().businessType.equals(Constants.INDEPENDENT)){
@@ -243,8 +243,8 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //MenuInflater inflater = getMenuInflater();
-       // inflater.inflate(R.menu.logout_menu, menu);
-       // MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        // inflater.inflate(R.menu.logout_menu, menu);
+        // MenuItem searchViewItem = menu.findItem(R.id.action_search);
         //inflater.inflate(R.menu.business_profile_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -258,7 +258,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
                 finish();
                 return true;
             case R.id.action_logout:
-                    Mualab.getInstance().getSessionManager().logout();
+                Mualab.getInstance().getSessionManager().logout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -274,7 +274,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
             super.onBackPressed();
         } else {
             // Otherwise, select the previous step.
-           // mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+            // mPager.setCurrentItem(mPager.getCurrentItem() - 1);
             int position = mPager.getCurrentItem();
             if(position != 0){
                 if(position==4 || position==5){

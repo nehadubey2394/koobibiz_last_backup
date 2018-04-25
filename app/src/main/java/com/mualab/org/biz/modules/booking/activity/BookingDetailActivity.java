@@ -278,7 +278,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                                         if (serviceName.equals("")) {
                                             serviceName = bookingInfo.artistServiceName;
                                         }
-                                        bookingInfo.bookingDetail = item;
+                                       // bookingInfo.bookingDetail = item;
 
                                         if (item.bookStatus.equals("0")) {
                                             item.pendingBookingInfos.add(bookingInfo);

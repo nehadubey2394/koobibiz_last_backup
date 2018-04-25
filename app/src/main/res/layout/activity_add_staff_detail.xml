@@ -29,13 +29,13 @@
             android:id="@+id/tvJobTitle"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:text="@string/enter_job_title"
+            android:hint="@string/enter_job_title"
+            android:textColorHint="@color/text_color"
             android:textColor="@color/text_color"
             android:fontFamily="@font/roboto_regular"
             android:textSize="13sp"
             android:gravity="center_vertical"
-            android:drawableTint="@color/text_color"
-            android:drawableRight="@drawable/down_arrow_ico"
+            android:drawableRight="@drawable/black_down_arrow_ico"
             />
 
         <View
@@ -50,12 +50,12 @@
             android:layout_height="30dp"
             android:text="@string/text_services"
             android:textColor="@color/text_color"
+            android:textColorHint="@color/text_color"
             android:fontFamily="@font/roboto_regular"
             android:textSize="13sp"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:drawableTint="@color/text_color"
-            android:drawableRight="@drawable/down_arrow_ico"
+            android:drawableRight="@drawable/black_down_arrow_ico"
             />
 
         <View
@@ -68,14 +68,14 @@
             android:id="@+id/tvSocialMedia"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:text="@string/social_media_access"
+            android:hint="@string/social_media_access"
             android:textColor="@color/text_color"
+            android:textColorHint="@color/text_color"
             android:fontFamily="@font/roboto_regular"
             android:textSize="13sp"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:drawableTint="@color/text_color"
-            android:drawableRight="@drawable/down_arrow_ico"
+            android:drawableRight="@drawable/black_down_arrow_ico"
             />
 
         <View
@@ -84,23 +84,21 @@
             android:layout_marginTop="5dp"
             android:background="@color/gray"/>
 
-        <TextView
+        <EditText
             android:id="@+id/tvHoliday"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:text="@string/holiday_allocation"
+            android:hint="@string/holiday_allocation"
             android:textColor="@color/text_color"
+            android:textColorHint="@color/text_color"
             android:fontFamily="@font/roboto_regular"
             android:textSize="13sp"
+            android:background="@null"
+            android:imeOptions="actionDone"
+            android:maxLength="3"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/gray"/>
+            android:inputType="number" />
 
     </LinearLayout>
 
@@ -122,14 +120,14 @@
             android:text="@string/set_working_hours"
             android:textSize="14sp"
             android:paddingLeft="10dp"
-            android:ems="15"
+            android:ems="16"
             android:textColor="@color/text_color"
             android:fontFamily="@font/roboto_medium"
             />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btnEditWhs"
-            android:layout_width="68dp"
+            android:layout_width="60dp"
             android:layout_height="26dp"
             style="@style/My_Button_Small.Invert"
             android:text="@string/edit"
@@ -137,19 +135,28 @@
             />
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatButton
-        style="@style/My_Button_Small.Invert"
-        android:layout_width="75dp"
-        android:layout_height="28dp"
-        android:text="@string/save"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/llSetWh"
         android:gravity="center"
-        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="25dp"
-        android:textSize="14sp"
-        />
+       >
 
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnSave"
+            style="@style/My_Button_Small.Invert"
+            android:layout_width="75dp"
+            android:layout_height="28dp"
+            android:text="@string/save"
+            android:gravity="center"
+            android:enabled="false"
+            android:alpha="0.5"
+            android:layout_gravity="center"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

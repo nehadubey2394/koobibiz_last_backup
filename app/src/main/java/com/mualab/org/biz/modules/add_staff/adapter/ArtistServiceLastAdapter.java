@@ -1,8 +1,10 @@
 package com.mualab.org.biz.modules.add_staff.adapter;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,24 +12,48 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.daimajia.swipe.SwipeLayout;
 import com.loopeer.shadow.ShadowView;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
+import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.ArtistServices;
-import com.mualab.org.biz.model.add_staff.SubServices;
+import com.mualab.org.biz.model.add_staff.SelectedServices;
+import com.mualab.org.biz.model.add_staff.StaffDetail;
+import com.mualab.org.biz.modules.add_staff.activity.AllServicesActivity;
+import com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment;
+import com.mualab.org.biz.modules.add_staff.listner.OnServiceSelectListener;
+import com.mualab.org.biz.session.Session;
+import com.mualab.org.biz.task.HttpResponceListner;
+import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Helper;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private ArrayList<ArtistServices> artistsList;
-    private SubServices subServices;
+    private OnServiceSelectListener serviceSelectListener = null;
+    private StaffDetail staffDetail;
     // Constructor of the class
-    public ArtistServiceLastAdapter(Context context, ArrayList<ArtistServices> artistsList, SubServices subServices) {
+    public ArtistServiceLastAdapter(Context context, ArrayList<ArtistServices> artistsList) {
         this.context = context;
         this.artistsList = artistsList;
-        this.subServices = subServices;
+        this.staffDetail = ((AllServicesActivity)context).getStaffDetail();
+    }
+
+    public void setListener(OnServiceSelectListener listener){
+        this.serviceSelectListener = listener;
     }
 
     @Override
@@ -70,19 +96,14 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         holder.tvOutCallPrice.setText("£"+outCallPrice);
         holder.tvInCallPrice.setText("£"+inCallPrice);
 
-      /*  if (fromConfirmBooking){
-            if (item.isBooked()) {
-                holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.shadow_green));
-                holder.sample1.setSwipeEnabled(true);
-            }
-            else {
-                holder.sample1.setSwipeEnabled(false);
-                holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.gray2));
-            }
-        }else {
+        if (item.isSelected()) {
+            holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.shadow_green));
+            holder.sample1.setSwipeEnabled(true);
+        }
+        else {
             holder.sample1.setSwipeEnabled(false);
             holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.gray2));
-        }*/
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -111,114 +132,35 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void onClick(View view) {
-         /*   switch (view.getId()){
+            switch (view.getId()){
                 case R.id.lyRemove:
-                    if (fromConfirmBooking){
-                        ArtistLastServicesFragment mServices3 = artistsList.get(getAdapterPosition());
-                        mServices3.setBooked(false);
-                        notifyDataSetChanged();
+                    ArtistServices mServices3 = artistsList.get(getAdapterPosition());
+                    mServices3.setSelected(false);
+                    notifyDataSetChanged();
 
-                        for (BookingInfo bookingInfo : BookingFragment4.arrayListbookingInfo) {
-                            if (mServices3._id.equals(bookingInfo.msId)){
-                                bookingId = bookingInfo.bookingId;
-                                BookingFragment4.arrayListbookingInfo.remove(bookingInfo);
-                                break;
-                            }
+                    for (SelectedServices selectedServices : ArtistLastServicesFragment.selectedServicesList) {
+                        if (mServices3._id.equals(selectedServices.artistServiceId)){
+                            if (selectedServices._id.equals("#"))
+                                ArtistLastServicesFragment.selectedServicesList.remove(selectedServices);
+                            else
+                                apiForDeleteBookedService(selectedServices);
+                            break;
                         }
-
-                        apiForDeleteBookedService();
                     }
+
                     break;
 
                 case R.id.lyServiceDetail:
-                    if(isClicked){
-                        return;
-                    }
-                    isClicked = true;
-
-                    Session session = Mualab.getInstance().getSessionManager();
-                    User user = session.getUser();
-                    BookingServices3 services3 = artistsList.get(getAdapterPosition());
-                    services3.setBooked(true);
-
-                    BookingInfo bookingInfo = new BookingInfo();
-                    //add data from artist main services
-                    bookingInfo.artistService = services3.title;
-                    bookingInfo.msId = services3._id;
-                    bookingInfo.time = services3.completionTime;
-
-                    //data from subservices
-                    bookingInfo.sServiceName = subServices.subServiceName;
-                    bookingInfo.ssId = subServices.subServiceId;
-                    bookingInfo.sId = subServices.serviceId;
-                    bookingInfo.subServices = subServices;
-                    bookingInfo.isOutCallSelect = isOutCallSelect;
-                    //       subServices.bookedArtistServices.addAll(artistsList);
-
-                    //add data from services
-                    bookingInfo.artistName = item.userName;
-                    bookingInfo.profilePic = item.profileImage;
-                    bookingInfo.artistId = item._id;
-                    bookingInfo.artistAddress = item.address;
-                    bookingInfo.item = item;
-                    bookingInfo.userId = String.valueOf(user.id);
-
-                    if (isOutCallSelect) {
-                        bookingInfo.preperationTime = item.outCallpreprationTime;
-                        bookingInfo.serviceType = "2";
-                        bookingInfo.price = Double.parseDouble(services3.outCallPrice);
-                    }else {
-                        bookingInfo.price = Double.parseDouble(services3.inCallPrice);
-                        bookingInfo.preperationTime = item.inCallpreprationTime;
-                        bookingInfo.serviceType = "1";
-                    }
-
-                    int ctMinuts = 0,ptMinuts;
-
-                    if (services3.completionTime.contains(":")){
-                        String hours,min;
-                        String[] separated = services3.completionTime.split(":");
-                        hours = separated[0];
-                        min = separated[1];
-                        ctMinuts = utility.getTimeInMin(Integer.parseInt(hours),Integer.parseInt(min));
-                    }
-
-                    if (bookingInfo.preperationTime.contains(":")){
-                        String hours,min;
-                        String[] separated = bookingInfo.preperationTime.split(":");
-                        hours = separated[0];
-                        min = separated[1];
-                        ptMinuts = utility.getTimeInMin(Integer.parseInt(hours),Integer.parseInt(min));
-
-                        bookingInfo.serviceTime = "00:"+(ptMinuts+ctMinuts);
-                        bookingInfo.endTime = ""+(ptMinuts+ctMinuts);
-                        bookingInfo.editEndTime = ""+(ptMinuts+ctMinuts);
-
-                    }
-
-                    if (item.businessType.equals("independent")){
-                        if (fromConfirmBooking){
-                            ((BookingActivity)context).addFragment(
-                                    BookingFragment4.newInstance(subServices.subServiceName,true,bookingInfo), true, R.id.flBookingContainer);
-                        }else {
-                            ((BookingActivity)context).addFragment(
-                                    BookingFragment4.newInstance(subServices.subServiceName,false,bookingInfo), true, R.id.flBookingContainer);
-                        }
-
-
-                    }else {
-                        ((BookingActivity)context).addFragment(
-                                BookingFragment1.newInstance(serviceTitle,item, bookingInfo,fromConfirmBooking), true, R.id.flBookingContainer);
-
+                    ArtistServices artistServices = artistsList.get(getAdapterPosition()) ;
+                    if (serviceSelectListener != null) {
+                        serviceSelectListener.onItemClick(getAdapterPosition(),artistServices);
                     }
                     break;
-
-            }*/
+            }
         }
     }
 
-/*
-    private void apiForDeleteBookedService(){
+    private void apiForDeleteBookedService(final SelectedServices selectedServices){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
@@ -228,19 +170,17 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
                 public void onNetworkChange(Dialog dialog, boolean isConnected) {
                     if(isConnected){
                         dialog.dismiss();
-                        apiForDeleteBookedService();
+                        apiForDeleteBookedService(selectedServices);
                     }
                 }
             }).show();
         }
 
         Map<String, String> params = new HashMap<>();
-        if (!bookingId.equals(""))
-            params.put("bookingId", bookingId);
-        // params.put("artistId", item._id);
+        params.put("addServiceId", selectedServices._id);
         // params.put("userId", String.valueOf(user.id));
 
-        HttpTask task = new HttpTask(new HttpTask.Builder(context, "deleteBookService", new HttpResponceListner.Listener() {
+        HttpTask task = new HttpTask(new HttpTask.Builder(context, "deleteStaffService", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
                 try {
@@ -250,19 +190,21 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     if (status.equalsIgnoreCase("success")) {
 
-                        if (BookingFragment4.arrayListbookingInfo.size()==0){
-                            BookingFragment4.arrayListbookingInfo.clear();
-                            ((BookingActivity)context).finish();
-                        }else {
-                            FragmentManager fm = ((BookingActivity)context).getSupportFragmentManager();
+                        if (ArtistLastServicesFragment.selectedServicesList.size()==0 ||
+                                ArtistLastServicesFragment.selectedServicesList.size()==1){
+                            ArtistLastServicesFragment.selectedServicesList.clear();
+                            staffDetail.staffServices.clear();
+                            ((AllServicesActivity)context).finish();
+
+                        } /*else if (ArtistLastServicesFragment.selectedServicesList.size()==1){
+                            ArtistLastServicesFragment.selectedServicesList.remove(selectedServices);
+                            FragmentManager fm = ((AllServicesActivity)context).getSupportFragmentManager();
                             fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                            BookingInfo bookingInfo = BookingFragment4.arrayListbookingInfo.get(0);
-                            ((BookingActivity)context).addFragment(
-                                    BookingFragment5.newInstance(bookingInfo), true, R.id.flBookingContainer);
+                        }*/else{
+                            ArtistLastServicesFragment.selectedServicesList.remove(selectedServices);
                         }
-
-
+                        MyToast.getInstance(context).showDasuAlert(message);
                     }else {
                         MyToast.getInstance(context).showDasuAlert(message);
                     }
@@ -293,6 +235,5 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
 
         task.execute(this.getClass().getName());
     }
-*/
 
 }

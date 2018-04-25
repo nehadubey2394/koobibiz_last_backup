@@ -80,9 +80,11 @@
     <style name="FadeInPopWin">
         <item name="android:backgroundDimEnabled">true</item>
 
-
-       <!-- <item name="@android:windowEnterAnimation">@anim/fade_in</item>
-        <item name="@android:windowExitAnimation">@anim/pop_win_content_fade_out</item>-->
     </style>
+
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/white</item>
+    </style>
+
 
 </resources>
