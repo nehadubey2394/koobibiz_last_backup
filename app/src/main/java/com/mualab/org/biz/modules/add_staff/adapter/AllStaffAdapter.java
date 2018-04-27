@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.model.add_staff.AllArtist;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
+import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.squareup.picasso.Picasso;
 
@@ -92,6 +93,8 @@ public class AllStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (!item.profileImage.equals("")){
             Picasso.with(context).load(item.profileImage).placeholder(R.drawable.defoult_user_img).
                     fit().into(holder.ivStaffProfile);
+        }else {
+            holder.ivStaffProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.defoult_user_img));
         }
     }
 
@@ -124,7 +127,7 @@ public class AllStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             args.putSerializable("staff",item);
             intent.putExtra("BUNDLE",args);
             context.startActivity(intent);
-            //((AddStaffActivity)context).finish();
+            ((AddStaffActivity)context).finish();
         }
     }
 

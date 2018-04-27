@@ -4,7 +4,6 @@ package com.mualab.org.biz.modules.add_staff.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +20,11 @@ import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.model.add_staff.AddedStaffServices;
 import com.mualab.org.biz.model.add_staff.ArtistServices;
 import com.mualab.org.biz.model.add_staff.SelectedServices;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.modules.add_staff.activity.AllServicesActivity;
-import com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment;
 import com.mualab.org.biz.modules.add_staff.listner.OnServiceSelectListener;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -38,6 +37,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment.localMap;
 
 
 public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -75,7 +76,12 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         final ArtistServices item = artistsList.get(position);
         holder.tvLastService.setText(item.title);
 
-        String totalTime = item.completionTime;
+        String totalTime;
+        if (!item.editedCtime.isEmpty()){
+            totalTime = item.editedCtime;
+        }else
+            totalTime = item.completionTime;
+
         if (totalTime.contains(":")){
             String[] separated = totalTime.split(":");
             String hours = separated[0]+" hrs ";
@@ -90,8 +96,15 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
 
         }
         double inCallPrice = 0.0,outCallPrice = 0.0;
-        outCallPrice = Double.parseDouble(item.outCallPrice);
-        inCallPrice = Double.parseDouble(item.inCallPrice);
+        if (!item.editedInCallP.isEmpty()){
+            inCallPrice = Double.parseDouble(item.editedInCallP);
+        }else
+            inCallPrice = Double.parseDouble(item.inCallPrice);
+
+        if (!item.editedOutCallP.isEmpty()){
+            outCallPrice = Double.parseDouble(item.editedOutCallP);
+        }else
+            outCallPrice = Double.parseDouble(item.outCallPrice);
 
         holder.tvOutCallPrice.setText("£"+outCallPrice);
         holder.tvInCallPrice.setText("£"+inCallPrice);
@@ -134,18 +147,30 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.lyRemove:
-                    ArtistServices mServices3 = artistsList.get(getAdapterPosition());
-                    mServices3.setSelected(false);
-                    notifyDataSetChanged();
-
-                    for (SelectedServices selectedServices : ArtistLastServicesFragment.selectedServicesList) {
-                        if (mServices3._id.equals(selectedServices.artistServiceId)){
-                            if (selectedServices._id.equals("#"))
-                                ArtistLastServicesFragment.selectedServicesList.remove(selectedServices);
-                            else
-                                apiForDeleteBookedService(selectedServices);
-                            break;
+                    if ( localMap.size()!=0){
+                        ArtistServices mServices3 = artistsList.get(getAdapterPosition());
+                        for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()) {
+                            SelectedServices selectedServices = entry.getValue();
+                            if (mServices3._id.equals(selectedServices.artistServiceId)){
+                                if (selectedServices.isHold && !mServices3.editedCtime.isEmpty()) {
+                                    mServices3.editedCtime = "";
+                                    mServices3.editedOutCallP = "";
+                                    mServices3.editedInCallP = "";
+                                    mServices3.setSelected(false);
+                                    notifyDataSetChanged();
+                                    localMap.remove(entry.getKey());
+                                    break;
+                                } else {
+                                    if (staffDetail.staffServices.size()>1)
+                                        apiForDeleteBookedService(selectedServices,mServices3,entry);
+                                    else
+                                        MyToast.getInstance(context).showDasuAlert("You have to keep at least one staff service");
+                                }
+                                break;
+                            }
                         }
+                    }else {
+                        MyToast.getInstance(context).showDasuAlert("You have to keep at least one staff service");
                     }
 
                     break;
@@ -160,7 +185,8 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    private void apiForDeleteBookedService(final SelectedServices selectedServices){
+    private void apiForDeleteBookedService(final SelectedServices selectedServices,final ArtistServices mServices3,
+                                           final Map.Entry<String, SelectedServices> entry){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
@@ -170,14 +196,17 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
                 public void onNetworkChange(Dialog dialog, boolean isConnected) {
                     if(isConnected){
                         dialog.dismiss();
-                        apiForDeleteBookedService(selectedServices);
+                        apiForDeleteBookedService(selectedServices,mServices3,entry);
                     }
                 }
             }).show();
         }
 
         Map<String, String> params = new HashMap<>();
-        params.put("addServiceId", selectedServices._id);
+        if (!selectedServices.isHold)
+            params.put("addServiceId", selectedServices._id);
+        else
+            params.put("addServiceId", "");
         // params.put("userId", String.valueOf(user.id));
 
         HttpTask task = new HttpTask(new HttpTask.Builder(context, "deleteStaffService", new HttpResponceListner.Listener() {
@@ -189,20 +218,31 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
                     String message = js.getString("message");
 
                     if (status.equalsIgnoreCase("success")) {
+                        selectedServices.isHold = false;
 
-                        if (ArtistLastServicesFragment.selectedServicesList.size()==0 ||
-                                ArtistLastServicesFragment.selectedServicesList.size()==1){
-                            ArtistLastServicesFragment.selectedServicesList.clear();
+                        mServices3.editedCtime = "";
+                        mServices3.editedOutCallP = "";
+                        mServices3.editedInCallP = "";
+                        mServices3.setSelected(false);
+                        notifyDataSetChanged();
+
+
+                        if (staffDetail.staffServices.size()!=0){
+                            for (AddedStaffServices staffServices : staffDetail.staffServices){
+                                if (staffServices.artistServiceId.equals(selectedServices.artistServiceId)) {
+                                    staffDetail.staffServices.remove(staffServices);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (localMap.size()==0 ){
+                            localMap.clear();
                             staffDetail.staffServices.clear();
                             ((AllServicesActivity)context).finish();
 
-                        } /*else if (ArtistLastServicesFragment.selectedServicesList.size()==1){
-                            ArtistLastServicesFragment.selectedServicesList.remove(selectedServices);
-                            FragmentManager fm = ((AllServicesActivity)context).getSupportFragmentManager();
-                            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-                        }*/else{
-                            ArtistLastServicesFragment.selectedServicesList.remove(selectedServices);
+                        }else{
+                            localMap.remove(entry.getKey());
                         }
                         MyToast.getInstance(context).showDasuAlert(message);
                     }else {
