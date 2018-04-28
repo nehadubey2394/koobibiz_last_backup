@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ArtistStaffFragment extends Fragment implements View.OnClickListener{
+public class ArtistStaffFragment extends Fragment implements View.OnClickListener,ArtistStaffAdapter.OnDeleteStaffListener {
     private TextView tvNoDataFound;
     private Context mContext;
     private List<Staff>artistStaffs;
@@ -63,9 +63,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String  mParam1 = getArguments().getString("param1");
-        }
+
     }
 
     @Override
@@ -97,7 +95,9 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
         rvArtistStaff = rootView.findViewById(R.id.rvArtistStaff);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvArtistStaff.setLayoutManager(layoutManager);
+        rvArtistStaff.setNestedScrollingEnabled(false);
         rvArtistStaff.setAdapter(staffAdapter);
+        staffAdapter.setChangeListener(ArtistStaffFragment.this);
 
         tvNoDataFound = rootView.findViewById(R.id.tvNoDataFound);
         LinearLayout llAddStaff = rootView.findViewById(R.id.llAddStaff);
@@ -112,7 +112,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
             case R.id.llAddStaff:
                 //startActivity(new Intent(mContext, SearchStaffActivity.class));
                 ((AddStaffActivity)mContext).addFragment(
-                        SearchStaffFragment.newInstance(""), true,R.id.flStffContainer);
+                        new SearchStaffFragment(), true,R.id.flStffContainer);
                 break;
         }
     }
@@ -182,6 +182,82 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
                     if (helper.error_Messages(error).contains("Session")){
                         Mualab.getInstance().getSessionManager().logout();
                         // MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }})
+                .setAuthToken(user.authToken)
+                .setProgress(true)
+                .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
+        //.setBody(params, "application/x-www-form-urlencoded"));
+
+        task.execute(this.getClass().getName());
+    }
+
+    @Override
+    public void onStaffSelect(int position, Staff staff) {
+        apiForDeleteStaff(staff);
+    }
+
+    private void apiForDeleteStaff(final Staff staff){
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        apiForDeleteStaff(staff);
+                    }
+                }
+            }).show();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("staffId", staff.staffId);
+        params.put("businessId", String.valueOf(user.id));
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "deleteStaff", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+
+                    if (status.equalsIgnoreCase("success")) {
+                        if (artistStaffs.size()!=0){
+                            artistStaffs.remove(staff);
+                            staffAdapter.notifyDataSetChanged();
+                        }
+
+                        if (artistStaffs.size()==0)
+                        {
+                            rvArtistStaff.setVisibility(View.GONE);
+                            tvNoDataFound.setVisibility(View.VISIBLE);
+                        }
+                        MyToast.getInstance(mContext).showDasuAlert(message);
+                    }else {
+                        MyToast.getInstance(mContext).showDasuAlert(message);
+                    }
+                } catch (Exception e) {
+                    Progress.hide(mContext);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                try{
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")){
+                        Mualab.getInstance().getSessionManager().logout();
+                        //      MyToast.getInstance(BookingActivity.this).showSmallCustomToast(helper.error_Messages(error));
                     }
                 }catch (Exception e){
                     e.printStackTrace();

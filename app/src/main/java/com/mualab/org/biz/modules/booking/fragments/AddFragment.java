@@ -58,4 +58,9 @@ public class AddFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        Mualab.getInstance().cancelAllPendingRequests();
+        super.onDestroy();
+    }
 }

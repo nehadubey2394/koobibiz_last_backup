@@ -1,5 +1,7 @@
 package com.mualab.org.biz.model.add_staff;
 
+import com.mualab.org.biz.model.BusinessDay;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +10,7 @@ public class StaffDetail implements Serializable {
     public String _id,job,mediaAccess,holiday,userName,profileImage,staffId,businessId;
 
     public List<BusinessDayForStaff>staffHoursList = new ArrayList<>();
+    public List<BusinessDay>businessDays = new ArrayList<>();
 
     public List<AddedStaffServices> staffServices = new ArrayList<>();
 

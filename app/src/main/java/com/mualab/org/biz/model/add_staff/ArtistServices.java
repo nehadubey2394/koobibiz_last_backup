@@ -1,8 +1,6 @@
 package com.mualab.org.biz.model.add_staff;
 
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 /**
@@ -12,9 +10,9 @@ import java.io.Serializable;
 public class ArtistServices implements Serializable{
     public String _id;
     public String title;
-    public String completionTime;
-    public String inCallPrice;
-    public String outCallPrice;
+    public String completionTime,editedCtime;
+    public String inCallPrice,editedInCallP;
+    public String outCallPrice,editedOutCallP;
     private boolean isSelected;
 
     public boolean isSelected() {

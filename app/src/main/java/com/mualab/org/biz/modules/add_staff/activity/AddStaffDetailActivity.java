@@ -5,6 +5,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
@@ -22,11 +25,15 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
-import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.model.add_staff.AddedStaffServices;
+import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
+import com.mualab.org.biz.model.add_staff.SelectedServices;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.modules.add_staff.cv_popup.CustomPopupWindow;
+import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment;
+import com.mualab.org.biz.modules.add_staff.fragments.EditBusinessHoursFragment;
+import com.mualab.org.biz.modules.profile.fragment.FragmentListner;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -42,21 +49,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddStaffDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class AddStaffDetailActivity extends AppCompatActivity implements View.OnClickListener,FragmentListner {
     private TextView tvJobTitle,tvSocialMedia,tvHoliday;
-    private StaffDetail staffDetail;
+    public StaffDetail staffDetail;
     private String[] sIds;
     private AppCompatButton btnSave;
+    private boolean isChangeOccured = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff_detail);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         initView();
     }
 
@@ -103,6 +106,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 if (charSequence.length()>0){
                     btnSave.setEnabled(true);
                     btnSave.setAlpha(1.0f);
+                    isChangeOccured = true;
                 }
             }
 
@@ -127,7 +131,18 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
             if (!staffDetail.holiday.equals(""))
                 tvHoliday.setText(staffDetail.holiday);
         }
+
+        sIds = new String[staffDetail.staffServices.size()];
+
+        for(int i = 0;i<staffDetail.staffServices.size();i++) {
+            sIds[i] = staffDetail.staffServices.get(i).artistServiceId;
+        }
     }
+
+    public StaffDetail getStaffDetail(){
+        return staffDetail;
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -142,15 +157,18 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 String mediaAccess =  tvSocialMedia.getText().toString().trim();
                 String holiday =  tvHoliday.getText().toString().trim();
 
-                if (!jobTltle.equals(""))
-                {
-                    if (!mediaAccess.equals(""))
-                        apiForAddStaff(whJsonArray,jobTltle,mediaAccess,holiday);
+                if (sIds!=null){
+                    if (!jobTltle.equals(""))
+                    {
+                        if (!mediaAccess.equals(""))
+                            apiForAddStaff(whJsonArray,jobTltle,mediaAccess,holiday);
+                        else
+                            MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select Social Media Access");
+                    }
                     else
-                        MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select Social Media Access");
-                }
-                else
-                    MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select Job Title");
+                        MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select Job Title");
+                }else
+                    MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select service");
 
                 break;
 
@@ -159,7 +177,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.tvJobTitle:
                 showJobTile();
-                CustomPopupWindow dialogsClass = new CustomPopupWindow();
+                // CustomPopupWindow dialogsClass = new CustomPopupWindow();
 
             /*    final ArrayList<String>arrayList = new ArrayList<>();
                 arrayList.add("Beginner");
@@ -190,7 +208,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.btnEditWhs:
-
+                addFragment( EditBusinessHoursFragment.newInstance(),true,R.id.rlContainer);
                 break;
         }
     }
@@ -205,6 +223,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 public void onClick(DialogInterface dialog, int item) {
                     btnSave.setEnabled(true);
                     btnSave.setAlpha(1.0f);
+                    isChangeOccured = true;
                     if (items[item].equals(getString(R.string.admin))) {
                         tvSocialMedia.setText(getString(R.string.admin));
                         dialog.cancel();
@@ -231,7 +250,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 public void onClick(DialogInterface dialog, int item) {
                     btnSave.setEnabled(true);
                     btnSave.setAlpha(1.0f);
-
+                    isChangeOccured = true;
                     if (items[item].equals(getString(R.string.beginner))) {
                         tvJobTitle.setText(getString(R.string.beginner));
                         dialog.cancel();
@@ -271,6 +290,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         params.put("staffService", Arrays.toString(sIds));
         params.put("job",jobTltle);
         params.put("holiday",holiday);
+        params.put("serviceType","");
         params.put("mediaAccess",mediaAccess );
         params.put("staffHours", whJsonArray.toString());
 
@@ -291,9 +311,12 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                     String status = js.getString("status");
                     String message = js.getString("message");
                     if (status.equalsIgnoreCase("success")) {
-                        ArtistLastServicesFragment.selectedServicesList.clear();
+                        //ArtistLastServicesFragment.selectedServicesList.clear();
+                        ArtistLastServicesFragment.localMap.clear();
                         MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Staff added successfully");
                         finish();
+                        startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
+
                     }
                 } catch (Exception e) {
                     Progress.hide(AddStaffDetailActivity.this);
@@ -322,12 +345,14 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         task.execute(this.getClass().getName());
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==10 && resultCode!=0){
             btnSave.setEnabled(true);
             btnSave.setAlpha(1.0f);
+            isChangeOccured = true;
             if (data!=null){
                 sIds = data.getStringArrayExtra("jsonArray");
             }
@@ -341,9 +366,12 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         alertDialog.setMessage("Are you sure you want to permanently remove all selected services?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
-                ArtistLastServicesFragment.selectedServicesList.clear();
+                //  ArtistLastServicesFragment.selectedServicesList.clear();
+                ArtistLastServicesFragment.localMap.clear();
                 dialog.cancel();
                 finish();
+                startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
+
             }
         });
 
@@ -356,13 +384,48 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
 
     }
 
+    public void addFragment(Fragment fragment, boolean addToBackStack, int containerId) {
+        String backStackName = fragment.getClass().getName();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStackName, 0);
+        if (!fragmentPopped) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_in,0,0);
+            transaction.add(containerId, fragment, backStackName);
+            if (addToBackStack)
+                transaction.addToBackStack(backStackName);
+            transaction.commit();
+        }
+
+    }
+
     @Override
     public void onBackPressed() {
-        if (ArtistLastServicesFragment.selectedServicesList.size()>0)
+        if (ArtistLastServicesFragment.localMap.size()>0 || isChangeOccured)
             showAlertDailog();
         else {
             finish();
-            super.onBackPressed();
+            startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
         }
+    }
+
+    @Override
+    public void onNext() {
+
+    }
+
+    @Override
+    public void onPrev() {
+
+    }
+
+    @Override
+    public void onChangeByTag(String Tag) {
+
+    }
+
+    @Override
+    public void onFinish() {
+
     }
 }

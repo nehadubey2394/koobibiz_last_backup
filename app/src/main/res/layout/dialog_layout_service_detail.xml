@@ -59,6 +59,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvIncall"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
@@ -68,6 +69,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tvOutCall"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
@@ -97,6 +99,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/llInCall"
                         android:layout_width="160dp"
                         android:layout_height="30dp"
                         android:background="@drawable/bg_gray_rect">
@@ -123,13 +126,15 @@
                             android:textColor="@color/dark_grey"
                             android:background="@null"
                             android:ems="8"
+                            android:cursorVisible="false"
                             android:imeOptions="actionDone"
                             android:textSize="14sp"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llOutCall"
                         android:layout_width="160dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="4dp"
@@ -157,9 +162,10 @@
                             android:textColor="@color/dark_grey"
                             android:background="@null"
                             android:ems="8"
+                            android:cursorVisible="false"
                             android:imeOptions="actionDone"
                             android:textSize="14sp"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </LinearLayout>
 

@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.daimajia.swipe.SwipeLayout;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
@@ -24,6 +26,7 @@ import com.mualab.org.biz.model.add_staff.AddedStaffServices;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -43,7 +46,17 @@ import java.util.Map;
 public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<Staff> staffList;
+    private OnDeleteStaffListener listener = null;
 
+    public interface OnDeleteStaffListener {
+
+        void onStaffSelect(int position, Staff staff);
+
+    }
+
+    public void setChangeListener(OnDeleteStaffListener listener){
+        this.listener = listener;
+    }
     // Constructor of the class
     public ArtistStaffAdapter(Context context,  List<Staff> staffList) {
         this.context = context;
@@ -76,6 +89,8 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (!item.staffImage.equals("")){
             Picasso.with(context).load(item.staffImage).placeholder(R.drawable.defoult_user_img).
                     fit().into(holder.ivStaffProfile);
+        }else {
+            holder.ivStaffProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.defoult_user_img));
         }
     }
 
@@ -83,21 +98,37 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     {
         TextView tvStaffServices,tvStaffName;
         ImageView ivStaffProfile;
+        SwipeLayout sample1;
+        LinearLayout lyRemove,llArtDetail;
         private ViewHolder(View itemView)
         {
             super(itemView);
-
+            sample1 = itemView.findViewById(R.id.sample1);
+            lyRemove = itemView.findViewById(R.id.lyRemove);
+            llArtDetail = itemView.findViewById(R.id.llArtDetail);
             ivStaffProfile = itemView.findViewById(R.id.ivStaffProfile);
             tvStaffServices = itemView.findViewById(R.id.tvStaffServices);
             tvStaffName = itemView.findViewById(R.id.tvStaffName);
 
-            itemView.setOnClickListener(this);
+            llArtDetail.setOnClickListener(this);
+            lyRemove.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            Staff staff = staffList.get(getAdapterPosition());
-            apiForGetStaffDetail(staff);
+            switch (view.getId()){
+                case R.id.lyRemove:
+                    Staff staff2 = staffList.get(getAdapterPosition());
+                    listener.onStaffSelect(getAdapterPosition(),staff2);
+
+                    break;
+
+                case R.id.llArtDetail:
+                    Staff staff = staffList.get(getAdapterPosition());
+                    apiForGetStaffDetail(staff);
+                    break;
+            }
+
         }
     }
 
@@ -172,7 +203,7 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 args.putSerializable("staff", item);
                                 intent.putExtra("BUNDLE", args);
                                 context.startActivity(intent);
-                                // ((AddStaffActivity) context).finish();
+                                ((AddStaffActivity) context).finish();
                             }
                         }
 

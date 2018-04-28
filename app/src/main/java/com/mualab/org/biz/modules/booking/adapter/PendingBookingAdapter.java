@@ -99,6 +99,8 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (!item.userDetail.profileImage.equals("")){
             Picasso.with(context).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).
                     fit().into(holder.ivProfilePic);
+        }else {
+            holder.ivProfilePic.setImageDrawable(context.getResources().getDrawable(R.drawable.defoult_user_img));
         }
     }
 

@@ -210,6 +210,9 @@ public class AllServiesFragment extends Fragment {
                                             JSONObject jsonObject3 = artistservices.getJSONObject(m);
                                             Gson gson2 = new Gson();
                                             ArtistServices services3 = gson2.fromJson(String.valueOf(jsonObject3), ArtistServices.class);
+                                            services3.editedCtime = "";
+                                            services3.editedOutCallP = "";
+                                            services3.editedInCallP = "";
                                             if (!services3.outCallPrice.equals("0") || !services3.outCallPrice.equals("null")){
                                                 services3.isOutCall3 = true;
                                                 subServices.isOutCall2 = true;
@@ -254,4 +257,10 @@ public class AllServiesFragment extends Fragment {
         task.execute(this.getClass().getName());
     }
 
+    @Override
+    public void onDestroyView() {
+        Mualab.getInstance().cancelAllPendingRequests();
+        ((AllServicesActivity)mContext).setTitle(getString(R.string.text_category));
+        super.onDestroyView();
+    }
 }

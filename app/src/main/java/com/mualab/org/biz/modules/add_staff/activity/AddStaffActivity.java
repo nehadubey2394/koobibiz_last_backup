@@ -16,11 +16,11 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
     private TextView tvHeaderTitle;
 
 
- /*   public void setBackButtonVisibility(int visibility){
-        if(ivHeaderBack!=null)
-            ivHeaderBack.setVisibility(visibility);
-    }
-*/
+    /*   public void setBackButtonVisibility(int visibility){
+           if(ivHeaderBack!=null)
+               ivHeaderBack.setVisibility(visibility);
+       }
+   */
     public void setTitle(String text){
         if(tvHeaderTitle!=null)
             tvHeaderTitle.setText(text);
@@ -39,7 +39,7 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
         tvHeaderTitle.setText(getString(R.string.text_staff));
         ivHeaderBack.setVisibility(View.VISIBLE);
         ivHeaderBack.setOnClickListener(this);
-        addFragment(ArtistStaffFragment.newInstance(""), false,R.id.flStffContainer);
+        addFragment(new ArtistStaffFragment(), true,R.id.flStffContainer);
 
     }
 
@@ -74,9 +74,10 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
         // Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flStffContainer);
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();
-        if (i > 0) {
+        if (i > 1) {
             fm.popBackStack();
         }else  {
+            finish();
             super.onBackPressed();
         }
     }

@@ -47,6 +47,8 @@ public class StaffListAdapter extends RecyclerView.Adapter<StaffListAdapter.View
 
         if (!staff.staffImage.equals("")){
             Picasso.with(context).load(staff.staffImage).fit().into(holder.ivProfilePic);
+        }else {
+            holder.ivProfilePic.setImageDrawable(context.getResources().getDrawable(R.drawable.defoult_user_img));
         }
 
     }

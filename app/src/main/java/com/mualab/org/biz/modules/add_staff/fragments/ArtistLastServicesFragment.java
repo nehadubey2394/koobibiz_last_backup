@@ -47,14 +47,16 @@ import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.KeyboardUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import views.pickerview.MyTimePickerDialog;
 import views.pickerview.timepicker.TimePicker;
@@ -67,6 +69,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     private Context mContext;
     // TODO: Rename and change types of parameters
     private SubServices subServices;
+    public static HashMap<String, SelectedServices> localMap = new HashMap<>();
     public static List<SelectedServices> selectedServicesList = new ArrayList<>();
     private StaffDetail staffDetail;
     private User user;
@@ -121,8 +124,18 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
 
         ArrayList<ArtistServices> arrayList = subServices.artistservices;
 
-        if (staffDetail.staffServices.size()!=0 && selectedServicesList.size()==0){
-            if (arrayList.size()!=0){
+        if (arrayList.size()!=0){
+            if (localMap.size()!=0){
+                for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()){
+                    SelectedServices  selectedServices = entry.getValue();
+                    for (ArtistServices artistServices : arrayList) {
+                        if (artistServices._id.equals(selectedServices.artistServiceId)) {
+                            artistServices.setSelected(true);
+                        }
+                    }
+                }
+            }
+            if (staffDetail.staffServices.size()!=0){
                 for (AddedStaffServices staffServices : staffDetail.staffServices){
                     for (ArtistServices artistServices : arrayList) {
                         if (artistServices._id.equals(staffServices.artistServiceId)) {
@@ -131,41 +144,18 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                             SelectedServices services = new SelectedServices();
                             services.serviceId = subServices.serviceId;
                             services.subserviceId = staffServices.subserviceId;
-                            services.artistId = staffServices.staffId;
+                            services.artistId = staffServices.artistId;
                             services.businessId = staffServices.businessId;
                             services.artistServiceId = staffServices.artistServiceId;
                             services.inCallPrice = staffServices.inCallPrice;
                             services.outCallPrice = staffServices.outCallPrice;
                             services.completionTime = staffServices.completionTime;
+                            services.title = staffServices.title;
                             services._id = staffServices._id;
-                            selectedServicesList.add(services);
+                            services.isHold = false;
+                            localMap.put(artistServices._id,services);
+                            //  selectedServicesList.add(services);
                         }
-                    }
-                }
-            }
-        }
-
-        if (staffDetail.staffServices.size()!=0 && selectedServicesList.size()==0){
-            for (AddedStaffServices staffServices : staffDetail.staffServices){
-                SelectedServices services = new SelectedServices();
-                services.serviceId = subServices.serviceId;
-                services.subserviceId = staffServices.subserviceId;
-                services.artistId = staffServices.staffId;
-                services.businessId = staffServices.businessId;
-                services.artistServiceId = staffServices.artistServiceId;
-                services.inCallPrice = staffServices.inCallPrice;
-                services.outCallPrice = staffServices.outCallPrice;
-                services.completionTime = staffServices.completionTime;
-                services._id = staffServices._id;
-                selectedServicesList.add(services);
-            }
-        }
-
-        if (selectedServicesList.size()>0){
-            for (SelectedServices selectedServices : selectedServicesList){
-                for (ArtistServices artistServices : arrayList) {
-                    if (artistServices._id.equals(selectedServices.artistServiceId)) {
-                        artistServices.setSelected(true);
                     }
                 }
             }
@@ -194,6 +184,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     @Override
     public void onDestroyView() {
         Mualab.getInstance().cancelAllPendingRequests();
+        ((AllServicesActivity)mContext).setTitle(getString(R.string.text_category));
         super.onDestroyView();
     }
 
@@ -205,12 +196,12 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
 
     @Override
     public void onItemClick(int position, ArtistServices artistServices) {
-
-        if (artistServices.isSelected()){
+        showDetailDialog(artistServices,position);
+       /* if (artistServices.isSelected()){
             MyToast.getInstance(mContext).showDasuAlert("This service is already added,Select another service");
         }else {
             showDetailDialog(artistServices,position);
-        }
+        }*/
     }
 
     private void showDetailDialog(final ArtistServices artistServices, final int position){
@@ -221,11 +212,16 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(DialogView);
+
         final EditText etInCallPrice = DialogView.findViewById(R.id.etInCallPrice);
         final EditText etOutCallPrice = DialogView.findViewById(R.id.etOutCallPrice);
         final TextView tvCTime = DialogView.findViewById(R.id.tvCTime);
         TextView tvTile = DialogView.findViewById(R.id.tvTile);
+        TextView tvIncall = DialogView.findViewById(R.id.tvIncall);
+        TextView tvOutCall = DialogView.findViewById(R.id.tvOutCall);
         LinearLayout llCtime = DialogView.findViewById(R.id.llCtime);
+        LinearLayout llOutCall = DialogView.findViewById(R.id.llOutCall);
+        LinearLayout llInCall = DialogView.findViewById(R.id.llInCall);
         AppCompatButton btnDone = DialogView.findViewById(R.id.btnDone);
         AppCompatButton btnCancel = DialogView.findViewById(R.id.btnCancel);
 
@@ -233,6 +229,16 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         etInCallPrice.setText(artistServices.inCallPrice);
         etOutCallPrice.setText(artistServices.outCallPrice);
         tvCTime.setText(artistServices.completionTime);
+
+        if (artistServices.inCallPrice.equals("0")){
+            tvIncall.setVisibility(View.GONE);
+            llInCall.setVisibility(View.GONE);
+        }
+        if (artistServices.outCallPrice.equals("0")){
+            tvOutCall.setVisibility(View.GONE);
+            llOutCall.setVisibility(View.GONE);
+        }
+
         etInCallPrice.clearFocus();
         etOutCallPrice.clearFocus();
 
@@ -249,9 +255,9 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                 String cTime = tvCTime.getText().toString().trim();
                 String inCallPrice = etInCallPrice.getText().toString().trim();
                 String outCallPrice = etOutCallPrice.getText().toString().trim();
-                artistServices.completionTime = cTime;
-                artistServices.inCallPrice = inCallPrice;
-                artistServices.outCallPrice = outCallPrice;
+                artistServices.editedCtime = cTime;
+                artistServices.editedInCallP = inCallPrice;
+                artistServices.editedOutCallP = outCallPrice;
                 artistServices.setSelected(true);
                 adapter.notifyDataSetChanged();
 
@@ -261,11 +267,14 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                 services.artistId = staffDetail.staffId;
                 services.businessId = String.valueOf(user.id);
                 services.artistServiceId = artistServices._id;
-                services.inCallPrice = artistServices.inCallPrice;
-                services.outCallPrice = artistServices.outCallPrice;
+                services.title = artistServices.title;
+                services.inCallPrice = inCallPrice;
+                services.outCallPrice = outCallPrice;
                 services.completionTime = cTime;
-                services._id = "#";
-                selectedServicesList.add(services);
+                services._id = "";
+                services.isHold = true;
+                localMap.put(artistServices._id,services);
+                //  selectedServicesList.add(services);
 
                 KeyboardUtil.hideKeyboard(DialogView,mContext);
                 dialog.cancel();
@@ -275,6 +284,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                KeyboardUtil.hideKeyboard(DialogView,mContext);
                 dialog.cancel();
             }
         });
@@ -305,18 +315,25 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         switch (view.getId()){
             case R.id.btnDone:
 
-                String[] sIds = new String[selectedServicesList.size()];
-                for (int i = 0;i<selectedServicesList.size();i++){
-                    SelectedServices  services = selectedServicesList.get(i);
+                String[] sIds = new String[localMap.size()];
+                int i = 0;
+                for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()){
+                    SelectedServices  services = entry.getValue();
                     sIds[i] = services.artistServiceId;
+                    i++;
+                }
+                Collection<SelectedServices> values = localMap.values();
+                ArrayList<SelectedServices> listOfValues = new ArrayList<>(values);
+
+                Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+                String jsonString = gson.toJson(listOfValues);
+                if (!jsonString.isEmpty()) {
+                    apiForAddServices(jsonString,sIds);
                 }
 
-                Gson gson = new GsonBuilder().create();
-                JsonArray jsonArray = gson.toJsonTree(selectedServicesList).getAsJsonArray();
+                // Gson gson = new GsonBuilder().create();
+                // JsonArray jsonArray = gson.toJsonTree(localMap).getAsJsonArray();
 
-                if (jsonArray!=null && jsonArray.size()!=0) {
-                    apiForAddServices(jsonArray,sIds);
-                }
                 break;
             case R.id.btnAddMoreService:
                 clearBackStack();
@@ -324,7 +341,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         }
     }
 
-    private void apiForAddServices(final JsonArray jsonArray,final String[] sIds){
+    private void apiForAddServices(final String jsonArray,final String[] sIds){
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
                 @Override
@@ -340,7 +357,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         Map<String, String> params = new HashMap<>();
         params.put("artistId", staffDetail.staffId);
         params.put("businessId", String.valueOf(user.id));
-        params.put("staffService", jsonArray.toString());
+        params.put("staffService", jsonArray);
 
         HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "addStaffService", new HttpResponceListner.Listener() {
             @Override
@@ -351,6 +368,19 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                     String message = js.getString("message");
 
                     if (status.equalsIgnoreCase("success")) {
+
+                       /*  JSONArray staffServiceArray = js.getJSONArray("staffServices");
+                       if (staffServiceArray.length()!=0){
+                            staffDetail.staffServices.clear();
+                            for (int k=0; k<staffServiceArray.length(); k++){
+                                JSONObject object3 = staffServiceArray.getJSONObject(k);
+                                Gson gson = new Gson();
+                                AddedStaffServices item3 = gson.fromJson(String.valueOf(object3), AddedStaffServices.class);
+                                staffDetail.staffServices.add(item3);
+                            }
+
+                        }*/
+
                         Intent intent = new Intent();
                         intent.putExtra("jsonArray", sIds);
                         //  selectedServicesList.clear();
@@ -392,6 +422,5 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         FragmentManager fm = ((AllServicesActivity)mContext).getSupportFragmentManager();
         fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
-
 
 }

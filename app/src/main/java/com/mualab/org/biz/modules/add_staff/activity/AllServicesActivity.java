@@ -15,7 +15,8 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.modules.add_staff.fragments.AllServiesFragment;
-import com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment;
+
+import static com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment.localMap;
 
 public class AllServicesActivity extends AppCompatActivity {
     public  StaffDetail staffDetail;
@@ -88,7 +89,8 @@ public class AllServicesActivity extends AppCompatActivity {
         alertDialog.setMessage("Are you sure you want to permanently remove all selected services?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
-                ArtistLastServicesFragment.selectedServicesList.clear();
+                //selected.clear();
+                localMap.clear();
                 dialog.cancel();
                 finish();
             }
@@ -110,9 +112,9 @@ public class AllServicesActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();
 
-        if (i>0 && ArtistLastServicesFragment.selectedServicesList.size()>0){
+        if (i>0 && localMap.size()>0){
             showAlertDailog(fm,i);
-        }else if (i==0 && ArtistLastServicesFragment.selectedServicesList.size()>0){
+        }else if (i==0 && localMap.size()>0){
             showAlertDailog(fm,i);
         }
         else if (i > 0) {
@@ -122,4 +124,9 @@ public class AllServicesActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        //  localMap.clear();
+        super.onDestroy();
+    }
 }

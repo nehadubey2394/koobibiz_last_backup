@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/screen_bg_color"
     tools:context=".modules.add_staff.activity.AddStaffDetailActivity">
+
     <include
         android:id="@+id/header"
         layout="@layout/header_layout_bookingdetail"
@@ -13,150 +14,159 @@
         android:visibility="visible"
         android:layout_alignParentTop="true" />
 
-    <LinearLayout
-        android:id="@+id/llDetail"
+    <RelativeLayout
+        android:id="@+id/rlContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:padding="16dp"
-        android:orientation="vertical"
-        android:background="@drawable/gray_broder_white_bg">
+        >
 
-        <TextView
-            android:id="@+id/tvJobTitle"
+        <LinearLayout
+            android:id="@+id/llDetail"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:hint="@string/enter_job_title"
-            android:textColorHint="@color/text_color"
-            android:textColor="@color/text_color"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="13sp"
-            android:gravity="center_vertical"
-            android:drawableRight="@drawable/black_down_arrow_ico"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/gray"/>
-
-        <TextView
-            android:id="@+id/tvServices"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="@string/text_services"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/text_color"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="13sp"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:drawableRight="@drawable/black_down_arrow_ico"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/gray"/>
-
-        <TextView
-            android:id="@+id/tvSocialMedia"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:hint="@string/social_media_access"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/text_color"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="13sp"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:drawableRight="@drawable/black_down_arrow_ico"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/gray"/>
-
-        <EditText
-            android:id="@+id/tvHoliday"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:hint="@string/holiday_allocation"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/text_color"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="13sp"
-            android:background="@null"
-            android:imeOptions="actionDone"
-            android:maxLength="3"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:inputType="number" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llSetWh"
-        android:layout_below="@+id/llDetail"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@drawable/gray_broder_white_bg">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/set_working_hours"
-            android:textSize="14sp"
-            android:paddingLeft="10dp"
-            android:ems="16"
-            android:textColor="@color/text_color"
-            android:fontFamily="@font/roboto_medium"
-            />
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:background="@drawable/gray_broder_white_bg">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btnEditWhs"
-            android:layout_width="60dp"
-            android:layout_height="26dp"
-            style="@style/My_Button_Small.Invert"
-            android:text="@string/edit"
-            android:layout_gravity="center_vertical"
-            />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvJobTitle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:hint="@string/enter_job_title"
+                android:textColorHint="@color/text_color"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="13sp"
+                android:gravity="center_vertical"
+                android:drawableRight="@drawable/black_down_arrow_ico"
+                />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/llSetWh"
-        android:gravity="center"
-        android:layout_marginBottom="5dp"
-       >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"/>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btnSave"
-            style="@style/My_Button_Small.Invert"
-            android:layout_width="75dp"
-            android:layout_height="28dp"
-            android:text="@string/save"
+            <TextView
+                android:id="@+id/tvServices"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/text_services"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/text_color"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="13sp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:drawableRight="@drawable/black_down_arrow_ico"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"/>
+
+            <TextView
+                android:id="@+id/tvSocialMedia"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:hint="@string/social_media_access"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/text_color"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="13sp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:drawableRight="@drawable/black_down_arrow_ico"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"/>
+
+            <EditText
+                android:id="@+id/tvHoliday"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:hint="@string/holiday_allocation"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/text_color"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="13sp"
+                android:background="@null"
+                android:imeOptions="actionDone"
+                android:maxLength="3"
+                android:cursorVisible="false"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSetWh"
+            android:layout_below="@+id/llDetail"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/gray_broder_white_bg">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/set_working_hours"
+                android:textSize="14sp"
+                android:paddingLeft="10dp"
+                android:ems="16"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/roboto_medium"
+                />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnEditWhs"
+                android:layout_width="60dp"
+                android:layout_height="26dp"
+                style="@style/My_Button_Small.Invert"
+                android:text="@string/edit"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/llSetWh"
             android:gravity="center"
-            android:enabled="false"
-            android:alpha="0.5"
-            android:layout_gravity="center"
-            android:textSize="14sp"
-            />
+            android:layout_marginBottom="5dp"
+            >
 
-    </LinearLayout>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnSave"
+                style="@style/My_Button_Small.Invert"
+                android:layout_width="75dp"
+                android:layout_height="28dp"
+                android:text="@string/save"
+                android:gravity="center"
+                android:enabled="false"
+                android:alpha="0.5"
+                android:layout_gravity="center"
+                android:textSize="14sp"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

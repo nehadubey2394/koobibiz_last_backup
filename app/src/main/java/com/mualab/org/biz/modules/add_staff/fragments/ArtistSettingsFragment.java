@@ -93,7 +93,7 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         switch (view.getId()){
             case R.id.rlStaff:
                 startActivity(new Intent(mContext,AddStaffActivity.class));
-               // MyToast.getInstance(mContext).showDasuAlert("Under development");
+              //  MyToast.getInstance(mContext).showDasuAlert("Under development");
                 break;
             case R.id.rlWorkinhHrs:
                 MyToast.getInstance(mContext).showDasuAlert("Under development");

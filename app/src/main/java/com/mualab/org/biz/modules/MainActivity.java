@@ -329,6 +329,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     }
 
     private void setInactiveTab(){
+        Mualab.getInstance().cancelAllPendingRequests();
         ibtnBookings.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_calender_ico));
         ibtnChart.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_chart_ico));
         ibtnAdd.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_add_ico));

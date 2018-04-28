@@ -803,4 +803,16 @@ public class BookingsFragment extends Fragment implements View.OnClickListener,T
         }
 
     }
+
+    @Override
+    public void onDestroy() {
+        Mualab.getInstance().cancelAllPendingRequests();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Mualab.getInstance().cancelAllPendingRequests();
+        super.onDestroyView();
+    }
 }

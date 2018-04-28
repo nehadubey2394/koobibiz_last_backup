@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Base64;
 
 import com.google.gson.Gson;
+import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.modules.authentication.LoginActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.model.BusinessDay;
@@ -99,6 +100,14 @@ public class Session {
         String string = mypref.getString("user", "");
         if (!string.isEmpty())
             return gson.fromJson(string, User.class);
+        else return null;
+    }
+
+    public StaffDetail getStaffInfo() {
+        Gson gson = new Gson();
+        String string = mypref.getString("satffInfo", "");
+        if (!string.isEmpty())
+            return gson.fromJson(string, StaffDetail.class);
         else return null;
     }
 
