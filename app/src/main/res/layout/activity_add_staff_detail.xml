@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_bg_color"
+    android:fitsSystemWindows="true"
     tools:context=".modules.add_staff.activity.AddStaffDetailActivity">
 
     <include
@@ -40,7 +41,7 @@
                 android:textColorHint="@color/text_color"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/roboto_regular"
-                android:textSize="13sp"
+                android:textSize="14sp"
                 android:gravity="center_vertical"
                 android:drawableRight="@drawable/black_down_arrow_ico"
                 />
@@ -48,7 +49,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="2dp"
                 android:background="@color/gray"/>
 
             <TextView
@@ -59,8 +60,8 @@
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/text_color"
                 android:fontFamily="@font/roboto_regular"
-                android:textSize="13sp"
-                android:layout_marginTop="5dp"
+                android:textSize="14sp"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:drawableRight="@drawable/black_down_arrow_ico"
                 />
@@ -68,7 +69,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="2dp"
                 android:background="@color/gray"/>
 
             <TextView
@@ -79,8 +80,8 @@
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/text_color"
                 android:fontFamily="@font/roboto_regular"
-                android:textSize="13sp"
-                android:layout_marginTop="5dp"
+                android:textSize="14sp"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:drawableRight="@drawable/black_down_arrow_ico"
                 />
@@ -88,7 +89,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="2dp"
                 android:background="@color/gray"/>
 
             <EditText
@@ -99,18 +100,18 @@
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/text_color"
                 android:fontFamily="@font/roboto_regular"
-                android:textSize="13sp"
+                android:textSize="14sp"
                 android:background="@null"
                 android:imeOptions="actionDone"
                 android:maxLength="3"
                 android:cursorVisible="false"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:inputType="number" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/llSetWh"
             android:layout_below="@+id/llDetail"
             android:layout_width="match_parent"
@@ -128,7 +129,7 @@
                 android:text="@string/set_working_hours"
                 android:textSize="14sp"
                 android:paddingLeft="10dp"
-                android:ems="16"
+                android:layout_alignParentLeft="true"
                 android:textColor="@color/text_color"
                 android:fontFamily="@font/roboto_medium"
                 />
@@ -139,13 +140,15 @@
                 android:layout_height="26dp"
                 style="@style/My_Button_Small.Invert"
                 android:text="@string/edit"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
                 />
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="180dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/llSetWh"
             android:gravity="center"
@@ -155,12 +158,10 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnSave"
                 style="@style/My_Button_Small.Invert"
-                android:layout_width="75dp"
-                android:layout_height="28dp"
+                android:layout_width="78dp"
+                android:layout_height="30dp"
                 android:text="@string/save"
                 android:gravity="center"
-                android:enabled="false"
-                android:alpha="0.5"
                 android:layout_gravity="center"
                 android:textSize="14sp"
                 />

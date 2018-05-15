@@ -24,6 +24,7 @@ import com.mualab.org.biz.model.add_staff.AddedStaffServices;
 import com.mualab.org.biz.model.add_staff.ArtistServices;
 import com.mualab.org.biz.model.add_staff.SelectedServices;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
+import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.mualab.org.biz.modules.add_staff.activity.AllServicesActivity;
 import com.mualab.org.biz.modules.add_staff.listner.OnServiceSelectListener;
 import com.mualab.org.biz.session.Session;
@@ -84,12 +85,12 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
 
         if (totalTime.contains(":")){
             String[] separated = totalTime.split(":");
-            String hours = separated[0]+" hrs ";
+            String hours = separated[0]+" hr ";
             String min = separated[1]+" min";
 
-            if (hours.equals("00 hrs "))
+            if (hours.equals("00 hr "))
                 holder.tvCtime.setText(min);
-            else if (!hours.equals("00 hrs ") && min.equals("00 min"))
+            else if (!hours.equals("00 hr ") && min.equals("00 min"))
                 holder.tvCtime.setText(hours);
             else
                 holder.tvCtime.setText(hours+min);
@@ -106,8 +107,8 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         }else
             outCallPrice = Double.parseDouble(item.outCallPrice);
 
-        holder.tvOutCallPrice.setText("£"+outCallPrice);
-        holder.tvInCallPrice.setText("£"+inCallPrice);
+        holder.tvOutCallPrice.setText("£"+String.format("%.2f", outCallPrice));
+        holder.tvInCallPrice.setText("£"+String.format("%.2f", inCallPrice));
 
         if (item.isSelected()) {
             holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.shadow_green));
@@ -147,24 +148,28 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.lyRemove:
-                    if ( localMap.size()!=0){
+                    if ( localMap.size()>1 || staffDetail.staffServices.size()>1){
                         ArtistServices mServices3 = artistsList.get(getAdapterPosition());
                         for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()) {
                             SelectedServices selectedServices = entry.getValue();
                             if (mServices3._id.equals(selectedServices.artistServiceId)){
                                 if (selectedServices.isHold && !mServices3.editedCtime.isEmpty()) {
+                                    selectedServices.isHold = false;
                                     mServices3.editedCtime = "";
                                     mServices3.editedOutCallP = "";
                                     mServices3.editedInCallP = "";
+                                    mServices3.isInCallEdited = "";
+                                    mServices3.isOutCallEdited = "";
                                     mServices3.setSelected(false);
                                     notifyDataSetChanged();
                                     localMap.remove(entry.getKey());
                                     break;
                                 } else {
-                                    if (staffDetail.staffServices.size()>1)
-                                        apiForDeleteBookedService(selectedServices,mServices3,entry);
-                                    else
-                                        MyToast.getInstance(context).showDasuAlert("You have to keep at least one staff service");
+                                    // add atleast one service on server also
+                                    //  if (staffDetail.staffServices.size()>1)
+                                    apiForDeleteBookedService(selectedServices,mServices3,entry);
+                                    // else
+                                    //   MyToast.getInstance(context).showDasuAlert("You have to keep at least one staff service");
                                 }
                                 break;
                             }
@@ -203,10 +208,11 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         Map<String, String> params = new HashMap<>();
-        if (!selectedServices.isHold)
+        params.put("addServiceId", selectedServices._id);
+        /*if (!selectedServices.isHold)
             params.put("addServiceId", selectedServices._id);
         else
-            params.put("addServiceId", "");
+            params.put("addServiceId", "");*/
         // params.put("userId", String.valueOf(user.id));
 
         HttpTask task = new HttpTask(new HttpTask.Builder(context, "deleteStaffService", new HttpResponceListner.Listener() {
@@ -219,13 +225,13 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     if (status.equalsIgnoreCase("success")) {
                         selectedServices.isHold = false;
-
                         mServices3.editedCtime = "";
                         mServices3.editedOutCallP = "";
                         mServices3.editedInCallP = "";
                         mServices3.setSelected(false);
+                        mServices3.isInCallEdited = "";
+                        mServices3.isOutCallEdited = "";
                         notifyDataSetChanged();
-
 
                         if (staffDetail.staffServices.size()!=0){
                             for (AddedStaffServices staffServices : staffDetail.staffServices){

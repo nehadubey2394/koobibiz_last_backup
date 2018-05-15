@@ -10,11 +10,8 @@ import com.mualab.org.biz.model.TimeSlot;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
-/**
- * Created by dharmraj on 29/1/18.
- */
 
-public class TimeSlotSerializer implements Serializable, JsonSerializer<TimeSlot> {
+public class EditTimeSlotSerializer implements Serializable, JsonSerializer<TimeSlot> {
 
     @Override
     public JsonElement serialize(TimeSlot obj, Type typeOfSrc, JsonSerializationContext context) {
@@ -22,6 +19,7 @@ public class TimeSlotSerializer implements Serializable, JsonSerializer<TimeSlot
         jObj.remove("slotTime");
         jObj.remove("id");
         jObj.remove("_id");
+        jObj.remove("status");
         return jObj;
     }
 }

@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:overScrollMode="never"
         android:layout_marginBottom="15dp"
+        android:layout_marginTop="2dp"
         >
 
         <LinearLayout
@@ -147,6 +148,35 @@
                         android:layout_alignParentRight="true"
                         android:padding="2dp"
                         />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlStaffName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="2dp"
+                    android:background="@drawable/bg_pink_strock_circle"
+                    >
+                    <TextView
+                        android:id="@+id/tvStaffName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:maxWidth="250dp"
+                        android:minWidth="50dp"
+                        android:minHeight="16dp"
+                        android:text="NA"
+                        android:fontFamily="@font/roboto_regular"
+                        android:layout_centerInParent="true" android:textColor="@color/colorPrimary"
+                        android:maxLines="1"
+                        />
+
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -295,5 +325,13 @@
         android:gravity="center"
         android:textColor="@color/black"
         android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="@color/primary_blue"/>
 
 </RelativeLayout>

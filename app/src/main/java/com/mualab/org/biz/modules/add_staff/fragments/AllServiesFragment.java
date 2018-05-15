@@ -213,6 +213,8 @@ public class AllServiesFragment extends Fragment {
                                             services3.editedCtime = "";
                                             services3.editedOutCallP = "";
                                             services3.editedInCallP = "";
+                                            services3.isInCallEdited = "";
+                                            services3.isOutCallEdited = "";
                                             if (!services3.outCallPrice.equals("0") || !services3.outCallPrice.equals("null")){
                                                 services3.isOutCall3 = true;
                                                 subServices.isOutCall2 = true;

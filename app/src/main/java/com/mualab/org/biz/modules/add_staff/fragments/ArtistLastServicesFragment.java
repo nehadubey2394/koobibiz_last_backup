@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +28,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
@@ -48,7 +50,6 @@ import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.KeyboardUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -56,7 +57,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import views.pickerview.MyTimePickerDialog;
 import views.pickerview.timepicker.TimePicker;
@@ -64,13 +64,14 @@ import views.pickerview.timepicker.TimePicker;
 import static android.app.Activity.RESULT_OK;
 
 
-public class ArtistLastServicesFragment extends Fragment implements OnServiceSelectListener,View.OnClickListener {
+public class ArtistLastServicesFragment extends Fragment implements OnServiceSelectListener,
+        View.OnClickListener
+{
     private ArtistServiceLastAdapter adapter;
     private Context mContext;
     // TODO: Rename and change types of parameters
     private SubServices subServices;
     public static HashMap<String, SelectedServices> localMap = new HashMap<>();
-    public static List<SelectedServices> selectedServicesList = new ArrayList<>();
     private StaffDetail staffDetail;
     private User user;
 
@@ -131,15 +132,38 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                     for (ArtistServices artistServices : arrayList) {
                         if (artistServices._id.equals(selectedServices.artistServiceId)) {
                             artistServices.setSelected(true);
+                            artistServices.inCallPrice = selectedServices.inCallPrice;
+                            artistServices.outCallPrice = selectedServices.outCallPrice;
+                            artistServices.completionTime = selectedServices.completionTime;
                         }
                     }
                 }
             }
+            //     else {
             if (staffDetail.staffServices.size()!=0){
                 for (AddedStaffServices staffServices : staffDetail.staffServices){
                     for (ArtistServices artistServices : arrayList) {
                         if (artistServices._id.equals(staffServices.artistServiceId)) {
                             artistServices.setSelected(true);
+                            artistServices.editedCtime = staffServices.completionTime;
+                            artistServices.editedInCallP = staffServices.inCallPrice;
+
+                            if (staffServices.outCallPrice.equals("0") && !artistServices.outCallPrice.equals("0")) {
+                                artistServices.isOutCallEdited = "0";
+                                artistServices.editedOutCallP = staffServices.outCallPrice;
+                            } else {
+                                artistServices.editedOutCallP = staffServices.outCallPrice;
+                                artistServices.isOutCallEdited = "1";
+                            }
+
+                            if (staffServices.inCallPrice.equals("0") && !artistServices.inCallPrice.equals("0")) {
+                                artistServices.isInCallEdited = "0";
+                                artistServices.editedInCallP = staffServices.inCallPrice;
+                            }
+                            else {
+                                artistServices.editedInCallP = staffServices.inCallPrice;
+                                artistServices.isInCallEdited = "1";
+                            }
                             //add in new arraylist
                             SelectedServices services = new SelectedServices();
                             services.serviceId = subServices.serviceId;
@@ -159,6 +183,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                     }
                 }
             }
+            //}
         }
 
         adapter = new ArtistServiceLastAdapter(mContext, arrayList);
@@ -196,7 +221,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
 
     @Override
     public void onItemClick(int position, ArtistServices artistServices) {
-        showDetailDialog(artistServices,position);
+        showDetailDialog(artistServices);
        /* if (artistServices.isSelected()){
             MyToast.getInstance(mContext).showDasuAlert("This service is already added,Select another service");
         }else {
@@ -204,7 +229,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         }*/
     }
 
-    private void showDetailDialog(final ArtistServices artistServices, final int position){
+    private void showDetailDialog(final ArtistServices artistServices){
         final View DialogView = View.inflate(mContext, R.layout.dialog_layout_service_detail, null);
 
         final Dialog dialog = new Dialog(mContext);
@@ -217,34 +242,107 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         final EditText etOutCallPrice = DialogView.findViewById(R.id.etOutCallPrice);
         final TextView tvCTime = DialogView.findViewById(R.id.tvCTime);
         TextView tvTile = DialogView.findViewById(R.id.tvTile);
-        TextView tvIncall = DialogView.findViewById(R.id.tvIncall);
-        TextView tvOutCall = DialogView.findViewById(R.id.tvOutCall);
+        final TextView tvIncall = DialogView.findViewById(R.id.tvIncall);
+        final TextView tvOutCall = DialogView.findViewById(R.id.tvOutCall);
         LinearLayout llCtime = DialogView.findViewById(R.id.llCtime);
-        LinearLayout llOutCall = DialogView.findViewById(R.id.llOutCall);
-        LinearLayout llInCall = DialogView.findViewById(R.id.llInCall);
+        final LinearLayout llOutCall = DialogView.findViewById(R.id.llOutCall);
+        final LinearLayout llInCall = DialogView.findViewById(R.id.llInCall);
         AppCompatButton btnDone = DialogView.findViewById(R.id.btnDone);
         AppCompatButton btnCancel = DialogView.findViewById(R.id.btnCancel);
 
-        tvTile.setText(artistServices.title);
-        etInCallPrice.setText(artistServices.inCallPrice);
-        etOutCallPrice.setText(artistServices.outCallPrice);
-        tvCTime.setText(artistServices.completionTime);
+        final CheckBox chb_inCall = DialogView.findViewById(R.id.rb_inCall);
+        final CheckBox chb_outCall = DialogView.findViewById(R.id.rb_outCall);
 
         if (artistServices.inCallPrice.equals("0")){
             tvIncall.setVisibility(View.GONE);
             llInCall.setVisibility(View.GONE);
+            chb_inCall.setVisibility(View.GONE);
+            chb_inCall.setChecked(false);
         }
         if (artistServices.outCallPrice.equals("0")){
             tvOutCall.setVisibility(View.GONE);
             llOutCall.setVisibility(View.GONE);
+            chb_outCall.setVisibility(View.GONE);
+            chb_outCall.setChecked(false);
         }
 
-        etInCallPrice.clearFocus();
-        etOutCallPrice.clearFocus();
+        if (artistServices.editedInCallP.equals("0"))
+        {
+            tvIncall.setVisibility(View.GONE);
+            llInCall.setVisibility(View.GONE);
+        }
+
+        if (artistServices.editedOutCallP.equals("0"))
+        {
+            tvOutCall.setVisibility(View.GONE);
+            llOutCall.setVisibility(View.GONE);
+        }
+
+        tvTile.setText(artistServices.title);
+
+        if (!artistServices.editedInCallP.equals("") && !artistServices.editedInCallP.isEmpty()
+                && !artistServices.editedInCallP.equals("0")){
+            etInCallPrice.setText(artistServices.editedInCallP);
+        }else
+            etInCallPrice.setText(artistServices.inCallPrice);
+
+        if (!artistServices.editedOutCallP.equals("") && !artistServices.editedOutCallP.isEmpty()
+                &&  !artistServices.editedOutCallP.equals("0")){
+            etOutCallPrice.setText(artistServices.editedOutCallP);
+        }else
+            etOutCallPrice.setText(artistServices.outCallPrice);
+
+        if (!artistServices.editedCtime.equals("") && !artistServices.editedCtime.isEmpty()){
+            tvCTime.setText(artistServices.editedCtime);
+        }else
+            tvCTime.setText(artistServices.completionTime);
+
+
+        if (artistServices.isOutCallEdited.equals("0") || artistServices.outCallPrice.equals("0"))
+            chb_outCall.setChecked(false);
+        else
+            chb_outCall.setChecked(true);
+
+        if (artistServices.isInCallEdited.equals("0") || artistServices.inCallPrice.equals("0"))
+            chb_inCall.setChecked(false);
+        else
+            chb_inCall.setChecked(true);
+
+        chb_inCall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    tvIncall.setVisibility(View.VISIBLE);
+                    llInCall.setVisibility(View.VISIBLE);
+                }else {
+                    tvIncall.setVisibility(View.GONE);
+                    llInCall.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        chb_outCall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    tvOutCall.setVisibility(View.VISIBLE);
+                    llOutCall.setVisibility(View.VISIBLE);
+                }else {
+                    tvOutCall.setVisibility(View.GONE);
+                    llOutCall.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
         llCtime.setOnClickListener(new View.OnClickListener() {
+            long mLastClickTime = 0;
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 showPicker(tvCTime,getString(R.string.time_for_completion));
             }
         });
@@ -252,32 +350,69 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String cTime = tvCTime.getText().toString().trim();
-                String inCallPrice = etInCallPrice.getText().toString().trim();
-                String outCallPrice = etOutCallPrice.getText().toString().trim();
-                artistServices.editedCtime = cTime;
-                artistServices.editedInCallP = inCallPrice;
-                artistServices.editedOutCallP = outCallPrice;
-                artistServices.setSelected(true);
-                adapter.notifyDataSetChanged();
 
-                SelectedServices services = new SelectedServices();
-                services.serviceId = subServices.serviceId;
-                services.subserviceId = subServices.subServiceId;
-                services.artistId = staffDetail.staffId;
-                services.businessId = String.valueOf(user.id);
-                services.artistServiceId = artistServices._id;
-                services.title = artistServices.title;
-                services.inCallPrice = inCallPrice;
-                services.outCallPrice = outCallPrice;
-                services.completionTime = cTime;
-                services._id = "";
-                services.isHold = true;
-                localMap.put(artistServices._id,services);
-                //  selectedServicesList.add(services);
+                if (chb_inCall.isChecked() || chb_outCall.isChecked()){
+                    String cTime = tvCTime.getText().toString().trim();
+                    String inCallPrice = etInCallPrice.getText().toString().trim();
+                    String outCallPrice = etOutCallPrice.getText().toString().trim();
 
-                KeyboardUtil.hideKeyboard(DialogView,mContext);
-                dialog.cancel();
+                    if (!inCallPrice.equals(".") && !outCallPrice.equals(".")){
+                        double inPrice = 0,outPrice = 0;
+                        if (!chb_inCall.isChecked()){
+                            inCallPrice = "0";
+                        } if (!chb_outCall.isChecked()){
+                            outCallPrice = "0";
+                        }
+                        if (!inCallPrice.equals(""))
+                            inPrice = Double.parseDouble(inCallPrice);
+                        if (!outCallPrice.equals(""))
+                            outPrice = Double.parseDouble(outCallPrice);
+
+                        if (artistServices.inCallPrice.equals("0") && outCallPrice.equals("")){
+                            MyToast.getInstance(mContext).showDasuAlert("Enter service price");
+                        }else if (artistServices.outCallPrice.equals("0") && inCallPrice.equals("")){
+                            MyToast.getInstance(mContext).showDasuAlert("Enter service price");;
+                        }else if (artistServices.outCallPrice.equals("0") && inPrice == 0){
+                            MyToast.getInstance(mContext).showDasuAlert("Enter service price");
+                        }else if (artistServices.inCallPrice.equals("0") && outPrice==0){
+                            MyToast.getInstance(mContext).showDasuAlert("Enter service price");
+                        }else if (chb_inCall.isChecked() && inPrice==0){
+                            MyToast.getInstance(mContext).showDasuAlert("Enter incall service price");
+                        }else if (chb_outCall.isChecked() && outPrice==0){
+                            MyToast.getInstance(mContext).showDasuAlert("Enter outcall service price");
+                        }else if (cTime.equals("00:00")){
+                            MyToast.getInstance(mContext).showDasuAlert("Select Completion time");
+                        }
+                        else {
+                            if (chb_inCall.isChecked())
+                                artistServices.isInCallEdited = "1";
+                            else
+                                artistServices.isInCallEdited = "0";
+
+                            if (chb_outCall.isChecked())
+                                artistServices.isOutCallEdited = "1";
+                            else
+                                artistServices.isOutCallEdited = "0";
+
+                            addService(cTime, inCallPrice, outCallPrice, artistServices);
+                            KeyboardUtil.hideKeyboard(DialogView, mContext);
+                            dialog.cancel();
+                        }
+                    }else {
+                        if (inCallPrice.equals(".")) {
+                            etInCallPrice.setText("");
+                            MyToast.getInstance(mContext).showDasuAlert("Enter incall price");
+                        }
+                        if (outCallPrice.equals(".")) {
+                            etOutCallPrice.setText("");
+                            MyToast.getInstance(mContext).showDasuAlert("Enter outcall price");
+                        }
+                    }
+
+                }else {
+                    MyToast.getInstance(mContext).showDasuAlert("Select staff service type");
+                }
+
             }
         });
 
@@ -289,6 +424,32 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
             }
         });
         dialog.show();
+    }
+
+    private void addService(final String cTime,final String inCallPrice,final String outCallPrice,final ArtistServices artistServices ){
+        if (!cTime.equals("00:00"))
+            artistServices.editedCtime = cTime;
+
+        artistServices.editedInCallP = inCallPrice;
+        artistServices.editedOutCallP = outCallPrice;
+        artistServices.setSelected(true);
+        adapter.notifyDataSetChanged();
+
+        SelectedServices services = new SelectedServices();
+        services.serviceId = subServices.serviceId;
+        services.subserviceId = subServices.subServiceId;
+        services.artistId = staffDetail.staffId;
+        services.businessId = String.valueOf(user.id);
+        services.artistServiceId = artistServices._id;
+        services.title = artistServices.title;
+        services.inCallPrice = inCallPrice;
+        services.outCallPrice = outCallPrice;
+        services.completionTime = cTime;
+        services._id = "";
+        services.isHold = true;
+
+        localMap.put(artistServices._id,services);
+        //  selectedServicesList.add(services);
     }
 
     public void showPicker(final TextView tvTime, final String title){
@@ -314,25 +475,32 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnDone:
+                if (staffDetail.staffServices.size()!=0 && localMap.size()==0){
+                    ((AllServicesActivity)mContext).finish();
+                }else {
+                    if (localMap.size()!=0){
+                        ArrayList<String> sIds = new ArrayList<>();
+                        // String[] sIds = new String[localMap.size()];
+                        int i = 0;
+                        for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()){
+                            SelectedServices  services = entry.getValue();
+                            sIds.add(services.artistServiceId);
+                            i++;
+                        }
+                        Collection<SelectedServices> values = localMap.values();
+                        ArrayList<SelectedServices> listOfValues = new ArrayList<>(values);
 
-                String[] sIds = new String[localMap.size()];
-                int i = 0;
-                for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()){
-                    SelectedServices  services = entry.getValue();
-                    sIds[i] = services.artistServiceId;
-                    i++;
+                        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+                        String jsonString = gson.toJson(listOfValues);
+
+                        if (!jsonString.isEmpty()) {
+                            apiForAddServices(jsonString,sIds);
+                        }
+                    }else {
+                        MyToast.getInstance(mContext).showDasuAlert("Please select staff service");
+                    }
                 }
-                Collection<SelectedServices> values = localMap.values();
-                ArrayList<SelectedServices> listOfValues = new ArrayList<>(values);
 
-                Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-                String jsonString = gson.toJson(listOfValues);
-                if (!jsonString.isEmpty()) {
-                    apiForAddServices(jsonString,sIds);
-                }
-
-                // Gson gson = new GsonBuilder().create();
-                // JsonArray jsonArray = gson.toJsonTree(localMap).getAsJsonArray();
 
                 break;
             case R.id.btnAddMoreService:
@@ -341,7 +509,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
         }
     }
 
-    private void apiForAddServices(final String jsonArray,final String[] sIds){
+    private void apiForAddServices(final String jsonArray,final ArrayList<String> sIds){
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
                 @Override
@@ -369,20 +537,33 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
 
                     if (status.equalsIgnoreCase("success")) {
 
-                       /*  JSONArray staffServiceArray = js.getJSONArray("staffServices");
-                       if (staffServiceArray.length()!=0){
-                            staffDetail.staffServices.clear();
-                            for (int k=0; k<staffServiceArray.length(); k++){
-                                JSONObject object3 = staffServiceArray.getJSONObject(k);
-                                Gson gson = new Gson();
-                                AddedStaffServices item3 = gson.fromJson(String.valueOf(object3), AddedStaffServices.class);
-                                staffDetail.staffServices.add(item3);
+                        JSONArray staffServiceArray = js.getJSONArray("staffServices");
+                        for (int i=0; i<staffServiceArray.length(); i++) {
+                            JSONObject object = staffServiceArray.getJSONObject(i);
+                            if (localMap.size()!=0){
+                                for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()){
+                                    SelectedServices  selectedServices = entry.getValue();
+                                    if (object.getString("artistServiceId").equals(selectedServices.artistServiceId)) {
+                                        selectedServices._id = object.getString("_id");;
+                                        selectedServices.businessId = object.getString("businessId");;
+                                        selectedServices.artistId = object.getString("artistId");;
+                                        selectedServices.artistServiceId = object.getString("artistServiceId");;
+                                        selectedServices.subserviceId = object.getString("subserviceId");;
+                                        selectedServices.serviceId = object.getString("serviceId");;
+                                        selectedServices.inCallPrice = object.getString("inCallPrice");;
+                                        selectedServices.outCallPrice = object.getString("outCallPrice");;
+                                        selectedServices.completionTime = object.getString("completionTime");;
+                                    }
+                                }
                             }
 
-                        }*/
-
+                            //    Gson gson = new Gson();
+                            //    AddedStaffServices item3 = gson.fromJson(String.valueOf(object), AddedStaffServices.class);
+                            //    staffDetail.staffServices.add(item3);
+                        }
                         Intent intent = new Intent();
                         intent.putExtra("jsonArray", sIds);
+                        intent.putExtra("staffDetail", staffDetail);
                         //  selectedServicesList.clear();
                         ((AllServicesActivity)mContext).setResult(RESULT_OK, intent);
                         ((AllServicesActivity)mContext).finish();

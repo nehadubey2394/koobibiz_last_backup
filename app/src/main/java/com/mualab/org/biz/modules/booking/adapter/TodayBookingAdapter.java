@@ -69,7 +69,8 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         holder.tvUserName.setText(item.userDetail.userName);
         holder.tvServices.setText(item.artistServiceName);
         holder.tvTime.setText(item.bookingTime);
-        holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
+        if (item.todayBookingInfos.size()!=0)
+            holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
 
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();

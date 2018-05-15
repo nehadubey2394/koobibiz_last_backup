@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -25,14 +26,14 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.add_staff.AddedStaffServices;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
-import com.mualab.org.biz.model.add_staff.SelectedServices;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.model.serializer.TimeSlotSerializer;
 import com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment;
 import com.mualab.org.biz.modules.add_staff.fragments.EditBusinessHoursFragment;
+import com.mualab.org.biz.modules.add_staff.listner.EditWorkingHours;
 import com.mualab.org.biz.modules.profile.fragment.FragmentListner;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
@@ -40,81 +41,91 @@ import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
+import com.mualab.org.biz.util.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddStaffDetailActivity extends AppCompatActivity implements View.OnClickListener,FragmentListner {
+public class AddStaffDetailActivity extends AppCompatActivity implements View.OnClickListener,
+        FragmentListner,EditWorkingHours {
     private TextView tvJobTitle,tvSocialMedia,tvHoliday;
-    public StaffDetail staffDetail;
-    private String[] sIds;
+    private StaffDetail staffDetail;
+    private ArrayList<String> sIds;
     private AppCompatButton btnSave;
     private boolean isChangeOccured = false;
+    private String whJsonArray;
+    private TextView tvHeaderTitle,tvUserName;
+    private LinearLayout lyArtistDetail;
+    private PreRegistrationSession pSession;
+    private ImageView ivHeaderProfile;
+
+    public void setHeaderVisibility(int visibility){
+        if(lyArtistDetail!=null)
+            lyArtistDetail.setVisibility(visibility);
+    }
+
+    public void setTitle(String text){
+        if(tvHeaderTitle!=null)
+            tvHeaderTitle.setText(text);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff_detail);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         initView();
     }
 
     private void initView(){
+        sIds = new ArrayList<>();
+        // staffDetail = new StaffDetail();
         Intent intent = getIntent();
         if (intent!=null){
             Bundle args = intent.getBundleExtra("BUNDLE");
             staffDetail = (StaffDetail) args.getSerializable("staff");
+            //  staffId = args.getString("staffId");
+            //  isEdit = args.getBoolean("isEdit");
+            //  staffDetail.staffId = staffId;
         }
 
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         ivHeaderBack.setVisibility(View.VISIBLE);
 
-        ImageView ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
-        TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
+
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        lyArtistDetail = findViewById(R.id.lyArtistDetail);
         tvHeaderTitle.setText(getString(R.string.text_staff));
-        TextView tvUserName = findViewById(R.id.tvUserName);
-        tvUserName.setText(staffDetail.userName);
-
-
+        tvUserName = findViewById(R.id.tvUserName);
         btnSave = findViewById(R.id.btnSave);
-
-        if (!staffDetail.profileImage.equals("")){
-            Picasso.with(AddStaffDetailActivity.this).load(staffDetail.profileImage).placeholder(R.drawable.defoult_user_img).
-                    fit().into(ivHeaderProfile);
-        }
-
         TextView tvServices = findViewById(R.id.tvServices);
         AppCompatButton btnEditWhs = findViewById(R.id.btnEditWhs);
         tvJobTitle = findViewById(R.id.tvJobTitle);
         tvSocialMedia = findViewById(R.id.tvSocialMedia);
         tvHoliday = findViewById(R.id.tvHoliday);
 
-        setView();
+        pSession = Mualab.getInstance().getBusinessProfileSession();
 
-        tvHoliday.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        //   apiForGetStaffDetail();
 
-            }
+        setView(staffDetail);
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()>0){
-                    btnSave.setEnabled(true);
-                    btnSave.setAlpha(1.0f);
-                    isChangeOccured = true;
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        for(int i = 0;i<staffDetail.staffServices.size();i++) {
+            sIds.add(staffDetail.staffServices.get(i).artistServiceId);
+        }
+        List<BusinessDayForStaff> businessDays = pSession.getBusinessProfile().dayForStaffs;
+        Gson gson = new GsonBuilder().registerTypeAdapter(TimeSlot.class, new TimeSlotSerializer()).create();
+        if ((staffDetail != null ? staffDetail.staffHoursList.size() : 0) !=0){
+            whJsonArray = gson.toJson(staffDetail.staffHoursList);
+        }else {
+            whJsonArray = gson.toJson(businessDays);
+        }
 
         ivHeaderBack.setOnClickListener(this);
         tvSocialMedia.setOnClickListener(this);
@@ -124,51 +135,70 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         btnSave.setOnClickListener(this);
     }
 
-    private void setView(){
-        if (staffDetail.job != null){
-            tvJobTitle.setText(staffDetail.job);
-            tvSocialMedia.setText(staffDetail.mediaAccess);
-            if (!staffDetail.holiday.equals(""))
-                tvHoliday.setText(staffDetail.holiday);
-        }
+    private void setView(StaffDetail staffDetail){
+        if (staffDetail!=null) {
+            tvUserName.setText(staffDetail.userName);
 
-        sIds = new String[staffDetail.staffServices.size()];
+            if (!staffDetail.profileImage.equals("")){
+                Picasso.with(AddStaffDetailActivity.this).load(staffDetail.profileImage).placeholder(R.drawable.defoult_user_img).
+                        fit().into(ivHeaderProfile);
+            }
 
-        for(int i = 0;i<staffDetail.staffServices.size();i++) {
-            sIds[i] = staffDetail.staffServices.get(i).artistServiceId;
+            if (staffDetail.job != null){
+                tvJobTitle.setText(staffDetail.job);
+                tvSocialMedia.setText(staffDetail.mediaAccess);
+                if (!staffDetail.holiday.equals(""))
+                    tvHoliday.setText(staffDetail.holiday);
+            }
+
+            tvHoliday.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.length()>0){
+                        btnSave.setEnabled(true);
+                        btnSave.setAlpha(1.0f);
+                        isChangeOccured = true;
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
         }
     }
-
-    public StaffDetail getStaffDetail(){
-        return staffDetail;
-    }
-
 
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
             case R.id.btnSave:
-                PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
-                List<BusinessDayForStaff> businessDays = pSession.getBusinessProfile().dayForStaffs;
-                Gson gson = new GsonBuilder().create();
-                JsonArray whJsonArray = gson.toJsonTree(businessDays).getAsJsonArray();
+                // JsonArray whJsonArray = gson.toJsonTree(staffDetail.staffHoursList).getAsJsonArray();
                 String jobTltle = tvJobTitle.getText().toString().trim();
                 String mediaAccess =  tvSocialMedia.getText().toString().trim();
                 String holiday =  tvHoliday.getText().toString().trim();
 
-                if (sIds!=null){
-                    if (!jobTltle.equals(""))
-                    {
-                        if (!mediaAccess.equals(""))
-                            apiForAddStaff(whJsonArray,jobTltle,mediaAccess,holiday);
+                if (!jobTltle.equals(""))
+                {
+                    if (sIds.size()!=0){
+                        if (!mediaAccess.equals("")) {
+
+                            if (!whJsonArray.isEmpty())
+                                apiForAddStaff(jobTltle, mediaAccess, holiday);
+                            else
+                                MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select working hours for staff");
+                        }
                         else
                             MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select Social Media Access");
-                    }
-                    else
-                        MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select Job Title");
-                }else
-                    MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select service");
+                    }else
+                        MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select at least one service for staff");
+                } else
+                    MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Select Job Title");
 
                 break;
 
@@ -177,22 +207,6 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.tvJobTitle:
                 showJobTile();
-                // CustomPopupWindow dialogsClass = new CustomPopupWindow();
-
-            /*    final ArrayList<String>arrayList = new ArrayList<>();
-                arrayList.add("Beginner");
-                arrayList.add("Moderate");
-                arrayList.add("Expert");
-
-                if (arrayList.size() > 0) {
-                    //   showFilterDialog(years);
-                    dialogsClass.poppup_window_with_list(this, new PoppupWithListListner() {
-                        @Override
-                        public void selectedoption(int id) {
-                            tvJobTitle.setText(arrayList.get(id));
-                        }
-                    }, tvJobTitle, arrayList);
-                }*/
 
                 break;
             case R.id.tvSocialMedia:
@@ -208,7 +222,49 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.btnEditWhs:
-                addFragment( EditBusinessHoursFragment.newInstance(),true,R.id.rlContainer);
+                staffDetail.businessDays.clear();
+               /* HashMap<Integer,BusinessDay> hashMap = new HashMap<>();
+                List<BusinessDay> days = pSession.getBusinessProfile().businessDays;
+
+                if ((staffDetail != null ? staffDetail.staffHoursList.size() : 0) !=0){
+
+                    for(BusinessDay tmpDay : days){
+                        for (BusinessDayForStaff dayForStaff : staffDetail.staffHoursList){
+                            if(tmpDay.dayId == dayForStaff.day){
+                                tmpDay.isOpen = true;
+                                TimeSlot slot = new TimeSlot(dayForStaff.day);
+                                slot.id = tmpDay.id;
+                                slot.startTime = dayForStaff.startTime;
+                                slot.endTime = dayForStaff.endTime;
+                                slot.status = 1;
+                                slot.slotTime =  slot.startTime+"-"+dayForStaff.endTime;
+                                tmpDay.slots.add(slot);
+                                break;
+                            }
+                        }
+                        hashMap.put(tmpDay.dayId,tmpDay);
+                    }
+
+                    if (hashMap.size()!=0){
+
+                        for (Object o : hashMap.entrySet()) {
+                            Map.Entry pair = (Map.Entry) o;
+                            BusinessDay businessDay = hashMap.get(pair.getKey());
+                            staffDetail.businessDays.add(businessDay);
+                            //    it.remove();
+                        }
+                        Collections.sort(staffDetail.businessDays, new Comparator<BusinessDay>() {
+                            @Override
+                            public int compare(BusinessDay a, BusinessDay b)
+                            {
+                                return a.dayId > b.dayId ? +1 : a.dayId < b.dayId ? -1 : 0;
+                            }
+                        });
+                    }
+
+                }*/
+                pSession.setStaffBusinessHours(staffDetail);
+                addFragment( new EditBusinessHoursFragment(),true,R.id.rlContainer);
                 break;
         }
     }
@@ -267,8 +323,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         }
     }
 
-    private void apiForAddStaff(final JsonArray whJsonArray,final String jobTltle,
-                                final String mediaAccess,final String holiday){
+    private void apiForAddStaff(final String jobTltle, final String mediaAccess,final String holiday){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
         if (!ConnectionDetector.isConnected()) {
@@ -277,22 +332,26 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 public void onNetworkChange(Dialog dialog, boolean isConnected) {
                     if(isConnected){
                         dialog.dismiss();
-                        apiForAddStaff(whJsonArray,jobTltle,mediaAccess,holiday);
+                        apiForAddStaff(jobTltle,mediaAccess,holiday);
                     }
                 }
             }).show();
         }
 
+        Gson gson2 = new GsonBuilder().create();
+        JsonArray serviceArray = gson2.toJsonTree(sIds).getAsJsonArray();
+
+
         Map<String, String> params = new HashMap<>();
         params.put("artistId", staffDetail.staffId);
-        // params.put("staffId", staffDetail.staffId);
+        params.put("staffId", staffDetail.staffId);
         params.put("businessId", String.valueOf(user.id));
-        params.put("staffService", Arrays.toString(sIds));
+        params.put("staffService", String.valueOf(serviceArray));
         params.put("job",jobTltle);
         params.put("holiday",holiday);
-        params.put("serviceType","");
+        params.put("serviceType",user.serviceType);
         params.put("mediaAccess",mediaAccess );
-        params.put("staffHours", whJsonArray.toString());
+        params.put("staffHours", whJsonArray);
 
         if (staffDetail.job != null && staffDetail.staffServices.size()!=0) {
             params.put("type", "edit");
@@ -314,9 +373,10 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                         //ArtistLastServicesFragment.selectedServicesList.clear();
                         ArtistLastServicesFragment.localMap.clear();
                         MyToast.getInstance(AddStaffDetailActivity.this).showDasuAlert("Staff added successfully");
+                        Intent intent = new Intent(AddStaffDetailActivity.this, AddStaffActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
-                        startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
-
+                        startActivity(intent);
                     }
                 } catch (Exception e) {
                     Progress.hide(AddStaffDetailActivity.this);
@@ -345,7 +405,6 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         task.execute(this.getClass().getName());
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -354,7 +413,8 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
             btnSave.setAlpha(1.0f);
             isChangeOccured = true;
             if (data!=null){
-                sIds = data.getStringArrayExtra("jsonArray");
+                sIds = data.getStringArrayListExtra("jsonArray");
+                staffDetail = (StaffDetail) data.getSerializableExtra("staffDetail");
             }
         }
     }
@@ -363,14 +423,14 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         final android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(AddStaffDetailActivity.this, R.style.MyDialogTheme);
         alertDialog.setCancelable(false);
         alertDialog.setTitle("Alert!");
-        alertDialog.setMessage("Are you sure you want to permanently remove all selected services?");
+        alertDialog.setMessage("Are you sure want to discard changes?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 //  ArtistLastServicesFragment.selectedServicesList.clear();
                 ArtistLastServicesFragment.localMap.clear();
                 dialog.cancel();
                 finish();
-                startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
+            //    startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
 
             }
         });
@@ -401,11 +461,19 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onBackPressed() {
-        if (ArtistLastServicesFragment.localMap.size()>0 || isChangeOccured)
-            showAlertDailog();
-        else {
-            finish();
-            startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
+        FragmentManager fm = getSupportFragmentManager();
+        int i = fm.getBackStackEntryCount();
+
+        if (i > 0) {
+            fm.popBackStack();
+        }else {
+
+            if (ArtistLastServicesFragment.localMap.size() > 0 || isChangeOccured)
+                showAlertDailog();
+            else {
+                finish();
+                //   startActivity(new Intent(AddStaffDetailActivity.this, AddStaffActivity.class));
+            }
         }
     }
 
@@ -427,5 +495,12 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
     @Override
     public void onFinish() {
 
+    }
+
+    @Override
+    public void onHorusChange(String JsonArray) {
+        this.whJsonArray = JsonArray;
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStack();
     }
 }

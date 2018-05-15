@@ -2,23 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   >
+    android:focusableInTouchMode="true"
+    >
 
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:background="@drawable/bg_dialog_alert"
-
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginTop="-2dp"
             android:background="@drawable/bg_dialog_box"
             >
             <TextView
@@ -28,7 +27,7 @@
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:padding="5dp"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:layout_gravity="center"
                 android:text="@string/alert"
                 android:fontFamily="@font/roboto_medium"
@@ -39,12 +38,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:background="@color/white"
             android:padding="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             >
+
+            <LinearLayout
+                android:id="@+id/ll_serviceType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal"
+                >
+
+                <CheckBox
+                    android:id="@+id/rb_inCall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/checkbox_selector"
+                    android:button="@color/transparent"
+                    android:fontFamily="@font/roboto_regular"
+                    android:background="@null"
+                    android:textSize="14sp"
+                    android:padding="2dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/incall"/>
+
+
+                <CheckBox
+                    android:id="@+id/rb_outCall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:drawableTop="@drawable/checkbox_selector"
+                    android:button="@color/transparent"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="2dp"
+                    android:text="@string/outcall"/>
+
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,7 +103,7 @@
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="@string/incall"
+                        android:text="@string/incall_p"
                         android:textColor="@color/dark_grey"
                         android:textSize="14sp" />
 
@@ -75,7 +114,7 @@
                         android:gravity="center_vertical"
                         android:fontFamily="@font/roboto_regular"
                         android:layout_marginTop="4dp"
-                        android:text="@string/outcall"
+                        android:text="@string/outcall_p"
                         android:textColor="@color/dark_grey"
                         android:textSize="14sp" />
 
@@ -126,7 +165,8 @@
                             android:textColor="@color/dark_grey"
                             android:background="@null"
                             android:ems="8"
-                            android:cursorVisible="false"
+                            android:hint="@string/price"
+                            android:maxLength="7"
                             android:imeOptions="actionDone"
                             android:textSize="14sp"
                             android:inputType="numberDecimal" />
@@ -162,7 +202,8 @@
                             android:textColor="@color/dark_grey"
                             android:background="@null"
                             android:ems="8"
-                            android:cursorVisible="false"
+                            android:hint="@string/price"
+                            android:maxLength="7"
                             android:imeOptions="actionDone"
                             android:textSize="14sp"
                             android:inputType="numberDecimal" />

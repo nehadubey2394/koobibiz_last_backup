@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class ArtistServices implements Serializable{
     public String _id;
     public String title;
+    public String isInCallEdited,isOutCallEdited;
     public String completionTime,editedCtime;
     public String inCallPrice,editedInCallP;
     public String outCallPrice,editedOutCallP;

@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:scrollbars="none"
-        android:groupIndicator="@drawable/custom_expandable"
+        android:groupIndicator="@null"
         android:background="@color/white"/>
 
 </LinearLayout>

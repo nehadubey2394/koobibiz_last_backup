@@ -21,6 +21,8 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.BusinessDay;
+import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.AddedStaffServices;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
@@ -28,6 +30,8 @@ import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
+import com.mualab.org.biz.modules.add_staff.listner.OnBottomReachedListener;
+import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -47,6 +51,8 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context context;
     private List<Staff> staffList;
     private OnDeleteStaffListener listener = null;
+    private OnBottomReachedListener onBottomReachedListener;
+
 
     public interface OnDeleteStaffListener {
 
@@ -56,6 +62,10 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setChangeListener(OnDeleteStaffListener listener){
         this.listener = listener;
+    }
+    public void setOnBottomReachedListener(OnBottomReachedListener onBottomReachedListener){
+
+        this.onBottomReachedListener = onBottomReachedListener;
     }
     // Constructor of the class
     public ArtistStaffAdapter(Context context,  List<Staff> staffList) {
@@ -76,12 +86,17 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
-
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
 
         final ViewHolder holder = ((ViewHolder) viewHolder);
         final Staff item = staffList.get(position);
+
+        if (position == staffList.size() - 1){
+
+            onBottomReachedListener.onBottomReached(position);
+
+        }
 
         holder.tvStaffServices.setText(item.job);
         holder.tvStaffName.setText(item.staffName);
@@ -125,6 +140,13 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 case R.id.llArtDetail:
                     Staff staff = staffList.get(getAdapterPosition());
+
+                  /*  Intent intent = new Intent(context, AddStaffDetailActivity.class);
+                    Bundle args = new Bundle();
+                    args.putString("staffId", staff.staffId);
+                    args.putBoolean("isEdit", true);
+                    intent.putExtra("BUNDLE", args);
+                    context.startActivity(intent);*/
                     apiForGetStaffDetail(staff);
                     break;
             }
@@ -161,7 +183,6 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     String message = js.getString("message");
 
                     if (status.equalsIgnoreCase("success")) {
-
                         JSONArray jsonArray = js.getJSONArray("staffDetails");
 
                         if (jsonArray!=null && jsonArray.length()!=0) {
@@ -184,8 +205,16 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 JSONArray staffHoursArray = object.getJSONArray("staffHours");
                                 for (int j=0; j<staffHoursArray.length(); j++){
                                     JSONObject object2 = staffHoursArray.getJSONObject(j);
-                                    Gson gson = new Gson();
-                                    BusinessDayForStaff item2 = gson.fromJson(String.valueOf(object2), BusinessDayForStaff.class);
+                                    BusinessDayForStaff item2 = new BusinessDayForStaff();
+                                    // Gson gson = new Gson();
+                                    // BusinessDayForStaff item2 = gson.fromJson(String.valueOf(object2), BusinessDayForStaff.class);
+                                    if (object2.has("day"))
+                                        item2.day = Integer.parseInt(object2.getString("day"));
+                                    if (object2.has("dayId"))
+                                        item2.day = Integer.parseInt(object2.getString("dayId"));
+
+                                    item2.endTime = object2.getString("endTime");
+                                    item2.startTime = object2.getString("startTime");
                                     item.staffHoursList.add(item2);
                                 }
 
@@ -203,7 +232,7 @@ public class ArtistStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 args.putSerializable("staff", item);
                                 intent.putExtra("BUNDLE", args);
                                 context.startActivity(intent);
-                                ((AddStaffActivity) context).finish();
+                                // ((AddStaffActivity) context).finish();
                             }
                         }
 

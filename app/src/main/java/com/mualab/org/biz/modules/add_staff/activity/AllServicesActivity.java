@@ -1,5 +1,6 @@
 package com.mualab.org.biz.modules.add_staff.activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +13,31 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
+import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.model.add_staff.SelectedServices;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.modules.add_staff.fragments.AllServiesFragment;
+import com.mualab.org.biz.session.Session;
+import com.mualab.org.biz.task.HttpResponceListner;
+import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Helper;
+import com.mualab.org.biz.util.StatusBarUtil;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment.localMap;
 
@@ -37,6 +60,7 @@ public class AllServicesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_services);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         init();
     }
 
@@ -86,7 +110,7 @@ public class AllServicesActivity extends AppCompatActivity {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllServicesActivity.this, R.style.MyDialogTheme);
         alertDialog.setCancelable(false);
         alertDialog.setTitle("Alert!");
-        alertDialog.setMessage("Are you sure you want to permanently remove all selected services?");
+        alertDialog.setMessage("Are you sure want to discard changes?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 //selected.clear();
@@ -105,21 +129,127 @@ public class AllServicesActivity extends AppCompatActivity {
 
     }
 
+    private void showDailogForAddService(){
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllServicesActivity.this, R.style.MyDialogTheme);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Alert!");
+        alertDialog.setMessage("You have to keep at least one staff service");
+        alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                if (localMap.size()!=0){
+                    String[] sIds = new String[localMap.size()];
+                    int i = 0;
+                    for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()){
+                        SelectedServices  services = entry.getValue();
+                        sIds[i] = services.artistServiceId;
+                        i++;
+                    }
+                    Collection<SelectedServices> values = localMap.values();
+                    ArrayList<SelectedServices> listOfValues = new ArrayList<>(values);
+
+                    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+                    String jsonString = gson.toJson(listOfValues);
+
+                    if (!jsonString.isEmpty()) {
+                        apiForAddServices(dialog,jsonString,sIds);
+                    }
+                }else {
+                    MyToast.getInstance(AllServicesActivity.this).showDasuAlert("Please select staff service");
+                }
+            }
+        });
+
+        alertDialog.show();
+
+    }
+
+    private void apiForAddServices(final DialogInterface dialog,final String jsonArray,final String[] sIds){
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(AllServicesActivity.this, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        apiForAddServices(dialog,jsonArray,sIds);
+                    }
+                }
+            }).show();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("artistId", staffDetail.staffId);
+        params.put("businessId", String.valueOf(user.id));
+        params.put("staffService", jsonArray);
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(AllServicesActivity.this, "addStaffService", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+
+                    if (status.equalsIgnoreCase("success")) {
+
+                        Intent intent = new Intent();
+                        intent.putExtra("jsonArray", sIds);
+                        //  selectedServicesList.clear();
+                        dialog.cancel();
+                        setResult(RESULT_OK, intent);
+                        finish();
+
+                    }else {
+                        if (!message.equals("Service already added"))
+                            MyToast.getInstance(AllServicesActivity.this).showDasuAlert(message);
+                    }
+                } catch (Exception e) {
+                    Progress.hide(AllServicesActivity.this);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                try{
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")){
+                        Mualab.getInstance().getSessionManager().logout();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }})
+                .setAuthToken(user.authToken)
+                .setProgress(true)
+                .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
+        //.setBody(params, "application/x-www-form-urlencoded"));
+
+        task.execute(this.getClass().getName());
+    }
+
     @Override
     public void onBackPressed() {
         // Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flStffContainer);
 
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();
-
-        if (i>0 && localMap.size()>0){
+        if (staffDetail.staffServices.size()==0 && localMap.size()>0){
+            showDailogForAddService();
+        }
+        else if (i>0 && localMap.size()>0){
             showAlertDailog(fm,i);
         }else if (i==0 && localMap.size()>0){
             showAlertDailog(fm,i);
         }
         else if (i > 0) {
             fm.popBackStack();
-        }else  {
+        }
+        else  {
+            finish();
             super.onBackPressed();
         }
     }

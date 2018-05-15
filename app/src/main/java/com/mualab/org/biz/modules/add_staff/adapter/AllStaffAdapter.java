@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.model.add_staff.AllArtist;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.squareup.picasso.Picasso;
 
@@ -86,7 +86,7 @@ public class AllStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         final ViewHolder holder = ((ViewHolder) viewHolder);
         final AllArtist item = staffList.get(position);
-
+        holder.sample1.setSwipeEnabled(false);
         holder.tvStaffServices.setVisibility(View.GONE);
         holder.tvStaffName.setText(item.userName);
 
@@ -102,10 +102,11 @@ public class AllStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     {
         TextView tvStaffServices,tvStaffName;
         ImageView ivStaffProfile;
+        SwipeLayout sample1;
         private ViewHolder(View itemView)
         {
             super(itemView);
-
+            sample1 = itemView.findViewById(R.id.sample1);
             ivStaffProfile = itemView.findViewById(R.id.ivStaffProfile);
             tvStaffServices = itemView.findViewById(R.id.tvStaffServices);
             tvStaffName = itemView.findViewById(R.id.tvStaffName);
@@ -125,9 +126,10 @@ public class AllStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Intent intent = new Intent(context, AddStaffDetailActivity.class);
             Bundle args = new Bundle();
             args.putSerializable("staff",item);
+            //args.putString("staffId", item.staffId);
+            // args.putBoolean("isEdit", false);
             intent.putExtra("BUNDLE",args);
             context.startActivity(intent);
-            ((AddStaffActivity)context).finish();
         }
     }
 

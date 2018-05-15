@@ -73,6 +73,11 @@ public class CategoriesFragmentCreation extends ProfileCreationBaseFragment {
                     lvExp.collapseGroup(lastExpandedGroupPosition);
                 }
 
+                if (_listDataHeader.get(groupPosition).subCategories.size()==0)
+                    lvExp.setGroupIndicator(null);
+                else
+                    lvExp.setGroupIndicator(getResources().getDrawable(R.drawable.custom_expandable));
+
                 super.onGroupExpanded(groupPosition);
                 lastExpandedGroupPosition = groupPosition;
             }
@@ -82,7 +87,7 @@ public class CategoriesFragmentCreation extends ProfileCreationBaseFragment {
         // In order to show animations, we need to use a custom click handler
         // for our ExpandableListView.
         lvExp.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-           // int previousGroup = -1;
+            // int previousGroup = -1;
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, final int groupPosition, long id) {
                 if (lvExp.isGroupExpanded(groupPosition)) {
@@ -116,16 +121,16 @@ public class CategoriesFragmentCreation extends ProfileCreationBaseFragment {
 
     class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
         private Context _context;
-       // private List<Category> _listDataHeader; // header titles
+        // private List<Category> _listDataHeader; // header titles
 
         private ExpandableListAdapter(Context context) {
             this._context = context;
-          //  this._listDataHeader = _listDataHeader;
+            //  this._listDataHeader = _listDataHeader;
         }
 
         @Override
         public SubCategory getChild(int groupPosition, int childPosititon) {
-           // return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
+            // return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
             return _listDataHeader.get(groupPosition).subCategories.get(childPosititon);
         }
 
@@ -174,6 +179,12 @@ public class CategoriesFragmentCreation extends ProfileCreationBaseFragment {
                 LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = infalInflater.inflate(R.layout.layout_categorylist_group, null);
             }
+
+            if (_listDataHeader.get(groupPosition).subCategories.size()==0)
+                lvExp.setGroupIndicator(null);
+            else
+                lvExp.setGroupIndicator(getResources().getDrawable(R.drawable.custom_expandable));
+
 
             TextView lblListHeader = convertView.findViewById(R.id.lblListHeader);
             lblListHeader.setText(category.name);
