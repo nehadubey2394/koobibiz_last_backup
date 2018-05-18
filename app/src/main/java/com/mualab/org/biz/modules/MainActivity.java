@@ -189,6 +189,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                             slot.id = objSlots.getInt("_id");
                             slot.startTime = objSlots.getString("startTime");
                             slot.endTime = objSlots.getString("endTime");
+                            slot.edtStartTime = objSlots.getString("startTime");
+                            slot.edtEndTime = objSlots.getString("endTime");
                             slot.status = objSlots.getInt("status");
 
                             businessDayForStaff.day = objSlots.getInt("day");

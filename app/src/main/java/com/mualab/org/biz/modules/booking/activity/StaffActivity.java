@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StaffActivity extends AppCompatActivity implements StaffSelectionListener {
-private List<Staff> staffList;
+    private List<Staff> staffList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ private List<Staff> staffList;
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
-         staffList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
+        staffList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
 
         // staffList = new ArrayList<>();
         StaffListAdapter staffListAdapter = new StaffListAdapter(StaffActivity.this, staffList);

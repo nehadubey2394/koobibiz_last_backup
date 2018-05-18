@@ -59,6 +59,11 @@ public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         holder.tvStaffName.setText(item.staffName);
         holder.tvServiceName.setText(item.artistServiceName);
 
+        if (item.bookingStatus.equals("2")){
+            holder.btnChangeStaff.setVisibility(View.GONE);
+        }else
+            holder.btnChangeStaff.setVisibility(View.VISIBLE);
+
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
         if (user.businessType.equals("independent")) {

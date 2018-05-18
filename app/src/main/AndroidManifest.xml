@@ -36,8 +36,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        >
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".modules.SplashActivity"
             android:screenOrientation="portrait"
@@ -125,14 +124,18 @@
             android:name=".modules.add_staff.activity.AddStaffActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".modules.add_staff.activity.AddStaffDetailActivity"
+        <activity
+            android:name=".modules.add_staff.activity.AddStaffDetailActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <activity android:name=".modules.add_staff.activity.AllServicesActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".modules.add_staff.activity.AllServicesActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan">
-
-        </activity>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".modules.booking.activity.CompanyListActivity" />
+        <activity android:name=".modules.company_management.activity.CompaniesListActivity" />
+        <activity android:name=".modules.company_management.activity.CompanyDetailActivity" />
+        <activity android:name=".modules.company_management.activity.CompanyServicesActivity"></activity>
     </application>
 
 </manifest>

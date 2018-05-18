@@ -20,6 +20,8 @@ public class EditTimeSlotSerializer implements Serializable, JsonSerializer<Time
         jObj.remove("id");
         jObj.remove("_id");
         jObj.remove("status");
+        jObj.remove("edtStartTime");
+        jObj.remove("edtEndTime");
         return jObj;
     }
 }

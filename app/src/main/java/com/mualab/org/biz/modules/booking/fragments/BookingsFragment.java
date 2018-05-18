@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.modules.booking.activity.BookingDetailActivity;
+import com.mualab.org.biz.modules.booking.activity.CompanyListActivity;
 import com.mualab.org.biz.modules.booking.activity.StaffActivity;
 import com.mualab.org.biz.modules.booking.adapter.PendingBookingAdapter;
 import com.mualab.org.biz.modules.booking.adapter.TimeSlotAdapter;
@@ -85,17 +86,16 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private long mLastClickTime = 0;
-    private String sMonth = "", sDay, selectedDate, lat = "22.7196", lng = "75.8577", staffId = "";
+    private String sMonth = "", sDay, selectedDate, lat = "22.7196", lng = "75.8577", businessId="",staffId = "";
     private Context mContext;
     private LinearLayout tabToday, tabPending;
-    private TextView tvPending, tvToday, tvBookingCount;
     private List<BookingTimeSlot> bookingTimeSlots;
     private List<Bookings> todayBookings, pendingBookings;
     private List<Staff> staffList;
     private TimeSlotAdapter timeSlotAdapter;
     private TodayBookingAdapter todayBookingAdapter;
     private PendingBookingAdapter pendingBookingAdapter;
-    private TextView tvNoData, tvNoSlot, tv_msg, tvStaffName;
+    private TextView tvNoData, tvNoSlot, tv_msg, tvStaffName,tvPending, tvToday, tvBookingCount;
     private RecyclerView rycTimeSlot, rycToday, rycPending;
     private RelativeLayout rlStaffName;
     private int dayId, count = 0;
@@ -131,7 +131,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
         // Inflate the layout for this fragment
         return rootView;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -210,10 +209,12 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
 
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
-        if (user.businessType.equals("independent"))
-            btnStaff.setVisibility(View.GONE);
-        else
-            btnStaff.setVisibility(View.VISIBLE);
+        if (user.businessType.equals("independent")) {
+            btnStaff.setText(R.string.company);
+        }
+        else{
+            btnStaff.setText(getString(R.string.text_staff));
+        }
 
         getDeviceLocation();
         //apiForGetFreeSlots();
@@ -247,11 +248,19 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                 break;
 
             case R.id.btnStaff:
-                Intent intent = new Intent(mContext, StaffActivity.class);
-                Bundle args = new Bundle();
-                args.putSerializable("ARRAYLIST", (Serializable) staffList);
-                intent.putExtra("BUNDLE", args);
-                startActivityForResult(intent, 5);
+                Session session = Mualab.getInstance().getSessionManager();
+                User user = session.getUser();
+                if (user.businessType.equals("independent")){
+                    Intent intent = new Intent(mContext, CompanyListActivity.class);
+                    startActivityForResult(intent, 10);
+                }else {
+                    Intent intent = new Intent(mContext, StaffActivity.class);
+                    Bundle args = new Bundle();
+                    args.putSerializable("ARRAYLIST", (Serializable) staffList);
+                    intent.putExtra("BUNDLE", args);
+                    startActivityForResult(intent, 5);
+                }
+
                 break;
 
             case R.id.tabToday:
@@ -451,12 +460,17 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
         }
 
         Map<String, String> params = new HashMap<>();
-        params.put("artistId", String.valueOf(user.id));
+        if (user.businessType.equals("independent")){
+            params.put("artistId", businessId);
+            params.put("staffId", String.valueOf(user.id));
+        }else {
+            params.put("artistId", String.valueOf(user.id));
+            params.put("staffId", staffId);
+        }
         params.put("day", String.valueOf(dayId));
         params.put("latitude", lat);
         params.put("longitude", lng);
         params.put("date", selectedDate);
-        params.put("staffId", staffId);
 
         HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "artistFreeSlotNew", new HttpResponceListner.Listener() {
             @Override
@@ -464,9 +478,8 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                 try {
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
-                    String message = js.getString("massage");
+                    String message = js.getString("message");
                     if (status.equalsIgnoreCase("success")) {
-
                         staffList.clear();
                         count = 0;
                         todayBookings.clear();
@@ -485,6 +498,8 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                         progress_bar.setVisibility(View.GONE);
                         rycTimeSlot.setVisibility(View.GONE);
                         tvNoData.setVisibility(View.VISIBLE);
+                        rycTimeSlot.setVisibility(View.GONE);
+                        tvNoSlot.setVisibility(View.VISIBLE);
                     }
                     //  showToast(message);
                 } catch (Exception e) {
@@ -919,6 +934,21 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                     tvStaffName.setText(staffName);
                 else {
                     tvStaffName.setText("All Staff");
+                }
+
+                apiForGetFreeSlots();
+            }
+        }else if (requestCode == 10) {
+            if (data != null) {
+                businessId = data.getStringExtra("businessId");
+                String staffName = data.getStringExtra("businessName");
+
+                if (!businessId.equals("")) {
+                    rlStaffName.setVisibility(View.VISIBLE);
+                    tvStaffName.setText(staffName);
+                }
+                else {
+                    rlStaffName.setVisibility(View.VISIBLE);
                 }
 
                 apiForGetFreeSlots();

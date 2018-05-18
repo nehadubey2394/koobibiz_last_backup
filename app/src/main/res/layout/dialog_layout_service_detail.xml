@@ -242,19 +242,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
                 >
-
-                <android.support.v7.widget.AppCompatButton
-                    style="@style/My_Button_Small.Invert"
-                    android:id="@+id/btnDone"
-                    android:layout_width="80dp"
-                    android:layout_height="28dp"
-                    android:text="@string/done"
-                    android:layout_gravity="center_vertical"
-                    android:padding="2dp"
-                    android:layout_alignParentLeft="true"
-                    android:textSize="12sp"
-                    />
-
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btnCancel"
                     style="@style/My_Button_Small.Invert"
@@ -264,7 +251,19 @@
                     android:layout_gravity="center_vertical"
                     android:padding="2dp"
                     android:textSize="12sp"
+                    android:layout_alignParentLeft="true"
+                    />
+
+                <android.support.v7.widget.AppCompatButton
+                    style="@style/My_Button_Small.Invert"
+                    android:id="@+id/btnDone"
+                    android:layout_width="80dp"
+                    android:layout_height="28dp"
+                    android:text="@string/done"
+                    android:layout_gravity="center_vertical"
+                    android:padding="2dp"
                     android:layout_alignParentRight="true"
+                    android:textSize="12sp"
                     />
 
             </RelativeLayout>

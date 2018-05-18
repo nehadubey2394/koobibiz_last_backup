@@ -72,13 +72,17 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(listener!=null && isvalidBusinessHours()){
-                    if(ConnectionDetector.isConnected()){
-                        // preSession.setBusinessHours(businessDays);
-                        updateDataIntoServerDb();
-                        listener.onNext();
-                    } else showToast(R.string.error_msg_network);
+                StaffDetail staffDetail  = preSession.getStaffBusinessHours();
+                if(staffDetail.businessDays.size()==0){
+                    if(listener!=null && isvalidBusinessHours()){
+                        if(ConnectionDetector.isConnected()){
+                            // preSession.setBusinessHours(businessDays);
+                            updateDataIntoServerDb();
+                            listener.onNext();
+                        } else showToast(R.string.error_msg_network);
+                    }
+                }else {
+                    MyToast.getInstance(mContext).showDasuAlert("Under development");
                 }
             }
         });

@@ -190,6 +190,8 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
         if(position == 0){
             timeSlot.startTime = startTime;
             timeSlot.endTime = endTime;
+            timeSlot.edtStartTime = startTime;
+            timeSlot.edtEndTime = endTime;
             timeSlot.slotTime = time;
             adapter.notifyDataSetChanged();
         }else {
@@ -211,6 +213,8 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
                         timeSlot.startTime = startTime;
                         timeSlot.endTime = endTime;
                         timeSlot.slotTime = time;
+                        timeSlot.edtStartTime = startTime;
+                        timeSlot.edtEndTime = endTime;
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -250,8 +254,10 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
             LinearLayout ll_delete = v.findViewById(R.id.ll_delete);
 
             // Populate the data into the template view using the data object
-            tv_from.setText(String.format("From: %s", timeSlot.startTime));
-            tv_to.setText(String.format("To: %s", timeSlot.endTime));
+
+            tv_from.setText(String.format("From: %s", timeSlot.edtStartTime));
+            tv_to.setText(String.format("To: %s", timeSlot.edtEndTime));
+
             viewDivider.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
             ll_delete.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
             ll_delete.setOnClickListener(new View.OnClickListener() {

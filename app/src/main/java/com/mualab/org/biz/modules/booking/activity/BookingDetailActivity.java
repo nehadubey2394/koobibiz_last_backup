@@ -323,10 +323,10 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
             @Override
             public void onClick(View view) {
 
-                //    if (!selectedStaff.staffId.equals(bookingInfo.staffId))
-                if (selectedStaff!=null)
-                    apiForChangeStaff(position,bookingInfo);
-
+                if (selectedStaff!=null){
+                    if (!selectedStaff.staffId.equals(bookingInfo.staffId))
+                        apiForChangeStaff(position,bookingInfo);
+                }
                 sheetDialog.dismiss();
             }
         });
@@ -447,6 +447,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                                         bookingInfo.staffId = bInfoObj.getString("staffId");
                                         bookingInfo.staffName = bInfoObj.getString("staffName");
                                         bookingInfo.staffImage = bInfoObj.getString("staffImage");
+                                        bookingInfo.bookingStatus = item.bookStatus;
                                         bookingInfo.artistServiceName = bInfoObj.getString("artistServiceName");
                                         if (serviceName.equals("")) {
                                             serviceName = bookingInfo.artistServiceName;

@@ -26,6 +26,7 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
@@ -47,6 +48,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -223,26 +226,33 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
 
             case R.id.btnEditWhs:
                 staffDetail.businessDays.clear();
-               /* HashMap<Integer,BusinessDay> hashMap = new HashMap<>();
+                HashMap<Integer,BusinessDay> hashMap = new HashMap<>();
                 List<BusinessDay> days = pSession.getBusinessProfile().businessDays;
 
                 if ((staffDetail != null ? staffDetail.staffHoursList.size() : 0) !=0){
 
                     for(BusinessDay tmpDay : days){
+                        int slotIndex = 0;
+                        BusinessDay businessDay = new BusinessDay();
                         for (BusinessDayForStaff dayForStaff : staffDetail.staffHoursList){
                             if(tmpDay.dayId == dayForStaff.day){
-                                tmpDay.isOpen = true;
-                                TimeSlot slot = new TimeSlot(dayForStaff.day);
+                                if (businessDay.getTimeSlotSize()>1)
+                                    slotIndex++;
+                                businessDay.dayName = tmpDay.dayName;
+                                businessDay.dayId = tmpDay.dayId;
+                                TimeSlot slot = new TimeSlot(tmpDay.dayId);
                                 slot.id = tmpDay.id;
-                                slot.startTime = dayForStaff.startTime;
-                                slot.endTime = dayForStaff.endTime;
+                                slot.startTime = tmpDay.slots.get(slotIndex).startTime;
+                                slot.endTime = tmpDay.slots.get(slotIndex).endTime;
+                                slot.edtStartTime = dayForStaff.startTime;
+                                slot.edtEndTime = dayForStaff.endTime;
                                 slot.status = 1;
                                 slot.slotTime =  slot.startTime+"-"+dayForStaff.endTime;
-                                tmpDay.slots.add(slot);
-                                break;
+                                businessDay.isOpen = true;
+                                businessDay.addTimeSlot(slot);
+                                hashMap.put(tmpDay.dayId,businessDay);
                             }
                         }
-                        hashMap.put(tmpDay.dayId,tmpDay);
                     }
 
                     if (hashMap.size()!=0){
@@ -262,7 +272,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                         });
                     }
 
-                }*/
+                }
                 pSession.setStaffBusinessHours(staffDetail);
                 addFragment( new EditBusinessHoursFragment(),true,R.id.rlContainer);
                 break;
@@ -430,7 +440,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 ArtistLastServicesFragment.localMap.clear();
                 dialog.cancel();
                 finish();
-            //    startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
+                //    startActivity(new Intent(AddStaffDetailActivity.this,AddStaffActivity.class));
 
             }
         });
