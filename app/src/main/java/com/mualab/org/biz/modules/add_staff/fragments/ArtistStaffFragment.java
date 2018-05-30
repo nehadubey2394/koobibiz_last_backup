@@ -3,6 +3,7 @@ package com.mualab.org.biz.modules.add_staff.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
+import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.mualab.org.biz.modules.add_staff.adapter.ArtistStaffAdapter;
 import com.mualab.org.biz.modules.add_staff.listner.OnBottomReachedListener;
 import com.mualab.org.biz.session.Session;
@@ -209,7 +211,29 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onStaffSelect(int position, Staff staff) {
-        apiForDeleteStaff(staff);
+        showAlertDailog(position,staff);
+    }
+
+    private void showAlertDailog(final int position, final Staff staff){
+        final android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(mContext, R.style.MyDialogTheme);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Alert!");
+        alertDialog.setMessage("Are you sure want to remove this staff?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                dialog.cancel();
+                apiForDeleteStaff(staff);
+
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+
     }
 
     private void apiForDeleteStaff(final Staff staff){

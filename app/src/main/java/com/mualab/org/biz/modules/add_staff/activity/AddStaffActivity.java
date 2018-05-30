@@ -16,7 +16,6 @@ import com.mualab.org.biz.util.StatusBarUtil;
 public class AddStaffActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView tvHeaderTitle;
 
-
     /*   public void setBackButtonVisibility(int visibility){
            if(ivHeaderBack!=null)
                ivHeaderBack.setVisibility(visibility);

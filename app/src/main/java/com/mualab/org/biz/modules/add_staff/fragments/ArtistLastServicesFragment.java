@@ -135,6 +135,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                             artistServices.inCallPrice = selectedServices.inCallPrice;
                             artistServices.outCallPrice = selectedServices.outCallPrice;
                             artistServices.completionTime = selectedServices.completionTime;
+                            localMap.put(artistServices._id,selectedServices);
                         }
                     }
                 }
@@ -473,6 +474,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId()){
             case R.id.btnDone:
                 if (staffDetail.staffServices.size()!=0 && localMap.size()==0){

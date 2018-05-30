@@ -65,6 +65,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
     private TextView tvHeaderTitle,tvUserName;
     private LinearLayout lyArtistDetail;
     private PreRegistrationSession pSession;
+    private List<TimeSlot> slotList;
     private ImageView ivHeaderProfile;
 
     public void setHeaderVisibility(int visibility){
@@ -87,7 +88,9 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
 
     private void initView(){
         sIds = new ArrayList<>();
+        slotList = new ArrayList<>();
         // staffDetail = new StaffDetail();
+
         Intent intent = getIntent();
         if (intent!=null){
             Bundle args = intent.getBundleExtra("BUNDLE");
@@ -229,13 +232,12 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 HashMap<Integer,BusinessDay> hashMap = new HashMap<>();
                 List<BusinessDay> days = pSession.getBusinessProfile().businessDays;
 
-                if ((staffDetail != null ? staffDetail.staffHoursList.size() : 0) !=0){
-
+                if (slotList.size()!=0){
                     for(BusinessDay tmpDay : days){
                         int slotIndex = 0;
                         BusinessDay businessDay = new BusinessDay();
-                        for (BusinessDayForStaff dayForStaff : staffDetail.staffHoursList){
-                            if(tmpDay.dayId == dayForStaff.day){
+                        for (TimeSlot dayForStaff : slotList){
+                            if(tmpDay.dayId == dayForStaff.dayId){
                                 if (businessDay.getTimeSlotSize()>1)
                                     slotIndex++;
                                 businessDay.dayName = tmpDay.dayName;
@@ -254,7 +256,6 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                             }
                         }
                     }
-
                     if (hashMap.size()!=0){
 
                         for (Object o : hashMap.entrySet()) {
@@ -272,6 +273,49 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                         });
                     }
 
+                }else {
+                    if ((staffDetail != null ? staffDetail.staffHoursList.size() : 0) !=0) {
+
+                        for (BusinessDay tmpDay : days) {
+                            int slotIndex = 0;
+                            BusinessDay businessDay = new BusinessDay();
+                            for (BusinessDayForStaff dayForStaff : staffDetail.staffHoursList) {
+                                if (tmpDay.dayId == dayForStaff.day) {
+                                    if (businessDay.getTimeSlotSize() > 1)
+                                        slotIndex++;
+                                    businessDay.dayName = tmpDay.dayName;
+                                    businessDay.dayId = tmpDay.dayId;
+                                    TimeSlot slot = new TimeSlot(tmpDay.dayId);
+                                    slot.id = tmpDay.id;
+                                    slot.startTime = tmpDay.slots.get(slotIndex).startTime;
+                                    slot.endTime = tmpDay.slots.get(slotIndex).endTime;
+                                    slot.edtStartTime = dayForStaff.startTime;
+                                    slot.edtEndTime = dayForStaff.endTime;
+                                    slot.status = 1;
+                                    slot.slotTime = slot.startTime + "-" + dayForStaff.endTime;
+                                    businessDay.isOpen = true;
+                                    businessDay.addTimeSlot(slot);
+                                    hashMap.put(tmpDay.dayId, businessDay);
+                                }
+                            }
+                        }
+
+                        if (hashMap.size() != 0) {
+
+                            for (Object o : hashMap.entrySet()) {
+                                Map.Entry pair = (Map.Entry) o;
+                                BusinessDay businessDay = hashMap.get(pair.getKey());
+                                staffDetail.businessDays.add(businessDay);
+                                //    it.remove();
+                            }
+                            Collections.sort(staffDetail.businessDays, new Comparator<BusinessDay>() {
+                                @Override
+                                public int compare(BusinessDay a, BusinessDay b) {
+                                    return a.dayId > b.dayId ? +1 : a.dayId < b.dayId ? -1 : 0;
+                                }
+                            });
+                        }
+                    }
                 }
                 pSession.setStaffBusinessHours(staffDetail);
                 addFragment( new EditBusinessHoursFragment(),true,R.id.rlContainer);
@@ -508,8 +552,10 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onHorusChange(String JsonArray) {
+    public void onHorusChange(String JsonArray,List<TimeSlot> slotList) {
+        isChangeOccured = true;
         this.whJsonArray = JsonArray;
+        this.slotList = slotList;
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStack();
     }

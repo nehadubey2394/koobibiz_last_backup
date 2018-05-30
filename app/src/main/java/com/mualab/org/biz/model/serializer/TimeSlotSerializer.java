@@ -22,6 +22,8 @@ public class TimeSlotSerializer implements Serializable, JsonSerializer<TimeSlot
         jObj.remove("slotTime");
         jObj.remove("id");
         jObj.remove("_id");
+        jObj.remove("edtStartTime");
+        jObj.remove("edtEndTime");
         return jObj;
     }
 }

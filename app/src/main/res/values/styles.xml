@@ -18,7 +18,6 @@
         <item name="android:windowExitAnimation">@anim/slide_bottom</item>
     </style>
 
-
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -86,5 +85,9 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="InOutAnimation">
+        <item name="android:windowEnterAnimation">@anim/anim_out</item>
+        <item name="android:windowExitAnimation">@anim/anim_in</item>
+    </style>
 
 </resources>

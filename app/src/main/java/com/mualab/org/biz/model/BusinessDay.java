@@ -9,10 +9,6 @@ import java.util.Map;
 
 import views.pickerview.DayOfWeek;
 
-/**
- * Created by dharmraj on 4/1/18.
- **/
-
 public class BusinessDay implements Serializable {
 
     public int id;

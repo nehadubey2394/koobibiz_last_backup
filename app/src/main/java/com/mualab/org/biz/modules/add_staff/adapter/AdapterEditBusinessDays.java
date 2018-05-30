@@ -31,7 +31,7 @@ import views.pickerview.popwindow.DualTimePickerPopWin;
 
 public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBusinessDays.ViewHolder>{
 
-    private List<BusinessDay> businessDaysList;
+    private List<BusinessDay> businessDaysList ;
     private Context mContext;
     private int parentPostion;
     private Date st1 = null,et1=null;
@@ -128,10 +128,22 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
                 case R.id.ll_addTimeSlot:
                     synchronized (this){
                         BusinessDay day = businessDaysList.get(position);
+                     /*   PreRegistrationSession preSession = new PreRegistrationSession(mContext);
+                        StaffDetail staffDetail  = preSession.getStaffBusinessHours();
+                        List<BusinessDay>edtStaffDays = staffDetail.edtStaffDays;
+                        BusinessDay day = edtStaffDays.get(position);*/
 
                         if(day.getTimeSlotSize()>=2){
                             MyToast.getInstance(mContext).showDasuAlert("Max time slot reached!");
                         }else {
+                           /* TimeSlot tmpSlot1 = day.slots.get(0);
+                            day.addTimeSlot(tmpSlot1);
+
+                            if (day.slots.size()>1) {
+                                TimeSlot tmpSlot2 = day.slots.get(1);
+                                day.addTimeSlot(tmpSlot2);
+                                day.addTimeSlot(tmpSlot1);
+                            }*/
                             day.addTimeSlot(new TimeSlot(day.dayId));
                             notifyItemChanged(position);
                         }
@@ -169,7 +181,12 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
                                     }else
                                         MyToast.getInstance(mContext).showDasuAlert("You can't select other time apart from your business timing");
                                 }else {
-                                    setTime(timeSlot,position,startTime,endTime,time,timeSlots,adapter);
+                                    if ((st2.after(st1) || st2.equals(st1)) && (et2.before(et1) || et2.equals(et1))){
+                                        setTime(timeSlot,position,startTime,endTime,time,timeSlots,adapter);
+                                    }else
+                                        MyToast.getInstance(mContext).showDasuAlert("You can't select other time apart from your business timing");
+
+                                    //  setTime(timeSlot,position,startTime,endTime,time,timeSlots,adapter);
                                 }
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -252,7 +269,6 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
             View viewDivider = v.findViewById(R.id.viewDivider);
             //ImageView iv_delete = v.findViewById(R.id.iv_delete);
             LinearLayout ll_delete = v.findViewById(R.id.ll_delete);
-
             // Populate the data into the template view using the data object
 
             tv_from.setText(String.format("From: %s", timeSlot.edtStartTime));
@@ -267,6 +283,7 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
                         timeSlots.remove(position);
                         AdapterTimeSlot.this.notifyDataSetChanged();
                         AdapterEditBusinessDays.this.notifyItemChanged(timeSlot.dayId-1);
+                        // dayId= "";
                     }
                 }
             });

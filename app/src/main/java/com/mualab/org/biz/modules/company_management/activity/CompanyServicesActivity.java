@@ -11,11 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.booking.Company;
 import com.mualab.org.biz.model.company_management.CompanyDetail;
 import com.mualab.org.biz.modules.add_staff.fragments.AllServiesFragment;
 import com.mualab.org.biz.modules.company_management.fragments.ServiesFragment;
+import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.util.StatusBarUtil;
 
 public class CompanyServicesActivity extends AppCompatActivity {
@@ -45,10 +48,12 @@ public class CompanyServicesActivity extends AppCompatActivity {
             Bundle args = intent.getBundleExtra("BUNDLE");
             companyDetail = (CompanyDetail) args.getSerializable("companyDetail");
         }
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
 
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
-        tvHeaderTitle.setText(getString(R.string.text_category));
+        tvHeaderTitle.setText(user.businessName);
         ivHeaderBack.setVisibility(View.VISIBLE);
 
         ivHeaderBack.setOnClickListener(new View.OnClickListener() {

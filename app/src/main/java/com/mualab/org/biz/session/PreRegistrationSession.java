@@ -73,6 +73,21 @@ public class PreRegistrationSession {
         editor.apply();
     }
 
+    public void setEditedStaffHours(List<BusinessDay> businessHour) {
+        Gson gson = new Gson();
+        String json = gson.toJson(businessHour); // myObject - instance of MyObject
+        editor.putString("edtStafBusinessHours", json);
+        editor.apply();
+    }
+
+    public BusinessDay getEditedStaffHours(){
+        Gson gson = new Gson();
+        String string = mypref.getString("edtStafBusinessHours", "");
+        if (!string.isEmpty()){
+            return gson.fromJson(string, BusinessDay.class);
+        }else return null;
+    }
+
     public void setStaffBusinessHours(StaffDetail staffDetail) {
         Gson gson = new Gson();
         String json = gson.toJson(staffDetail); // myObject - instance of MyObject

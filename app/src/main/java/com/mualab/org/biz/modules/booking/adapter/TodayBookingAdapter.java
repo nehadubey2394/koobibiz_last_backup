@@ -27,6 +27,7 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Bookings> artistsList;
     private List<Staff> staffList;
     private OnBookingListListener bookingListListener;
+    private boolean isFiltered;
 
     // Constructor of the class
     public TodayBookingAdapter(Context context, List<Bookings> artistsList,List<Staff> staffList) {
@@ -38,6 +39,11 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public  void setBookingClickListner(OnBookingListListener bookingListListener){
         this.bookingListListener = bookingListListener;
     }
+
+    public  void setNameVisibility(boolean isFiltered){
+        this.isFiltered = isFiltered;
+    }
+
     @Override
     public int getItemCount() {
         return artistsList.size();
@@ -74,10 +80,18 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
-        if (user.businessType.equals("independent"))
-            holder.rlStaffName.setVisibility(View.GONE);
-        else
+        if (user.businessType.equals("independent")) {
+            String currentString = item.todayBookingInfos.get(0).companyName;
+            String[] separated = currentString.split(" ");
+            holder.tvStaffName.setText(separated[0]);
+            if (isFiltered)
+                holder.rlStaffName.setVisibility(View.VISIBLE);
+            else
+                holder.rlStaffName.setVisibility(View.GONE);
+        }
+        else {
             holder.rlStaffName.setVisibility(View.VISIBLE);
+        }
 
         if (!item.userDetail.profileImage.equals("")){
             Picasso.with(context).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).

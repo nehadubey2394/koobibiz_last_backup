@@ -92,7 +92,7 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
 
     private void apiForGetArtistStaff(){
         Session session = Mualab.getInstance().getSessionManager();
-        User user = session.getUser();
+        final User user = session.getUser();
 
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(CompanyListActivity.this, new NoConnectionDialog.Listner() {
@@ -158,13 +158,17 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
                                     item3.setSelected(true);
                                     item.staffService.add(item3);
                                 }
-
                                 companyList.add(item);
                             }
                         }else {
                             rvAllCompany.setVisibility(View.GONE);
                             tvNoDataFound.setVisibility(View.VISIBLE);
                         }
+
+                        Company item1 = new Company();
+                        item1.profileImage = user.profileImage;
+                        item1.businessName = "My Booking";
+                        companyList.add(item1);
                         companyAdapter.notifyDataSetChanged();
                     }else {
                         rvAllCompany.setVisibility(View.GONE);
@@ -201,9 +205,14 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
 
     @Override
     public void onStaffSelect(int position, String staffId) {
+        String companyName = companyList.get(position).businessName;
+        if (staffId==null){
+            staffId = "";
+            companyName = "";
+        }
         Intent intent = new Intent();
         intent.putExtra("businessId", staffId);
-        intent.putExtra("businessName", companyList.get(position).businessName);
+        intent.putExtra("businessName",companyName );
         setResult(RESULT_OK, intent);
         finish();
     }

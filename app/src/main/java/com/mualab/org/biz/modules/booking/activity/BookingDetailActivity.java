@@ -227,6 +227,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
             apiForBookingAction(type,item,serviceId,subServiceId,artistServiceId,isCancelled);
         }else {
             if (item.todayBookingInfos.size()!=0){
+
                 for (int i=0; i<item.pendingBookingInfos.size(); i++){
                     BookingInfo bookingInfo = item.pendingBookingInfos.get(i);
                     if (serviceId.equals("")){
@@ -322,12 +323,15 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         tvDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sheetDialog.dismiss();
 
                 if (selectedStaff!=null){
                     if (!selectedStaff.staffId.equals(bookingInfo.staffId))
                         apiForChangeStaff(position,bookingInfo);
+                }else {
+
                 }
-                sheetDialog.dismiss();
+
             }
         });
 
@@ -618,6 +622,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                         isChangedOccured = true;
                         selectedStaff.isSelected = false;
                         listAdapter.notifyDataSetChanged();
+                        selectedStaff = null;
                         MyToast.getInstance(BookingDetailActivity.this).showDasuAlert(message);
                     }else {
                         MyToast.getInstance(BookingDetailActivity.this).showDasuAlert(message);
@@ -689,8 +694,12 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                         llBottom2.setVisibility(View.GONE);
                         isChangedOccured = true;
                         if (type.equals("reject")){
+                            for (int i=0; i<item.pendingBookingInfos.size(); i++){
+                                item.pendingBookingInfos.get(i).bookingStatus = "2";
+                            }
                             ivReject.setVisibility(View.GONE);
                             ivCancle.setVisibility(View.GONE);
+                            adapter.notifyDataSetChanged();
                         }
                         if (isCancelled)
                             MyToast.getInstance(BookingDetailActivity.this).showDasuAlert("Request has been cancelled");

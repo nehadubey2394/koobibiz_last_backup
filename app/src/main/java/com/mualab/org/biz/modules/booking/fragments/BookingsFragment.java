@@ -32,6 +32,17 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
+import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.helper.Constants;
+import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.model.booking.BookingInfo;
+import com.mualab.org.biz.model.booking.BookingTimeSlot;
+import com.mualab.org.biz.model.booking.Bookings;
+import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.model.booking.UserDetail;
 import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.modules.booking.activity.BookingDetailActivity;
 import com.mualab.org.biz.modules.booking.activity.CompanyListActivity;
@@ -42,17 +53,6 @@ import com.mualab.org.biz.modules.booking.adapter.TodayBookingAdapter;
 import com.mualab.org.biz.modules.booking.listner.OnBookingListListener;
 import com.mualab.org.biz.modules.booking.listner.PendingBookingListener;
 import com.mualab.org.biz.modules.booking.listner.TimeSlotClickListener;
-import com.mualab.org.biz.application.Mualab;
-import com.mualab.org.biz.dialogs.NoConnectionDialog;
-import com.mualab.org.biz.dialogs.Progress;
-import com.mualab.org.biz.helper.Constants;
-import com.mualab.org.biz.helper.MyToast;
-import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.booking.Bookings;
-import com.mualab.org.biz.model.booking.BookingInfo;
-import com.mualab.org.biz.model.booking.BookingTimeSlot;
-import com.mualab.org.biz.model.booking.Staff;
-import com.mualab.org.biz.model.booking.UserDetail;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -61,9 +61,7 @@ import com.mualab.org.biz.util.Constant;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
 
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -99,7 +97,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     private RecyclerView rycTimeSlot, rycToday, rycPending;
     private RelativeLayout rlStaffName;
     private int dayId, count = 0;
-    private boolean isToday = true, isCurrentDate = true;
+    private boolean isToday = true, isCurrentDate = true,isCompanyFiltered = false;
     private View rootView;
     private SimpleDateFormat dateSdf, timeSdf;
     private ProgressBar progress_bar;
@@ -205,6 +203,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
         rycToday.setNestedScrollingEnabled(false);
         rycPending.setAdapter(pendingBookingAdapter);
         pendingBookingAdapter.setCustomListener(BookingsFragment.this);
+        pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
         pendingBookingAdapter.setBookingClickListner(BookingsFragment.this);
 
         Session session = Mualab.getInstance().getSessionManager();
@@ -461,8 +460,13 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
 
         Map<String, String> params = new HashMap<>();
         if (user.businessType.equals("independent")){
-            params.put("artistId", businessId);
-            params.put("staffId", String.valueOf(user.id));
+            if (isCompanyFiltered) {
+                params.put("artistId", businessId);
+                params.put("staffId", String.valueOf(user.id));
+            }else {
+                params.put("artistId", String.valueOf(user.id));
+                params.put("staffId", "");
+            }
         }else {
             params.put("artistId", String.valueOf(user.id));
             params.put("staffId", staffId);
@@ -534,6 +538,9 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void parseBookingResponse(String response) {
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+
         try {
             JSONObject js = new JSONObject(response);
 
@@ -563,10 +570,10 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
             }
 
             JSONArray todayArray = js.getJSONArray("today");
-            parseTodaysBooking(todayArray);
+            parseTodaysBooking(todayArray,user);
 
             JSONArray pendingArray = js.getJSONArray("pending");
-            parsePendingBooking(pendingArray);
+            parsePendingBooking(pendingArray,user);
 
             if (isCurrentDate) {
                 tvToday.setText(getString(R.string.today));
@@ -619,7 +626,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     }
 
     //parsing for today's booking
-    private void parseTodaysBooking(JSONArray todayArray) {
+    private void parseTodaysBooking(JSONArray todayArray,User user) {
         if (todayArray != null && todayArray.length() != 0) {
             for (int j = 0; j < todayArray.length(); j++) {
                 String serviceName = "";
@@ -660,15 +667,18 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                                 Gson gson2 = new Gson();
                                 BookingInfo bookingInfo = gson2.fromJson(String.valueOf(bInfoObj), BookingInfo.class);
 
+                                if (bInfoObj.has("companyName"))
+                                    bookingInfo.companyName = bInfoObj.getString("companyName");
+
                                 if (serviceName.equals("")) {
                                     serviceName = bookingInfo.artistServiceName;
                                 }
                                 item.todayBookingInfos.add(bookingInfo);
                             }
                             item.artistServiceName = serviceName;
+                            if (arrBookingInfo.length()!=0)
+                                todayBookings.add(item);
                         }
-                        if (arrBookingInfo.length()!=0)
-                            todayBookings.add(item);
                         //   }
                     }
 
@@ -683,7 +693,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     }
 
     //parsing for pending booking
-    private void parsePendingBooking(JSONArray pendingArray) {
+    private void parsePendingBooking(JSONArray pendingArray,User user) {
 
         if (pendingArray != null && pendingArray.length() != 0) {
             for (int j = 0; j < pendingArray.length(); j++) {
@@ -723,15 +733,33 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                                     JSONObject bInfoObj = arrBookingInfo.getJSONObject(l);
                                     Gson gson2 = new Gson();
                                     BookingInfo bookingInfo = gson2.fromJson(String.valueOf(bInfoObj), BookingInfo.class);
+                                    if (bInfoObj.has("companyName"))
+                                        bookingInfo.companyName = bInfoObj.getString("companyName");
 
                                     if (serviceName.equals("")) {
                                         serviceName = bookingInfo.artistServiceName;
                                     }
                                     item.pendingBookingInfos.add(bookingInfo);
+                                  /*  if (user.businessType.equals("independent")) {
+                                        if (!item.bookStatus.equals("0")){
+                                            item.pendingBookingInfos.add(bookingInfo);
+                                        }
+                                    }else
+                                        item.pendingBookingInfos.add(bookingInfo);*/
                                 }
                                 item.artistServiceName = serviceName;
+                                if (arrBookingInfo.length()!=0) {
+                                    if (user.businessType.equals("independent")) {
+                                        if (staffId.equals("") && !isCompanyFiltered){
+                                            pendingBookings.add(item);
+                                        }else if (isCompanyFiltered){
+                                            if (!item.bookStatus.equals("0"))
+                                                pendingBookings.add(item);
+                                        }
+                                    }else
+                                        pendingBookings.add(item);
+                                }
                             }
-                            pendingBookings.add(item);
                         }
                         //parsing for user detail
                     }
@@ -944,11 +972,15 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                 String staffName = data.getStringExtra("businessName");
 
                 if (!businessId.equals("")) {
+                    isCompanyFiltered = true;
                     rlStaffName.setVisibility(View.VISIBLE);
                     tvStaffName.setText(staffName);
+                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
                 }
                 else {
-                    rlStaffName.setVisibility(View.VISIBLE);
+                    isCompanyFiltered = false;
+                    rlStaffName.setVisibility(View.GONE);
                 }
 
                 apiForGetFreeSlots();

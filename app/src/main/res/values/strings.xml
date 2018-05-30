@@ -277,6 +277,7 @@
     <string name="social_media_access">Social Media Access</string>
     <string name="holiday_allocation">Holiday Allocation</string>
     <string name="set_working_hours">Set Working Hours :</string>
+    <string name="show_working_hours">Working Hours :</string>
     <string name="text_remove">Remove</string>
     <string name="edit">Edit</string>
     <string name="completion_time">Completion Time</string>
@@ -295,5 +296,6 @@
     <string name="select_your_maximum_travelling_radius">Select your maximum travelling radius</string>
     <string name="company">Company</string>
     <string name="show">Show</string>
+    <string name="no_staff_available">No staff available</string>
 
 </resources>

@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/ivHeader"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="132dp"
         android:background="@drawable/artist_header_bg"
         android:layout_alignParentTop="true"
         />
@@ -69,10 +69,10 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
             android:textColor="@color/white"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textSize="14sp"
-            android:maxWidth="250dp"
-            android:layout_marginLeft="6dp"
+            android:maxWidth="200dp"
+            android:layout_marginLeft="8dp"
             android:ellipsize="end"
             android:text="@string/appoinment"
             android:maxLines="1"/>

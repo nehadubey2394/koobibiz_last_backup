@@ -11,6 +11,7 @@ public class StaffDetail implements Serializable {
 
     public List<BusinessDayForStaff>staffHoursList = new ArrayList<>();
     public List<BusinessDay>businessDays = new ArrayList<>();
+    public List<BusinessDay>edtStaffDays = new ArrayList<>();
 
     public List<AddedStaffServices> staffServices = new ArrayList<>();
 

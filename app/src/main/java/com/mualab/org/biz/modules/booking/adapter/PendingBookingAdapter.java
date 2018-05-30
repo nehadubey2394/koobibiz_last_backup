@@ -34,6 +34,7 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private PendingBookingListener bookingListener = null;
     private List<Staff> staffList;
     private OnBookingListListener bookingListListener;
+    private boolean isFiltered;
 
     public  void setBookingClickListner(OnBookingListListener bookingListListener){
         this.bookingListListener = bookingListListener;
@@ -41,6 +42,10 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void setCustomListener(PendingBookingListener bookingListener){
         this.bookingListener = bookingListener;
+    }
+
+    public  void setNameVisibility(boolean isFiltered){
+        this.isFiltered = isFiltered;
     }
 
     // Constructor of the class
@@ -62,7 +67,6 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return new ViewHolder(view);
 
     }
-
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
@@ -91,10 +95,23 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
-        if (user.businessType.equals("independent"))
-            holder.rlStaffName.setVisibility(View.GONE);
-        else
+        if (user.businessType.equals("independent")) {
+           /* holder.btnAccept.setVisibility(View.GONE);
+            holder.btnCounter.setVisibility(View.GONE);
+            holder.btnReject.setVisibility(View.GONE);*/
+            if (item.pendingBookingInfos.size()!=0) {
+                String currentString = item.pendingBookingInfos.get(0).companyName;
+                String[] separated = currentString.split(" ");
+                holder.tvStaffName.setText(separated[0]);
+            }
+            if (isFiltered)
+                holder.rlStaffName.setVisibility(View.VISIBLE);
+            else
+                holder.rlStaffName.setVisibility(View.GONE);
+        }
+        else {
             holder.rlStaffName.setVisibility(View.VISIBLE);
+        }
 
         if (!item.userDetail.profileImage.equals("")){
             Picasso.with(context).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).

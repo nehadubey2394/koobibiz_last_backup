@@ -35,6 +35,7 @@ import com.mualab.org.biz.util.Helper;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -107,8 +108,8 @@ public class ArtistServiceLastAdapter extends RecyclerView.Adapter<RecyclerView.
         }else
             outCallPrice = Double.parseDouble(item.outCallPrice);
 
-        holder.tvOutCallPrice.setText("£"+String.format("%.2f", outCallPrice));
         holder.tvInCallPrice.setText("£"+String.format("%.2f", inCallPrice));
+        holder.tvOutCallPrice.setText("£"+String.format("%.2f", outCallPrice));
 
         if (item.isSelected()) {
             holder.lyFrontView.setShadowColor(context.getResources().getColor(R.color.shadow_green));

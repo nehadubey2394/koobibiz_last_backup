@@ -23,7 +23,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:overScrollMode="never"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:padding="2dp"
         />
 

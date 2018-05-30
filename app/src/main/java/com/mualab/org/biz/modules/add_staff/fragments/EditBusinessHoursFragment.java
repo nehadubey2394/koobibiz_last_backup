@@ -73,17 +73,17 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
             @Override
             public void onClick(View v) {
                 StaffDetail staffDetail  = preSession.getStaffBusinessHours();
-                if(staffDetail.businessDays.size()==0){
-                    if(listener!=null && isvalidBusinessHours()){
-                        if(ConnectionDetector.isConnected()){
-                            // preSession.setBusinessHours(businessDays);
-                            updateDataIntoServerDb();
-                            listener.onNext();
-                        } else showToast(R.string.error_msg_network);
-                    }
-                }else {
-                    MyToast.getInstance(mContext).showDasuAlert("Under development");
+                //    if(staffDetail.businessDays.size()==0){
+                if(listener!=null && isvalidBusinessHours()){
+                    if(ConnectionDetector.isConnected()){
+                        // preSession.setBusinessHours(businessDays);
+                        updateDataIntoServerDb();
+                        listener.onNext();
+                    } else showToast(R.string.error_msg_network);
                 }
+                /*}else {
+                    MyToast.getInstance(mContext).showDasuAlert("Under development");
+                }*/
             }
         });
 
@@ -97,10 +97,9 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
             BusinessDay tmpDay = edtBusinessDays.get(k);
 
             if(tmpDay.slots.size()>1){
-
                 TimeSlot tmpTimeSlot = tmpDay.slots.get(0);
                 TimeSlot tmpTimeSlot2 = tmpDay.slots.get(1);
-                boolean bool = new CalanderUtils().compareTime(tmpTimeSlot.startTime, tmpTimeSlot.endTime, tmpTimeSlot2.startTime);
+                boolean bool = new CalanderUtils().compareTime(tmpTimeSlot.edtStartTime, tmpTimeSlot.edtEndTime, tmpTimeSlot2.edtStartTime);
 
                 if(bool){
                     MyToast.getInstance(mContext).showDasuAlert(getString(R.string.error_timeslot_intersect));
@@ -127,6 +126,10 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
         }
         edtBusinessDays.removeAll(tmpBusinessDays);
 
+        StaffDetail staffDetail  = preSession.getStaffBusinessHours();
+        staffDetail.edtStaffDays.addAll(edtBusinessDays);
+        preSession.setStaffBusinessHours(staffDetail);
+        //List<BusinessDay> tmpDayList.addAll(edtBusinessDays);
         AdapterEditBusinessDays adapter = new AdapterEditBusinessDays(mContext, edtBusinessDays);
         RecyclerView rvBusinessDay = view.findViewById(R.id.rvBusinessDay);
         rvBusinessDay.setLayoutManager(new LinearLayoutManager(mContext));
@@ -145,10 +148,12 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
     /*update data into server db*/
     private void updateDataIntoServerDb(){
         //List<BusinessDay> businessDays = getBusinessdays(); // getting business hours slots like opening/closing time
-        ArrayList<TimeSlot> slotList = new ArrayList<>();
+        List<TimeSlot> slotList = new ArrayList<>();
         for(BusinessDay tmp : edtBusinessDays){
             if(tmp.isOpen){
                 for(TimeSlot slot:tmp.slots){
+                    slot.startTime = slot.edtStartTime;
+                    slot.endTime = slot.edtEndTime;
                     //slot.dayId = tmp.dayId-1;
                     slot.status = 1;
                     slotList.add(slot);
@@ -164,7 +169,7 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
         if(mContext instanceof EditWorkingHours) listener = (EditWorkingHours) mContext;
 
         if(listener!=null)
-            listener.onHorusChange(whJsonArray);
+            listener.onHorusChange(whJsonArray,slotList);
 
     }
 
