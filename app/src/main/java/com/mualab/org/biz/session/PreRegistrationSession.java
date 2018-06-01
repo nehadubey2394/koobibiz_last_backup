@@ -7,6 +7,7 @@ import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.SubCategory;
+import com.mualab.org.biz.model.add_staff.StaffDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +46,6 @@ public class PreRegistrationSession {
         editor.apply();
     }
 
-
-
-
     public BusinessProfile getBusinessProfile() {
         Gson gson = new Gson();
         String string = mypref.getString("businessProfile", "");
@@ -75,6 +73,35 @@ public class PreRegistrationSession {
         editor.apply();
     }
 
+    public void setEditedStaffHours(List<BusinessDay> businessHour) {
+        Gson gson = new Gson();
+        String json = gson.toJson(businessHour); // myObject - instance of MyObject
+        editor.putString("edtStafBusinessHours", json);
+        editor.apply();
+    }
+
+    public BusinessDay getEditedStaffHours(){
+        Gson gson = new Gson();
+        String string = mypref.getString("edtStafBusinessHours", "");
+        if (!string.isEmpty()){
+            return gson.fromJson(string, BusinessDay.class);
+        }else return null;
+    }
+
+    public void setStaffBusinessHours(StaffDetail staffDetail) {
+        Gson gson = new Gson();
+        String json = gson.toJson(staffDetail); // myObject - instance of MyObject
+        editor.putString("staffBusinessHours", json);
+        editor.apply();
+    }
+
+    public StaffDetail getStaffBusinessHours(){
+        Gson gson = new Gson();
+        String string = mypref.getString("staffBusinessHours", "");
+        if (!string.isEmpty()){
+            return gson.fromJson(string, StaffDetail.class);
+        }else return null;
+    }
 
    /* public void setBusinessHours(List<BusinessDay> businessHour) {
         BusinessProfile businessProfile = getBusinessProfile();

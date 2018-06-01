@@ -2,6 +2,7 @@ package com.mualab.org.biz.modules.authentication;
 
 import android.app.Dialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -21,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.modules.BaseActivity;
 import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.application.Mualab;
@@ -35,6 +37,7 @@ import com.mualab.org.biz.session.SharedPreferanceUtils;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.KeyboardUtil;
 import com.mualab.org.biz.util.StatusBarUtil;
 import org.json.JSONObject;
@@ -116,9 +119,9 @@ public class LoginActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 dialog.dismiss();
-                                showToast(getString(R.string.under_development));
+                                apiForForgotPass(string);
                             }
-                        }, 4000);
+                        }, 1000);
                     }
 
                     @Override
@@ -200,7 +203,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         if (isValidInput) {
-           final Map<String, String> params = new HashMap<>();
+            final Map<String, String> params = new HashMap<>();
             params.put("userName", username);
             params.put("password", password);
             params.put("deviceToken",deviceToken);
@@ -228,7 +231,7 @@ public class LoginActivity extends BaseActivity {
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
-                          //  overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            //  overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             finish();
                         }else {
                             showToast(message);
@@ -281,7 +284,7 @@ public class LoginActivity extends BaseActivity {
         String password = ed_password.getText().toString().trim();
         if (TextUtils.isEmpty(password)) {
             showToast(getString(R.string.error_password_required));
-           // input_layout_password.setError(getString(R.string.error_password_required));
+            // input_layout_password.setError(getString(R.string.error_password_required));
             ed_password.requestFocus();
             return false;
         } else if (password.length() < 6) {
@@ -320,6 +323,59 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    private void apiForForgotPass(final String email){
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(LoginActivity.this, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        apiForForgotPass(email);
+                    }
+                }
+            }).show();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(LoginActivity.this, "forgotPassword", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+
+                    MyToast.getInstance(LoginActivity.this).showDasuAlert(message);
+
+                } catch (Exception e) {
+                    Progress.hide(LoginActivity.this);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                try{
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")){
+                        Mualab.getInstance().getSessionManager().logout();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }})
+                .setProgress(true)
+                .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
+        //.setBody(params, "application/x-www-form-urlencoded"));
+
+        task.execute(this.getClass().getName());
+    }
 
    /* private void checkNetwork() {
 

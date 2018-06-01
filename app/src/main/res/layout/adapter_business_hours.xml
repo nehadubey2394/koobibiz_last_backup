@@ -6,8 +6,10 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/llDot"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         android:gravity="center_horizontal">
 
         <ImageView

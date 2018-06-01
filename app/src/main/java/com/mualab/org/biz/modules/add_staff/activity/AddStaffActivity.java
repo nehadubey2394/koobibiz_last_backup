@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.modules.add_staff.fragments.ArtistStaffFragment;
+import com.mualab.org.biz.util.StatusBarUtil;
 
 public class AddStaffActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView tvHeaderTitle;
-
 
     /*   public void setBackButtonVisibility(int visibility){
            if(ivHeaderBack!=null)
@@ -30,6 +30,7 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         initView();
     }
 
@@ -39,7 +40,7 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
         tvHeaderTitle.setText(getString(R.string.text_staff));
         ivHeaderBack.setVisibility(View.VISIBLE);
         ivHeaderBack.setOnClickListener(this);
-        addFragment(new ArtistStaffFragment(), true,R.id.flStffContainer);
+        addFragment(new ArtistStaffFragment(), false,R.id.flStffContainer);
 
     }
 
@@ -74,11 +75,11 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
         // Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flStffContainer);
         FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();
-        if (i > 1) {
+        if (i > 0) {
             fm.popBackStack();
         }else  {
-            finish();
             super.onBackPressed();
+            finish();
         }
     }
 

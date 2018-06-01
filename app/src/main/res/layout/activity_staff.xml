@@ -49,7 +49,7 @@
         android:id="@+id/tvoData"
         android:textColor="@color/text_color"
         android:fontFamily="@font/roboto_regular"
-        android:text="@string/no_data_available"
+        android:text="@string/no_staff_available"
         android:visibility="gone"
         android:gravity="center"
         android:textSize="14sp"

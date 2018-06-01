@@ -22,6 +22,13 @@ public class TimeSlot implements Serializable {
     @SerializedName("endTime")
     public String endTime = "07:00 PM";
 
+    public String edtStartTime = "10:00 AM";
+    public String edtEndTime = "07:00 PM";
+
+
+    // public String edtStartTime;
+    //public String edtEndTime;
+
     public String slotTime = "10:00 AM - 07:00 PM";
 
     @SerializedName("status")

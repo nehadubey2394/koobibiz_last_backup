@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -52,6 +53,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,OnRefreshListener {
     private Session session;
+    private  long mLastClickTime = 0;
     private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnLogo,ibtnUser;
     private ImageView ivHeaderBack;
     private TextView tvHeaderTitle;
@@ -187,9 +189,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                             slot.id = objSlots.getInt("_id");
                             slot.startTime = objSlots.getString("startTime");
                             slot.endTime = objSlots.getString("endTime");
+                            slot.edtStartTime = objSlots.getString("startTime");
+                            slot.edtEndTime = objSlots.getString("endTime");
                             slot.status = objSlots.getInt("status");
 
-                            businessDayForStaff.dayId = objSlots.getInt("day");
+                            businessDayForStaff.day = objSlots.getInt("day");
                             businessDayForStaff.startTime = objSlots.getString("startTime");
                             businessDayForStaff.endTime = objSlots.getString("endTime");
                             bsp.dayForStaffs.add(businessDayForStaff);
@@ -278,6 +282,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
     @Override
     public void onClick(View view) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         switch (view.getId()) {
             case R.id.ivHeaderBack:
                 onBackPressed();

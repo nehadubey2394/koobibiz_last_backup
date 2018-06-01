@@ -3,7 +3,9 @@ package com.mualab.org.biz.modules.add_staff.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +26,9 @@ import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
+import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.mualab.org.biz.modules.add_staff.adapter.ArtistStaffAdapter;
+import com.mualab.org.biz.modules.add_staff.listner.OnBottomReachedListener;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -40,12 +44,14 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ArtistStaffFragment extends Fragment implements View.OnClickListener,ArtistStaffAdapter.OnDeleteStaffListener {
+public class ArtistStaffFragment extends Fragment implements View.OnClickListener,
+        ArtistStaffAdapter.OnDeleteStaffListener,OnBottomReachedListener {
     private TextView tvNoDataFound;
     private Context mContext;
     private List<Staff>artistStaffs;
     private ArtistStaffAdapter staffAdapter;
     private RecyclerView rvArtistStaff;
+    private   long mLastClickTime = 0;
 
     public ArtistStaffFragment() {
         // Required empty public constructor
@@ -95,9 +101,10 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
         rvArtistStaff = rootView.findViewById(R.id.rvArtistStaff);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvArtistStaff.setLayoutManager(layoutManager);
-        rvArtistStaff.setNestedScrollingEnabled(false);
+        //  rvArtistStaff.setNestedScrollingEnabled(false);
         rvArtistStaff.setAdapter(staffAdapter);
         staffAdapter.setChangeListener(ArtistStaffFragment.this);
+        staffAdapter.setOnBottomReachedListener(ArtistStaffFragment.this);
 
         tvNoDataFound = rootView.findViewById(R.id.tvNoDataFound);
         LinearLayout llAddStaff = rootView.findViewById(R.id.llAddStaff);
@@ -108,11 +115,16 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         switch (view.getId()){
             case R.id.llAddStaff:
                 //startActivity(new Intent(mContext, SearchStaffActivity.class));
                 ((AddStaffActivity)mContext).addFragment(
-                        new SearchStaffFragment(), true,R.id.flStffContainer);
+                        SearchStaffFragment.newInstance(""), true,R.id.flStffContainer);
                 break;
         }
     }
@@ -199,7 +211,29 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onStaffSelect(int position, Staff staff) {
-        apiForDeleteStaff(staff);
+        showAlertDailog(position,staff);
+    }
+
+    private void showAlertDailog(final int position, final Staff staff){
+        final android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(mContext, R.style.MyDialogTheme);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Alert!");
+        alertDialog.setMessage("Are you sure want to remove this staff?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                dialog.cancel();
+                apiForDeleteStaff(staff);
+
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+
     }
 
     private void apiForDeleteStaff(final Staff staff){
@@ -273,4 +307,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
         task.execute(this.getClass().getName());
     }
 
+    @Override
+    public void onBottomReached(int position) {
+    }
 }

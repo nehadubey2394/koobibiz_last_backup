@@ -112,7 +112,8 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
                 miles = value;
-                String newValue = value > 20 ? "20+" : "" + value;
+               // String newValue = value > 20 ? "20+" : "" + value;
+                String newValue = "" + value;
                 tv_mileIndicater1.setText(String.format("%s miles", newValue));
                 seekBarRadius.setIndicatorFormatter(newValue);
                 updateLocationCircle(miles);
@@ -395,13 +396,17 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
         tvIncallPreprationTime.setText(incallPreprationTime);
         tvOutcallPreprationTime.setText(outcallPreprationTime);
 
-        String newValue = miles>20?"20+":""+miles;
+       // String newValue = miles>20?"20+":""+miles;
+        String newValue = ""+miles;
         tv_mileIndicater1.setText(String.format("%s miles", newValue));
 
-        if(miles>20){
+       /* if(miles>20){
             seekBarRadius.setProgress(miles);
             seekBarRadius.setIndicatorFormatter(newValue);
-        }else seekBarRadius.setProgress(miles);
+        }else
+            seekBarRadius.setProgress(miles);*/
+
+            seekBarRadius.setProgress(miles);
     }
 
     private boolean validateInputValue(){

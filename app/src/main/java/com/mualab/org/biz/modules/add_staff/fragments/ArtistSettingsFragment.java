@@ -16,6 +16,7 @@ import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
+import com.mualab.org.biz.modules.company_management.activity.CompaniesListActivity;
 import com.mualab.org.biz.session.Session;
 
 
@@ -72,12 +73,18 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         RelativeLayout rlCategories = rootView.findViewById(R.id.rlCategories);
         RelativeLayout rlStaffPlanner = rootView.findViewById(R.id.rlStaffPlanner);
         RelativeLayout rlVoucherCode = rootView.findViewById(R.id.rlVoucherCode);
+        RelativeLayout rlCompany = rootView.findViewById(R.id.rlCompany);
 
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
         if (user.businessType.equals("independent")){
+            rlCompany.setVisibility(View.VISIBLE);
             rlStaffPlanner.setVisibility(View.GONE);
             rlStaff.setVisibility(View.GONE);
+        }else {
+            rlCompany.setVisibility(View.GONE);
+            rlStaff.setVisibility(View.VISIBLE);
+            rlStaffPlanner.setVisibility(View.VISIBLE);
         }
 
 
@@ -86,6 +93,7 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         rlCategories.setOnClickListener(this);
         rlStaffPlanner.setOnClickListener(this);
         rlVoucherCode.setOnClickListener(this);
+        rlCompany.setOnClickListener(this);
     }
 
     @Override
@@ -93,7 +101,7 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         switch (view.getId()){
             case R.id.rlStaff:
                 startActivity(new Intent(mContext,AddStaffActivity.class));
-              //  MyToast.getInstance(mContext).showDasuAlert("Under development");
+                // MyToast.getInstance(mContext).showDasuAlert("Under development");
                 break;
             case R.id.rlWorkinhHrs:
                 MyToast.getInstance(mContext).showDasuAlert("Under development");
@@ -106,6 +114,9 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
                 break;
             case R.id.rlVoucherCode:
                 MyToast.getInstance(mContext).showDasuAlert("Under development");
+                break;
+            case R.id.rlCompany:
+                startActivity(new Intent(mContext,CompaniesListActivity.class));
                 break;
         }
     }

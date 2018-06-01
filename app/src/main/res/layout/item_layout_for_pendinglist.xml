@@ -23,7 +23,7 @@
         <View
             android:id="@+id/lineView"
             android:layout_width="2dp"
-            android:layout_height="68dp"
+            android:layout_height="76dp"
             android:layout_alignParentLeft="true"
             android:background="@color/colorPrimary"/>
 
@@ -77,12 +77,13 @@
                 <RelativeLayout
                     android:id="@+id/rlStaffName"
                     android:layout_width="wrap_content"
-                    android:layout_height="18dp"
+                    android:layout_height="20dp"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="2dp"
-                    android:padding="2dp" android:background="@drawable/bg_pink_strock_circle"
+                    android:padding="2dp"
+                    android:background="@drawable/bg_pink_strock_circle"
                     >
                     <TextView
                         android:id="@+id/tvStaffName"
@@ -93,7 +94,8 @@
                         android:maxWidth="200dp"
                         android:minWidth="50dp"
                         android:minHeight="16dp"
-                        android:text="NA" android:fontFamily="@font/roboto_regular"
+                        android:text="NA"
+                        android:fontFamily="@font/roboto_regular"
                         android:layout_centerInParent="true" android:textColor="@color/colorPrimary"
                         android:maxLines="1"
                         />
@@ -169,7 +171,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="4dp"
             android:layout_alignParentBottom="true"
             android:padding="2dp"
             >

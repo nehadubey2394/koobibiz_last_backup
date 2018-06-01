@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/rlHeader1"
-    android:background="@color/white">
+    >
 
     <ImageView
         android:id="@+id/ivHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="125dp"
         android:background="@drawable/artist_header_bg"
         android:layout_alignParentTop="true"
         />
@@ -26,8 +26,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_back_ico"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:visibility="gone"
             android:layout_alignParentLeft="true" />
 

@@ -13,8 +13,8 @@
         android:text="@string/text_staff"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/roboto_regular"
         android:layout_marginStart="12dp" />
 
@@ -34,11 +34,11 @@
                 android:id="@+id/rvArtistStaff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginLeft="6dp"
                 android:overScrollMode="never"
                 android:background="@color/screen_bg_color"
-                android:padding="5dp"/>
+                android:padding="3dp"/>
 
             <LinearLayout
                 android:id="@+id/llAddStaff"
@@ -47,7 +47,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="12dp"
                 android:padding="4dp"
                 android:gravity="center"
                 android:layout_gravity="end"

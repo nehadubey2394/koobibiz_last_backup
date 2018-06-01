@@ -19,8 +19,11 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.model.add_staff.AddedStaffServices;
 import com.mualab.org.biz.model.add_staff.ArtistServices;
+import com.mualab.org.biz.model.add_staff.SelectedServices;
 import com.mualab.org.biz.model.add_staff.Services;
+import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.add_staff.SubServices;
 import com.mualab.org.biz.modules.add_staff.activity.AllServicesActivity;
 import com.mualab.org.biz.modules.add_staff.adapter.ServiceExpandListAdapter;
@@ -192,7 +195,7 @@ public class AllServiesFragment extends Fragment {
                                 Services services = new Services();
                                 services.serviceId = object.getString("serviceId");
                                 services.serviceName = object.getString("serviceName");
-
+                                StaffDetail staffDetail = ((AllServicesActivity)mContext).getStaffDetail();
                                 JSONArray subServiesArray = object.getJSONArray("subServies");
                                 if (subServiesArray!=null) {
                                     for (int k=0; k<subServiesArray.length(); k++){
@@ -213,12 +216,56 @@ public class AllServiesFragment extends Fragment {
                                             services3.editedCtime = "";
                                             services3.editedOutCallP = "";
                                             services3.editedInCallP = "";
-                                            if (!services3.outCallPrice.equals("0") || !services3.outCallPrice.equals("null")){
+                                            services3.isInCallEdited = "";
+                                            services3.isOutCallEdited = "";
+                                            if (!services3.outCallPrice.equals("null") || !services3.outCallPrice.equals("0")){
                                                 services3.isOutCall3 = true;
                                                 subServices.isOutCall2 = true;
                                                 services.isOutCall = true;
                                             }
                                             subServices.artistservices.add(services3);
+
+                                            if (staffDetail.staffServices.size()!=0){
+                                                for (AddedStaffServices staffServices : staffDetail.staffServices){
+                                                    if (services3._id.equals(staffServices.artistServiceId)) {
+                                                        services3.setSelected(true);
+                                                        services3.editedCtime = staffServices.completionTime;
+                                                        services3.editedInCallP = staffServices.inCallPrice;
+
+                                                        if (staffServices.outCallPrice.equals("0") && !services3.outCallPrice.equals("0")) {
+                                                            services3.isOutCallEdited = "0";
+                                                            services3.editedOutCallP = staffServices.outCallPrice;
+                                                        } else {
+                                                            services3.editedOutCallP = staffServices.outCallPrice;
+                                                            services3.isOutCallEdited = "1";
+                                                        }
+
+                                                        if (staffServices.inCallPrice.equals("0") && !services3.inCallPrice.equals("0")) {
+                                                            services3.isInCallEdited = "0";
+                                                            services3.editedInCallP = staffServices.inCallPrice;
+                                                        }
+                                                        else {
+                                                            services3.editedInCallP = staffServices.inCallPrice;
+                                                            services3.isInCallEdited = "1";
+                                                        }
+                                                        //add in new arraylist
+                                                        SelectedServices selectedServices = new SelectedServices();
+                                                        selectedServices.serviceId = subServices.serviceId;
+                                                        selectedServices.subserviceId = staffServices.subserviceId;
+                                                        selectedServices.artistId = staffServices.artistId;
+                                                        selectedServices.businessId = staffServices.businessId;
+                                                        selectedServices.artistServiceId = staffServices.artistServiceId;
+                                                        selectedServices.inCallPrice = staffServices.inCallPrice;
+                                                        selectedServices.outCallPrice = staffServices.outCallPrice;
+                                                        selectedServices.completionTime = staffServices.completionTime;
+                                                        selectedServices.title = staffServices.title;
+                                                        selectedServices._id = staffServices._id;
+                                                        selectedServices.isHold = false;
+                                                        ArtistLastServicesFragment.localMap.put(services3._id,selectedServices);
+                                                        //  selectedServicesList.add(services);
+                                                    }
+                                                }
+                                            }
                                         }
 
                                         services.arrayList.add(subServices);

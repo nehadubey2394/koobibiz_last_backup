@@ -26,6 +26,7 @@ public class BusinessProfile {
     public User user;
     public Address address;
     public List<BusinessDay> businessDays;
+    public List<BusinessDay> edtStaffDays;
     public List<BusinessDayForStaff> dayForStaffs = new ArrayList<>();;
     public List<SubCategory> subCategories = new ArrayList<>();
 }

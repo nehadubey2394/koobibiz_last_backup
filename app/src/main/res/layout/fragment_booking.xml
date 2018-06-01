@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:overScrollMode="never"
         android:layout_marginBottom="15dp"
+        android:layout_marginTop="2dp"
         >
 
         <LinearLayout
@@ -25,8 +26,8 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnToday"
                 style="@style/My_Button_Small.Invert"
-                android:layout_width="80dp"
-                android:layout_height="27dp"
+                android:layout_width="78dp"
+                android:layout_height="28dp"
                 android:text="@string/text_today" android:layout_gravity="center_vertical"
                 android:padding="2dp"
                 android:gravity="center"
@@ -122,7 +123,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginRight="9dp"
                     android:layout_marginLeft="6dp"
                     android:orientation="horizontal">
 
@@ -139,7 +140,7 @@
                     <android.support.v7.widget.AppCompatButton
                         style="@style/My_Button_Small.Invert"
                         android:layout_width="70dp"
-                        android:layout_height="24dp"
+                        android:layout_height="25dp"
                         android:id="@+id/btnStaff"
                         android:fontFamily="@font/roboto_regular"
                         android:text="@string/text_staff"
@@ -147,6 +148,36 @@
                         android:layout_alignParentRight="true"
                         android:padding="2dp"
                         />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlStaffName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_pink_strock_circle"
+                    >
+                    <TextView
+                        android:id="@+id/tvStaffName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:maxWidth="250dp"
+                        android:minWidth="50dp"
+                        android:minHeight="16dp"
+                        android:text="NA"
+                        android:ellipsize="end"
+                        android:padding="5dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:layout_centerInParent="true" android:textColor="@color/colorPrimary"
+                        android:maxLines="1"
+                        />
+
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -242,7 +273,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
-                        android:scrollbars="none" app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                        android:scrollbars="none"
+                        android:nestedScrollingEnabled="false"
+                        android:isScrollContainer="false"
+                         />
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rycPending"
                         android:layout_width="match_parent"
@@ -250,7 +284,9 @@
                         android:overScrollMode="never"
                         android:scrollbars="none"
                         android:visibility="gone"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                        android:nestedScrollingEnabled="false"
+                        android:isScrollContainer="false"
+                        />
 
                 </RelativeLayout>
 
@@ -295,5 +331,13 @@
         android:gravity="center"
         android:textColor="@color/black"
         android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="@color/primary_blue"/>
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.modules.booking.listner.StaffSelectionListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,16 +19,20 @@ import java.util.List;
 public class StaffListAdapter extends RecyclerView.Adapter<StaffListAdapter.ViewHolder> {
     private Context context;
     private List<Staff> staffArrayList;
+    private StaffSelectionListener staffSelectionListner = null;
     // Constructor of the class
     public StaffListAdapter(Context context, List<Staff> staffArrayList) {
         this.context = context;
         this.staffArrayList = staffArrayList;
     }
 
+    public void setStaffSelectionListner(StaffSelectionListener staffSelectionListene){
+        this.staffSelectionListner = staffSelectionListene;
+    }
     // get the size of the list
     @Override
     public int getItemCount() {
-            return staffArrayList.size();
+        return staffArrayList.size();
     }
 
 
@@ -67,7 +72,11 @@ public class StaffListAdapter extends RecyclerView.Adapter<StaffListAdapter.View
         }
 
         @Override
-        public void onClick(View view) {}
+        public void onClick(View view) {
+            if (staffSelectionListner!=null){
+                staffSelectionListner.onStaffSelect(getAdapterPosition(),staffArrayList.get(getAdapterPosition()).staffId);
+            }
+        }
     }
 
 }

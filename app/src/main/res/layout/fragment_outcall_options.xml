@@ -213,7 +213,7 @@
                android:textColor="@color/black"
                android:textSize="16sp"
                android:layout_gravity="center"
-               android:text="Radius"/>
+               android:text="@string/select_your_maximum_travelling_radius"/>
 
            <LinearLayout
                android:layout_width="match_parent"
@@ -227,7 +227,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginLeft="-5dp"
                    app:dsb_min="1"
-                   app:dsb_max="21"
+                   app:dsb_max="50"
                    app:dsb_progressColor="@color/colorPrimary"
                    app:dsb_indicatorColor="@color/colorPrimary"
                    app:dsb_trackColor="@color/colorPrimary" />

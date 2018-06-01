@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg_color"
+    tools:context="com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity">
+
+    <include
+        android:id="@+id/topLayout"
+        layout="@layout/header_layout_for_staff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/topLayout"
+        android:id="@+id/rvAllCompany"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:overScrollMode="never"
+        android:layout_marginTop="4dp"
+        android:padding="2dp"
+        />
+
+    <TextView
+        android:id="@+id/tvNoDataFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_data_available"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:fontFamily="@font/roboto_regular"
+        />
+
+</RelativeLayout>
