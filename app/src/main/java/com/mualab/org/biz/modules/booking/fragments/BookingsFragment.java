@@ -677,7 +677,12 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                             }
                             item.artistServiceName = serviceName;
                             if (arrBookingInfo.length()!=0)
+                            {
                                 todayBookings.add(item);
+                                //   if (isCompanyFiltered && !item.bookStatus.equals("2"))
+                                //       todayBookings.add(item);
+
+                            }
                         }
                         //   }
                     }
@@ -957,11 +962,20 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                 staffId = data.getStringExtra("staffId");
                 String staffName = data.getStringExtra("staffName");
                 rlStaffName.setVisibility(View.VISIBLE);
-
-                if (!staffId.equals(""))
+                isCompanyFiltered = true;
+                if (staffName.equals("My Booking")){
                     tvStaffName.setText(staffName);
+                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
+                }else  if (!staffId.equals("")) {
+                    tvStaffName.setText(staffName);
+                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
+                }
                 else {
                     tvStaffName.setText("All Staff");
+                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
                 }
 
                 apiForGetFreeSlots();
@@ -970,17 +984,18 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
             if (data != null) {
                 businessId = data.getStringExtra("businessId");
                 String staffName = data.getStringExtra("businessName");
+                isCompanyFiltered = true;
 
                 if (!businessId.equals("")) {
-                    isCompanyFiltered = true;
                     rlStaffName.setVisibility(View.VISIBLE);
                     tvStaffName.setText(staffName);
                     pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
                     todayBookingAdapter.setNameVisibility(isCompanyFiltered);
                 }
                 else {
-                    isCompanyFiltered = false;
                     rlStaffName.setVisibility(View.GONE);
+                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
                 }
 
                 apiForGetFreeSlots();

@@ -30,6 +30,7 @@ public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.context = context;
         this.artistsList = artistsList;
     }
+
     public void setListener(OnStaffChangeListener listener){
         this.listener = listener;
     }
@@ -54,8 +55,11 @@ public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         final ViewHolder holder = ((ViewHolder) viewHolder);
         final BookingInfo item = artistsList.get(position);
 
-        holder.tvPrice.setText("£" + item.bookingPrice);
-        holder.tvPrice2.setText("£" + item.bookingPrice);
+        double price = Double.parseDouble(item.bookingPrice);
+
+        holder.tvPrice.setText("£"+String.format("%.2f", price));
+        holder.tvPrice2.setText("£"+String.format("%.2f", price));
+
         holder.tvStaffName.setText(item.staffName);
         holder.tvServiceName.setText(item.artistServiceName);
 

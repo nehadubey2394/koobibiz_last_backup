@@ -17,6 +17,7 @@ import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
 import com.mualab.org.biz.modules.company_management.activity.CompaniesListActivity;
+import com.mualab.org.biz.profile.activity.ProfileActivity;
 import com.mualab.org.biz.session.Session;
 
 
@@ -50,7 +51,7 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_settings, container, false);
-        initView(rootView);
+        initView();
 
         setView(rootView);
         // Inflate the layout for this fragment
@@ -63,7 +64,7 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         this.mContext = context;
     }
 
-    private void initView(View rootView){
+    private void initView(){
         ((MainActivity) mContext).setTitle(getString(R.string.title_buisness_admin));
     }
 
@@ -74,6 +75,7 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         RelativeLayout rlStaffPlanner = rootView.findViewById(R.id.rlStaffPlanner);
         RelativeLayout rlVoucherCode = rootView.findViewById(R.id.rlVoucherCode);
         RelativeLayout rlCompany = rootView.findViewById(R.id.rlCompany);
+        RelativeLayout rlProfile = rootView.findViewById(R.id.rlProfile);
 
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
@@ -94,14 +96,17 @@ public class ArtistSettingsFragment extends Fragment implements View.OnClickList
         rlStaffPlanner.setOnClickListener(this);
         rlVoucherCode.setOnClickListener(this);
         rlCompany.setOnClickListener(this);
+        rlProfile.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.rlProfile:
+                startActivity(new Intent(mContext,ProfileActivity.class));
+                break;
             case R.id.rlStaff:
                 startActivity(new Intent(mContext,AddStaffActivity.class));
-                // MyToast.getInstance(mContext).showDasuAlert("Under development");
                 break;
             case R.id.rlWorkinhHrs:
                 MyToast.getInstance(mContext).showDasuAlert("Under development");

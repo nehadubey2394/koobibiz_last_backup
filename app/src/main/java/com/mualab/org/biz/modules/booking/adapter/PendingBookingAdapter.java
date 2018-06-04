@@ -108,9 +108,18 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 holder.rlStaffName.setVisibility(View.VISIBLE);
             else
                 holder.rlStaffName.setVisibility(View.GONE);
+
         }
         else {
             holder.rlStaffName.setVisibility(View.VISIBLE);
+            if (isFiltered){
+                if (user.id.equals(item.pendingBookingInfos.get(0).staffId))
+                    holder.tvStaffName.setText("My booking");
+                else
+                    holder.tvStaffName.setText(item.pendingBookingInfos.get(0).staffName);
+            }else {
+                holder.tvStaffName.setText(item.pendingBookingInfos.get(0).staffName);
+            }
         }
 
         if (!item.userDetail.profileImage.equals("")){

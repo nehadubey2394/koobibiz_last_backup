@@ -12,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.booking.adapter.StaffListAdapter;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.booking.listner.StaffSelectionListener;
+import com.mualab.org.biz.session.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +29,22 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff);
+        staffList = new ArrayList<>();
+
+        Session session = Mualab.getInstance().getSessionManager();
+        final User user = session.getUser();
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
-        staffList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
+        List<Staff> tmpList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
+
+        Staff item1 = new Staff();
+        item1.staffName = "My Booking";
+        item1.staffImage = user.profileImage;
+        staffList.add(item1);
+        if (tmpList != null) {
+            staffList.addAll(tmpList);
+        }
 
         // staffList = new ArrayList<>();
         StaffListAdapter staffListAdapter = new StaffListAdapter(StaffActivity.this, staffList);
@@ -77,9 +92,14 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
 
     @Override
     public void onStaffSelect(int position, String staffId) {
+        String staffName = staffList.get(position).staffName;
+        if (staffId==null){
+            staffId = "0";
+            staffName = "My Booking";
+        }
         Intent intent = new Intent();
         intent.putExtra("staffId", staffId);
-        intent.putExtra("staffName", staffList.get(position).staffName);
+        intent.putExtra("staffName", staffName);
         setResult(RESULT_OK, intent);
         finish();
     }
