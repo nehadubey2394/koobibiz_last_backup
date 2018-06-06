@@ -135,7 +135,8 @@
         <activity android:name=".modules.booking.activity.CompanyListActivity" />
         <activity android:name=".modules.company_management.activity.CompaniesListActivity" />
         <activity android:name=".modules.company_management.activity.CompanyDetailActivity" />
-        <activity android:name=".modules.company_management.activity.CompanyServicesActivity"></activity>
+        <activity android:name=".modules.company_management.activity.CompanyServicesActivity" />
+        <activity android:name=".modules.my_profile.activity.ProfileActivity"></activity>
     </application>
 
 </manifest>

@@ -298,4 +298,13 @@
     <string name="show">Show</string>
     <string name="no_staff_available">No staff available</string>
 
+    <!--Profile-->
+    <string name="text_certificate">Certificate</string>
+    <string name="text_follower">Followers</string>
+    <string name="text_following">Following</string>
+    <string name="text_post">Post</string>
+    <string name="videos">Videos</string>
+    <string name="feeds">Feeds</string>
+    <string name="images">Images</string>
+
 </resources>

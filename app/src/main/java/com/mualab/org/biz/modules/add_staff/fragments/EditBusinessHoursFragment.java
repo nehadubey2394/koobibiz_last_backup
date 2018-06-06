@@ -119,12 +119,12 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
         Iterator<BusinessDay> it = edtBusinessDays.iterator();
         List<BusinessDay> tmpBusinessDays =new ArrayList<>();
 
-        while(it.hasNext()) {
+       /* while(it.hasNext()) {
             BusinessDay day = it.next();
             if (!day.isOpen)
                 tmpBusinessDays.add(day);
         }
-        edtBusinessDays.removeAll(tmpBusinessDays);
+        edtBusinessDays.removeAll(tmpBusinessDays);*/
 
         StaffDetail staffDetail  = preSession.getStaffBusinessHours();
         staffDetail.edtStaffDays.addAll(edtBusinessDays);
@@ -149,6 +149,7 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
     private void updateDataIntoServerDb(){
         //List<BusinessDay> businessDays = getBusinessdays(); // getting business hours slots like opening/closing time
         List<TimeSlot> slotList = new ArrayList<>();
+        List<TimeSlot> slotList2 = new ArrayList<>();
         for(BusinessDay tmp : edtBusinessDays){
             if(tmp.isOpen){
                 for(TimeSlot slot:tmp.slots){
@@ -158,6 +159,13 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
                     slot.status = 1;
                     slotList.add(slot);
                 }
+            }
+            for(TimeSlot slot:tmp.slots){
+                slot.startTime = slot.edtStartTime;
+                slot.endTime = slot.edtEndTime;
+                //slot.dayId = tmp.dayId-1;
+                slot.status = 1;
+                slotList2.add(slot);
             }
         }
 
@@ -169,7 +177,7 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
         if(mContext instanceof EditWorkingHours) listener = (EditWorkingHours) mContext;
 
         if(listener!=null)
-            listener.onHorusChange(whJsonArray,slotList);
+            listener.onHorusChange(whJsonArray,slotList2);
 
     }
 

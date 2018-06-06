@@ -23,6 +23,11 @@
         <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
+    <style name="TextView.Reguler">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
     <style name="TextView.Invert" parent="TextView">
         <item name="android:textColor">@color/colorPrimary</item>
     </style>

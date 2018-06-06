@@ -258,15 +258,40 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
     }
 
     private void upDateUI(Bookings bookingInfo,String status){
-        tvBookingDate.setText(bookingInfo.bookingDate);
-        tvBookingLoc.setText(bookingInfo.location);
-        tvBookingTime.setText(bookingInfo.bookingTime);
-        tvUserName.setText(bookingInfo.userDetail.userName);
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
 
         if (!item.userDetail.profileImage.equals("")){
             Picasso.with(BookingDetailActivity.this).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).fit().into(ivHeaderProfile);
-        }
+        }else
+            ivHeaderProfile.setImageDrawable(getResources().getDrawable(R.drawable.defoult_user_img));
 
+        tvBookingLoc.setText(bookingInfo.location);
+        tvUserName.setText(bookingInfo.userDetail.userName);
+
+        SimpleDateFormat dfInput = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dfOutput = new SimpleDateFormat("dd MMMM yyyy");
+        Date formatedDate = null;
+        try {
+
+            if (user.businessType.equals("independent")) {
+                if (bookingInfo.todayBookingInfos.size()!=0){
+                    formatedDate = dfInput.parse(bookingInfo.todayBookingInfos.get(0).bookingDate);
+                    tvBookingDate.setText(dfOutput.format(formatedDate));
+                    tvBookingTime.setText(bookingInfo.todayBookingInfos.get(0).startTime);
+                }else {
+                    formatedDate = dfInput.parse(bookingInfo.pendingBookingInfos.get(0).bookingDate);
+                    tvBookingDate.setText(dfOutput.format(formatedDate));
+                    tvBookingTime.setText(bookingInfo.pendingBookingInfos.get(0).startTime);
+                }
+            }else {
+                formatedDate = dfInput.parse(bookingInfo.bookingDate);
+                tvBookingDate.setText(dfOutput.format(formatedDate));
+                tvBookingTime.setText(bookingInfo.bookingTime);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         switch (status) {
             case "0":
@@ -282,16 +307,6 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                 llBottom2.setVisibility(View.GONE);
                 llBottom.setVisibility(View.VISIBLE);
                 break;
-        }
-
-        SimpleDateFormat dfInput = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat dfOutput = new SimpleDateFormat("dd MMMM yyyy");
-        Date formatedDate = null;
-        try {
-            formatedDate = dfInput.parse(bookingInfo.bookingDate);
-            tvBookingDate.setText(dfOutput.format(formatedDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
     }
 
@@ -385,7 +400,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
 
     private void apiForGetBookingDetail(){
         Session session = Mualab.getInstance().getSessionManager();
-        User user = session.getUser();
+        final User user = session.getUser();
 
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(BookingDetailActivity.this, new NoConnectionDialog.Listner() {
@@ -453,17 +468,30 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                                         bookingInfo.staffImage = bInfoObj.getString("staffImage");
                                         bookingInfo.bookingStatus = item.bookStatus;
                                         bookingInfo.artistServiceName = bInfoObj.getString("artistServiceName");
+
                                         if (serviceName.equals("")) {
                                             serviceName = bookingInfo.artistServiceName;
                                         }
                                         // bookingInfo.bookingDetail = item;
+                                        if (user.businessType.equals("independent")) {
+                                            if (bookingInfo.staffId.equals(user.id)){
+                                                if (item.bookStatus.equals("0")) {
+                                                    item.pendingBookingInfos.add(bookingInfo);
+                                                    bookingInfoList.add(bookingInfo);
+                                                } else {
+                                                    item.todayBookingInfos.add(bookingInfo);
+                                                    bookingInfoList.add(bookingInfo);
+                                                }
 
-                                        if (item.bookStatus.equals("0")) {
-                                            item.pendingBookingInfos.add(bookingInfo);
-                                            bookingInfoList.add(bookingInfo);
-                                        } else {
-                                            item.todayBookingInfos.add(bookingInfo);
-                                            bookingInfoList.add(bookingInfo);
+                                            }
+                                        }else {
+                                            if (item.bookStatus.equals("0")) {
+                                                item.pendingBookingInfos.add(bookingInfo);
+                                                bookingInfoList.add(bookingInfo);
+                                            } else {
+                                                item.todayBookingInfos.add(bookingInfo);
+                                                bookingInfoList.add(bookingInfo);
+                                            }
                                         }
                                     }
                                     item.artistServiceName = serviceName;

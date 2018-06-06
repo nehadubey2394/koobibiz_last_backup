@@ -78,19 +78,30 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (item.todayBookingInfos.size()!=0)
             holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
 
+
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
         if (user.businessType.equals("independent")) {
+            holder.tvTime.setText(item.todayBookingInfos.get(0).startTime);
             String currentString = item.todayBookingInfos.get(0).companyName;
             String[] separated = currentString.split(" ");
             holder.tvStaffName.setText(separated[0]);
-            if (isFiltered)
+            if (isFiltered) {
                 holder.rlStaffName.setVisibility(View.VISIBLE);
+            }
             else
                 holder.rlStaffName.setVisibility(View.GONE);
         }
         else {
             holder.rlStaffName.setVisibility(View.VISIBLE);
+            if (isFiltered){
+                if (user.id.equals(item.todayBookingInfos.get(0).staffId))
+                    holder.tvStaffName.setText("My booking");
+                else
+                    holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
+            }else {
+                holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
+            }
         }
 
         if (!item.userDetail.profileImage.equals("")){

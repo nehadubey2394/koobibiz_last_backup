@@ -85,7 +85,7 @@
                 <RelativeLayout
                     android:id="@+id/rlStaffName"
                     android:layout_width="wrap_content"
-                    android:layout_height="18dp"
+                    android:layout_height="22dp"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:layout_marginTop="5dp"
@@ -102,6 +102,7 @@
                         android:maxWidth="200dp"
                         android:minWidth="50dp"
                         android:minHeight="16dp"
+                        android:padding="2dp"
                         android:text="NA"
                       android:fontFamily="@font/roboto_medium"
                         android:layout_centerInParent="true" android:textColor="@color/colorPrimary"

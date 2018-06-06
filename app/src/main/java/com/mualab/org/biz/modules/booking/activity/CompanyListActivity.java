@@ -122,6 +122,11 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
                         rvAllCompany.setVisibility(View.VISIBLE);
                         tvNoDataFound.setVisibility(View.GONE);
 
+                        Company item1 = new Company();
+                        item1.profileImage = user.profileImage;
+                        item1.businessName = "My Booking";
+                        companyList.add(item1);
+
                         JSONArray jsonArray = js.getJSONArray("businessList");
                         if (jsonArray!=null && jsonArray.length()!=0) {
                             for (int i=0; i<jsonArray.length(); i++){
@@ -160,16 +165,11 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
                                 }
                                 companyList.add(item);
                             }
+                            companyAdapter.notifyDataSetChanged();
                         }else {
                             rvAllCompany.setVisibility(View.GONE);
                             tvNoDataFound.setVisibility(View.VISIBLE);
                         }
-
-                        Company item1 = new Company();
-                        item1.profileImage = user.profileImage;
-                        item1.businessName = "My Booking";
-                        companyList.add(item1);
-                        companyAdapter.notifyDataSetChanged();
                     }else {
                         rvAllCompany.setVisibility(View.GONE);
                         tvNoDataFound.setVisibility(View.VISIBLE);
@@ -208,7 +208,7 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
         String companyName = companyList.get(position).businessName;
         if (staffId==null){
             staffId = "";
-            companyName = "";
+            companyName = "My Booking";
         }
         Intent intent = new Intent();
         intent.putExtra("businessId", staffId);
