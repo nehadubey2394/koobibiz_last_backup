@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.modules.add_staff.fragments.ArtistSettingsFragment;
@@ -18,6 +20,15 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+        ImageView btnBack = findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         replaceFragment(new ProfileFragment(), false);
     }
 

@@ -1,6 +1,8 @@
 package com.mualab.org.biz.util;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -14,6 +16,8 @@ import android.view.WindowManager;
  */
 
 public class ScreenUtils {
+    private static int screenWidth = 0;
+    private static int screenHeight = 0;
 
     public static boolean hasSoftKeys(WindowManager windowManager , Activity activity ){
         boolean hasSoftwareKeys = true;
@@ -39,5 +43,29 @@ public class ScreenUtils {
             hasSoftwareKeys = !hasMenuKey && !hasBackKey;
         }
         return hasSoftwareKeys;
+    }
+
+    public static int getScreenHeight(Context c) {
+        if (screenHeight == 0) {
+            WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            screenHeight = size.y;
+        }
+
+        return screenHeight;
+    }
+
+    public static int getScreenWidth(Context c) {
+        if (screenWidth == 0) {
+            WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+        }
+
+        return screenWidth;
     }
 }

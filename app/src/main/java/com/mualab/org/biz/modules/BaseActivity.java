@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.baselistner.BaseListner;
+import com.mualab.org.biz.util.NetworkUtils;
 import com.mualab.org.biz.util.StatusBarUtil;
 
 /**
@@ -62,5 +63,9 @@ public class BaseActivity extends AppCompatActivity implements BaseListner {
                 transaction.addToBackStack(backStackName);
             transaction.commit();
         }
+    }
+
+    public boolean isNetworkConnected() {
+        return NetworkUtils.isNetworkConnected(getApplicationContext());
     }
 }

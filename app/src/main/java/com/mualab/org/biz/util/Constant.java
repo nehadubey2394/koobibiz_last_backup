@@ -25,5 +25,7 @@ public class Constant {
     public static final int CAMERA_REQUEST = 234;
     public static final int REQUEST_CODE_PICK = 235;
     public static final int SELECT_FILE = 1;
+    public static final int TEXT_STATE = 0, IMAGE_STATE = 1, VIDEO_STATE = 2, FEED_STATE = 3;
+
 
 }

@@ -24,6 +24,7 @@
             android:layout_centerVertical="true"
             android:src="@drawable/white_back_ico"
             android:tint="@color/text_color"
+            android:padding="2dp"
             />
 
         <TextView
@@ -35,7 +36,7 @@
             android:layout_gravity="center"
             android:textSize="18sp"
             android:textColor="@color/text_color"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/roboto_bold"
             />
 
         <ImageView

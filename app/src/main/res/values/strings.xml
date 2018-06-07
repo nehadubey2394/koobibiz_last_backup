@@ -306,5 +306,8 @@
     <string name="videos">Videos</string>
     <string name="feeds">Feeds</string>
     <string name="images">Images</string>
-
+    <string name="text_comments">Comments</string>
+    <string name="text_follow">Follow</string>
+    <string name="likes">Likes</string>
+    <string name="comments">Comments</string>
 </resources>
