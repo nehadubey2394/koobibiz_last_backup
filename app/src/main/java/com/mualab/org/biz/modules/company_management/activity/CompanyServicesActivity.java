@@ -1,11 +1,11 @@
 package com.mualab.org.biz.modules.company_management.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,10 +13,7 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.model.booking.Company;
 import com.mualab.org.biz.model.company_management.CompanyDetail;
-import com.mualab.org.biz.modules.add_staff.fragments.AllServiesFragment;
 import com.mualab.org.biz.modules.company_management.fragments.ServiesFragment;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.util.StatusBarUtil;

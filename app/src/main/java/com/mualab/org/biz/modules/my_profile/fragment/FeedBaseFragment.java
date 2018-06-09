@@ -11,12 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.helper.MyToast;
-import com.mualab.org.biz.model.feeds.Feeds;
+import com.mualab.org.biz.modules.my_profile.model.Feeds;
 import com.mualab.org.biz.modules.Base.BaseFragment;
 import com.squareup.picasso.Picasso;
-
-
-import java.util.ArrayList;
 
 
 public class FeedBaseFragment extends BaseFragment {

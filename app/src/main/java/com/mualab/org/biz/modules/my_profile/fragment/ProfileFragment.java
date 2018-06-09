@@ -33,9 +33,10 @@ import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.listner.RecyclerViewScrollListener;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.UserProfileData;
-import com.mualab.org.biz.model.feeds.Feeds;
-import com.mualab.org.biz.modules.my_profile.activity.ProfileActivity;
+import com.mualab.org.biz.modules.my_profile.activity.FollowersActivity;
+import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
+import com.mualab.org.biz.modules.my_profile.model.Feeds;
+import com.mualab.org.biz.modules.my_profile.activity.ArtistServicesActivity;
 import com.mualab.org.biz.modules.my_profile.adapter.feeds.FeedAdapter;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -64,7 +65,7 @@ import views.refreshview.RjRefreshLayout;
 public class ProfileFragment extends FeedBaseFragment implements View.OnClickListener,FeedAdapter.Listener {
     private String mParam1,TAG = this.getClass().getName();
     private Context mContext;
-    private TextView tvImages,tvVideos,tvFeeds,tv_msg,tv_dot1,tv_dot2;
+    private TextView tvImages,tvVideos,tvFeeds,tv_msg,tv_no_data_msg,tv_dot1,tv_dot2;
     private ImageView iv_profile_back ,iv_profile_forward,ivActive;
     private LinearLayout lowerLayout1,lowerLayout2,ll_progress;
     private RecyclerView rvFeed;
@@ -120,7 +121,7 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvFeed =  view.findViewById(R.id.rvFeed);
-        rvFeed.setNestedScrollingEnabled(false);
+        // rvFeed.setNestedScrollingEnabled(false);
 
         WrapContentLinearLayoutManager lm = new WrapContentLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         rvFeed.setItemAnimator(null);
@@ -148,8 +149,8 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
         rvFeed.setAdapter(feedAdapter);
         rvFeed.addOnScrollListener(endlesScrollListener);
 
-      //  if(feeds!=null && feeds.size()==0)
-          //  updateViewType(R.id.ly_feeds);
+        //  if(feeds!=null && feeds.size()==0)
+        //  updateViewType(R.id.ly_feeds);
 
         mRefreshLayout =  view.findViewById(R.id.mSwipeRefreshLayout);
         mRefreshLayout.setNestedScrollingEnabled(false);
@@ -198,6 +199,13 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
         LinearLayout lyVideos = view.findViewById(R.id.ly_videos);
         LinearLayout lyFeed = view.findViewById(R.id.ly_feeds);
 
+        LinearLayout llServices = view.findViewById(R.id.llServices);
+        LinearLayout llCertificate = view.findViewById(R.id.llCertificate);
+        LinearLayout llAboutUs = view.findViewById(R.id.llAboutUs);
+        LinearLayout llFollowers = view.findViewById(R.id.llFollowers);
+        LinearLayout llFollowing = view.findViewById(R.id.llFollowing);
+        LinearLayout llPost = view.findViewById(R.id.llPost);
+
         lowerLayout2 =  view.findViewById(R.id.lowerLayout2);
         lowerLayout1 =  view.findViewById(R.id.lowerLayout);
 
@@ -206,11 +214,19 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
         iv_profile_forward =  view.findViewById(R.id.iv_profile_forward);
 
         tv_msg = view.findViewById(R.id.tv_msg);
+        tv_no_data_msg = view.findViewById(R.id.tv_no_data_msg);
         ll_progress = view.findViewById(R.id.ll_progress);
 
         lyImage.setOnClickListener(this);
         lyVideos.setOnClickListener(this);
         lyFeed.setOnClickListener(this);
+
+        llServices.setOnClickListener(this);
+        llCertificate.setOnClickListener(this);
+        llAboutUs.setOnClickListener(this);
+        llFollowers.setOnClickListener(this);
+        llFollowing.setOnClickListener(this);
+        llPost.setOnClickListener(this);
         //  profile_btton_back.setOnClickListener(this);
         iv_profile_back.setOnClickListener(this);
         iv_profile_forward.setOnClickListener(this);
@@ -224,13 +240,42 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.rlProfile:
-                startActivity(new Intent(mContext,ProfileActivity.class));
+                //      startActivity(new Intent(mContext,ProfileActivity.class));
                 break;
 
             case R.id.ly_feeds:
             case R.id.ly_images:
             case R.id.ly_videos:
                 updateViewType(view.getId());
+                break;
+
+            case R.id.llServices:
+                startActivity(new Intent(mContext,ArtistServicesActivity.class));
+                break;
+
+            case R.id.llAboutUs:
+                MyToast.getInstance(mContext).showDasuAlert("Under development");
+                break;
+
+            case R.id.llCertificate:
+                MyToast.getInstance(mContext).showDasuAlert("Under development");
+                break;
+
+            case R.id.llFollowing:
+                Intent intent1 = new Intent(mContext,FollowersActivity.class);
+                intent1.putExtra("isFollowers",false);
+                startActivity(intent1);
+                break;
+
+            case R.id.llFollowers:
+                Intent intent = new Intent(mContext,FollowersActivity.class);
+                intent.putExtra("isFollowers",true);
+                startActivity(intent);
+                //startActivity(new Intent(mContext,FollowersActivity.class));
+                break;
+
+            case R.id.llPost:
+                updateViewType(R.id.ly_feeds);
                 break;
 
             case R.id.iv_profile_back:
@@ -307,7 +352,7 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
                 lowerLayout2.setVisibility(View.VISIBLE);
                 tv_dot1.setVisibility(View.GONE);
                 tv_dot2.setVisibility(View.GONE);
-               // tv_distance.setVisibility(View.GONE);
+                // tv_distance.setVisibility(View.GONE);
                 ivActive.setVisibility(View.GONE);
             }else {
                 iv_profile_back.setVisibility(View.VISIBLE);
@@ -316,7 +361,7 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
                 lowerLayout2.setVisibility(View.GONE);
                 tv_dot1.setVisibility(View.VISIBLE);
                 tv_dot2.setVisibility(View.VISIBLE);
-               // tv_distance.setVisibility(View.VISIBLE);
+                // tv_distance.setVisibility(View.VISIBLE);
                 ivActive.setVisibility(View.VISIBLE);
             }
         }
@@ -446,7 +491,7 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
     }
 
     private void apiForGetAllFeeds(final int page, final int feedLimit, final boolean isEnableProgress){
-
+        tv_no_data_msg.setVisibility(View.GONE);
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
                 @Override
@@ -483,7 +528,7 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
 
                     if (status.equalsIgnoreCase("success")) {
                         //removeProgress();
-                        ParseAndUpdateUI(response);
+                        ParseAndUpdateUI(page,response);
 
                     }else MyToast.getInstance(mContext).showSmallMessage(message);
                 } catch (Exception e) {
@@ -513,7 +558,7 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
         ll_progress.setVisibility(isEnableProgress?View.VISIBLE:View.GONE);
     }
 
-    private void ParseAndUpdateUI(final String response) {
+    private void ParseAndUpdateUI(final int page,final String response) {
 
         try {
             JSONObject js = new JSONObject(response);
@@ -532,44 +577,49 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
                 }
 
                 Gson gson = new Gson();
-                for (int i = 0; i < array.length(); i++) {
+                if (array.length()!=0){
+                    for (int i = 0; i < array.length(); i++) {
 
-                    try{
-                        JSONObject jsonObject = array.getJSONObject(i);
-                        Feeds feed = gson.fromJson(String.valueOf(jsonObject), Feeds.class);
+                        try{
+                            JSONObject jsonObject = array.getJSONObject(i);
+                            Feeds feed = gson.fromJson(String.valueOf(jsonObject), Feeds.class);
 
-                        /*tmp get data and set into actual json format*/
-                        if(feed.userInfo!=null && feed.userInfo.size()>0){
-                            Feeds.User user = feed.userInfo.get(0);
-                            feed.userName = user.userName;
-                            feed.fullName = user.firstName+" "+user.lastName;
-                            feed.profileImage = user.profileImage;
-                            feed.userId = user._id;
-                            feed.crd =feed.timeElapsed;
-                        }
-
-                        if(feed.feedData!=null && feed.feedData.size()>0){
-
-                            feed.feed = new ArrayList<>();
-                            feed.feedThumb = new ArrayList<>();
-
-                            for(Feeds.Feed tmp : feed.feedData){
-                                feed.feed.add(tmp.feedPost);
-                                if(!TextUtils.isEmpty(feed.feedData.get(0).videoThumb))
-                                    feed.feedThumb.add(tmp.feedPost);
+                            /*tmp get data and set into actual json format*/
+                            if(feed.userInfo!=null && feed.userInfo.size()>0){
+                                Feeds.User user = feed.userInfo.get(0);
+                                feed.userName = user.userName;
+                                feed.fullName = user.firstName+" "+user.lastName;
+                                feed.profileImage = user.profileImage;
+                                feed.userId = user._id;
+                                feed.crd =feed.timeElapsed;
                             }
 
-                            if(feed.feedType.equals("video"))
-                                feed.videoThumbnail = feed.feedData.get(0).videoThumb;
+                            if(feed.feedData!=null && feed.feedData.size()>0){
+
+                                feed.feed = new ArrayList<>();
+                                feed.feedThumb = new ArrayList<>();
+
+                                for(Feeds.Feed tmp : feed.feedData){
+                                    feed.feed.add(tmp.feedPost);
+                                    if(!TextUtils.isEmpty(feed.feedData.get(0).videoThumb))
+                                        feed.feedThumb.add(tmp.feedPost);
+                                }
+
+                                if(feed.feedType.equals("video"))
+                                    feed.videoThumbnail = feed.feedData.get(0).videoThumb;
+                            }
+
+                            feeds.add(feed);
+
+                        }catch (JsonParseException e){
+                            e.printStackTrace();
                         }
-
-                        feeds.add(feed);
-
-                    }catch (JsonParseException e){
-                        e.printStackTrace();
                     }
-
-                } // loop end.
+                }else if (page==0 || feeds.size()==0){
+                    tv_no_data_msg.setVisibility(View.VISIBLE);
+                    rvFeed.setVisibility(View.GONE);
+                }
+                // loop end.
 
                 feedAdapter.notifyDataSetChanged();
                 //updateViewType(R.id.ly_feeds);

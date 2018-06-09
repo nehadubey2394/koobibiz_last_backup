@@ -1,4 +1,4 @@
-package com.mualab.org.biz.model;
+package com.mualab.org.biz.modules.my_profile.model;
 
 import java.io.Serializable;
 

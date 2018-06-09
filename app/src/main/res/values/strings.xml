@@ -310,4 +310,6 @@
     <string name="text_follow">Follow</string>
     <string name="likes">Likes</string>
     <string name="comments">Comments</string>
+    <string name="about_me">About me</string>
+    <string name="follow">Follow</string>
 </resources>

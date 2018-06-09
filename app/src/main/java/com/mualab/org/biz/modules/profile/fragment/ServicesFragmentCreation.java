@@ -53,7 +53,7 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
     private ServiceAdapter adapter;
     private PreRegistrationSession bpSession;
     private List<Service> serviceList;
-    //private List<Service> actualServiceList;
+    //private List<ArtistCategory> actualServiceList;
 
     public static ServicesFragmentCreation newInstance() {
         return new ServicesFragmentCreation();

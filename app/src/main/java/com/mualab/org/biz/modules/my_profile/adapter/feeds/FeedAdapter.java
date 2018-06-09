@@ -1,6 +1,5 @@
 package com.mualab.org.biz.modules.my_profile.adapter.feeds;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.hendraanggrian.socialview.SocialView;
 import com.hendraanggrian.widget.SocialTextView;
 import com.mualab.org.biz.R;
@@ -29,20 +27,13 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.listner.OnDoubleTapListener;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.feeds.Feeds;
+import com.mualab.org.biz.modules.my_profile.model.Feeds;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
 import com.mualab.org.biz.session.Session;
-import com.mualab.org.biz.task.HttpResponceListner;
-import com.mualab.org.biz.task.HttpTask;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;

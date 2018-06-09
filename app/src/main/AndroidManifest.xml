@@ -136,7 +136,9 @@
         <activity android:name=".modules.company_management.activity.CompaniesListActivity" />
         <activity android:name=".modules.company_management.activity.CompanyDetailActivity" />
         <activity android:name=".modules.company_management.activity.CompanyServicesActivity" />
-        <activity android:name=".modules.my_profile.activity.ProfileActivity"></activity>
+        <activity android:name=".modules.my_profile.activity.ProfileActivity" />
+        <activity android:name=".modules.my_profile.activity.ArtistServicesActivity" />
+        <activity android:name=".modules.my_profile.activity.FollowersActivity"></activity>
     </application>
 
 </manifest>

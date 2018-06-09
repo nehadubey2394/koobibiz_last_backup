@@ -1,15 +1,14 @@
-package com.mualab.org.biz.modules.company_management.fragments;
-
+package com.mualab.org.biz.modules.my_profile.activity;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -22,10 +21,10 @@ import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.ArtistServices;
 import com.mualab.org.biz.model.add_staff.Services;
 import com.mualab.org.biz.model.add_staff.SubServices;
-import com.mualab.org.biz.model.company_management.ComapnySelectedServices;
-import com.mualab.org.biz.model.company_management.CompanyDetail;
-import com.mualab.org.biz.modules.add_staff.adapter.ServiceExpandListAdapter;
-import com.mualab.org.biz.modules.company_management.activity.CompanyServicesActivity;
+import com.mualab.org.biz.modules.my_profile.adapter.SubServiceExpandListAdapter;
+import com.mualab.org.biz.modules.my_profile.adapter.services.ServicesAdapter;
+import com.mualab.org.biz.modules.my_profile.listner.OnServiceClickListener;
+import com.mualab.org.biz.modules.my_profile.model.ArtistCategory;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -40,71 +39,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-public class ServiesFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private Context mContext;
+public class ArtistServicesActivity extends AppCompatActivity implements OnServiceClickListener {
+    private List<ArtistCategory> servicesList;
+    private List<SubServices> subServicesList;
     private ExpandableListView lvExpandable;
     private TextView tvNoData;
-    private ServiceExpandListAdapter expandableListAdapter;
-    private List<Services> servicesList;
-    private HashMap<Integer, Services> serviceHashMap ;
-
-    public ServiesFragment() {
-        // Required empty public constructor
-    }
-
-
-    public static ServiesFragment newInstance(String param1) {
-        ServiesFragment fragment = new ServiesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private SubServiceExpandListAdapter expandableListAdapter;
+    private ServicesAdapter servicesAdapter;
+    private LinearLayout llCategory;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
+        setContentView(R.layout.activity_artist_services);
+        initView();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.mContext = context;
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_services, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initView(view);
-    }
-
-    private void initView(View rootView){
-        serviceHashMap = new HashMap<>();
+    private void initView(){
         servicesList = new ArrayList<>();
-        expandableListAdapter = new ServiceExpandListAdapter(mContext, servicesList);
-        setView(rootView);
+        subServicesList = new ArrayList<>();
+        servicesAdapter = new ServicesAdapter(ArtistServicesActivity.this, servicesList);
+        servicesAdapter.setCustomListener(ArtistServicesActivity.this);
+        expandableListAdapter = new SubServiceExpandListAdapter(ArtistServicesActivity.this, subServicesList);
+        setView();
     }
 
-    private void setView(View rootView){
-        lvExpandable = rootView.findViewById(R.id.lvExpandable);
-        tvNoData = rootView.findViewById(R.id.tvNoData);
+    private void setView(){
+        ImageView btnBack = findViewById(R.id.btnBack);
+        TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        tvHeaderTitle.setText(getString(R.string.text_services));
+        llCategory = findViewById(R.id.llCategory);
+
+        RecyclerView rycService = findViewById(R.id.rycService);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(ArtistServicesActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager.scrollToPositionWithOffset(0, 0);
+        rycService.setLayoutManager(layoutManager);
+        rycService.setAdapter(servicesAdapter);
+        lvExpandable = findViewById(R.id.lvExpandable);
+        tvNoData = findViewById(R.id.tvNoData);
         lvExpandable.setAdapter(expandableListAdapter);
 
         lvExpandable.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
@@ -118,8 +90,7 @@ public class ServiesFragment extends Fragment {
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                Services item = servicesList.get(groupPosition);
-                item.isExpand = true;
+                ArtistCategory item = servicesList.get(groupPosition);
             }
         });
 
@@ -128,8 +99,7 @@ public class ServiesFragment extends Fragment {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Services item = servicesList.get(groupPosition);
-                item.isExpand = false;
+                ArtistCategory item = servicesList.get(groupPosition);
 
             }
         });
@@ -137,7 +107,7 @@ public class ServiesFragment extends Fragment {
         lvExpandable.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
-                return false;
+                return true;
             }
         });
 
@@ -149,23 +119,26 @@ public class ServiesFragment extends Fragment {
             }
         });
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         apiForGetAllServices();
     }
 
     private void onChildClickListener(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l){
-        Services servicesItem = servicesList.get(groupPosition);
-        SubServices subServices = servicesItem.arrayList.get(childPosition);
-        ((CompanyServicesActivity)mContext).addFragment(LastServicesFragment.newInstance(subServices), true, R.id.flServiceContainer);
+        ArtistCategory servicesItem = servicesList.get(groupPosition);
+        //SubServices subServices = servicesItem.arrayList.get(childPosition);
     }
 
     private void apiForGetAllServices(){
-        final CompanyDetail companyDetail = ((CompanyServicesActivity)mContext).getCompanyDetail();
-
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
         if (!ConnectionDetector.isConnected()) {
-            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+            new NoConnectionDialog(ArtistServicesActivity.this, new NoConnectionDialog.Listner() {
                 @Override
                 public void onNetworkChange(Dialog dialog, boolean isConnected) {
                     if(isConnected){
@@ -177,9 +150,9 @@ public class ServiesFragment extends Fragment {
         }
 
         Map<String, String> params = new HashMap<>();
-        params.put("artistId", companyDetail.businessId );
+        params.put("artistId", String.valueOf(user.id));
 
-        HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "artistService", new HttpResponceListner.Listener() {
+        HttpTask task = new HttpTask(new HttpTask.Builder(ArtistServicesActivity.this, "artistService", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
                 try {
@@ -189,16 +162,21 @@ public class ServiesFragment extends Fragment {
 
                     if (status.equalsIgnoreCase("success")) {
                         lvExpandable.setVisibility(View.VISIBLE);
+                        llCategory.setVisibility(View.VISIBLE);
                         tvNoData.setVisibility(View.GONE);
+                        servicesList.clear();
+                        subServicesList.clear();
+
                         JSONArray allServiceArray = js.getJSONArray("artistServices");
                         if (allServiceArray!=null) {
-                            List<Services> list = new ArrayList<>();
 
                             for (int j=0; j<allServiceArray.length(); j++){
                                 JSONObject object = allServiceArray.getJSONObject(j);
-                                Services services = new Services();
+                                ArtistCategory services = new ArtistCategory();
                                 services.serviceId = object.getString("serviceId");
                                 services.serviceName = object.getString("serviceName");
+
+                                services.isSelect = j == 0;
 
                                 JSONArray subServiesArray = object.getJSONArray("subServies");
                                 if (subServiesArray!=null) {
@@ -217,11 +195,7 @@ public class ServiesFragment extends Fragment {
                                             JSONObject jsonObject3 = artistservices.getJSONObject(m);
                                             Gson gson2 = new Gson();
                                             ArtistServices services3 = gson2.fromJson(String.valueOf(jsonObject3), ArtistServices.class);
-                                            services3.editedCtime = "";
-                                            services3.editedOutCallP = "";
-                                            services3.editedInCallP = "";
-                                            services3.isInCallEdited = "";
-                                            services3.isOutCallEdited = "";
+
                                             if (!services3.outCallPrice.equals("0") || !services3.outCallPrice.equals("null")){
                                                 services3.isOutCall3 = true;
                                                 subServices.isOutCall2 = true;
@@ -233,55 +207,22 @@ public class ServiesFragment extends Fragment {
                                         services.arrayList.add(subServices);
                                     }
                                 }
-                                //  servicesList.add(services);
-                                list.add(services);
+                                servicesList.add(services);
                             }
-
-                            if (companyDetail.staffService.size()!=0){
-                                servicesList.clear();
-                                serviceHashMap.clear();
-                                for (ComapnySelectedServices artistServices2 : companyDetail.staffService){
-                                    int artistServId = Integer.parseInt(artistServices2.serviceId);
-                                    for (Services services : list) {
-                                        if (artistServices2.serviceId.equals(services.serviceId))
-                                        {
-                                            for (SubServices subServices : services.arrayList) {
-                                                if (artistServices2.subserviceId.equals(subServices.subServiceId)){
-                                                    for (ArtistServices mainService : subServices.artistservices){
-                                                        if (mainService._id.equals(artistServices2.artistServiceId)){
-                                                            mainService.setSelected(true);
-                                                            mainService._id = artistServices2._id;
-                                                            mainService.completionTime = artistServices2.completionTime;
-                                                            mainService.outCallPrice = artistServices2.outCallPrice;
-                                                            mainService.inCallPrice = artistServices2.inCallPrice;
-                                                            mainService.title = artistServices2.title;
-                                                            serviceHashMap.put(artistServId,services);
-                                                            //servicesList.add(services);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                                for(Map.Entry<Integer, Services> entry : serviceHashMap.entrySet()){
-                                    Services  services = entry.getValue();
-                                    servicesList.add(services);
-                                }
-
-                            }else {
-                                lvExpandable.setVisibility(View.GONE);
-                                tvNoData.setVisibility(View.VISIBLE);
-                            }
+                            servicesAdapter.notifyDataSetChanged();
+                            subServicesList.addAll(servicesList.get(0).arrayList);
                             expandableListAdapter.notifyDataSetChanged();
+
+                            for(int i=0; i < expandableListAdapter.getGroupCount(); i++)
+                                lvExpandable.expandGroup(i);
                         }
                     }else {
                         lvExpandable.setVisibility(View.GONE);
+                        llCategory.setVisibility(View.GONE);
                         tvNoData.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e) {
-                    Progress.hide(mContext);
+                    Progress.hide(ArtistServicesActivity.this);
                     e.printStackTrace();
                 }
             }
@@ -306,8 +247,26 @@ public class ServiesFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        ((CompanyServicesActivity)mContext).setTitle(getString(R.string.text_category));
-        super.onDestroyView();
+    public void onServiceClick(int position) {
+        for(ArtistCategory artistCategory : servicesList)
+            artistCategory.isSelect = false;
+        servicesAdapter.notifyDataSetChanged();
+        ArtistCategory category = servicesList.get(position);
+        category.isSelect = true;
+        servicesAdapter.notifyItemChanged(position);
+
+        subServicesList.clear();
+        subServicesList.addAll(servicesList.get(position).arrayList);
+        expandableListAdapter.notifyDataSetChanged();
+
+        for(int i=0; i < expandableListAdapter.getGroupCount(); i++)
+            lvExpandable.expandGroup(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
+

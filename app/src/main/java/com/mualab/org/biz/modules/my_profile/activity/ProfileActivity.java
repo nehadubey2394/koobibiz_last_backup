@@ -54,4 +54,10 @@ public class ProfileActivity extends AppCompatActivity {
             transaction.commit();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

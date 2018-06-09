@@ -219,7 +219,7 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
 
                                 artistStaffs.add(item);
                             }
-                        }else {
+                        }else if (artistStaffs.size()==0 && page==0){
                             rvAllStaff.setVisibility(View.GONE);
                             tvNoDataFound.setVisibility(View.VISIBLE);
                         }

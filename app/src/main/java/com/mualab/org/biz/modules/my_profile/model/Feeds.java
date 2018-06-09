@@ -1,4 +1,4 @@
-package com.mualab.org.biz.model.feeds;
+package com.mualab.org.biz.modules.my_profile.model;
 
 import com.google.gson.annotations.SerializedName;
 

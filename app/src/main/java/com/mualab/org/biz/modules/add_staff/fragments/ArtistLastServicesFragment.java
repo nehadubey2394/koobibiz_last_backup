@@ -571,7 +571,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                         ((AllServicesActivity)mContext).finish();
 
                     }else {
-                        if (!message.equals("Service already added"))
+                        if (!message.equals("ArtistCategory already added"))
                             MyToast.getInstance(mContext).showDasuAlert(message);
                     }
                 } catch (Exception e) {

@@ -201,7 +201,7 @@ public class AllServicesActivity extends AppCompatActivity {
                         finish();
 
                     }else {
-                        if (!message.equals("Service already added"))
+                        if (!message.equals("ArtistCategory already added"))
                             MyToast.getInstance(AllServicesActivity.this).showDasuAlert(message);
                     }
                 } catch (Exception e) {
