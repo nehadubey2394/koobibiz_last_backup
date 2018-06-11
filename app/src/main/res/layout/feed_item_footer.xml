@@ -27,9 +27,9 @@
                 android:background="@drawable/like_icon"
                 android:button="@null"
                 android:layout_marginLeft="5dp"
-                android:clickable="false"
+                android:checked="false"
+                android:clickable="true"
                 android:focusable="true"
-                android:enabled="false"
                 android:stateListAnimator="@animator/scale"
                 app:layout_constraintLeft_toLeftOf="parent"
                 tools:ignore="UnusedAttribute" />

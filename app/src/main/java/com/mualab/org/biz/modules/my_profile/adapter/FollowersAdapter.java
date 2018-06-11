@@ -171,8 +171,14 @@ public class FollowersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         Map<String, String> params = new HashMap<>();
-        params.put("userId", String.valueOf(user.id));
-        params.put("followerId", followers.followerId);
+        if (isFollowers) {
+            params.put("userId", String.valueOf(user.id));
+            params.put("followerId", followers.followerId);
+        }else {
+            params.put("userId", followers.userId);
+            params.put("followerId", String.valueOf(user.id));
+
+        }
 
 
         HttpTask task = new HttpTask(new HttpTask.Builder(context, "followFollowing", new HttpResponceListner.Listener() {

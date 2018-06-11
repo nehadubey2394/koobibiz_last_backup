@@ -33,6 +33,7 @@ import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.listner.RecyclerViewScrollListener;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.modules.my_profile.activity.CommentsActivity;
 import com.mualab.org.biz.modules.my_profile.activity.FollowersActivity;
 import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
 import com.mualab.org.biz.modules.my_profile.model.Feeds;
@@ -661,7 +662,11 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
 
     @Override
     public void onCommentBtnClick(Feeds feed, int pos) {
-
+        Intent intent = new Intent(mContext, CommentsActivity.class);
+        intent.putExtra("feed_id", feed._id);
+        intent.putExtra("feedPosition", pos);
+        intent.putExtra("feed", feed);
+        startActivityForResult(intent, Constant.ACTIVITY_COMMENT);
     }
 
     @Override

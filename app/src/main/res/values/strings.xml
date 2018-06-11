@@ -312,4 +312,6 @@
     <string name="comments">Comments</string>
     <string name="about_me">About me</string>
     <string name="follow">Follow</string>
+    <string name="write_a_comment_here">Write a comment here…</string>
+    <string name="no_comment_yet">No Comment yet</string>
 </resources>

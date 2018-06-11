@@ -16,6 +16,9 @@ import com.mualab.org.biz.model.Location;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by dharmraj on 21/12/17.
  **/
@@ -28,6 +31,7 @@ public class Mualab extends Application {
 
     private static Mualab mInstance;
     public static double currentLat,currentLng;
+    public static Map<String, String> feedBasicInfo = new HashMap<>();
 
     private  DatabaseReference ref;
     private  Session session;

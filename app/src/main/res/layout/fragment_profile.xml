@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal"
-                    android:textColor="@color/text_color"
+                    android:textColor="@color/black"
                     android:textSize="20sp" />
 
                 <TextView
@@ -50,6 +50,7 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
                     android:text=""
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <RelativeLayout
@@ -454,6 +455,7 @@
                             android:padding="2dp"
                             android:text="@string/feeds"
                             android:fontFamily="@font/roboto_regular"
+                            android:textSize="18sp"
                             android:textColor="@color/colorPrimary"
                             />
 
@@ -476,7 +478,7 @@
                             android:padding="2dp"
                             android:text="@string/images"
                             android:textColor="@color/text_color"
-                            android:textSize="16sp" />
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
@@ -496,7 +498,7 @@
                             android:padding="2dp"
                             android:text="@string/videos"
                             android:textColor="@color/text_color"
-                            android:textSize="16sp" />
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
@@ -630,7 +632,6 @@
               />
 
       </views.refreshview.RjRefreshLayout>-->
-
 
 
     <LinearLayout

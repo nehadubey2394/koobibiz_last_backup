@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.add_staff.fragments.ArtistSettingsFragment;
 import com.mualab.org.biz.modules.my_profile.fragment.ProfileFragment;
 import com.mualab.org.biz.util.StatusBarUtil;
@@ -21,6 +23,13 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         ImageView btnBack = findViewById(R.id.btnBack);
+        User currentUser = Mualab.getInstance().getSessionManager().getUser();
+        Mualab.feedBasicInfo.put("userId", ""+ currentUser.id);
+        Mualab.feedBasicInfo.put("age", "25");
+        Mualab.feedBasicInfo.put("gender", "Male");
+        Mualab.feedBasicInfo.put("city", "indore");
+        Mualab.feedBasicInfo.put("state", "MP");
+        Mualab.feedBasicInfo.put("country", "India");
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
