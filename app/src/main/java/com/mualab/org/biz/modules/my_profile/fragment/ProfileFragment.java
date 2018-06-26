@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,13 +29,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.baselistner.BaseListner;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.listner.RecyclerViewScrollListener;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.modules.my_profile.activity.CertificateActivity;
 import com.mualab.org.biz.modules.my_profile.activity.CommentsActivity;
 import com.mualab.org.biz.modules.my_profile.activity.FollowersActivity;
+import com.mualab.org.biz.modules.my_profile.activity.ProfileActivity;
 import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
 import com.mualab.org.biz.modules.my_profile.model.Feeds;
 import com.mualab.org.biz.modules.my_profile.activity.ArtistServicesActivity;
@@ -77,13 +81,13 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
     private FeedAdapter feedAdapter;
     private List<Feeds> feeds;
     private boolean isPulltoRefrash = false;
+    private  long mLastClickTime = 0;
 
     private View view;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
-
 
     public static ProfileFragment newInstance(String param1) {
         ProfileFragment fragment = new ProfileFragment();
@@ -121,6 +125,8 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        apiForGetProfile();
+
         rvFeed =  view.findViewById(R.id.rvFeed);
         // rvFeed.setNestedScrollingEnabled(false);
 
@@ -128,8 +134,6 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
         rvFeed.setItemAnimator(null);
         rvFeed.setLayoutManager(lm);
         rvFeed.setHasFixedSize(true);
-
-        apiForGetProfile();
 
         feedAdapter = new FeedAdapter(mContext, feeds, this);
         endlesScrollListener = new RecyclerViewScrollListener(lm) {
@@ -149,9 +153,6 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
 
         rvFeed.setAdapter(feedAdapter);
         rvFeed.addOnScrollListener(endlesScrollListener);
-
-        //  if(feeds!=null && feeds.size()==0)
-        //  updateViewType(R.id.ly_feeds);
 
         mRefreshLayout =  view.findViewById(R.id.mSwipeRefreshLayout);
         mRefreshLayout.setNestedScrollingEnabled(false);
@@ -239,6 +240,11 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         switch (view.getId()){
             case R.id.rlProfile:
                 //      startActivity(new Intent(mContext,ProfileActivity.class));
@@ -259,19 +265,20 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
                 break;
 
             case R.id.llCertificate:
-                MyToast.getInstance(mContext).showDasuAlert("Under development");
+                Intent intent = new Intent(mContext, CertificateActivity.class);
+                startActivityForResult(intent, 10);
                 break;
 
             case R.id.llFollowing:
                 Intent intent1 = new Intent(mContext,FollowersActivity.class);
                 intent1.putExtra("isFollowers",false);
-                startActivity(intent1);
+                startActivityForResult(intent1,10);
                 break;
 
             case R.id.llFollowers:
-                Intent intent = new Intent(mContext,FollowersActivity.class);
-                intent.putExtra("isFollowers",true);
-                startActivity(intent);
+                Intent intent2 = new Intent(mContext,FollowersActivity.class);
+                intent2.putExtra("isFollowers",true);
+                startActivityForResult(intent2,10);
                 //startActivity(new Intent(mContext,FollowersActivity.class));
                 break;
 
@@ -321,6 +328,7 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
         RatingBar rating =  view.findViewById(R.id.rating);
 
         if (profileData!=null){
+            tv_distance.setText(profileData.radius+" Miles");
             tv_ProfileName.setText(profileData.firstName+" "+profileData.lastName);
             tv_username.setText("@"+profileData.userName);
             tv_profile_followers.setText(profileData.followersCount);
@@ -438,11 +446,15 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
 
         Map<String, String> params = new HashMap<>();
         params.put("userId", String.valueOf(user.id));
+        params.put("loginUserId", String.valueOf(user.id));
 
         HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "getProfile", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
                 try {
+                    if(feeds!=null && feeds.size()==0)
+                        updateViewType(R.id.ly_feeds);
+
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
                     String message = js.getString("message");
@@ -484,11 +496,11 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
 
             }})
                 .setAuthToken(user.authToken)
-                .setProgress(true)
+                .setProgress(false)
                 .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
         //.setBody(params, "application/x-www-form-urlencoded"));
 
-        task.execute(TAG);
+        task.execute(getClass().getName());
     }
 
     private void apiForGetAllFeeds(final int page, final int feedLimit, final boolean isEnableProgress){
@@ -671,7 +683,10 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
 
     @Override
     public void onLikeListClick(Feeds feed) {
-
+        User currentUser = Mualab.getInstance().getSessionManager().getUser();
+        if(mContext instanceof ProfileActivity){
+            ((ProfileActivity) mContext).addFragment(LikeFragment.newInstance(feed._id, Integer.parseInt(currentUser.id)), true);
+        }
     }
 
     @Override
@@ -682,5 +697,14 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
     @Override
     public void onClickProfileImage(Feeds feed, ImageView v) {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10) {
+            apiForGetProfile();
+            // apiForGetAllFeeds(0, 10, true);
+        }
     }
 }

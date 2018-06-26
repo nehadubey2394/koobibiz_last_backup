@@ -89,7 +89,6 @@
                     android:maxLines="2"
                     android:layout_marginTop="2dp"
                     android:maxWidth="250dp"
-                    android:text="Adam Smith"
                     android:textColor="@color/dark_grey"
                     android:textSize="13sp" />
 
@@ -148,7 +147,8 @@
                     android:layout_width="75dp"
                     android:layout_height="28dp"
                     android:id="@+id/btnChangeStaff"
-                    android:text="@string/change_staff" android:layout_gravity="end"
+                    android:text="@string/change_staff"
+                    android:layout_gravity="end"
                     android:gravity="center"
                     android:padding="2dp"
                     android:visibility="visible"

@@ -1,5 +1,6 @@
 package com.mualab.org.biz.modules.profile.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,17 +19,22 @@ import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.image.picker.ImagePicker;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
+import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.modules.profile.adapter.AdapterUploadCertificate;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.model.Certificate;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.session.PreRegistrationSession;
+import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Helper;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -62,7 +68,7 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
     public static UploadCertificationFragment newInstance() {
         UploadCertificationFragment fragment = new UploadCertificationFragment();
         Bundle args = new Bundle();
-       // args.putString(ARG_PARAM1, param1);
+        // args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,7 +101,7 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
         mAdapter = new AdapterUploadCertificate(mContext, certificates);
         mAdapter.setCallBack(this);
         mAdapter.setAuthtoken(user.authToken);
-       // RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+        // RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         //  recyclerView.setLayoutManager(mLayoutManager);
         /*DividerItemDecoration decoration = new DividerItemDecoration(mContext, LinearLayoutManager.HORIZONTAL);
         recyclerView.addItemDecoration(decoration);
@@ -111,7 +117,8 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
         item_picker.addOnItemChangedListener(this);
         edBio.setText(TextUtils.isEmpty(user.bio)?"":user.bio);
         updateView();
-        getAllCertificate();
+        //  getAllCertificate();
+        apiForGetCertificates();
     }
 
     @Override
@@ -228,6 +235,77 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
         }
     }
 
+    private void apiForGetCertificates(){
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        apiForGetCertificates();
+                    }
+                }
+            }).show();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("artistId", String.valueOf(user.id));
+        params.put("type", "artist");
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "getAllCertificate", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+                    if (status.equalsIgnoreCase("success")) {
+                        certificates.clear();
+                        JSONArray jsonArray = js.getJSONArray("allCertificate");
+
+                        for(int i=0; i<jsonArray.length(); i++){
+                            JSONObject cObj = (JSONObject) jsonArray.get(i);
+                            Certificate certificate = new Certificate();
+                            certificate.id = cObj.getInt("_id");
+                            certificate.imageUri = cObj.getString("certificateImage");
+                            certificate.status = cObj.getInt("status");
+                            certificates.add(certificate);
+                        }
+
+                        updateView();
+                        mAdapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+                    Progress.hide(mContext);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                try{
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")){
+                        Mualab.getInstance().getSessionManager().logout();
+                        // MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }})
+                .setAuthToken(user.authToken)
+                .setProgress(true)
+                .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
+        //.setBody(params, "application/x-www-form-urlencoded"));
+
+        task.execute(this.getClass().getName());
+    }
+
+/*
     private void getAllCertificate(){
         new HttpTask(new HttpTask.Builder(mContext, "getAllCertificate", new HttpResponceListner.Listener() {
             @Override
@@ -264,9 +342,10 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
             }
         }).setAuthToken(user.authToken)).execute("getAllCertificate");
     }
+*/
 
     private void uploadCertificateIntoServerDb(Bitmap bitmap){
-       // Map<String, String> body = new HashMap<>();
+        // Map<String, String> body = new HashMap<>();
         HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "addArtistCertificate", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
@@ -302,8 +381,6 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
             }})
                 .setAuthToken(user.authToken)
                 .setProgress(true));
-                //.setBody(body, HttpTask.ContentType.X_WWW_FORM_URLENCODED)
-                //.setParam(body));
 
         task.postImage("certificateImage", bitmap);
     }

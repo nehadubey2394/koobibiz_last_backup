@@ -131,8 +131,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -147,7 +145,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
                     if(user.countryCode!=null && user.countryCode.equals(countryCode) &&  user.email.equals(email)
                             && user.contactNo.equals(contactNo)
-                            /*&& countDownTimer!=null && timerIsRunning*/){
+                        /*&& countDownTimer!=null && timerIsRunning*/){
                         nextScreen();
                     }else {
                         isResendOTP = false;
@@ -273,7 +271,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
 
     private boolean validateAddress() {
-       // String phone = tvAddress.getText().toString().trim();
+        // String phone = tvAddress.getText().toString().trim();
         if (address==null) {
             tvAddress.setText(String.format("%s*", getString(R.string.address_activity)));
             showToast(getString(R.string.error_address_required));
@@ -411,8 +409,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             case 2:
                 progressView2.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
                 startActivity(new Intent(RegistrationActivity.this, Registration2Activity.class)
-                .putExtra(Constants.USER, user)
-                .putExtra(Constants.ADDRESS, address));
+                        .putExtra(Constants.USER, user)
+                        .putExtra(Constants.ADDRESS, address));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 break;
         }
@@ -485,14 +483,14 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             for (int i = 0; i < countries.size(); i++) {
                 Country country = countries.get(i);
                 if (CountryID.equalsIgnoreCase(country.code)) {
-                   // CountryZipCode = countries.get(i).phone_code;
+                    // CountryZipCode = countries.get(i).phone_code;
                     countryCode = "+" + country.phone_code;
                     tvCountryCode.setText(String.format("+%s", country.phone_code));
                     break;
                 }
             }
         }
-       // return CountryZipCode + " " + CountryID;
+        // return CountryZipCode + " " + CountryID;
     }
 
     private void apiCallForDataVerify() {

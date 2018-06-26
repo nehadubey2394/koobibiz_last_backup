@@ -235,6 +235,7 @@
     <string name="no_booking_available">No data found</string>
     <string name="text_cancelled">Cancelled</string>
     <string name="text_confirmed">Confirmed</string>
+    <string name="text_completed">Completed</string>
     <string name="text_reject">Reject</string>
     <string name="counter">Counter</string>
     <string name="text_accept">Accept</string>
@@ -243,6 +244,8 @@
 
     <!--Booking detail-->
     <string name="text_location">Location</string>
+    <string name="payment_details">Payment Details</string>
+    <string name="booking_status">Booking Status</string>
     <string name="text_services">Services</string>
     <string name="text_date_and_time">Appointment Date And Time</string>
     <string name="change_staff">Change Staff</string>
@@ -314,4 +317,11 @@
     <string name="follow">Follow</string>
     <string name="write_a_comment_here">Write a comment here…</string>
     <string name="no_comment_yet">No Comment yet</string>
+    <string name="unfollow_user">Unfollow <b>@%s?</b></string>
+    <string name="unfollow">Unfollow</string>
+    <string name="no_like_yet">No like yet</string>
+    <string name="transection_id">Transection Id</string>
+    <string name="complete_booking">Complete Booking</string>
+    <string name="booking">Booking</string>
+    <string name="total">Total</string>
 </resources>

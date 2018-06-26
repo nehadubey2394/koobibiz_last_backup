@@ -14,15 +14,31 @@
         android:visibility="visible"
         android:layout_alignParentTop="true" />
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnComplete"
+        style="@style/My_Button_Small.Invert"
+        android:layout_width="130dp"
+        android:layout_height="30dp"
+        android:text="@string/complete_booking"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:textSize="12sp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/header"
+        />
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rlBottom"
+        android:id="@+id/nsView"
+        android:layout_above="@+id/llPrice"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_below="@+id/header"
+        android:layout_below="@+id/btnComplete"
         >
 
         <LinearLayout
@@ -177,6 +193,172 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="2dp"
+                android:padding="4dp">
+
+                <LinearLayout
+                    android:id="@+id/lyPaymDetail"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/bg_white_circle_gray_strock"
+                    android:gravity="center"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/ivPaymDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/payment_ico"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lyLinear3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toEndOf="@+id/lyPaymDetail"
+                    android:layout_toRightOf="@+id/lyPaymDetail"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="@string/payment_details"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_alignParentLeft="true"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tvPayType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/text_color"
+                            android:layout_alignParentRight="true"
+                            android:textSize="15sp" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:maxLines="2"
+                        android:text="@string/transection_id"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvTransectionId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:maxLines="2"
+                        android:text="-"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/text_color"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray2"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="50dp"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="2dp"
+                android:padding="4dp">
+
+                <LinearLayout
+                    android:id="@+id/lyBookStatus"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/bg_white_circle_gray_strock"
+                    android:gravity="center"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/ivBookStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/booking_ico"
+                        android:padding="2dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lyLinear4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toEndOf="@+id/lyBookStatus"
+                    android:layout_toRightOf="@+id/lyBookStatus"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/booking_status"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvBookingStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:maxLines="2"
+                        android:text="NA"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/text_color"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray2"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="50dp"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
@@ -239,6 +421,46 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/llPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:paddingRight="12dp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/rlBottom"
+        >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color"
+            android:textSize="16sp"
+            style="@style/TextView.Bold"
+            android:padding="4dp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/total"
+            />
+
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_blue"
+            android:textSize="16sp"
+            android:text="-"
+            style="@style/TextView.Bold"
+            android:layout_marginLeft="5dp"
+            android:padding="4dp"
+            />
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/rlBottom"
@@ -344,6 +566,6 @@
 
         </LinearLayout>
 
-
     </RelativeLayout>
+
 </RelativeLayout>

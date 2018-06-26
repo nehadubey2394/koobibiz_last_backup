@@ -51,6 +51,18 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             />
 
+        <ImageView
+            android:id="@+id/btnAddCertificate"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/staff_add_ico"
+            android:visibility="gone"
+            android:padding="5dp"
+            android:tint="@color/black"
+            />
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

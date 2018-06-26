@@ -35,5 +35,5 @@ public class UserProfileData implements Serializable {
 ]*/
     public String _id,firstName,lastName,userName,businessName,businesspostalCode,buildingNumber,businessType,
             profileImage,email,gender,dob,address,address2,countryCode,contactNo,userType,followersCount,
-            followingCount,serviceCount,certificateCount,postCount,reviewCount,ratingCount,bio,serviceType,isCertificateVerify;
+            followingCount,serviceCount,certificateCount,postCount,reviewCount,ratingCount,radius,bio,serviceType,isCertificateVerify;
 }

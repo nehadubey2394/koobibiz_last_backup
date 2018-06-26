@@ -75,6 +75,7 @@ public class CommentsActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
     private ArrayList<Comment> commentList = new ArrayList<>();
     private EndlessRecyclerViewScrollListener scrollListener;
+    private User currentUser = Mualab.getInstance().getSessionManager().getUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,8 +256,6 @@ public class CommentsActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     public void onBackPressed() {
         View view = this.getCurrentFocus();
@@ -272,12 +271,12 @@ public class CommentsActivity extends AppCompatActivity {
             output.putExtra("feedPosition", feedPosition);
             setResult(RESULT_OK, output);
         }
-
         super.onBackPressed();
+        finish();
     }
 
     private void getCommentList(int pageNo, String search) {
-        User currentUser = Mualab.getInstance().getSessionManager().getUser();
+
         Map<String, String> map = new HashMap<>();
         map.put("feedId", ""+feed._id);
         map.put("userId",  ""+currentUser.id);
@@ -334,13 +333,14 @@ public class CommentsActivity extends AppCompatActivity {
 
             }
         }).setProgress(false)
+                .setAuthToken(currentUser.authToken)
                 .setParam(map)).execute(TAG);
     }
 
     private void apiForAddComments(final String comments, final Bitmap bitmap) {
 
         Map<String, String> map = new HashMap<>();
-       map.putAll(Mualab.feedBasicInfo);
+        map.putAll(Mualab.feedBasicInfo);
         map.put("feedId", ""+feed._id);
         map.put("postUserId", ""+feed.userId);
         map.put("type", bitmap==null?"text":"image");
@@ -364,7 +364,6 @@ public class CommentsActivity extends AppCompatActivity {
                         Comment comment = new Comment();
 
                         feed.commentCount = js.getInt("commentCount");
-                        User currentUser = Mualab.getInstance().getSessionManager().getUser();
                         comment.id = js.getInt("_id");
                         comment.comment = comments;
                         comment.firstName = currentUser.firstName;
@@ -408,10 +407,9 @@ public class CommentsActivity extends AppCompatActivity {
                     tv_no_comments.setText(getString(R.string.msg_some_thing_went_wrong));
                 }
             }}).setProgress(true)
+                .setAuthToken(currentUser.authToken)
                 .setParam(map)).postImage("comment", bitmap);
     }
-
-
 
     protected void setStatusbarColor(){
         Window window = this.getWindow();

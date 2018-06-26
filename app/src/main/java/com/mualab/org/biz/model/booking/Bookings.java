@@ -9,7 +9,8 @@ import java.util.List;
  */
 
 public class Bookings implements Serializable {
-    public  String _id,bookingDate,bookingTime,bookStatus,paymentType,paymentStatus,totalPrice,artistServiceName,location;
+    public  String _id,bookingDate,bookingTime,bookStatus,paymentType,paymentStatus,totalPrice,
+            artistServiceName,location,transjectionId,isFinsh;
 
     public UserDetail userDetail;
     public List<BookingInfo>todayBookingInfos = new ArrayList<>();

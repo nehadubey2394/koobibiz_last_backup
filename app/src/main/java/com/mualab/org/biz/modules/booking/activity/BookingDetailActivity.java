@@ -55,15 +55,17 @@ import java.util.Map;
 public class BookingDetailActivity extends AppCompatActivity implements OnStaffChangeListener,View.OnClickListener ,OnStaffChangeAndDoneClickListener{
     private String bookingId;
     private BookedServicesAdapter adapter;
-    private TextView tvBookingDate,tvBookingTime,tvBookingLoc,tvUserName;
+    private TextView tvBookingDate,tvBookingTime,tvBookingLoc,tvUserName,tvBookingStatus,
+            tvTransectionId,tvPayType,tvTotalPrice;
     private List<BookingInfo> bookingInfoList;
     private ImageView ivChat,ivCall,ivLocation,ivCancle,ivHeaderProfile,ivReject;
     private LinearLayout llBottom2,llBottom;
     private List<Staff> staffList;
     private Bookings item;
     private Staff selectedStaff;
-    private boolean isChangedOccured = false;
+    private boolean isChangedOccured = false,isFiltered = false;
     private ChangeStaffListAdapter listAdapter;
+    private AppCompatButton btnComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         Intent intent = getIntent();
         if (intent!=null){
             bookingId =  intent.getStringExtra("bookingId");
+            isFiltered =  intent.getBooleanExtra("isFiltered",isFiltered);
             Bundle args = intent.getBundleExtra("BUNDLE");
             //  staffList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
         }/*else {
@@ -94,9 +97,14 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
     private void setViewId(){
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
+        btnComplete = findViewById(R.id.btnComplete);
         ivHeaderBack.setVisibility(View.VISIBLE);
         TextView  tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvUserName = findViewById(R.id.tvUserName);
+        tvPayType = findViewById(R.id.tvPayType);
+        tvTotalPrice = findViewById(R.id.tvTotalPrice);
+        tvTransectionId = findViewById(R.id.tvTransectionId);
+        tvBookingStatus = findViewById(R.id.tvBookingStatus);
 
         tvBookingDate = findViewById(R.id.tvBookingDate);
         tvBookingTime = findViewById(R.id.tvBookingTime);
@@ -121,13 +129,14 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         rycServices.setLayoutManager(layoutManager);
         rycServices.setAdapter(adapter);
 
-        apiForGetBookingDetail();
+        apiForGetBookingDetail(true);
 
         ivAccept.setOnClickListener(this);
         ivReject.setOnClickListener(this);
         ivCounter.setOnClickListener(this);
         ivCancle.setOnClickListener(this);
         ivHeaderBack.setOnClickListener(this);
+        btnComplete.setOnClickListener(this);
     }
 
     @Override
@@ -142,6 +151,10 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                 // showCancleDialog();
                 actionForBooking("reject",false);
                 break;
+            case R.id.btnComplete:
+                actionForBooking("complete",false);
+                break;
+
             case R.id.ivCancle:
                 showCancleDialog();
                 break;
@@ -257,59 +270,6 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
 
     }
 
-    private void upDateUI(Bookings bookingInfo,String status){
-        Session session = Mualab.getInstance().getSessionManager();
-        User user = session.getUser();
-
-        if (!item.userDetail.profileImage.equals("")){
-            Picasso.with(BookingDetailActivity.this).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).fit().into(ivHeaderProfile);
-        }else
-            ivHeaderProfile.setImageDrawable(getResources().getDrawable(R.drawable.defoult_user_img));
-
-        tvBookingLoc.setText(bookingInfo.location);
-        tvUserName.setText(bookingInfo.userDetail.userName);
-
-        SimpleDateFormat dfInput = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat dfOutput = new SimpleDateFormat("dd MMMM yyyy");
-        Date formatedDate = null;
-        try {
-
-            if (user.businessType.equals("independent")) {
-                if (bookingInfo.todayBookingInfos.size()!=0){
-                    formatedDate = dfInput.parse(bookingInfo.todayBookingInfos.get(0).bookingDate);
-                    tvBookingDate.setText(dfOutput.format(formatedDate));
-                    tvBookingTime.setText(bookingInfo.todayBookingInfos.get(0).startTime);
-                }else {
-                    formatedDate = dfInput.parse(bookingInfo.pendingBookingInfos.get(0).bookingDate);
-                    tvBookingDate.setText(dfOutput.format(formatedDate));
-                    tvBookingTime.setText(bookingInfo.pendingBookingInfos.get(0).startTime);
-                }
-            }else {
-                formatedDate = dfInput.parse(bookingInfo.bookingDate);
-                tvBookingDate.setText(dfOutput.format(formatedDate));
-                tvBookingTime.setText(bookingInfo.bookingTime);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        switch (status) {
-            case "0":
-                llBottom2.setVisibility(View.VISIBLE);
-                llBottom.setVisibility(View.GONE);
-                break;
-            case "2":
-                llBottom2.setVisibility(View.GONE);
-                llBottom.setVisibility(View.VISIBLE);
-                ivCancle.setVisibility(View.GONE);
-                break;
-            default:
-                llBottom2.setVisibility(View.GONE);
-                llBottom.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
     public void showStaffList(final int position, final BookingInfo bookingInfo) {
         View DialogView = View.inflate(BookingDetailActivity.this, R.layout.dialog_layout_change_staff, null);
 
@@ -398,7 +358,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         //     MyToast.getInstance(BookingDetailActivity.this).showDasuAlert("No staff available");
     }
 
-    private void apiForGetBookingDetail(){
+    private void apiForGetBookingDetail(final boolean isProgressShow){
         Session session = Mualab.getInstance().getSessionManager();
         final User user = session.getUser();
 
@@ -408,7 +368,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                 public void onNetworkChange(Dialog dialog, boolean isConnected) {
                     if(isConnected){
                         dialog.dismiss();
-                        apiForGetBookingDetail();
+                        apiForGetBookingDetail(isProgressShow);
                     }
                 }
             }).show();
@@ -424,7 +384,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
                     String message = js.getString("message");
-
+                    Progress.hide(BookingDetailActivity.this);
                     if (status.equalsIgnoreCase("success")) {
 
                         JSONArray array = js.getJSONArray("bookingDetails");
@@ -438,8 +398,15 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                                 item.bookingTime = object.getString("bookingTime");
                                 item.bookStatus = object.getString("bookStatus");
                                 item.paymentType = object.getString("paymentType");
+                                item.paymentStatus = object.getString("paymentStatus");
                                 item.totalPrice = object.getString("totalPrice");
                                 item.location = object.getString("location");
+                                item.transjectionId = object.getString("transjectionId");
+                                item.isFinsh = object.getString("isFinsh");
+                                if (item.isFinsh.equals("1"))
+                                    btnComplete.setVisibility(View.VISIBLE);
+                                else
+                                    btnComplete.setVisibility(View.GONE);
 
                                 JSONArray arrUserDetail = object.getJSONArray("userDetail");
                                 if (arrUserDetail != null && arrUserDetail.length() != 0) {
@@ -526,7 +493,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
 
             }})
                 .setAuthToken(user.authToken)
-                .setProgress(true)
+                .setProgress(isProgressShow)
                 .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
         //.setBody(params, "application/x-www-form-urlencoded"));
 
@@ -707,7 +674,9 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         params.put("subserviceId", subServiceId);
         params.put("artistServiceId", artistServiceId);
         params.put("type", type);
-
+        if (type.equals("complete")){
+            params.put("paymentType ", item.paymentType);
+        }
 
         HttpTask task = new HttpTask(new HttpTask.Builder(BookingDetailActivity.this, "bookingAction", new HttpResponceListner.Listener() {
             @Override
@@ -716,11 +685,12 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
                     String message = js.getString("message");
-
+                    Progress.hide(BookingDetailActivity.this);
                     if (status.equalsIgnoreCase("success")) {
                         llBottom.setVisibility(View.VISIBLE);
                         llBottom2.setVisibility(View.GONE);
                         isChangedOccured = true;
+
                         if (type.equals("reject")){
                             for (int i=0; i<item.pendingBookingInfos.size(); i++){
                                 item.pendingBookingInfos.get(i).bookingStatus = "2";
@@ -729,10 +699,28 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                             ivCancle.setVisibility(View.GONE);
                             adapter.notifyDataSetChanged();
                         }
+
                         if (isCancelled)
                             MyToast.getInstance(BookingDetailActivity.this).showDasuAlert("Request has been cancelled");
                         else
                             MyToast.getInstance(BookingDetailActivity.this).showDasuAlert(message);
+
+                        if (type.equals("complete")) {
+                            btnComplete.setVisibility(View.GONE);
+                            ivCancle.setVisibility(View.GONE);
+                            for (BookingInfo bookingInfo : bookingInfoList){
+                                bookingInfo.bookingStatus = "3";
+                                adapter.notifyDataSetChanged();
+                            }
+                            if (item.paymentType.equals("2") && item.paymentStatus.equals("0")){
+                                tvBookingStatus.setText("Payment pending");
+                            }else {
+                                tvBookingStatus.setText(getString(R.string.booking)+" "+getString(R.string.text_completed));
+                            }
+                            item = new Bookings();
+                            bookingInfoList.clear();
+                            apiForGetBookingDetail(true);
+                        }
                     }else {
                         MyToast.getInstance(BookingDetailActivity.this).showDasuAlert(message);
                     }
@@ -770,6 +758,96 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         selectedStaff = bookingInfo;
     }
 
+    private void upDateUI(Bookings bookingInfo,String status){
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+
+        if (!item.userDetail.profileImage.equals("")){
+            Picasso.with(BookingDetailActivity.this).load(item.userDetail.profileImage).placeholder(R.drawable.defoult_user_img).fit().into(ivHeaderProfile);
+        }else
+            ivHeaderProfile.setImageDrawable(getResources().getDrawable(R.drawable.defoult_user_img));
+
+        tvBookingLoc.setText(bookingInfo.location);
+        tvUserName.setText(bookingInfo.userDetail.userName);
+        //if (user.businessType.equals("independent")) {
+        if (isFiltered) {
+            if (bookingInfo.todayBookingInfos.size()!=0){
+                tvBookingDate.setText(changeDateFormate(bookingInfo.todayBookingInfos.get(0).bookingDate));
+                tvBookingTime.setText(bookingInfo.todayBookingInfos.get(0).startTime);
+            }else {
+                tvBookingDate.setText(changeDateFormate(bookingInfo.pendingBookingInfos.get(0).bookingDate));
+                tvBookingTime.setText(bookingInfo.pendingBookingInfos.get(0).startTime);
+            }
+        }else {
+            tvBookingDate.setText(changeDateFormate(bookingInfo.bookingDate));
+            tvBookingTime.setText(bookingInfo.bookingTime);
+        }
+
+        if (bookingInfo.paymentType.equals("2")){
+            tvPayType.setText("Online");
+        }else {
+            tvPayType.setText("Cash");
+        }
+
+        tvTotalPrice.setText("£"+bookingInfo.totalPrice);
+
+        if (!bookingInfo.transjectionId.equals(""))
+            tvTransectionId.setText(bookingInfo.transjectionId);
+
+        switch (bookingInfo.bookStatus) {
+            case "0":
+                tvBookingStatus.setText(getString(R.string.booking)+" "+getString(R.string.pending));
+                break;
+            case "1":
+                tvBookingStatus.setText(getString(R.string.booking)+" "+getString(R.string.confirmed));
+                break;
+            case "2":
+                tvBookingStatus.setText(getString(R.string.booking)+" "+getString(R.string.text_cancelled));
+                break;
+            case "3":
+                if (bookingInfo.paymentType.equals("2") && bookingInfo.paymentStatus.equals("0")){
+                    tvBookingStatus.setText("Payment pending");
+                }else {
+                    tvBookingStatus.setText(getString(R.string.booking)+" "+getString(R.string.text_completed));
+                }
+                break;
+        }
+
+        switch (status) {
+            case "0":
+                llBottom2.setVisibility(View.VISIBLE);
+                llBottom.setVisibility(View.GONE);
+                break;
+            case "2":
+                llBottom2.setVisibility(View.GONE);
+                llBottom.setVisibility(View.VISIBLE);
+                ivCancle.setVisibility(View.GONE);
+                break;
+            case "3":
+                llBottom2.setVisibility(View.GONE);
+                llBottom.setVisibility(View.VISIBLE);
+                ivCancle.setVisibility(View.GONE);
+                break;
+            default:
+                llBottom2.setVisibility(View.GONE);
+                llBottom.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    private String changeDateFormate(String sDate){
+        SimpleDateFormat inputDf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat outputtDf = new SimpleDateFormat("dd/MM/yyyy");
+        Date formatedDate = null;
+        String date = "";
+        try {
+            formatedDate = inputDf.parse(sDate);
+            date =  outputtDf.format(formatedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
     @Override
     public void onBackPressed() {
         if (!isChangedOccured)

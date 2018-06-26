@@ -171,14 +171,16 @@ public class FollowersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         Map<String, String> params = new HashMap<>();
-        if (isFollowers) {
+        params.put("userId", String.valueOf(user.id));
+        params.put("followerId", followers.followerId);
+       /* if (isFollowers) {
             params.put("userId", String.valueOf(user.id));
             params.put("followerId", followers.followerId);
         }else {
             params.put("userId", followers.userId);
             params.put("followerId", String.valueOf(user.id));
 
-        }
+        }*/
 
 
         HttpTask task = new HttpTask(new HttpTask.Builder(context, "followFollowing", new HttpResponceListner.Listener() {
@@ -190,11 +192,11 @@ public class FollowersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     String message = js.getString("message");
 
                     if (status.equalsIgnoreCase("success")) {
-                         if (followers.followerStatus.equals("1")){
-                             followers.followerStatus = "0";
-                         }else {
-                             followers.followerStatus = "1";
-                         }
+                        if (followers.followerStatus.equals("1")){
+                            followers.followerStatus = "0";
+                        }else {
+                            followers.followerStatus = "1";
+                        }
                         notifyDataSetChanged();
                     }else {
                         MyToast.getInstance(context).showDasuAlert(message);

@@ -67,7 +67,11 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (item.bookStatus.equals("2")) {
             holder.tvBookingStatus.setText(R.string.text_cancelled);
             holder.tvBookingStatus.setTextColor(context.getResources().getColor(R.color.primary_red));
-        }else {
+        }else  if (item.bookStatus.equals("3"))  {
+            holder.tvBookingStatus.setText(R.string.text_completed);
+            holder.tvBookingStatus.setTextColor(context.getResources().getColor(R.color.primary_green));
+        }
+        else {
             holder.tvBookingStatus.setText(R.string.text_confirmed);
             holder.tvBookingStatus.setTextColor(context.getResources().getColor(R.color.primary_green));
         }
@@ -95,6 +99,7 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         else {
             holder.rlStaffName.setVisibility(View.VISIBLE);
             if (isFiltered){
+                holder.tvTime.setText(item.todayBookingInfos.get(0).startTime);
                 if (user.id.equals(item.todayBookingInfos.get(0).staffId))
                     holder.tvStaffName.setText("My booking");
                 else

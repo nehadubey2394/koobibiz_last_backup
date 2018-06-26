@@ -1,17 +1,16 @@
 package com.mualab.org.biz.modules.my_profile.activity;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.modules.add_staff.fragments.ArtistSettingsFragment;
 import com.mualab.org.biz.modules.my_profile.fragment.ProfileFragment;
 import com.mualab.org.biz.util.StatusBarUtil;
 
@@ -34,11 +33,11 @@ public class ProfileActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                onBackPressed();
             }
         });
 
-        replaceFragment(new ProfileFragment(), false);
+        addFragment(new ProfileFragment(), false);
     }
 
  /*   public void setTitle(String text){
@@ -64,9 +63,32 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /* frangment replace code */
+    public void addFragment(Fragment fragment, boolean addToBackStack) {
+        String backStackName = fragment.getClass().getName();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStackName, 0);
+        if (!fragmentPopped) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_in,0,0);
+            transaction.add(R.id.container1, fragment, backStackName);
+            if (addToBackStack)
+                transaction.addToBackStack(backStackName);
+            transaction.commit();
+        }
+
+    }
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container1);
+        FragmentManager fm = getSupportFragmentManager();
+        int i = fm.getBackStackEntryCount();
+        if (i > 0) {
+            fm.popBackStack();
+        } else {
+            // super.onBackPressed();
+            finish();
+        }
     }
 }

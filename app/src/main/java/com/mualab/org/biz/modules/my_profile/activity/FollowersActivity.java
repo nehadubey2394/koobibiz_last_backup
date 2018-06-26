@@ -76,7 +76,7 @@ public class FollowersActivity extends AppCompatActivity {
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -277,6 +277,8 @@ public class FollowersActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
         finish();
     }
 }

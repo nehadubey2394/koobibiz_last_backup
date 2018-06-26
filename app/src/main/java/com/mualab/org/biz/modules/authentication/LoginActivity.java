@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.dialogs.Progress;
@@ -62,6 +64,7 @@ public class LoginActivity extends BaseActivity {
         ed_password = findViewById(R.id.ed_password);
         input_layout_UserName = findViewById(R.id.input_layout_UserName);
         input_layout_password = findViewById(R.id.input_layout_password);
+        FirebaseApp.initializeApp(this);
         //ed_password.addTextChangedListener(new MyTextWatcher(ed_password));
     }
 
@@ -92,9 +95,9 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
                 String appPackageName = "com.mualab.org.user";//getPackageName(); // getPackageName() from Context or Activity object
                 if(isPackageExisted(appPackageName)){
-                    Intent intent = new Intent();
+                  /*  Intent intent = new Intent();
                     intent.setComponent(new ComponentName(appPackageName, appPackageName+".modules.SplashActivity"));
-                    startActivity(intent);
+                    startActivity(intent);*/
                 }else {
 
                     try {
@@ -182,7 +185,7 @@ public class LoginActivity extends BaseActivity {
         boolean isValidInput = true;
         String username = ed_username.getText().toString().trim();
         String password = ed_password.getText().toString().trim();
-        String deviceToken = "androidTest";//FirebaseInstanceId.getInstance().getToken();
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();//"androidTest"
 
         if (!validateName() || !validatePassword()) {
             isValidInput = false;
@@ -207,6 +210,7 @@ public class LoginActivity extends BaseActivity {
             params.put("userName", username);
             params.put("password", password);
             params.put("deviceToken",deviceToken);
+            params.put("firebaseToken",deviceToken);
             params.put("userType", "artist");
             params.put("deviceType", "2");
 

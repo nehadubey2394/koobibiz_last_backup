@@ -34,14 +34,15 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
         Session session = Mualab.getInstance().getSessionManager();
         final User user = session.getUser();
 
-        Intent intent = getIntent();
-        Bundle args = intent.getBundleExtra("BUNDLE");
-        List<Staff> tmpList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
-
         Staff item1 = new Staff();
         item1.staffName = "My Booking";
         item1.staffImage = user.profileImage;
         staffList.add(item1);
+
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        List<Staff> tmpList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
+
         if (tmpList != null) {
             staffList.addAll(tmpList);
         }

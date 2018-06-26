@@ -19,6 +19,8 @@ import android.widget.ViewSwitcher;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.image.picker.ImagePicker;
 import com.image.cropper.CropImage;
@@ -123,6 +125,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
     }
 
     private void initViews(){
+        FirebaseApp.initializeApp(this);
         viewSwitcher = findViewById(R.id.viewSwitcher);
         progressView3 = findViewById(R.id.progressView3);
         progressView4 = findViewById(R.id.progressView4);
@@ -246,7 +249,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
                 break;
 
             case 4:
-                String deviceToken = "android test token";//FirebaseInstanceId.getInstance().getToken();
+                String deviceToken = FirebaseInstanceId.getInstance().getToken();//"android test token";
                 Map<String, String> params = new HashMap<>();
                 params.put("userName", user.userName);
                 params.put("firstName", user.firstName);
@@ -313,7 +316,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
                     @Override
                     public void ErrorListener(VolleyError error) {
                         findViewById(R.id.btnContinue2).setEnabled(true);
-                        Log.d("log", error.getLocalizedMessage());
+                        // Log.d("log", error.getLocalizedMessage());
                     }
                 }).setParam(params)
                         .setProgress(true));
@@ -470,7 +473,6 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
 
         return true;
     }
-
 
     private boolean validInputField(EditText editText, TextInputLayout inputLayout, int id) {
         String text = editText.getText().toString().trim();

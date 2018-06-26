@@ -1,4 +1,4 @@
-package com.mualab.org.biz.modules.my_profile.adapter;
+package com.mualab.org.biz.modules.my_profile.adapter.services;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

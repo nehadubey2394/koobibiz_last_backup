@@ -114,7 +114,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return null;
     }
 
-
     @Override
     public int getItemViewType(int position) {
         Feeds feed = feedItems.get(position);
@@ -416,11 +415,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         videoHolder.ly_like_count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* int adapterPosition = videoHolder.getAdapterPosition();
+                int adapterPosition = videoHolder.getAdapterPosition();
                 Feeds feed = feedItems.get(adapterPosition);
                 if(listener!=null){
                     listener.onLikeListClick(feed);
-                }*/
+                }
             }
         });
 
@@ -733,7 +732,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             public void ErrorListener(VolleyError error) {
 
             }
-        }).setParam(map)).execute("like"+feed._id);
+        }).setAuthToken(currentUser.authToken)
+                .setParam(map)).execute("like"+feed._id);
+
 
     }
 

@@ -95,7 +95,7 @@ public class AdapterUploadCertificate extends RecyclerView.Adapter<AdapterUpload
         holder.civ_picImage.setVisibility(cf.id==-1?View.VISIBLE:View.GONE);
         holder.ivCertificate.setVisibility(cf.id==-1?View.GONE:View.VISIBLE);
         holder.civDeleteBtn.setVisibility(cf.id==-1?View.GONE:View.VISIBLE);
-       // listner.onUpdateIndex(position);
+        // listner.onUpdateIndex(position);
         if(!TextUtils.isEmpty(cf.imageUri)){
             Picasso.with(context).load(cf.imageUri).into(holder.ivCertificate);
         }
