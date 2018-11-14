@@ -195,7 +195,7 @@ public class HttpTask {
                 listener.ErrorListener(error);
                 if(progress)
                     Progress.hide(context);
-                handleError(error);
+               // handleError(error);
             }
         }){
             @Override
@@ -269,7 +269,7 @@ public class HttpTask {
             @Override
             public void onErrorResponse(VolleyError error) {
                 listener.ErrorListener(error);
-                handleError(error);
+              //  handleError(error);
             }
         }) {
             @Override

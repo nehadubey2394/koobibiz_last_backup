@@ -65,6 +65,7 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
                 day.isOpen = isChecked;
 
                 if(isChecked && (day.slots==null || day.slots.size()==0)){
+                    assert day.slots != null;
                     day.slots.add(new TimeSlot(day.dayId));
                 }else if(!isChecked){
                     day.slots.clear();
@@ -89,7 +90,7 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CheckBox checkbox;
-       // ImageView ivAddTimeSlot;
+        // ImageView ivAddTimeSlot;
         LinearLayout ll_addTimeSlot;
         ListView listView;
         TextView tv_dayName, tv_workingStatus;

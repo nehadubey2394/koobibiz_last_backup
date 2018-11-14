@@ -15,7 +15,7 @@ import org.json.JSONObject;
  */
 
 public class Helper {
-    public  String error_Messages(VolleyError error) {
+    public String error_Messages(VolleyError error) {
         NetworkResponse networkResponse = error.networkResponse;
         String errorMessage = "Something went wrong.";
 
@@ -30,14 +30,21 @@ public class Helper {
             try {
                 JSONObject response = new JSONObject(result);
                 String status = response.getString("status");
-                String message = response.getString("message");
+                String message = "";
+                if (response.has("message"))
+                    message = response.getString("message");
 
-                Log.e("Error Message", message);
+                if (response.has("error"))
+                    message = response.getString("error");
 
-                if (networkResponse.statusCode == 404) {
+                if (networkResponse.statusCode == 404 && !message.equals("")) {
+                    errorMessage = message;
+                    return errorMessage;
+                } else if (networkResponse.statusCode == 404) {
                     errorMessage = "Resource not found";
                     return errorMessage;
-                } else if (networkResponse.statusCode == 401) {
+                }
+                else if (networkResponse.statusCode == 401) {
                     //errorMessage = message + " Check your inputs";
                     errorMessage =  "Your Session is expired,please login again.";
                     return errorMessage;

@@ -1,5 +1,6 @@
 package com.mualab.org.biz.modules.profile.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.modules.profile.adapter.AdapterBusinessDays;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.BusinessDay;
@@ -45,7 +47,6 @@ public class BusinessHoursFragmentCreation extends ProfileCreationBaseFragment {
         return new BusinessHoursFragmentCreation();
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +67,6 @@ public class BusinessHoursFragmentCreation extends ProfileCreationBaseFragment {
                     if(ConnectionDetector.isConnected()){
                         preSession.setBusinessHours(businessDays);
                         updateDataIntoServerDb();
-                        listener.onNext();
                     } else showToast(R.string.error_msg_network);
                 }
             }
@@ -74,7 +74,6 @@ public class BusinessHoursFragmentCreation extends ProfileCreationBaseFragment {
 
         return view;
     }
-
 
     private boolean  isvalidBusinessHours(){
 
@@ -105,7 +104,6 @@ public class BusinessHoursFragmentCreation extends ProfileCreationBaseFragment {
         rvBusinessDay.setLayoutManager(new LinearLayoutManager(mContext));
         rvBusinessDay.setAdapter(adapter);
     }
-
 
     private List<BusinessDay> getBusinessdays(){
         BusinessProfile businessProfile =  preSession.getBusinessProfile();
@@ -170,7 +168,20 @@ public class BusinessHoursFragmentCreation extends ProfileCreationBaseFragment {
 
     /*update data into server db*/
     private void updateDataIntoServerDb(){
-        List<BusinessDay> businessDays = getBusinessdays(); // getting business hours slots like opening/closing time
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        updateDataIntoServerDb();
+                    }
+                }
+            }).show();
+        }
+
+        //  List<BusinessDay> businessDays = getBusinessdays(); // getting business hours slots like opening/closing time
         ArrayList<TimeSlot> slotList = new ArrayList<>();
         for(BusinessDay tmp : businessDays){
             if(tmp.isOpen){
@@ -182,26 +193,33 @@ public class BusinessHoursFragmentCreation extends ProfileCreationBaseFragment {
             }
         }
 
-        // dynamic serialization on product
-        Gson gson = new GsonBuilder().registerTypeAdapter(TimeSlot.class, new TimeSlotSerializer()).create();
-        Map<String,String> body = new HashMap<>();
-        body.put("businessHour", gson.toJson(slotList));
+        if (slotList.size()!=0){
 
-        new HttpTask(new HttpTask.Builder(mContext, "addBusinessHour", new HttpResponceListner.Listener() {
-            @Override
-            public void onResponse(String response, String apiName) {
-                Log.d("res:", response);
-                preSession.updateRegStep(1);
-            }
+            // dynamic serialization on product
+            Gson gson = new GsonBuilder().registerTypeAdapter(TimeSlot.class, new TimeSlotSerializer()).create();
+            Map<String,String> body = new HashMap<>();
+            body.put("businessHour", gson.toJson(slotList));
 
-            @Override
-            public void ErrorListener(VolleyError error) {
-                // Log.d("res:", error.getLocalizedMessage());
-            }})
-                .setMethod(Request.Method.POST)
-                .setParam(body)
-                .setBodyContentType( HttpTask.ContentType.APPLICATION_JSON)
-                .setBody(body)
-                .setAuthToken(user.authToken)).execute("AddBusinessHour");
+            new HttpTask(new HttpTask.Builder(mContext, "addBusinessHour", new HttpResponceListner.Listener() {
+                @Override
+                public void onResponse(String response, String apiName) {
+                    Log.d("res:", response);
+                    listener.onNext();
+                    preSession.updateRegStep(1);
+                }
+
+                @Override
+                public void ErrorListener(VolleyError error) {
+                    // Log.d("res:", error.getLocalizedMessage());
+                }})
+                    .setMethod(Request.Method.POST)
+                    .setParam(body)
+                    .setBodyContentType( HttpTask.ContentType.APPLICATION_JSON)
+                    .setBody(body)
+                    .setAuthToken(user.authToken)).execute("AddBusinessHour");
+        }else {
+            preSession.updateRegStep(0);
+            MyToast.getInstance(mContext).showDasuAlert("Select at least one day working hours");
+        }
     }
 }

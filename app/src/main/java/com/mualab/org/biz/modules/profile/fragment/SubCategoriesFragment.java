@@ -1,6 +1,7 @@
 package com.mualab.org.biz.modules.profile.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.modules.profile.BusinessProfileActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.model.Category;
@@ -281,7 +283,17 @@ public class SubCategoriesFragment extends ProfileCreationBaseFragment {
                     .setBody(body)
                     .setProgress(true)
                     .setAuthToken(user.authToken)).execute("updateRange");
-        }else showToast(R.string.error_msg_network);
+        }else{
+            //showToast(R.string.error_msg_network);
+            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                    }
+                }
+            }).show();
+        }
     }
 
 }

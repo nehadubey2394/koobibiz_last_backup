@@ -62,7 +62,7 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
         rycvStaff.setLayoutManager(linearLayoutManager);
         rycvStaff.setAdapter(staffListAdapter);
 
-        AppCompatButton btnNewAppointment = findViewById(R.id.btnNewAppointment);
+        AppCompatButton btnAllStaff = findViewById(R.id.btnAllStaff);
 
 
         if (staffList.size()==0){
@@ -70,7 +70,7 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
             tvoData.setVisibility(View.VISIBLE);
         }
 
-        btnNewAppointment.setOnClickListener(new View.OnClickListener() {
+        btnAllStaff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -95,6 +95,13 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
     public void onStaffSelect(int position, String staffId) {
         String staffName = staffList.get(position).staffName;
         if (staffId==null){
+            Session session = Mualab.getInstance().getSessionManager();
+            User user = session.getUser();
+
+           /* staffId = "0";
+            staffName = "My Booking";*/
+            // staffId = user.id;
+            // staffName = "My Booking";
             staffId = "0";
             staffName = "My Booking";
         }

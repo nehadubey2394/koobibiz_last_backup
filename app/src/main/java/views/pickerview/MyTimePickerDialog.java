@@ -81,7 +81,8 @@ public class MyTimePickerDialog extends AlertDialog implements OnClickListener {
      */
     public MyTimePickerDialog(Context context,
                               int theme,
-                              OnTimeSetListener callBack, String title, int hours, int minute, int intervel, int mMaxHours) {
+                              OnTimeSetListener callBack, String title,
+                              int hours, int minute, int intervel, int mMaxHours) {
         super(context, theme);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mCallback = callBack;

@@ -50,7 +50,7 @@ public class CompaniesListActivity extends AppCompatActivity implements StaffSel
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_companies_list2);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+    //    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
 
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         ivHeaderBack.setVisibility(View.VISIBLE);

@@ -7,19 +7,22 @@
     android:orientation="vertical"
     tools:context=".modules.profile.BusinessProfileActivity">
 
-    <ImageView
-        android:id="@+id/bg_header"
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/actionbar_fill_business_profile"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/toolbar_header"/>
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentTop="true" />
 
+<!--
     <include layout="@layout/actionbar_fill_business_profile"/>
+-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/bg_header"
+        android:layout_below="@+id/headerLayout"
         android:orientation="vertical">
 
         <views.progressview.ProgressView

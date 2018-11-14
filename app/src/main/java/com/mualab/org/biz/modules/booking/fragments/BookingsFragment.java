@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -118,7 +119,14 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Progress.show(mContext);
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Progress.hide(mContext);
+            }
+        },200);
     }
 
     @Override
@@ -993,6 +1001,11 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                 isFiltered = true;
 
                 if (!businessId.equals("")) {
+                    rlStaffName.setVisibility(View.VISIBLE);
+                    tvStaffName.setText(staffName);
+                    pendingBookingAdapter.setNameVisibility(isFiltered);
+                    todayBookingAdapter.setNameVisibility(isFiltered);
+                }else if (staffName.equals("My Booking")){
                     rlStaffName.setVisibility(View.VISIBLE);
                     tvStaffName.setText(staffName);
                     pendingBookingAdapter.setNameVisibility(isFiltered);

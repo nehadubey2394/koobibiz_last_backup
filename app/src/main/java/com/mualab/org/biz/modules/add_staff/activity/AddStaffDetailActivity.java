@@ -82,7 +82,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff_detail);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+      //  StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         initView();
     }
 
@@ -105,7 +105,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
 
         ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
 
-        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle2);
         lyArtistDetail = findViewById(R.id.lyArtistDetail);
         tvHeaderTitle.setText(getString(R.string.text_staff));
         tvUserName = findViewById(R.id.tvUserName);

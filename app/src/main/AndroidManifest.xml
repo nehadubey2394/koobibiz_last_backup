@@ -49,27 +49,40 @@
         </activity>
         <activity
             android:name=".modules.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack">
+        </activity>
         <activity
             android:name=".modules.authentication.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
+
         <activity
             android:name=".modules.authentication.OtpVerificationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
+
         <activity
             android:name=".modules.authentication.ChooseUserTypeActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
+
         <activity
             android:name=".modules.authentication.RegistrationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
+
         <activity
             android:name=".modules.authentication.Registration2Activity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
+
         <activity
             android:name=".modules.authentication.AddAddressActivity"
             android:label="@string/address_activity"
             android:theme="@style/AppTheme.DarkActionBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".modules.authentication.ChooseCountryActivity"
             android:label="@string/country_activity"
@@ -79,11 +92,14 @@
             android:theme="@style/AppTheme.DarkActionBar" />
         <activity
             android:name=".modules.profile.BusinessProfileActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
+
         <activity android:name=".modules.BaseActivity" />
         <activity
             android:name=".modules.booking.activity.StaffActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
 
         <!-- Meta data -->
         <meta-data
@@ -119,37 +135,50 @@
         <activity
             android:name=".modules.booking.activity.BookingDetailActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".modules.add_staff.activity.AddStaffActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".modules.add_staff.activity.AddStaffDetailActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".modules.add_staff.activity.AllServicesActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".modules.booking.activity.CompanyListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
         <activity android:name=".modules.company_management.activity.CompaniesListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
         <activity android:name=".modules.company_management.activity.CompanyDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
         <activity android:name=".modules.company_management.activity.CompanyServicesActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
         <activity android:name=".modules.my_profile.activity.ProfileActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
         <activity android:name=".modules.my_profile.activity.ArtistServicesActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
         <activity android:name=".modules.my_profile.activity.FollowersActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
         <activity android:name=".modules.my_profile.activity.CommentsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"/>
         <activity android:name=".modules.my_profile.activity.CertificateActivity"
-            android:screenOrientation="portrait" ></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"></activity>
 
         <service
             android:name=".fcm.MyFirebaseInstanceIDService"

@@ -125,6 +125,7 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
                     item1.profileImage = user.profileImage;
                     item1.businessName = "My Booking";
                     companyList.add(item1);
+                    companyAdapter.notifyDataSetChanged();
 
                     if (status.equalsIgnoreCase("success")) {
 
@@ -173,8 +174,8 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
                         }*/
                     }else {
                         MyToast.getInstance(CompanyListActivity.this).showDasuAlert(message);
-                      //  rvAllCompany.setVisibility(View.GONE);
-                       // tvNoDataFound.setVisibility(View.VISIBLE);
+                        //  rvAllCompany.setVisibility(View.GONE);
+                        // tvNoDataFound.setVisibility(View.VISIBLE);
                     }
                     //  showToast(message);
                 } catch (Exception e) {

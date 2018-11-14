@@ -362,9 +362,9 @@ public class WebServiceAPI {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Progress.hide(mContext);
-                        if (isSelfErrorHandle)
+                       /* if (isSelfErrorHandle)
                             handleError(error);
-                        else
+                        else*/
                             mListener.ErrorListener(error);
                     }
                 }) {

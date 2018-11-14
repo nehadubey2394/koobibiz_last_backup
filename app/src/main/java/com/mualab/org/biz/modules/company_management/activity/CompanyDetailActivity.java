@@ -44,7 +44,7 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_detail);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+    //    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         initView();
     }
 
@@ -60,7 +60,7 @@ public class CompanyDetailActivity extends AppCompatActivity implements View.OnC
 
         ivHeaderProfile = findViewById(R.id.ivHeaderProfile);
 
-        TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle2);
         LinearLayout lyArtistDetail = findViewById(R.id.lyArtistDetail);
         tvHeaderTitle.setText(getString(R.string.company));
         tvUserName = findViewById(R.id.tvUserName);

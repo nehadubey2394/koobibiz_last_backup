@@ -1,19 +1,15 @@
 package com.mualab.org.biz.modules.authentication;
 
 import android.app.Dialog;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,19 +17,23 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.dialogs.Progress;
-import com.mualab.org.biz.modules.BaseActivity;
-import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.chat.model.FirebaseUser;
 import com.mualab.org.biz.dialogs.ForgotPassword;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
+import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MySnackBar;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.modules.BaseActivity;
+import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.session.SharedPreferanceUtils;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -42,7 +42,9 @@ import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.KeyboardUtil;
 import com.mualab.org.biz.util.StatusBarUtil;
+
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -213,6 +215,7 @@ public class LoginActivity extends BaseActivity {
             params.put("firebaseToken",deviceToken);
             params.put("userType", "artist");
             params.put("deviceType", "2");
+            params.put("appType", "biz");
 
             new HttpTask(new HttpTask.Builder(this, "userLogin", new HttpResponceListner.Listener() {
                 @Override
@@ -232,11 +235,9 @@ public class LoginActivity extends BaseActivity {
                             if(user.isProfileComplete==3)
                                 session.setBusinessProfileComplete(true);
                             MyToast.getInstance(LoginActivity.this).showDasuAlert("Success",message);
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            //  overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                            finish();
+
+                            writeNewUser(user);
+
                         }else {
                             showToast(message);
                             //showDialog("Alert", message);
@@ -381,96 +382,22 @@ public class LoginActivity extends BaseActivity {
         task.execute(this.getClass().getName());
     }
 
-   /* private void checkNetwork() {
+    private void writeNewUser(User user) {
+        DatabaseReference mDatabase  = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser firebaseUser = new FirebaseUser();
+        firebaseUser.firebaseToken = FirebaseInstanceId.getInstance().getToken();;
+        firebaseUser.isOnline = 1;
+        firebaseUser.lastActivity = ServerValue.TIMESTAMP;
+        firebaseUser.profilePic = user.profileImage;
+        firebaseUser.userName = user.userName;
+        firebaseUser.uId = Integer.parseInt(user.id);
+        mDatabase.child("users").child(String.valueOf(user.id)).setValue(firebaseUser);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setTitle("Alert");
-        builder.setMessage("There is no network connection right now");
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                finish();
-            }
-        });
-
-        builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                // getArtistInformation();
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-*/
-
-   /* public void firebaseLoginRegistration(final User user) {
-
-        mAuth.signInWithEmailAndPassword(user.email, "123456")
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            user.fireBaseId = task.getResult().getUser().getUid();
-                            session.createSession(user, true);
-                            goNextActivity();
-                        } else if (!task.isSuccessful()) {
-                            fireBaseRegistrationTask(user);
-                        }
-
-                    }
-                });
-
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        //  overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        finish();
     }
 
-    public void fireBaseRegistrationTask(final User user) {
-
-        mAuth.createUserWithEmailAndPassword(user.email, "123456")
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            user.fireBaseId = task.getResult().getUser().getUid();
-                            session.createSession(user, true);
-                            session.setPassword(ed_password.getText().toString().trim());
-                            mDatabase.child("users").child(user.fireBaseId).setValue(user);
-                            goNextActivity();
-
-                        } *//*else {
-                            Toast.makeText(LoginActivity.this, "in firebase already register with this email id.", Toast.LENGTH_SHORT).show();
-                        }*//*
-                    }
-                });
-    }*/
-
-    /*private class MyTextWatcher implements TextWatcher {
-
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.ed_username:
-                    validateName();
-                    break;
-                case R.id.ed_password:
-                    validatePassword();
-                    break;
-            }
-        }
-    }*/
 }

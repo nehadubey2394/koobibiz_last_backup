@@ -29,6 +29,7 @@ import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.KeyboardUtil;
 
 import org.json.JSONException;
@@ -121,7 +122,6 @@ public class AddAddressActivity extends AppCompatActivity {
 
     }
 
-
     private void getAddressByPostCode(String postalCode){
         String api = "https://api.postcodes.io/postcodes/";
         new HttpTask(new HttpTask.Builder(this, postalCode, new HttpResponceListner.Listener() {
@@ -140,8 +140,10 @@ public class AddAddressActivity extends AppCompatActivity {
                         Double lng = Double.parseDouble(longitude);
                         new GioAddress(AddAddressActivity.this, lat, lng).execute();
 
-                    }else MyToast.getInstance(AddAddressActivity.this)
-                            .showDasuAlert(getString(R.string.msg_some_thing_went_wrong));
+                    }else {
+                        MyToast.getInstance(AddAddressActivity.this)
+                                .showDasuAlert(getString(R.string.msg_some_thing_went_wrong));
+                    }
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -149,14 +151,14 @@ public class AddAddressActivity extends AppCompatActivity {
 
             @Override
             public void ErrorListener(VolleyError error) {
-                Log.d("responce", "e");
+                Helper helper = new Helper();
+                MyToast.getInstance(AddAddressActivity.this).showDasuAlert(helper.error_Messages(error));
             }})
                 .setBaseURL(api)
                 .setProgress(true)
                 .setMethod(Request.Method.GET))
-        .execute("TAG");
+                .execute("TAG");
     }
-
 
     private void setResult(Address address){
         Intent resultIntent = new Intent();
@@ -230,7 +232,7 @@ public class AddAddressActivity extends AppCompatActivity {
                 Place place = PlacePicker.getPlace(this, data);
                 //String toastMsg = String.format("Place: %s", place.getName());
                 getAddressDetails(place);
-               // fullAddress = place.getAddress().toString();
+                // fullAddress = place.getAddress().toString();
                 placeName = place.getName().toString();
 
                 if(TextUtils.isEmpty(city))
@@ -255,7 +257,6 @@ public class AddAddressActivity extends AppCompatActivity {
     public void hideKeyboard(View view) {
         KeyboardUtil.hideKeyboard(view, this);
     }
-
 
     @SuppressLint("StaticFieldLeak")
     class GioAddress extends AsyncTask<Void, Void, Void>{
@@ -315,7 +316,6 @@ public class AddAddressActivity extends AppCompatActivity {
             }
         }
     }
-
 
     public void getAddressDetails(Place place) {
         city = state = country = postalCode = stAddress1 = stAddress2 = latitude = longitude = "";

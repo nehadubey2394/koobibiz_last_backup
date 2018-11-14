@@ -14,20 +14,6 @@
         android:visibility="visible"
         android:layout_alignParentTop="true" />
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btnComplete"
-        style="@style/My_Button_Small.Invert"
-        android:layout_width="130dp"
-        android:layout_height="30dp"
-        android:text="@string/complete_booking"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"
-        android:textSize="12sp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/header"
-        />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -38,7 +24,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_below="@+id/btnComplete"
+        android:layout_below="@+id/header"
         >
 
         <LinearLayout

@@ -3,6 +3,7 @@ package com.mualab.org.biz.modules.profile.fragment;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -24,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mualab.org.biz.R;
 
+import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.modules.profile.BusinessProfileActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.model.Category;
@@ -53,6 +55,7 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
     private ServiceAdapter adapter;
     private PreRegistrationSession bpSession;
     private List<Service> serviceList;
+    private long mLastClickTime = 0;
     //private List<ArtistCategory> actualServiceList;
 
     public static ServicesFragmentCreation newInstance() {
@@ -114,6 +117,10 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 800) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
 
                 updateDtataIntoServer();
                /* bpSession.updateRegStep(5);
@@ -129,14 +136,13 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
         }
     }
 
-
     private void margeServiceAndSubCategory(List<SubCategory> serverSubCategory){
         BusinessProfileActivity.tmpSubCategory.clear();
         //BusinessProfileActivity.tmpSubCategory = serverSubCategory!=null?serverSubCategory:bpSession.getBusinessProfile().subCategories;
 
         if(serverSubCategory!=null)
             BusinessProfileActivity.tmpSubCategory.addAll(serverSubCategory);
-       // else BusinessProfileActivity.tmpSubCategory = bpSession.getBusinessProfile().subCategories;
+        // else BusinessProfileActivity.tmpSubCategory = bpSession.getBusinessProfile().subCategories;
 
         for(SubCategory subCategory : BusinessProfileActivity.tmpSubCategory){
 
@@ -152,7 +158,6 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
             }
         }
     }
-
 
     private void retrieveServices(){
         pbLoder.setVisibility(View.VISIBLE);
@@ -206,13 +211,12 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
         btnNext.setVisibility(BusinessProfileActivity.tmpSubCategory.size()>0?View.VISIBLE:View.GONE);
     }
 
-
     @SuppressLint("StaticFieldLeak")
     public void insertServices() {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-               // Mualab.get().getDB().serviceDao().deleteAll();
+                // Mualab.get().getDB().serviceDao().deleteAll();
                 Mualab.get().getDB().serviceDao().insertAll(serviceList);
                 return null;
             }
@@ -237,8 +241,6 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
             }
         }.execute();
     }
-
-
 
     class ServiceAdapter extends BaseAdapter {
 
@@ -300,10 +302,12 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
             Map<String,String> body = new HashMap<>();
             Gson gson = new GsonBuilder().registerTypeAdapter(SubCategory.class, new SubCategorySerializer()).create();
             body.put("artistService", gson.toJson(BusinessProfileActivity.tmpSubCategory));
+
             new HttpTask(new HttpTask.Builder(mContext, "addArtistService", new HttpResponceListner.Listener() {
                 @Override
                 public void onResponse(String response, String apiName) {
                     Log.d("res:", response);
+                    Progress.hide(mContext);
                     bpSession.updateRegStep(5);
                     listener.onChangeByTag("Upload Certification");
                     //insertServices(addMoreService);
@@ -311,6 +315,7 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
 
                 @Override
                 public void ErrorListener(VolleyError error) {
+                    Progress.hide(mContext);
                 }})
                     .setMethod(Request.Method.POST)
                     .setParam(body)

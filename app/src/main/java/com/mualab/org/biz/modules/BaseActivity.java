@@ -19,7 +19,7 @@ public class BaseActivity extends AppCompatActivity implements BaseListner {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        setStatusBar();
+        //setStatusBar();
     }
 
     protected void setStatusBar() {

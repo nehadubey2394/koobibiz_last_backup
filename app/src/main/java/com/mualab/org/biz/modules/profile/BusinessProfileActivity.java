@@ -2,6 +2,7 @@ package com.mualab.org.biz.modules.profile;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -64,7 +65,6 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
     private List<MyViews> views = new ArrayList<>();
     private ProgressView progressView;
-
     private TextView tvHeaderText,tv_skip;
     private ImageView iv_back;
     /**
@@ -72,6 +72,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
      * and next wizard steps.
      */
     public ViewPager mPager;
+    private long mLastClickTime = 0;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -92,6 +93,11 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
     @Override
     public void onNext() {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         if(views.size()>mPager.getCurrentItem())
             mPager.setCurrentItem(mPager.getCurrentItem() + 1);
     }
@@ -265,7 +271,6 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         }
     }
 
-
     @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
@@ -283,7 +288,6 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
             }
         }
     }
-
 
     private void getBusinessProfile(){
 
@@ -335,25 +339,28 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
 
                         JSONArray businessArray = obj.getJSONArray("businessHour");
-                        bsp.businessDays = getBusinessDay();
-                        for(int i =0; i<businessArray.length();  i++){
-                            JSONObject objSlots = businessArray.getJSONObject(i);
-                            int dayId = objSlots.getInt("day");
+                        if (businessArray.length()!=0){
+                            bsp.businessDays = getBusinessDay();
+                            for(int i =0; i<businessArray.length();  i++){
+                                JSONObject objSlots = businessArray.getJSONObject(i);
+                                int dayId = objSlots.getInt("day");
 
-                            TimeSlot slot = new TimeSlot(dayId);
-                            slot.id = objSlots.getInt("_id");
-                            slot.startTime = objSlots.getString("startTime");
-                            slot.endTime = objSlots.getString("endTime");
-                            slot.status = objSlots.getInt("status");
+                                TimeSlot slot = new TimeSlot(dayId);
+                                slot.id = objSlots.getInt("_id");
+                                slot.startTime = objSlots.getString("startTime");
+                                slot.endTime = objSlots.getString("endTime");
+                                slot.status = objSlots.getInt("status");
 
-                            for(BusinessDay tmpDay : bsp.businessDays){
-                                if(tmpDay.dayId == dayId){
-                                    tmpDay.isOpen = true;
-                                    tmpDay.addTimeSlot(slot);
-                                    break;
+                                for(BusinessDay tmpDay : bsp.businessDays){
+                                    if(tmpDay.dayId == dayId){
+                                        tmpDay.isOpen = true;
+                                        tmpDay.addTimeSlot(slot);
+                                        break;
+                                    }
                                 }
                             }
                         }
+
 
                         if(businessArray.length()>0)
                             pSession.createBusinessProfile(bsp);
@@ -423,7 +430,6 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         return businessDays;
     }
 
-
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -467,5 +473,14 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
                 .setBody(body)
                 .setProgress(true)
                 .setAuthToken(session.getUser().authToken)).execute("skip");
+    }
+
+    @Override
+    protected void onDestroy() {
+        PreRegistrationSession preSession = new PreRegistrationSession(this);
+        if (mPager.getCurrentItem() == 0) {
+            preSession.updateRegStep(0);
+        }
+        super.onDestroy();
     }
 }

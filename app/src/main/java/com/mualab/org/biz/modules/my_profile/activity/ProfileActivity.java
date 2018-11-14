@@ -20,7 +20,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+     //   StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         ImageView btnBack = findViewById(R.id.btnBack);
         User currentUser = Mualab.getInstance().getSessionManager().getUser();
         Mualab.feedBasicInfo.put("userId", ""+ currentUser.id);

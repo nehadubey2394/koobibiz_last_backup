@@ -31,7 +31,7 @@ public class CompanyServicesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_services);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+    //    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         init();
     }
 

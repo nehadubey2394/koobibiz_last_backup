@@ -1,5 +1,6 @@
 package com.mualab.org.biz.modules.authentication;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import com.image.picker.ImagePicker;
 import com.image.cropper.CropImage;
 import com.image.cropper.CropImageView;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
@@ -36,6 +38,7 @@ import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.session.SharedPreferanceUtils;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.ConnectionDetector;
 
 import org.json.JSONObject;
 
@@ -172,32 +175,7 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
                     user.userName = ed_userName.getText().toString().trim();
                     user.businessName = ed_businessName.getText().toString().trim();
 
-                    final Map<String, String> body = new HashMap<>();
-                    body.put("userName", user.userName);
-                    new HttpTask(new HttpTask.Builder(this, "checkUser", new HttpResponceListner.Listener() {
-                        @Override
-                        public void onResponse(String response, String apiName) {
-                            try {
-                                JSONObject js = new JSONObject(response);
-                                String status = js.getString("status");
-                                String message = js.getString("message");
-                                if (status.equalsIgnoreCase("success")) {
-                                    nextScreen();
-                                }else {
-                                    showToast(getString(R.string.error_user_name_exist));
-                                }
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void ErrorListener(VolleyError error) {
-
-                        }}) .setBody(body, HttpTask.ContentType.APPLICATION_JSON)
-                            .setMethod(Request.Method.POST)
-                            .setProgress(true))
-                            .execute(Registration2Activity.this.getClass().getName());
+                    apiForCheckUser();
 
                 }
                 break;
@@ -205,11 +183,9 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
 
             case R.id.btnContinue2:
 
-
                 if(isValidPassword(edPwd, input_layout_pwd)){
 
                     if(isValidPassword(edConfirmPwd, input_layout_cnfPwd)){
-
 
                         if(matchPassword()){
 
@@ -236,6 +212,47 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
         }
     }
 
+    private void apiForCheckUser(){
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(Registration2Activity.this, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if (isConnected) {
+                        dialog.dismiss();
+                        apiForCheckUser();
+                    }
+                }
+            }).show();
+        }
+
+        final Map<String, String> body = new HashMap<>();
+        body.put("userName", user.userName);
+        new HttpTask(new HttpTask.Builder(this, "checkUser", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+                    if (status.equalsIgnoreCase("success")) {
+                        nextScreen();
+                    }else {
+                        showToast(getString(R.string.error_user_name_exist));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+
+            }}) .setBody(body, HttpTask.ContentType.APPLICATION_JSON)
+                .setMethod(Request.Method.POST)
+                .setProgress(true))
+                .execute(Registration2Activity.this.getClass().getName());
+    }
 
     private void nextScreen(){
         progressView3.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
@@ -249,84 +266,105 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
                 break;
 
             case 4:
-                String deviceToken = FirebaseInstanceId.getInstance().getToken();//"android test token";
-                Map<String, String> params = new HashMap<>();
-                params.put("userName", user.userName);
-                params.put("firstName", user.firstName);
-                params.put("lastName", user.lastName);
-                params.put("email", user.email);
-                params.put("password", user.password);
-                params.put("countryCode", user.countryCode);
-                params.put("contactNo", user.contactNo);
-                params.put("businessName", user.businessName);
 
-                params.put("gender", user.gender);
-                params.put("dob", user.dob);
-                params.put("address", address.stAddress1);
-                params.put("address2", address.stAddress2);
-                params.put("city", address.city);
-                params.put("state", address.state);
-                params.put("country", address.country);
-                params.put("buildingNo", address.houseNumber);
-                params.put("businessPostCode", address.postalCode);
-                params.put("latitude", address.latitude);
-                params.put("longitude", address.longitude);
-                params.put("userType", "artist");
-                params.put("businessType", user.businessType);
-                params.put("deviceType", "2");
-                params.put("deviceToken", deviceToken);
-                params.put("firebaseToken", deviceToken);
-                //  params.put("socialId", user.socialId);
-                // Progress.show(Registration2Activity.this);
-                // api.signUpTask(params, profileImageBitmap);
+                apiArtistRegistration();
 
-                HttpTask task = new HttpTask(new HttpTask.Builder(this, "artistRegistration", new HttpResponceListner.Listener() {
-                    @Override
-                    public void onResponse(String response, String apiName) {
-                        try {
-                            JSONObject js = new JSONObject(response);
-                            String status = js.getString("status");
-                            String message = js.getString("message");
-                            if (status.equalsIgnoreCase("success")) {
-                                Progress.hide(Registration2Activity.this);
-                                Gson gson = new Gson();
-                                JSONObject userObj = js.getJSONObject("users");
-                                User user = gson.fromJson(String.valueOf(userObj), User.class);
-                                session.createSession(user);
-                                session.setPassword(user.password);
-                                checkUserRember(user);
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                intent.putExtra("user", user);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                                finish();
-                            }else {
-                                showToast(message);
-                                findViewById(R.id.btnContinue2).setEnabled(true);
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            findViewById(R.id.btnContinue2).setEnabled(true);
-                        }
-                    }
-
-                    @Override
-                    public void ErrorListener(VolleyError error) {
-                        findViewById(R.id.btnContinue2).setEnabled(true);
-                        // Log.d("log", error.getLocalizedMessage());
-                    }
-                }).setParam(params)
-                        .setProgress(true));
-                task.postImage("profileImage", profileImageBitmap);
                 break;
         }
 
     }
 
+    private  void apiArtistRegistration(){
 
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(Registration2Activity.this, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if (isConnected) {
+                        dialog.dismiss();
+                        apiArtistRegistration();
+                    }
+                }
+            }).show();
+        }
+
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();//"android test token";
+        Map<String, String> params = new HashMap<>();
+        params.put("userName", user.userName);
+        params.put("firstName", user.firstName);
+        params.put("lastName", user.lastName);
+        params.put("email", user.email);
+        params.put("password", user.password);
+        params.put("countryCode", user.countryCode);
+        params.put("contactNo", user.contactNo);
+        params.put("businessName", user.businessName);
+
+        params.put("gender", user.gender);
+        params.put("dob", user.dob);
+        params.put("address", address.stAddress1);
+        params.put("address2", address.stAddress2);
+        params.put("city", address.city);
+        params.put("state", address.state);
+        params.put("country", address.country);
+        params.put("buildingNo", address.houseNumber);
+        params.put("businessPostCode", address.postalCode);
+        params.put("latitude", address.latitude);
+        params.put("longitude", address.longitude);
+        params.put("userType", "artist");
+        params.put("businessType", user.businessType);
+        params.put("deviceType", "2");
+        params.put("deviceToken", deviceToken);
+        params.put("firebaseToken", deviceToken);
+        params.put("appType", "biz");
+        //  params.put("socialId", user.socialId);
+        // Progress.show(Registration2Activity.this);
+        // api.signUpTask(params, profileImageBitmap);
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(this, "artistRegistration", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+                    if (status.equalsIgnoreCase("success")) {
+                        Progress.hide(Registration2Activity.this);
+                        Gson gson = new Gson();
+                        JSONObject userObj = js.getJSONObject("users");
+                        User user = gson.fromJson(String.valueOf(userObj), User.class);
+                        session.createSession(user);
+                        session.setPassword(user.password);
+                        checkUserRember(user);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        finish();
+                    }else {
+                        showToast(message);
+                        findViewById(R.id.btnContinue2).setEnabled(true);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    findViewById(R.id.btnContinue2).setEnabled(true);
+                    Progress.hide(Registration2Activity.this);
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                findViewById(R.id.btnContinue2).setEnabled(true);
+                Progress.hide(Registration2Activity.this);
+                // Log.d("log", error.getLocalizedMessage());
+            }
+        }).setParam(params)
+                .setProgress(true));
+        task.postImage("profileImage", profileImageBitmap);
+    }
     // check permission or Get image from camera or gallery
     public void getPermissionAndPicImage() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -384,36 +422,6 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
             break;
         }
     }
-
-
-   /* private boolean isValidPassword(EditText edPwd, TextInputLayout inputLayout) {
-        //Pattern regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
-        String password = edPwd.getText().toString().trim();
-
-        if (TextUtils.isEmpty(password)) {
-            inputLayout.setError(getString(R.string.error_password_required));
-            edPwd.requestFocus();
-            return false;
-        } else if (password.length() < 8) {
-            inputLayout.setError(getString(R.string.error_invalid_password_length));
-            edPwd.requestFocus();
-            return false;
-        }else if (password.toLowerCase().equals(password)) {
-            inputLayout.setError(getString(R.string.error_invalid_password_capital));
-            edPwd.requestFocus();
-            return false;
-        }if(!password.matches(".*\\d+.*")){
-            inputLayout.setError(getString(R.string.error_invalid_password));
-            edPwd.requestFocus();
-        } *//*else if (!regex.matcher(password).find()) {
-            inputLayout.setError(getString(R.string.error_invalid_password_special_character));
-            edPwd.requestFocus();
-            return false;
-        }*//*else {
-            inputLayout.setErrorEnabled(false);
-        }
-        return true;
-    }*/
 
     public boolean isValidPassword(EditText edPwd, TextInputLayout inputLayout) {
         Pattern PASSWORD_PATTERN_UPERCASE = Pattern.compile(".*[A-Z].*");
@@ -546,7 +554,6 @@ public class Registration2Activity extends AppCompatActivity implements View.OnC
         }
         //overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
     }
-
 
     private void checkUserRember(User user){
         SharedPreferanceUtils sp = new SharedPreferanceUtils(this);

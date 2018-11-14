@@ -98,6 +98,7 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         else {
             holder.rlStaffName.setVisibility(View.VISIBLE);
+
             if (isFiltered){
                 holder.tvTime.setText(item.todayBookingInfos.get(0).startTime);
                 if (user.id.equals(item.todayBookingInfos.get(0).staffId))
@@ -105,7 +106,11 @@ public class TodayBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 else
                     holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
             }else {
-                holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
+             //   holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
+                if (user.id.equals(item.todayBookingInfos.get(0).staffId))
+                    holder.tvStaffName.setText("My booking");
+                else
+                    holder.tvStaffName.setText(item.todayBookingInfos.get(0).staffName);
             }
         }
 

@@ -24,6 +24,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.modules.add_staff.fragments.ArtistSettingsFragment;
 import com.mualab.org.biz.modules.booking.fragments.AddFragment;
@@ -42,6 +43,7 @@ import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
 import com.mualab.org.biz.util.network.NetworkChangeReceiver;
 
@@ -220,6 +222,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     }
 
                 } catch (JSONException e) {
+                    Progress.hide(MainActivity.this);
                     e.printStackTrace();
                 }
 
@@ -227,6 +230,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             @Override
             public void ErrorListener(VolleyError error) {
+                Progress.hide(MainActivity.this);
+                try {
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")) {
+                        Mualab.getInstance().getSessionManager().logout();
+                        //      MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 //progress_bar.setVisibility(View.GONE);
 
                 // Log.d("", error.getLocalizedMessage());

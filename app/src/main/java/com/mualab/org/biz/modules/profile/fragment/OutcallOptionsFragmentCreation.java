@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -23,7 +24,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.modules.authentication.AddAddressActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
@@ -37,6 +41,7 @@ import com.mualab.org.biz.util.ConnectionDetector;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +58,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
     private DiscreteSeekBar seekBarRadius;
     private RadioGroup radioGroup;
     private RadioButton rb_inCall, rb_outCall, rb_both;
-
+    private long mLastClickTime = 0;
     private int miles = 5;
     private int serviceType = 1;
     private float mapWidth;
@@ -112,7 +117,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
                 miles = value;
-               // String newValue = value > 20 ? "20+" : "" + value;
+                // String newValue = value > 20 ? "20+" : "" + value;
                 String newValue = "" + value;
                 tv_mileIndicater1.setText(String.format("%s miles", newValue));
                 seekBarRadius.setIndicatorFormatter(newValue);
@@ -134,6 +139,10 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
         view.findViewById(R.id.btn_countinue).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 800) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
 
                 if (validateInputValue()) {
 
@@ -240,7 +249,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }*/
-       // map.setMyLocationEnabled(true);
+        // map.setMyLocationEnabled(true);
         map.getUiSettings().setAllGesturesEnabled(false);
 
         updateLocationCircle(miles);
@@ -396,7 +405,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
         tvIncallPreprationTime.setText(incallPreprationTime);
         tvOutcallPreprationTime.setText(outcallPreprationTime);
 
-       // String newValue = miles>20?"20+":""+miles;
+        // String newValue = miles>20?"20+":""+miles;
         String newValue = ""+miles;
         tv_mileIndicater1.setText(String.format("%s miles", newValue));
 
@@ -406,7 +415,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
         }else
             seekBarRadius.setProgress(miles);*/
 
-            seekBarRadius.setProgress(miles);
+        seekBarRadius.setProgress(miles);
     }
 
     private boolean validateInputValue(){
@@ -443,7 +452,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
                         || inCallTime.equals("00:00")
                         || outCallTime.equals(getString(R.string.hh_mm))
                         || outCallTime.equals("00:00")){
-                showToast(R.string.select_in_and_outcall_preparation_time);
+                    showToast(R.string.select_in_and_outcall_preparation_time);
                     return false;
                 }else {
                     incallPreprationTime = tvIncallPreprationTime.getText().toString();
@@ -482,8 +491,12 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
                                         address = bpSession.getBusinessProfile().address;
 
                                         LatLng latLng = new LatLng(Double.parseDouble(address.latitude), Double.parseDouble(address.latitude));
-                                        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                        updateAddressIntoServer();
+                                        if (latLng!=null) {
+                                            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                            updateAddressIntoServer();
+                                        }else {
+                                            MyToast.getInstance(mContext).showDasuAlert("Address not found");
+                                        }
                                     }
                                 }
                             }).show();
@@ -494,10 +507,15 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
                             tv_placeName.setText(TextUtils.isEmpty(address.placeName)?address.stAddress1:address.placeName);
                             tv_address.setVisibility(TextUtils.isEmpty(address.placeName)?View.GONE:View.VISIBLE);
                             address = bpSession.getBusinessProfile().address;
-
                             LatLng latLng = new LatLng(Double.parseDouble(address.latitude), Double.parseDouble(address.latitude));
-                            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                            updateAddressIntoServer();
+
+                            if (latLng!=null){
+                                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                updateAddressIntoServer();
+                            }else {
+                                MyToast.getInstance(mContext).showDasuAlert("Address not found");
+                            }
+
                         }
                     }
                     break;
@@ -507,6 +525,18 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
     }
 
     private void updateDtataIntoServer(){
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        updateDtataIntoServer();
+                    }
+                }
+            }).show();
+        }
+
         Map<String,String> body = new HashMap<>();
         body.put("radius", ""+miles);
         body.put("serviceType", ""+serviceType);
@@ -532,7 +562,26 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
     }
 
     private void updateAddressIntoServer(){
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        updateAddressIntoServer();
+                    }
+                }
+            }).show();
+        }
+
         Map<String,String> params = new HashMap<>();
+        ArrayList<String>location = new ArrayList<>();
+        location.add(address.latitude);
+        location.add(address.longitude);
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        String jsonString = gson.toJson(location);
+
         params.put("address", address.stAddress1);
         params.put("address2", address.stAddress2);
         params.put("city", address.city);
@@ -541,6 +590,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
         params.put("businessPostCode", address.postalCode);
         params.put("latitude", address.latitude);
         params.put("longitude", address.longitude);
+        params.put("location", jsonString);
 
         new HttpTask(new HttpTask.Builder(mContext, "updateRecord", new HttpResponceListner.Listener() {
             @Override
@@ -551,7 +601,7 @@ public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment 
                 bpSession.updateAddress(address);
                 Mualab.getInstance().getSessionManager().createSession(user);
 
-               // bpSession.updateRegStep(2);
+                // bpSession.updateRegStep(2);
             }
 
             @Override

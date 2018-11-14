@@ -17,6 +17,9 @@ import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.BookingInfo;
 import com.mualab.org.biz.session.Session;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -60,6 +63,9 @@ public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         holder.tvPrice.setText("£"+String.format("%.2f", price));
         holder.tvPrice2.setText("£"+String.format("%.2f", price));
 
+        holder.tvDate.setText(changeDateFormate(item.bookingDate));
+        holder.tvTime.setText(item.startTime);
+
         holder.tvStaffName.setText(item.staffName);
         holder.tvServiceName.setText(item.artistServiceName);
 
@@ -85,7 +91,7 @@ public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-        TextView tvServiceName,tvAssignrdStaff,tvStaffName,tvPrice2,tvPrice;
+        TextView tvServiceName,tvAssignrdStaff,tvStaffName,tvPrice2,tvPrice,tvTime,tvDate;
         AppCompatButton btnChangeStaff;
         LinearLayout llChangeStaff;
         private ViewHolder(View itemView)
@@ -99,6 +105,8 @@ public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             btnChangeStaff = itemView.findViewById(R.id.btnChangeStaff);
             llChangeStaff = itemView.findViewById(R.id.llChangeStaff);
             tvPrice2 = itemView.findViewById(R.id.tvPrice2);
+            tvTime = itemView.findViewById(R.id.tvTime);
+            tvDate = itemView.findViewById(R.id.tvDate);
 
             btnChangeStaff.setOnClickListener(this);
         }
@@ -117,5 +125,20 @@ public class BookedServicesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
     }
+
+    private String changeDateFormate(String sDate){
+        SimpleDateFormat inputDf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat outputtDf = new SimpleDateFormat("dd/MM/yyyy");
+        Date formatedDate = null;
+        String date = "";
+        try {
+            formatedDate = inputDf.parse(sDate);
+            date =  outputtDf.format(formatedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
 
 }

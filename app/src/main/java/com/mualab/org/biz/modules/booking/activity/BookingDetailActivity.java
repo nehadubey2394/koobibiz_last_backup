@@ -71,7 +71,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+        // StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         initView();
         setViewId();
     }
@@ -241,8 +241,8 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         }else {
             if (item.todayBookingInfos.size()!=0){
 
-                for (int i=0; i<item.pendingBookingInfos.size(); i++){
-                    BookingInfo bookingInfo = item.pendingBookingInfos.get(i);
+                for (int i=0; i<item.todayBookingInfos.size(); i++){
+                    BookingInfo bookingInfo = item.todayBookingInfos.get(i);
                     if (serviceId.equals("")){
                         serviceId = bookingInfo.serviceId;
                     }else {
@@ -386,7 +386,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
                     String message = js.getString("message");
                     Progress.hide(BookingDetailActivity.this);
                     if (status.equalsIgnoreCase("success")) {
-
+                        item = new Bookings();
                         JSONArray array = js.getJSONArray("bookingDetails");
                         if (array!=null && array.length()!=0) {
                             for (int j = 0; j < array.length(); j++) {
@@ -674,9 +674,9 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         params.put("subserviceId", subServiceId);
         params.put("artistServiceId", artistServiceId);
         params.put("type", type);
-        if (type.equals("complete")){
-            params.put("paymentType ", item.paymentType);
-        }
+        // if (type.equals("complete")){
+        params.put("paymentType", item.paymentType);
+        // }
 
         HttpTask task = new HttpTask(new HttpTask.Builder(BookingDetailActivity.this, "bookingAction", new HttpResponceListner.Listener() {
             @Override
@@ -848,6 +848,7 @@ public class BookingDetailActivity extends AppCompatActivity implements OnStaffC
         }
         return date;
     }
+
     @Override
     public void onBackPressed() {
         if (!isChangedOccured)

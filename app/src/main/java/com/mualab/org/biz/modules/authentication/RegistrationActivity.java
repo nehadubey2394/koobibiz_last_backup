@@ -1,6 +1,7 @@
 package com.mualab.org.biz.modules.authentication;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -20,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.broadcast.OnSmsCatchListener;
 import com.mualab.org.biz.broadcast.SmsVerifyCatcher;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.Address;
@@ -28,6 +30,7 @@ import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.session.SharedPreferanceUtils;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.JsonUtils;
 import com.mualab.org.biz.util.KeyboardUtil;
 
@@ -64,7 +67,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private boolean isResendOTP;
     //private CountDownTimer countDownTimer;
     //private boolean timerIsRunning;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,13 +125,11 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-
     private void showToast(String msg){
         if (!TextUtils.isEmpty(msg)){
             MyToast.getInstance(this).showDasuAlert(msg);
         }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -269,7 +269,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         return true;
     }
 
-
     private boolean validateAddress() {
         // String phone = tvAddress.getText().toString().trim();
         if (address==null) {
@@ -279,7 +278,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
         return true;
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -468,7 +466,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if(smsVerifyCatcher!=null) smsVerifyCatcher.onStop();
     }
 
-
     //*******country code alert ***********
     public void getCountryZipCode() {
         String CountryID;
@@ -494,14 +491,29 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void apiCallForDataVerify() {
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(RegistrationActivity.this, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if (isConnected) {
+                        dialog.dismiss();
+                        apiCallForDataVerify();
+                    }
+                }
+            }).show();
+        }
+
         Map<String, String> body = new HashMap<>();
         body.put("countryCode", user.countryCode);
         body.put("contactNo", user.contactNo);
         body.put("email", user.email);
+        body.put("userType", "artist");
         body.put("socialId", TextUtils.isEmpty(user.socialId)?"":user.socialId);
         new HttpTask(new HttpTask.Builder(this, "phonVerification", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
+                System.out.println("response = "+response);
                 parseApiResponce(response);
             }
 

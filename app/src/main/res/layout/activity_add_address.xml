@@ -65,6 +65,7 @@
                 android:singleLine="true"
                 android:maxLines="1"
                 android:maxLength="10"
+                android:imeOptions="actionSearch"
                 android:inputType="textPostalAddress|textCapCharacters"
                 android:gravity="center_horizontal"/>
 

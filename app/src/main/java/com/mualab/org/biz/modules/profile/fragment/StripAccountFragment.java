@@ -1,5 +1,6 @@
 package com.mualab.org.biz.modules.profile.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,9 +13,12 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.ConnectionDetector;
+
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -156,6 +160,18 @@ public class StripAccountFragment extends ProfileCreationBaseFragment implements
 
 
     private void updateDataIntoServer(){
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        updateDataIntoServer();
+                    }
+                }
+            }).show();
+        }
 
         Map<String,String> params = new HashMap<>();
         params.put("firstName", firstName);
