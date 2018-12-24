@@ -22,7 +22,7 @@ public interface ServiceDao {
     @Query("SELECT * FROM service")
     List<Service> getAll();
 
-    @Query("SELECT * FROM service WHERE name LIKE :name LIMIT 1")
+    @Query("SELECT * FROM service WHERE serviceName LIKE :name LIMIT 1")
     Service findByName(String name);
 
     @Query("SELECT * FROM service WHERE id=:id")

@@ -53,7 +53,7 @@ public class PreRegistrationSession {
             BusinessProfile businessProfile = gson.fromJson(string, BusinessProfile.class);
             businessProfile.address = getAddress();
             return businessProfile;
-           // return businessProfile;
+            // return businessProfile;
         }
         else return new BusinessProfile();
     }
@@ -152,6 +152,10 @@ public class PreRegistrationSession {
         return mypref.getInt("stepIndex", 0);
     }
 
+    public String getBusinessName(){
+        return mypref.getString("businessName","");
+    }
+
     public int getBankStatus(){
         return mypref.getInt("bankStatus", 0);
     }
@@ -174,7 +178,7 @@ public class PreRegistrationSession {
 
     public BusinessDay getBusinessHours(){
         Gson gson = new Gson();
-        String string = mypref.getString("businessDay", "");
+        String string = mypref.getString("businessHours", "");
         if (!string.isEmpty()){
             return gson.fromJson(string, BusinessDay.class);
         }else return null;
@@ -190,6 +194,12 @@ public class PreRegistrationSession {
 
     /* update business profile*/
 
+    public void updateBusinessName(String businessName){
+        editor.putString("businessName", businessName);
+        editor.apply();
+    }
+
+
     public void updateRegStep(int stepIndex){
         editor.putInt("stepIndex", stepIndex);
         editor.apply();
@@ -202,6 +212,7 @@ public class PreRegistrationSession {
 
     public void updateServiceType(int serviceType){
         editor.putInt("serviceType", serviceType);
+        editor.commit();
         editor.apply();
     }
 

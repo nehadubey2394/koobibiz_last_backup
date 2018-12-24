@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:layout_marginBottom="@dimen/_35sdp"
     android:gravity="center">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_centerInParent="true"
+        android:padding="10dp">
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/profile_image"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
                 android:src="@drawable/user_img"
                 android:padding="1dp"
-                app:civ_border_width="2dp"
                 app:civ_border_color="@color/white"
                 app:civ_fill_color="@color/white"/>
 
@@ -31,35 +38,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/camera_ico"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="1dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_gravity="bottom|end"/>
 
         </FrameLayout>
-
-
-        <TextView
-            style="@style/TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="5dp"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:text="@string/create_profile"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="10dp"
-        android:padding="10dp">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_firstName"
@@ -67,6 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/white"
+            android:layout_marginTop="30dp"
+            android:textSize="14sp"
             app:errorTextAppearance="@style/txtinputError_appearance">
 
             <EditText
@@ -79,6 +64,7 @@
                 android:inputType="textPersonName"
                 android:singleLine="true"
                 android:maxLines="1"
+                android:textSize="14sp"
                 android:maxLength="50"
                 android:imeOptions="actionNext"/>
         </android.support.design.widget.TextInputLayout>
@@ -88,8 +74,9 @@
             android:theme="@style/tvStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:textColorHint="@color/white"
+            android:textSize="14sp"
             app:errorTextAppearance="@style/txtinputError_appearance">
 
             <EditText
@@ -103,9 +90,39 @@
                 android:singleLine="true"
                 android:maxLines="1"
                 android:maxLength="50"
-                android:imeOptions="actionNext"/>
+                android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
 
+        <RelativeLayout
+            android:id="@+id/rlDob"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="15sp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                style="@style/TextView"
+                android:text="@string/date_of_birth"
+                android:background="@drawable/underline_white"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                style="@style/TextView"
+                android:text="(DD/MM/YYYY)"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/underline_white"/>
+
+
+        </RelativeLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_businessName"
@@ -114,6 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColorHint="@color/white"
+            android:visibility="gone"
             app:errorTextAppearance="@style/txtinputError_appearance">
 
             <EditText
@@ -123,6 +141,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/business_name"
                 android:inputType="textPersonName" />
+
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -130,8 +149,9 @@
             android:theme="@style/tvStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:textColorHint="@color/white"
+            android:textSize="14sp"
             app:errorTextAppearance="@style/txtinputError_appearance">
 
             <EditText
@@ -143,14 +163,19 @@
                 android:inputType="textPersonName" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btnContinue1"
-            style="@style/My_Button"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="55dp"
-            android:text="@string/continue_txt" />
-
     </LinearLayout>
 
-</LinearLayout>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnContinue1"
+        style="@style/My_Button"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="28dp"
+        android:layout_marginRight="28dp"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/next" />
+
+
+</RelativeLayout>

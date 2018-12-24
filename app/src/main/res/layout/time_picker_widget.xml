@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:fontFamily="@font/roboto_medium"
             android:text="Hours"/>
 
         <!-- hour -->
@@ -22,7 +23,7 @@
             android:id="@+id/hour"
             android:layout_width="70dip"
             android:layout_height="wrap_content"
-            android:clickable="false"
+            android:clickable="true"
             android:descendantFocusability="blocksDescendants"
             />
 
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:fontFamily="@font/roboto_medium"
             android:text="Minutes"/>
 
         <!-- minute -->
@@ -39,7 +41,7 @@
             android:layout_width="70dip"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dip"
-            android:clickable="false"
+            android:clickable="true"
             android:descendantFocusability="blocksDescendants"
             />
 

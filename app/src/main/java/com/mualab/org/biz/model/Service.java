@@ -16,7 +16,7 @@ import java.util.List;
  * Created by dharmraj on 18/1/18.
  **/
 
-@Entity(tableName = "service")
+@Entity(tableName = "services")
 @TypeConverters({ServiceConverter.class})
 public class Service {
 
@@ -26,12 +26,14 @@ public class Service {
     public int id;
 
     @ColumnInfo(name = "name")
-    @SerializedName("title")
+    @SerializedName("name")
     public String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     public String description;
 
+    @ColumnInfo(name = "subService")
     @SerializedName("subService")
     public List<Category> categorys;
 

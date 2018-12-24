@@ -1,0 +1,181 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragContainer"
+    tools:context=".modules.profile.fragment.ServicesFragmentCreation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_above="@+id/llBottomButtons"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Your Category"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:paddingLeft="@dimen/margin_left"
+            android:paddingRight="@dimen/margin_right"
+            android:paddingEnd="@dimen/margin_right"
+            android:paddingStart="@dimen/margin_left"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable"
+            android:gravity="center"/>
+
+        <View
+            android:id="@+id/topLine"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/gray_line"
+            >
+        </View>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listViewServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/gray2"
+            android:scrollbars="none"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:listSelector="@color/colorPrimary"
+            android:dividerHeight="1px"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llBottomButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/bottomLine"
+            android:background="@color/gray_line"
+            >
+        </View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:id="@+id/llAddCategory"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:tint="@color/black"
+                    android:src="@drawable/plush_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/add_category"
+                    android:textColor="@color/text_color"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:padding="2dp"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray_line"/>
+
+            <LinearLayout
+                android:id="@+id/llAddService"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:tint="@color/black"
+                    android:src="@drawable/plush_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/add_services"
+                    android:textColor="@color/text_color"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:padding="2dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            style="@style/My_Button.Invert"
+            android:layout_marginLeft="@dimen/margin_left26"
+            android:layout_marginRight="@dimen/margin_right26"
+            android:text="@string/continue_txt"
+            android:visibility="visible"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvNoRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/no_data_available"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/roboto_medium"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        />
+
+    <ProgressBar
+        android:id="@+id/pbLoder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>

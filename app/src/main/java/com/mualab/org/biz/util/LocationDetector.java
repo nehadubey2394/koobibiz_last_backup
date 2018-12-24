@@ -27,8 +27,8 @@ public class LocationDetector {
         this.context = mContext;
 
         android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(mContext);
-        builder1.setTitle("GPS Services Not Active");
-        builder1.setMessage("Please enable Location Services and GPS");
+        builder1.setTitle("GPS BusinessType Not Active");
+        builder1.setMessage("Please enable Location BusinessType and GPS");
         builder1.setCancelable(true);
         builder1.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {

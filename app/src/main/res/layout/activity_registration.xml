@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="4dp"
         android:weightSum="4"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="28dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
@@ -64,13 +64,13 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_below="@+id/llHeader"
-        android:layout_marginTop="20dp"
-        android:layout_centerInParent="true">
+        android:layout_marginTop="55dp"
+        >
 
         <LinearLayout
             android:id="@+id/vPanel1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <include layout="@layout/layout_reg_view1"/>
 
         </LinearLayout>
@@ -79,8 +79,8 @@
         <LinearLayout
             android:id="@+id/vPanel2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include layout="@layout/layout_reg_view2"/>
+            android:layout_height="wrap_content">
+            <include layout="@layout/layout_reg_new_view2"/>
 
         </LinearLayout>
 

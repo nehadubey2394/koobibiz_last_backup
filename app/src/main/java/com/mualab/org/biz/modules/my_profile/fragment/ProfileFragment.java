@@ -125,6 +125,7 @@ public class ProfileFragment extends FeedBaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         apiForGetProfile();
 
         rvFeed =  view.findViewById(R.id.rvFeed);

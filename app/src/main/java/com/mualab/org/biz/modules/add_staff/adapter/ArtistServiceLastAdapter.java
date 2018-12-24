@@ -24,7 +24,6 @@ import com.mualab.org.biz.model.add_staff.AddedStaffServices;
 import com.mualab.org.biz.model.add_staff.ArtistServices;
 import com.mualab.org.biz.model.add_staff.SelectedServices;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
 import com.mualab.org.biz.modules.add_staff.activity.AllServicesActivity;
 import com.mualab.org.biz.modules.add_staff.listner.OnServiceSelectListener;
 import com.mualab.org.biz.session.Session;
@@ -35,7 +34,6 @@ import com.mualab.org.biz.util.Helper;
 
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

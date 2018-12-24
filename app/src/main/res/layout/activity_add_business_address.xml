@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".modules.profile.activity.BookingTypeActivity">
+
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/actionbar_fill_business_profile"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentTop="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/headerLayout"
+        android:layout_above="@+id/btnContinue"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/tvHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
+                android:textSize="18sp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/set_business_address"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:textSize="14sp"
+                android:paddingLeft="@dimen/margin_left"
+                android:paddingRight="@dimen/margin_right"
+                android:paddingEnd="@dimen/margin_right"
+                android:paddingStart="@dimen/margin_left"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable"
+                android:gravity="center"/>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/gray_line"/>
+
+            <TextView
+                android:fontFamily="@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxWidth="240dp"
+                android:textSize="14sp"
+                android:text="@string/return_location"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:textColor="@color/text_color" />
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxWidth="240dp"
+                android:textSize="14sp"
+                android:hint="Enter Postcode"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:textColor="@color/dark_gray" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray_line"/>
+
+            <LinearLayout
+                android:id="@+id/ll_radious"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="5dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="2dp"
+                    android:layout_marginRight="10dp">
+
+                    <TextView
+                        android:fontFamily="@font/roboto_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:text="Outcall Radius"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/text_color" />
+
+                    <TextView
+                        android:id="@+id/tvShowMiles"
+                        android:fontFamily="@font/roboto_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="22sp"
+                        android:layout_centerVertical="true"
+                        android:text="16"
+                        android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@+id/tvMiles"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/tvMiles"
+                        android:fontFamily="@font/roboto_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:text="(miles)"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/dark_gray" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="5dp">
+
+                    <views.MyMapView
+                        android:id="@+id/mapview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/map_pin_ico"/>
+
+                   <!-- <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/dark_transperant"/>
+-->
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="165dp"
+                        android:layout_height="165dp"
+                        app:civ_border_width="1dp"
+                        android:layout_centerInParent="true"
+                        app:civ_border_color="@color/colorPrimary"
+                        android:src="#831BD3C9" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_color"
+                    android:fontFamily="@font/roboto_semibold"
+                    android:textSize="16sp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/select_your_maximum_travelling_radius"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="15dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="2dp"
+                            android:text="1"/>
+
+                        <TextView
+                            android:id="@+id/tv_mileIndicater1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/roboto_regular"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:textColor="@color/black"
+                            android:text="20 Miles"/>
+
+                    </RelativeLayout>
+
+                    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                        android:id="@+id/seekBarRadius"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-5dp"
+                        app:dsb_min="1"
+                        app:dsb_max="20"
+                        app:dsb_progressColor="@color/colorPrimary"
+                        app:dsb_indicatorColor="@color/colorPrimary"
+                        app:dsb_trackColor="@color/colorPrimary" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        style="@style/My_Button.Invert"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/continue_txt"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        />
+
+</RelativeLayout>

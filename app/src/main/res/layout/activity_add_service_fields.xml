@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@color/white"
+    tools:context=".modules.profile.activity.AddServiceFieldsActivity">
+
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/actionbar_fill_business_profile"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentTop="true" />
+
+
+    <LinearLayout
+        android:id="@+id/llServiceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/headerLayout"
+        android:layout_marginTop="10dp"
+        android:visibility="visible"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxWidth="240dp"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/service_name"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/text_color" />
+
+        <EditText
+            android:id="@+id/etServiceName"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:maxWidth="240dp"
+            android:textSize="16sp"
+            android:background="@null"
+            android:layout_marginLeft="6dp"
+            android:ems="18"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:maxLength="30"
+            android:maxLines="2"
+            android:padding="5dp"
+            android:hint="@string/service_name"
+            android:textColor="@color/text_color" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/gray_line" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llInCallPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/headerLayout"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:fontFamily="@font/roboto_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxWidth="240dp"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/incall_p"
+            android:textColor="@color/text_color" />
+
+        <EditText
+            android:id="@+id/etInCallPrice"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:maxWidth="240dp"
+            android:textSize="16sp"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionDone"
+            android:background="@null"
+            android:layout_marginLeft="6dp"
+            android:ems="18"
+            android:maxLength="7"
+            android:maxLines="2"
+            android:padding="5dp"
+            android:hint="£00.00"
+            android:textColor="@color/text_color" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/gray_line" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llOutCallPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/llInCallPrice"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:fontFamily="@font/roboto_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxWidth="240dp"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/outcall_p"
+            android:textColor="@color/text_color" />
+
+        <EditText
+            android:id="@+id/etOutCallPrice"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:maxWidth="240dp"
+            android:textSize="16sp"
+            android:background="@null"
+            android:layout_marginLeft="6dp"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:ems="18"
+            android:maxLength="7"
+            android:maxLines="2"
+            android:padding="5dp"
+            android:hint="£00.00"
+            android:textColor="@color/text_color" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/gray_line" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llServiceDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/headerLayout"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:fontFamily="@font/roboto_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxWidth="240dp"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/service_description"
+            android:textColor="@color/text_color" />
+
+        <EditText
+            android:id="@+id/etServiceDesc"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:background="@null"
+            android:layout_marginLeft="6dp"
+            android:maxLength="200"
+            android:maxLines="4"
+            android:padding="5dp"
+            android:imeOptions="actionDone"
+            android:hint="Enter Description"
+            android:textColor="@color/text_color" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/gray_line" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlBusinessType"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_below="@+id/headerLayout"
+        android:layout_gravity="center_vertical">
+
+        <Spinner
+            android:id="@+id/spBookingType"
+            android:overlapAnchor="false"
+            android:background="@null"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:popupBackground="@color/light_gray"
+            android:textColor="@color/text_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:prompt="@string/business_type"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/textv"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxWidth="240dp"
+                android:textSize="14sp"
+                android:text="@string/booking_type"
+                android:textColor="@color/text_color" />
+
+            <TextView
+                android:id="@+id/tvBookingType"
+                style="@style/TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="240dp"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginTop="1dp"
+                android:text="@string/business_type"
+                android:textColor="@color/text_color" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentRight="true"
+            android:rotation="270"
+            android:layout_centerVertical="true"
+            android:background="@drawable/back_icon"
+            android:visibility="visible" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlComplitionTime"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="8dp"
+        android:layout_below="@+id/headerLayout"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:layout_gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxWidth="240dp"
+                android:textSize="14sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Time for Completion"
+                android:textColor="@color/text_color" />
+
+            <TextView
+                android:id="@+id/tvCompletionTime"
+                style="@style/TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="240dp"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:visibility="visible"
+                android:hint="@string/hh_mm"
+                android:text="@string/hh_mm"
+                android:layout_marginTop="1dp"
+                android:textColor="@color/text_color" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        style="@style/My_Button.Invert"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/margin_left26"
+        android:layout_marginRight="@dimen/margin_right26"
+        android:text="@string/save"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        />
+
+</RelativeLayout>

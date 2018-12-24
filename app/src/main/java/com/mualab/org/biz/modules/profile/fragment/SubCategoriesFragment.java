@@ -119,7 +119,7 @@ public class SubCategoriesFragment extends ProfileCreationBaseFragment {
                 if(validateInputData() && listener!=null){
                     insertServices(true);
                     //updateDtataIntoServer(true);
-                    //listener.onPrev("Services");
+                    //listener.onPrev("BusinessType");
                 }
 
             }
@@ -145,8 +145,6 @@ public class SubCategoriesFragment extends ProfileCreationBaseFragment {
 
     }
 
-
-
     public void showPicker(final TextView tvTime, final String title){
         int hours = 01;
         //int minute = 00;
@@ -154,7 +152,7 @@ public class SubCategoriesFragment extends ProfileCreationBaseFragment {
         if(!tmpTime.equals("HH:MM")){
             String[] arrayTime = tmpTime.split(":");
             hours = Integer.parseInt(arrayTime[0]);
-           // minute = Integer.parseInt(arrayTime[1]);
+            // minute = Integer.parseInt(arrayTime[1]);
         }
         MyTimePickerDialog mTimePicker = new MyTimePickerDialog(mContext, new MyTimePickerDialog.OnTimeSetListener() {
             @SuppressLint("DefaultLocale")
@@ -209,7 +207,7 @@ public class SubCategoriesFragment extends ProfileCreationBaseFragment {
 
     @SuppressLint("StaticFieldLeak")
     public void insertServices(final boolean addMoreService) {
-        new AsyncTask<Void, Void, Void>() {
+   /*     new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
 
@@ -230,7 +228,7 @@ public class SubCategoriesFragment extends ProfileCreationBaseFragment {
                             category.addSubCategory(subCategory);
                         }
                     }
-                    Mualab.get().getDB().serviceDao().update(service);
+                    //Mualab.get().getDB().serviceDao().update(service);
 
                 }
                 return null;
@@ -241,15 +239,14 @@ public class SubCategoriesFragment extends ProfileCreationBaseFragment {
                 super.onPostExecute(aVoid);
 
                 if(addMoreService)
-                    listener.onChangeByTag("Services");
+                    listener.onChangeByTag("BusinessType");
                 else
                     listener.onNext();
             }
-        }.execute();
+        }.execute();*/
     }
 
-
-    /*update service data local db to server db*/
+    /*update service data local db_modle to server db_modle*/
     private void updateDtataIntoServer(final boolean addMoreService){
 
         if(ConnectionDetector.isConnected()){

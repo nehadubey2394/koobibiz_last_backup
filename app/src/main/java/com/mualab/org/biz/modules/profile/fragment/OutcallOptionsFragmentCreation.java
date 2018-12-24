@@ -49,7 +49,8 @@ import views.MyMapView;
 import views.pickerview.MyTimePickerDialog;
 import views.pickerview.timepicker.TimePicker;
 
-public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment implements OnMapReadyCallback {
+public class OutcallOptionsFragmentCreation extends ProfileCreationBaseFragment
+        implements OnMapReadyCallback {
 
     private TextView tv_placeName, tv_address;
     private TextView tv_mileIndicater1;

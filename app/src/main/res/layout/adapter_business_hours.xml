@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="32dp"
+    android:background="@color/white"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/llDot"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:gravity="center_horizontal">
 
         <ImageView
@@ -20,81 +22,67 @@
 
     </LinearLayout>
 
-
-
     <LinearLayout
         android:id="@+id/ll_timeslotView"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="32dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_marginLeft="5dp"
         android:paddingLeft="5dp"
-
-        android:background="@drawable/gray_broder_white_bg">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/clock_ico"/>
+        >
 
         <TextView
             android:id="@+id/tv_from"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="@style/TextView"
-            android:textColor="@color/black"
-            android:layout_marginLeft="5dp"
-            android:text="From 10:00 AM"/>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="@color/gray2"
-            />
-
-        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/TextView"
+            android:gravity="center"
+            android:textColor="@color/text_color"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/clock_ico"/>
+            android:text="10:00 am "/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView"
+            android:gravity="center"
+            android:textColor="@color/text_color"
+            android:layout_marginLeft="5dp"
+            android:text="-"/>
+
 
         <TextView
             android:id="@+id/tv_to"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             style="@style/TextView"
-            android:textColor="@color/black"
+            android:gravity="center"
+            android:textColor="@color/text_color"
             android:layout_marginLeft="5dp"
-            android:text="From 7:00 PM"/>
+            android:text=" 7:00 pm"/>
 
-        <View
-            android:id="@+id/viewDivider"
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="@color/gray2"
-            />
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_delete"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:gravity="center">
+    <LinearLayout
+        android:id="@+id/ll_delete"
+        android:layout_width="wrap_content"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center">
 
-            <ImageView
-                android:id="@+id/iv_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/ic_close_black"/>
-
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:tint="@color/gray"
+            android:layout_gravity="center"
+            android:padding="3dp"
+            android:src="@drawable/ic_close_black"/>
 
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,156 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".modules.profile.fragment.ServicesFragmentCreation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_above="@+id/btnNext"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Search and add your business"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:paddingLeft="@dimen/margin_left"
+            android:paddingRight="@dimen/margin_right"
+            android:paddingEnd="@dimen/margin_right"
+            android:paddingStart="@dimen/margin_left"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable"
+            android:gravity="center"/>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/searchView"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            app:cardElevation="2dp"
+            android:background="@drawable/bg_searchbox_circle"
+            >
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searchview"
+                android:theme="@style/SearchboardSearchView"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                app:iconifiedByDefault="false"
+                app:searchIcon="@null"
+                android:background="@null"
+                app:queryBackground="@color/white"
+                android:lineSpacingExtra="0dp"
+                android:lineSpacingMultiplier="0"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_gravity="center"
+                app:queryHint="Search..."/>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listViewServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/gray2"
+            android:scrollbars="none"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@color/white"
+            android:listSelector="@color/colorPrimary"
+            android:dividerHeight="1px"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        style="@style/My_Button.Invert"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/margin_left26"
+        android:layout_marginRight="@dimen/margin_right26"
+        android:text="@string/done"
+        android:visibility="visible"
+        />
+
+    <LinearLayout
+        android:id="@+id/llNotRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvNoRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_data_available"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/roboto_medium"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:paddingLeft="@dimen/margin_left"
+            android:paddingRight="@dimen/margin_right"
+            android:paddingEnd="@dimen/margin_right"
+            android:paddingStart="@dimen/margin_left"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable"
+            android:gravity="center"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnAddNewBizType"
+            android:layout_width="120dp"
+            android:layout_height="@dimen/button_height"
+            style="@style/My_Button_Pink"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/add"
+            android:visibility="visible"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbLoder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>

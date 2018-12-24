@@ -18,15 +18,14 @@
 
         <ImageView
             android:id="@+id/ivHeaderBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/white_back_ico"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:tint="@color/text_color"
-            android:visibility="visible"
-            android:layout_alignParentLeft="true" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/back_icon"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/tvHeaderTitle"
@@ -37,6 +36,19 @@
             android:fontFamily="@font/roboto_bold"
             android:textColor="@color/text_color"
             android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:id="@+id/ivDropDown"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="5dp"
+            android:rotation="270"
+            android:visibility="gone"
+            android:layout_toRightOf="@+id/tvHeaderTitle"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/back_icon"
+            android:layout_centerVertical="true" />
+
 
         <ImageView
             android:layout_width="wrap_content"

@@ -34,7 +34,15 @@ public class TimeSlot implements Serializable {
     @SerializedName("status")
     public int status = 1;
 
+    public int bizdayPosition;
+
     public TimeSlot(int dayId){
         this.dayId = dayId;
     }
+
+    public TimeSlot(int dayId,int bizdayPosition ){
+        this.dayId = dayId;
+        this.bizdayPosition = bizdayPosition;
+    }
+
 }

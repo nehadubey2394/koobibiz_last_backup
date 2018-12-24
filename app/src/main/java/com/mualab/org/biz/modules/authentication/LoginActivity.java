@@ -1,10 +1,12 @@
 package com.mualab.org.biz.modules.authentication;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
@@ -25,7 +27,6 @@ import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.chat.model.FirebaseUser;
-import com.mualab.org.biz.dialogs.ForgotPassword;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
@@ -33,7 +34,7 @@ import com.mualab.org.biz.helper.MySnackBar;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.BaseActivity;
-import com.mualab.org.biz.modules.MainActivity;
+import com.mualab.org.biz.modules.NewBaseActivity;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.session.SharedPreferanceUtils;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -84,11 +85,11 @@ public class LoginActivity extends BaseActivity {
         initView();
 
 
-        if ((Boolean) sp.getParam(Constants.isLoginReminder, Boolean.FALSE)) {
+      /*  if ((Boolean) sp.getParam(Constants.isLoginReminder, Boolean.FALSE)) {
             isRemind = true;
             ed_username.setText(String.valueOf(sp.getParam(Constants.USER_ID, "")));
             ed_password.setText(String.valueOf(sp.getParam(Constants.USER_PASSWORD, "")));
-        }
+        }*/
 
 
 
@@ -116,7 +117,9 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.tvForgotPassword).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ForgotPassword(LoginActivity.this, new ForgotPassword.Listner() {
+
+                startActivity(new Intent(LoginActivity.this,ForgotPasswordActivity.class));
+               /* new ForgotPassword(LoginActivity.this, new ForgotPassword.Listner() {
                     @Override
                     public void onSubmitClick(final Dialog dialog, final String string) {
                         Handler handler = new Handler();
@@ -133,7 +136,7 @@ public class LoginActivity extends BaseActivity {
                     public void onDismis(Dialog dialog) {
                         dialog.dismiss();
                     }
-                }).show();
+                }).show();*/
             }
         });
 
@@ -154,8 +157,9 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.createNewAccount).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this,  ChooseUserTypeActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                geNextActivity(Constants.INDEPENDENT);
+                //  startActivity(new Intent(LoginActivity.this,  ChooseUserTypeActivity.class));
+                // overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
 
@@ -171,6 +175,14 @@ public class LoginActivity extends BaseActivity {
                 if (dialog != null)
                     dialog.show();
         }
+    }
+
+    private void geNextActivity(String registrationType){
+        Intent intent = new Intent(this,RegistrationActivity.class);
+        intent.putExtra(Constants.registrationType, registrationType);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        startActivity(intent);
+        finish();
     }
 
     public boolean isPackageExisted(String targetPackage){
@@ -209,7 +221,7 @@ public class LoginActivity extends BaseActivity {
 
         if (isValidInput) {
             final Map<String, String> params = new HashMap<>();
-            params.put("userName", username);
+            params.put("userName", username.toLowerCase());
             params.put("password", password);
             params.put("deviceToken",deviceToken);
             params.put("firebaseToken",deviceToken);
@@ -235,8 +247,8 @@ public class LoginActivity extends BaseActivity {
                             if(user.isProfileComplete==3)
                                 session.setBusinessProfileComplete(true);
                             MyToast.getInstance(LoginActivity.this).showDasuAlert("Success",message);
-
                             writeNewUser(user);
+                            new ClearTask().execute("");
 
                         }else {
                             showToast(message);
@@ -250,7 +262,11 @@ public class LoginActivity extends BaseActivity {
 
                 @Override
                 public void ErrorListener(VolleyError error) {
-
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")) {
+                        Mualab.getInstance().getSessionManager().logout();
+                        //      MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                    }
                 }})
                     .setBody(params, HttpTask.ContentType.APPLICATION_JSON)
                     .setMethod(Request.Method.POST)
@@ -258,6 +274,24 @@ public class LoginActivity extends BaseActivity {
                     .execute(this.getClass().getName());
             //Progress.show(this);
         }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class ClearTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            Mualab.getInstance().getDB().clearAllTables();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) { }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) { }
     }
 
     private void checkUserRember(User user){
@@ -393,8 +427,9 @@ public class LoginActivity extends BaseActivity {
         firebaseUser.uId = Integer.parseInt(user.id);
         mDatabase.child("users").child(String.valueOf(user.id)).setValue(firebaseUser);
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), NewBaseActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        overridePendingTransition(0,0);
         startActivity(intent);
         //  overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();

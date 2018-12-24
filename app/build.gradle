@@ -60,9 +60,12 @@ dependencies {
     implementation 'com.hendraanggrian:socialview-commons:0.16.3'
 
     /*for android room data base */
-    implementation 'android.arch.persistence.room:runtime:1.0.0'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'
-
+    /* implementation 'android.arch.persistence.room:runtime:1.0.0'
+    annotationProccessor 'android.arch.persistence.room:compiler:1.0.0'*/
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
+    implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3'
+    implementation 'com.intuit.sdp:sdp-android:1.0.5'
 }
 apply plugin: 'com.google.gms.google-services'
-

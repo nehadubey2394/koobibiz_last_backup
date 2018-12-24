@@ -1,83 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:orientation="vertical"
+    android:background="@color/white"
+    android:id="@+id/rlParent"
     android:padding="5dp">
 
     <LinearLayout
+        android:id="@+id/llTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:layout_marginBottom="4dp"
+        >
 
         <CheckBox
             android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:padding="2dp"
             android:background="@null"
             android:button="@drawable/checkbox_selector" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="34dp"
+            android:layout_height="wrap_content"
+            android:minHeight="34dp"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:layout_marginLeft="5dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/gray_broder_white_bg">
+            >
 
             <TextView
                 android:id="@+id/tv_dayName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="32dp"
                 style="@style/TextView"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:text="@string/monday"/>
+                android:text="@string/wednesday"/>
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                android:dividerHeight="2dp"
+                android:layout_marginLeft="5dp"
+                android:minHeight="50dp"
+                android:visibility="gone"
+                android:listSelector="@android:color/transparent"
+                />
 
             <TextView
                 android:id="@+id/tv_workingStatus"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:gravity="center"
                 style="@style/TextView"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_horizontal"
                 android:textColor="@color/gray"
                 android:text="@string/not_working"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"/>
-
-            <LinearLayout
-                android:id="@+id/ll_addTimeSlot"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/ivAddTimeSlot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/add_ico"/>
-
-            </LinearLayout>
 
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:divider="@null"
-        android:dividerHeight="2dp"
-        android:listSelector="@android:color/transparent"
-        android:visibility="gone"/>
+    <LinearLayout
+        android:id="@+id/ll_addTimeSlot"
+        android:layout_width="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:background="@color/white"
+        >
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/ivAddTimeSlot"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:src="@drawable/add_time_ico"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="2dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray_line"/>
+
+</RelativeLayout>

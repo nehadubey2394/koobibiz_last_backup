@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
@@ -30,6 +31,7 @@ import com.mualab.org.biz.modules.add_staff.fragments.ArtistSettingsFragment;
 import com.mualab.org.biz.modules.booking.fragments.AddFragment;
 import com.mualab.org.biz.modules.booking.fragments.BookingsFragment;
 import com.mualab.org.biz.modules.booking.listner.OnRefreshListener;
+import com.mualab.org.biz.modules.business_setup.BaseBusinessSetupFragment;
 import com.mualab.org.biz.modules.profile.BusinessProfileActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
@@ -39,6 +41,8 @@ import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.TimeSlot;
+import com.mualab.org.biz.modules.profile.activity.NewBusinessInfoActivity;
+import com.mualab.org.biz.modules.profile.activity.NewBusinessSetUpActivity;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -56,10 +60,12 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements View.OnClickListener,OnRefreshListener {
     private Session session;
     private  long mLastClickTime = 0;
-    private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnLogo,ibtnUser;
+    private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnNotification,ibtnUser;
     private ImageView ivHeaderBack;
+    private ImageView ivDropDown;
     private TextView tvHeaderTitle;
     private int clickedId = 0;
+    private CardView topLayout1;
     //private TextView tv_msg;
     private String lat="",lng="";
     // private ProgressBar progress_bar;
@@ -82,14 +88,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         // progress_bar = findViewById(R.id.progress_bar);
         initView();
 
-        if(!session.isBusinessProfileComplete()){
-            startActivity(new Intent(this, BusinessProfileActivity.class));
-            finish();
-        }else {
-            getBusinessProfile();
-        }
-
-
         final NoConnectionDialog network =  new NoConnectionDialog(MainActivity.this, new NoConnectionDialog.Listner() {
             @Override
             public void onNetworkChange(Dialog dialog, boolean isConnected) {
@@ -108,25 +106,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 }else network.show();
             }
         });
+
     }
 
     private void initView() {
+        topLayout1 = findViewById(R.id.topLayout1);
         ibtnBookings = findViewById(R.id.ibtnBookings);
         ibtnChart = findViewById(R.id.ibtnChart);
         ibtnAdd = findViewById(R.id.ibtnAdd);
-        ibtnLogo = findViewById(R.id.ibtnLogo);
+        ibtnNotification = findViewById(R.id.ibtnNotification);
         ibtnUser = findViewById(R.id.ibtnUser);
         ivHeaderBack = findViewById(R.id.ivHeaderBack);
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        ivDropDown = findViewById(R.id.ivDropDown);
         // tv_msg = findViewById(R.id.tv_msg);
         ibtnBookings.setImageResource(R.drawable.active_calender_ico);
 
         ibtnBookings.setOnClickListener(this);
         ibtnChart.setOnClickListener(this);
         ibtnAdd.setOnClickListener(this);
-        ibtnLogo.setOnClickListener(this);
+        ibtnNotification.setOnClickListener(this);
         ibtnUser.setOnClickListener(this);
         ivHeaderBack.setOnClickListener(this);
+
+        if(!session.isBusinessProfileComplete())
+            getBusinessProfile();
+        else
+            replaceFragment(BookingsFragment.newInstance(""), false);
+
     }
 
     private void getBusinessProfile(){
@@ -214,12 +221,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     }
 
                     if(!session.isBusinessProfileComplete()){
-                        startActivity(new Intent(MainActivity.this, BusinessProfileActivity.class));
+                        // startActivity(new Intent(MainActivity.this, BusinessProfileActivity.class));
+                        startActivity(new Intent(MainActivity.this, NewBusinessSetUpActivity.class));
+                        overridePendingTransition(0,0);
                         finish();
                     }else {
                         //getDeviceLocation();
                         replaceFragment(BookingsFragment.newInstance(""), false);
                     }
+
 
                 } catch (JSONException e) {
                     Progress.hide(MainActivity.this);
@@ -295,7 +305,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
     @Override
     public void onClick(View view) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
@@ -306,6 +316,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 break;
             case R.id.ibtnBookings:
                 if (clickedId!=1){
+                    topLayout1.setVisibility(View.VISIBLE);
                     setInactiveTab();
                     clickedId = 1;
                     ibtnBookings.setImageResource(R.drawable.active_calender_ico);                     replaceFragment(new BookingsFragment(), false);
@@ -314,6 +325,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             case R.id.ibtnChart:
                 if (clickedId!=2){
+                    topLayout1.setVisibility(View.VISIBLE);
                     setInactiveTab();
                     clickedId = 2;
                     ibtnChart.setImageResource(R.drawable.active_chart_ico);
@@ -323,6 +335,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             case R.id.ibtnAdd:
                 if (clickedId!=3){
+                    topLayout1.setVisibility(View.VISIBLE);
                     setInactiveTab();
                     clickedId = 3;
                     ibtnAdd.setImageResource(R.drawable.active_add_ico);
@@ -330,21 +343,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 }
                 break;
 
-            case R.id.ibtnLogo:
+            case R.id.ibtnNotification:
                 if (clickedId!=4){
+                    topLayout1.setVisibility(View.VISIBLE);
                     setInactiveTab();
                     clickedId = 4;
-                    ibtnLogo.setImageResource(R.drawable.active_logo_ico);
+                    ibtnNotification.setImageResource(R.drawable.active_notification_ico);
                     replaceFragment(new AddFragment(), false);
                 }
                 break;
 
             case R.id.ibtnUser:
                 if (clickedId!=5){
+                    topLayout1.setVisibility(View.GONE);
                     setInactiveTab();
                     clickedId = 5;
                     ibtnUser.setImageResource(R.drawable.active_user_ico);
-                    replaceFragment(new ArtistSettingsFragment(), false);
+                    replaceFragment(new BaseBusinessSetupFragment(), false);
                 }
                 break;
         }
@@ -355,7 +370,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         ibtnBookings.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_calender_ico));
         ibtnChart.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_chart_ico));
         ibtnAdd.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_add_ico));
-        ibtnLogo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_logo_ico));
+        ibtnNotification.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_notification_ico));
         ibtnUser.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_user_ico));
 
     }

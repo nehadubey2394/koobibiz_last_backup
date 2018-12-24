@@ -111,7 +111,7 @@ public class AdapCompanyBusinessDays extends RecyclerView.Adapter<AdapCompanyBus
 
             TextView tv_from =  v.findViewById(R.id.tv_from);
             TextView tv_to =  v.findViewById(R.id.tv_to);
-            View viewDivider = v.findViewById(R.id.viewDivider);
+          //  View viewDivider = v.findViewById(R.id.viewDivider);
             LinearLayout ll_delete = v.findViewById(R.id.ll_delete);
             ll_delete.setVisibility(View.GONE);
             LinearLayout llDot  =  v.findViewById(R.id.llDot);
@@ -119,7 +119,7 @@ public class AdapCompanyBusinessDays extends RecyclerView.Adapter<AdapCompanyBus
             // Populate the data into the template view using the data object
             tv_from.setText(String.format("From: %s", timeSlot.startTime));
             tv_to.setText(String.format("To: %s", timeSlot.endTime));
-            viewDivider.setVisibility(timeSlots.size()==1? View.GONE: View.VISIBLE);
+          //  viewDivider.setVisibility(timeSlots.size()==1? View.GONE: View.VISIBLE);
 
             return v;
         }

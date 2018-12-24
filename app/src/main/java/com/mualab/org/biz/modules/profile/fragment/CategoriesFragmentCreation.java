@@ -106,7 +106,8 @@ public class CategoriesFragmentCreation extends ProfileCreationBaseFragment {
                     ViewPager viewPager = (getActivity()) != null ? activity.mPager : null;
                     PagerAdapter adapter = (getActivity()) != null ? activity.mPagerAdapter : null;
                     if (adapter != null && viewPager!=null) {
-                        SubCategoriesFragment fragment = (SubCategoriesFragment) adapter.instantiateItem(null, viewPager.getCurrentItem()+1);
+                        SubCategoriesFragment fragment = (SubCategoriesFragment)
+                                adapter.instantiateItem(null, viewPager.getCurrentItem()+1);
                         SubCategory subCategory = _listDataHeader.get(groupPosition).subCategories.get(childPosition);
                         fragment.updateSubCategory(subCategory);
                         //listener.saveTmpData("subCategory", subCategory);

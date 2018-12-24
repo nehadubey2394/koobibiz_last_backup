@@ -26,8 +26,7 @@ import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
-import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
-import com.mualab.org.biz.modules.add_staff.adapter.ArtistStaffAdapter;
+import com.mualab.org.biz.modules.business_setup.my_staff.adapter.MyStaffAdapter;
 import com.mualab.org.biz.modules.add_staff.listner.OnBottomReachedListener;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -45,11 +44,11 @@ import java.util.Map;
 
 
 public class ArtistStaffFragment extends Fragment implements View.OnClickListener,
-        ArtistStaffAdapter.OnDeleteStaffListener,OnBottomReachedListener {
+        MyStaffAdapter.OnDeleteStaffListener,OnBottomReachedListener {
     private TextView tvNoDataFound;
     private Context mContext;
     private List<Staff>artistStaffs;
-    private ArtistStaffAdapter staffAdapter;
+    private MyStaffAdapter staffAdapter;
     private RecyclerView rvArtistStaff;
     private   long mLastClickTime = 0;
 
@@ -93,10 +92,10 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
     }
 
     private void initView(View rootView){
-        // if(mContext instanceof AddStaffActivity) {
-        //   ((AddStaffActivity) mContext).setTitle();
+        // if(mContext instanceof AddNewStaffActivity) {
+        //   ((AddNewStaffActivity) mContext).setTitle();
         artistStaffs = new ArrayList<>();
-        staffAdapter = new ArtistStaffAdapter(mContext, artistStaffs);
+        staffAdapter = new MyStaffAdapter(mContext, artistStaffs);
 
         rvArtistStaff = rootView.findViewById(R.id.rvArtistStaff);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -104,7 +103,7 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
         //  rvArtistStaff.setNestedScrollingEnabled(false);
         rvArtistStaff.setAdapter(staffAdapter);
         staffAdapter.setChangeListener(ArtistStaffFragment.this);
-        staffAdapter.setOnBottomReachedListener(ArtistStaffFragment.this);
+        //   staffAdapter.setOnBottomReachedListener(ArtistStaffFragment.this);
 
         tvNoDataFound = rootView.findViewById(R.id.tvNoDataFound);
         LinearLayout llAddStaff = rootView.findViewById(R.id.llAddStaff);
@@ -210,8 +209,13 @@ public class ArtistStaffFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onStaffSelect(int position, Staff staff) {
+    public void onStaffDelete(int position, Staff staff) {
         showAlertDailog(position,staff);
+    }
+
+    @Override
+    public void onStaffSelect(int position, Staff staff) {
+
     }
 
     private void showAlertDailog(final int position, final Staff staff){

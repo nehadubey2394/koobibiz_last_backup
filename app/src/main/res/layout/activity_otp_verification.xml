@@ -153,7 +153,7 @@
                         android:background="?android:selectableItemBackground"
                         android:padding="5dp"
                         android:layout_marginTop="10dp"
-                        android:fontFamily="@font/raleway_medium"
+                        android:fontFamily="@font/roboto_medium"
                         android:textAllCaps="false"
                         android:text="@string/resent_code" />
 

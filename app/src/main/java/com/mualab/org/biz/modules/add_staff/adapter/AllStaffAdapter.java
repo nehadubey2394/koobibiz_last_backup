@@ -15,7 +15,7 @@ import com.daimajia.swipe.SwipeLayout;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.model.add_staff.AllArtist;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
+import com.mualab.org.biz.modules.business_setup.new_add_staff.AddStaffDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

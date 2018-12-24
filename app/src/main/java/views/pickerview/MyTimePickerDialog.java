@@ -38,8 +38,8 @@ public class MyTimePickerDialog extends AlertDialog implements OnClickListener {
     private final TimePicker mTimePicker;
     private final OnTimeSetListener mCallback;
 
-    private int mInitialHourOfDay = 1;
-    private int mInitialMinute = 0;
+    private int mInitialHourOfDay = 01;
+    private int mInitialMinute = 00;
     public static int mIntervel = 10;
 
     /**
@@ -99,16 +99,16 @@ public class MyTimePickerDialog extends AlertDialog implements OnClickListener {
         View view = inflater.inflate(R.layout.time_picker_dialog, null);
         setView(view);
         mTimePicker = view.findViewById(R.id.timePicker);
-
         // initialize state
         mTimePicker.setCurrentHour(mInitialHourOfDay);
         mTimePicker.setCurrentMinute(mInitialMinute);
-        mTimePicker.clearFocus();
+        //mTimePicker.clearFocus();
     }
 
     public void onClick(DialogInterface dialog, int which) {
         if (mCallback != null) {
             mTimePicker.clearFocus();
+          //  if (mTimePicker.getCurrentHour())
             mCallback.onTimeSet(mTimePicker, mTimePicker.getCurrentHour(),
                     mTimePicker.getCurrentMinute()*mIntervel);
         }

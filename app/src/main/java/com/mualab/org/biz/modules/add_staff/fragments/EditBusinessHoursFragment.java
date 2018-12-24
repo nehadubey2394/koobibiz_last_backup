@@ -19,7 +19,7 @@ import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.serializer.EditTimeSlotSerializer;
-import com.mualab.org.biz.modules.add_staff.activity.AddStaffDetailActivity;
+import com.mualab.org.biz.modules.business_setup.new_add_staff.AddStaffDetailActivity;
 import com.mualab.org.biz.modules.add_staff.adapter.AdapterEditBusinessDays;
 import com.mualab.org.biz.modules.add_staff.listner.EditWorkingHours;
 import com.mualab.org.biz.modules.profile.fragment.ProfileCreationBaseFragment;
@@ -145,7 +145,7 @@ public class EditBusinessHoursFragment extends ProfileCreationBaseFragment {
             return  null;
     }
 
-    /*update data into server db*/
+    /*update data into server db_modle*/
     private void updateDataIntoServerDb(){
         //List<BusinessDay> businessDays = getBusinessdays(); // getting business hours slots like opening/closing time
         List<TimeSlot> slotList = new ArrayList<>();

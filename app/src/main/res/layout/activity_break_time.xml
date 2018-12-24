@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".modules.profile.activity.BookingTypeActivity">
+
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/actionbar_fill_business_profile"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/headerLayout"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="15dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/break_between_appointment"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:paddingLeft="@dimen/margin_left"
+            android:paddingRight="@dimen/margin_right"
+            android:paddingEnd="@dimen/margin_right"
+            android:paddingStart="@dimen/margin_left"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/this_is_the_free_time_you_wish_to_be_allocated_inbetween_each_booking"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_line"
+            android:layout_marginTop="10dp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llInCallTimePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvInCallHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:textSize="26sp"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/dark_gray"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hours"
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            />
+
+        <TextView
+            android:id="@+id/tvInCallMins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:textSize="26sp"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/dark_gray"
+            android:layout_marginLeft="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mins"
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llOutCallTimePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="12dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/tvOutCallHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:textSize="24sp"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/dark_gray"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hours"
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            />
+
+        <TextView
+            android:id="@+id/tvOutCallMins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:textSize="24sp"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/dark_gray"
+            android:layout_marginLeft="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mins"
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llBottomOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:id="@+id/bottomLine"
+            android:visibility="gone"
+            android:background="@color/gray_line"
+            >
+        </View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:id="@+id/llInCallOutCall"
+            android:visibility="gone"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/tvInCall"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:text="In Call"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="16sp"
+                android:padding="2dp"
+                />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray_line"/>
+
+            <TextView
+                android:id="@+id/tvOutCall"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:text="Out Call"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="16sp"
+                android:padding="2dp"
+                />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnContinue"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            style="@style/My_Button.Invert"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/continue_txt"
+            android:visibility="visible"
+            android:layout_gravity="center_horizontal"
+            />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

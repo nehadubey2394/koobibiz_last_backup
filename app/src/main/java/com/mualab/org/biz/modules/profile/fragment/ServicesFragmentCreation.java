@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
     private PreRegistrationSession bpSession;
     private List<Service> serviceList;
     private long mLastClickTime = 0;
+    private LinearLayout llAddBizType,llAddCategory;
     //private List<ArtistCategory> actualServiceList;
 
     public static ServicesFragmentCreation newInstance() {
@@ -76,6 +78,8 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
         View view = inflater.inflate(R.layout.fragment_services, container, false);
         pbLoder = view.findViewById(R.id.pbLoder);
         btnNext = view.findViewById(R.id.btnNext);
+        llAddBizType = view.findViewById(R.id.llAddBizType);
+        llAddCategory = view.findViewById(R.id.llAddCategory);
         return view;
     }
 
@@ -217,7 +221,7 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
             @Override
             protected Void doInBackground(Void... voids) {
                 // Mualab.get().getDB().serviceDao().deleteAll();
-                Mualab.get().getDB().serviceDao().insertAll(serviceList);
+               // Mualab.get().getDB().serviceDao().insertAll(serviceList);
                 return null;
             }
         }.execute();
@@ -229,7 +233,7 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
             @Override
             protected Void doInBackground(Void... voids) {
                 serviceList.clear();
-                serviceList.addAll(Mualab.get().getDB().serviceDao().getAll());
+              //  serviceList.addAll(Mualab.get().getDB().serviceDao().getAll());
                 //margeServiceAndSubCategory(null);
                 return null;
             }
@@ -294,8 +298,7 @@ public class ServicesFragmentCreation extends ProfileCreationBaseFragment {
         private TextView tvName;
     }
 
-
-    /*update service data local db to server db*/
+    /*update service data local db_modle to server db_modle*/
     private void updateDtataIntoServer(){
 
         if(ConnectionDetector.isConnected()){

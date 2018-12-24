@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@color/white"
+    tools:context=".modules.profile.activity.AddServiceFieldsActivity">
+
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/actionbar_fill_business_profile"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentTop="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnDone"
+        android:layout_below="@+id/headerLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:id="@+id/llBizType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/business_type"
+                    android:textColor="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvBusinessTypeName"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_marginLeft="6dp"
+                    android:ems="18"
+                    android:maxLength="30"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:hint="Makeup"
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_line" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/category"
+                    android:textColor="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvCategoryName"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_marginLeft="6dp"
+                    android:ems="18"
+                    android:maxLength="30"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:hint="makeup"
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_line" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llServiceName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/service_name"
+                    android:textColor="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvServiceName"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_marginLeft="6dp"
+                    android:ems="18"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
+                    android:maxLength="30"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:hint="Hair brown color"
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llBookingType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/booking_type"
+                    android:textColor="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvBookingType"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_marginLeft="6dp"
+                    android:ems="18"
+                    android:maxLength="30"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:hint=""
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llInCallPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/headerLayout"
+                android:layout_marginTop="10dp"
+                >
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/incall_p"
+                    android:textColor="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvInCallPrice"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:inputType="number"
+                    android:imeOptions="actionDone"
+                    android:background="@null"
+                    android:layout_marginLeft="6dp"
+                    android:ems="18"
+                    android:maxLength="30"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:hint="£ 60"
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llOutCallPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/llInCallPrice"
+                android:layout_marginTop="10dp"
+                >
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/outcall_p"
+                    android:textColor="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvOutCallPrice"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_marginLeft="6dp"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:ems="18"
+                    android:maxLength="30"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:hint="£ 60"
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llServiceDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/headerLayout"
+                android:layout_marginTop="10dp"
+                >
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/service_description"
+                    android:textColor="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvServiceDesc"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_marginLeft="6dp"
+                    android:ems="18"
+                    android:padding="5dp"
+                    android:imeOptions="actionDone"
+                    android:hint="Enter Description"
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llCompileTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    style="@style/TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/time_for_completion"
+                    android:textColor="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvCompileTime"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_marginLeft="6dp"
+                    android:ems="18"
+                    android:maxLength="30"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:hint="HH:MM"
+                    android:textColor="@color/grey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_line" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnDone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        style="@style/My_Button.Invert"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/margin_left26"
+        android:layout_marginRight="@dimen/margin_right26"
+        android:text="@string/done"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        />
+
+</RelativeLayout>

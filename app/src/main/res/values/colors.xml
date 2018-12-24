@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f83272</color>
+    <!--<color name="colorPrimary">#f83272</color>-->
+    <color name="colorPrimary">#1bd3c9</color>
+<!--
     <color name="colorPrimaryDark">#4c3549</color>
-    <color name="colorPrimaryDark2">#4c3549</color>
+-->
+    <color name="colorPrimaryPink">#f83272</color>
+    <color name="colorPrimaryDark">#010306</color>
+    <!--<color name="colorPrimaryDark2">#4c3549</color>-->
+    <color name="colorPrimaryDark2">#010306</color>
     <color name="colorAccent">#03A7E9</color>
+
+    <color name="colorAccent2">#831BD3C9</color>
+
+    <color name="colorPrimary2">#1bd3c9</color>
+    <color name="colorOrage">#f17204 </color>
 
     <color name="colorPrimaryTransprent1">#30860309</color>
     <color name="colorPrimaryTransprent2">#50b26800</color>
@@ -18,6 +29,7 @@
     <color name="dark_grey">#434343</color>
     <color name="circle_gredient_end_color">#358efc</color>
     <color name="calender_bg_color">#4c3549</color>
+    <color name="gray_text_color">#101010</color>
 
     <color name="colorInitial">#FFC107</color>
     <color name="colorProgress">#00796B</color>
@@ -29,6 +41,7 @@
     <color name="gredienBottom">#ca3586</color>
     <color name="profileBorder">#a4035a</color>
     <color name="white">#FFFFFF</color>
+    <color name="bg_half_white">#F2F2F2</color>
     <color name="black">#000000</color>
     <color name="dark_transperant">#66000000</color>
     <color name="transparent">#00000000</color>
@@ -38,7 +51,8 @@
     <color name="grey1">#f5f5f5</color>
 
     <color name="light_gray">#ffefefef</color>
-    <color name="gray">#999999</color>
+    <color name="gray">#f8999999</color>
+    <color name="gray_line">#cccccc </color>
     <color name="gray2">#E0E0E0</color>
     <color name="gray3">#ececec</color>
     <color name="dark_gray">#FF595959</color>
@@ -102,4 +116,5 @@
     <color name="btn_context_menu_text_red">#ffff0000</color>
     <color name="text_like_counter">#2b5a83</color>
     <color name="shadow_green">#00bb27</color>
+    <color name="light_gray_shadow">#D3D3D3</color>
 </resources>

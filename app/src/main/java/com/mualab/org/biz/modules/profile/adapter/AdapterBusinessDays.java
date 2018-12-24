@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
@@ -55,6 +56,24 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
         holder.listView.setVisibility(day.isOpen?View.VISIBLE:View.GONE);
         holder.checkbox.setChecked(day.isOpen);
 
+        if (day.isExpand) {
+            RelativeLayout.LayoutParams layout_description =
+                    new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 170);
+
+            holder.rlParent.setLayoutParams(layout_description);
+        }else {
+            RelativeLayout.LayoutParams layout_description =
+                    new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            holder.rlParent.setLayoutParams(layout_description);
+        }
+
+        if (day.isOpen){
+            holder.tv_dayName.setTextColor(mContext.getResources().getColor(R.color.black));
+        }else {
+            holder.tv_dayName.setTextColor(mContext.getResources().getColor(R.color.gray));
+        }
+
         holder.checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -92,6 +111,7 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
         CheckBox checkbox;
         // ImageView ivAddTimeSlot;
         LinearLayout ll_addTimeSlot;
+        RelativeLayout rlParent;
         ListView listView;
         TextView tv_dayName, tv_workingStatus;
 
@@ -102,6 +122,7 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
             tv_workingStatus = itemView.findViewById(R.id.tv_workingStatus);
             //ivAddTimeSlot =  itemView.findViewById(R.id.ivAddTimeSlot);
             ll_addTimeSlot =  itemView.findViewById(R.id.ll_addTimeSlot);
+            rlParent =  itemView.findViewById(R.id.rlParent);
             listView = itemView.findViewById(R.id.listView);
             checkbox.setOnClickListener(this);
             ll_addTimeSlot.setOnClickListener(this);
@@ -123,7 +144,8 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
                         if(day.getTimeSlotSize()>=2){
                             MyToast.getInstance(mContext).showDasuAlert("Max time slot reached!");
                         }else {
-                            day.addTimeSlot(new TimeSlot(day.dayId));
+                            day.isExpand = true;
+                            day.addTimeSlot(new TimeSlot(day.dayId,position));
                             notifyItemChanged(position);
                         }
                     }
@@ -213,14 +235,21 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
 
             TextView tv_from =  v.findViewById(R.id.tv_from);
             TextView tv_to =  v.findViewById(R.id.tv_to);
-            View viewDivider = v.findViewById(R.id.viewDivider);
+            // View viewDivider = v.findViewById(R.id.viewDivider);
             //ImageView iv_delete = v.findViewById(R.id.iv_delete);
             LinearLayout ll_delete = v.findViewById(R.id.ll_delete);
 
+            //  if (timeSlot.isFirst){
+            ll_delete.setVisibility(View.GONE);
+            //  }else
+            //     ll_delete.setVisibility(View.VISIBLE);
+
             // Populate the data into the template view using the data object
-            tv_from.setText(String.format("From: %s", timeSlot.startTime));
-            tv_to.setText(String.format("To: %s", timeSlot.endTime));
-            viewDivider.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
+            //  tv_from.setText(String.format("From: %s", timeSlot.startTime));
+            //   tv_to.setText(String.format("To: %s", timeSlot.endTime));
+            tv_from.setText(timeSlot.startTime);
+            tv_to.setText(timeSlot.endTime);
+            //   viewDivider.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
             ll_delete.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
             ll_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -228,7 +257,8 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
                     if(timeSlots.size()>position){
                         timeSlots.remove(position);
                         AdapterTimeSlot.this.notifyDataSetChanged();
-                        AdapterBusinessDays.this.notifyItemChanged(timeSlot.dayId-1);
+                        businessDaysList.get(timeSlot.bizdayPosition).isExpand = false;
+                        AdapterBusinessDays.this.notifyItemChanged(timeSlot.bizdayPosition);
                     }
                 }
             });
@@ -279,5 +309,4 @@ public class AdapterBusinessDays extends RecyclerView.Adapter<AdapterBusinessDay
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
-
 }

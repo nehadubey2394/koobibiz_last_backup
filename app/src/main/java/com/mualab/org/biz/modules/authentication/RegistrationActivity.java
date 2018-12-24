@@ -11,14 +11,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.broadcast.OnSmsCatchListener;
 import com.mualab.org.biz.broadcast.SmsVerifyCatcher;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
@@ -31,6 +35,7 @@ import com.mualab.org.biz.session.SharedPreferanceUtils;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.JsonUtils;
 import com.mualab.org.biz.util.KeyboardUtil;
 
@@ -52,6 +57,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private TextInputLayout input_layout_email, input_layout_phone;
     private TextView tvCountryCode, tvAddress, tvAddressHint;
     private EditText ed_email, edPhoneNumber;
+    private EditText etOtp1, etOtp2,etOtp3,etOtp4;
     //Reg_View2
     private TextView tvOtp[] = new TextView[4];
 
@@ -60,7 +66,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private List<Country> countries;
     private String countryCode;
     private String apiOTP="";
-    private User user;
+    private User user,tempUser;
     private Address address;
 
     private SmsVerifyCatcher smsVerifyCatcher;
@@ -137,7 +143,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
             case R.id.btnContinue1:
 
-                if(validateEmail() && validatePhone() && validateAddress()){
+                if(validateEmail() && validatePhone() /*&& validateAddress()*/){
 
                     String contactNo = edPhoneNumber.getText().toString().trim();
                     String email = ed_email.getText().toString().trim();
@@ -146,7 +152,14 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     if(user.countryCode!=null && user.countryCode.equals(countryCode) &&  user.email.equals(email)
                             && user.contactNo.equals(contactNo)
                         /*&& countDownTimer!=null && timerIsRunning*/){
-                        nextScreen();
+                        // nextScreen();
+                        isResendOTP = false;
+                        user.countryCode = countryCode;
+                        user.contactNo = contactNo;
+                        user.email = email;
+                        resetOTP();
+                        apiCallForDataVerify();
+
                     }else {
                         isResendOTP = false;
                         user.countryCode = countryCode;
@@ -161,7 +174,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
             case R.id.btnVerifyOtp:
                 String userOtp = "";
-                for (Integer s : inputList) userOtp += s;
+                /*for (Integer s : inputList) userOtp += s;
                 if(inputList.size()!=4) showToast(getString(R.string.error_otp_reuired));
                 else if(apiOTP.equals(userOtp)) {
                     user.otp = userOtp;
@@ -170,7 +183,33 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 } else {
                     resetOTP();
                     showToast(getString(R.string.error_otp_invalid));
-                }
+                }*/
+
+                String otp1 = etOtp1.getText().toString().trim();
+                String otp2 = etOtp2.getText().toString().trim();
+                String otp3 = etOtp3.getText().toString().trim();
+                String otp4 = etOtp4.getText().toString().trim();
+
+                if (!otp1.isEmpty() && !otp2.isEmpty() && !otp3.isEmpty() && !otp4.isEmpty()){
+                    userOtp = otp1+""+otp2+""+otp3+""+otp4;
+                    if(apiOTP.equals(userOtp)) {
+                        user.otp = userOtp;
+                        user.otpVerified = true;
+                        if (tempUser!=null){
+                            Intent intent = new Intent(RegistrationActivity.this,MergeAccountActivity.class);
+                            intent.putExtra("userData",tempUser);
+                            startActivity(intent);
+                        }else {
+                            nextScreen();
+                        }
+                    } else {
+                        resetOTP();
+                        showToast(getString(R.string.error_otp_invalid));
+                    }
+
+                }else
+                    showToast(getString(R.string.error_otp_reuired));
+
                 break;
 
             case R.id.tv_resend_otp:
@@ -355,7 +394,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         viewSwitcher = findViewById(R.id.viewSwitcher);
         progressView1 = findViewById(R.id.progressView1);
         progressView2 = findViewById(R.id.progressView2);
-        progressView1.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
+        progressView1.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary2));
 
         /* view 1 */
         input_layout_email = findViewById(R.id.input_layout_email);
@@ -365,7 +404,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         tvCountryCode = findViewById(R.id.tvCountryCode);
         ed_email = findViewById(R.id.ed_email);
         edPhoneNumber = findViewById(R.id.edPhoneNumber);
-
         //Reg_View2
         tvOtp[0] = findViewById(R.id.tvOtp1);
         tvOtp[1] = findViewById(R.id.tvOtp2);
@@ -391,6 +429,68 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         findViewById(R.id.tv_9).setOnClickListener(this);
         findViewById(R.id.ivBackKeyboard).setOnClickListener(this);
 
+        etOtp1 = findViewById(R.id.etOtp1);
+        etOtp2 = findViewById(R.id.etOtp2);
+        etOtp3 = findViewById(R.id.etOtp3);
+        etOtp4 = findViewById(R.id.etOtp4);
+
+        etOtp1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() ==1) {
+                    etOtp2.requestFocus();
+                }
+            }
+        });
+
+        etOtp2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() ==1) {
+                    etOtp3.requestFocus();
+                }
+            }
+        });
+
+        etOtp3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() ==1) {
+                    etOtp4.requestFocus();
+                }
+            }
+        });
+
     }
 
     private void nextScreen(){
@@ -401,11 +501,11 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 inputList.clear();
                 for (TextView aTvOtp : tvOtp) aTvOtp.setText("*");
                 viewSwitcher.showNext();
-                progressView2.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
+                progressView2.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary2));
                 break;
 
             case 2:
-                progressView2.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
+                progressView2.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary2));
                 startActivity(new Intent(RegistrationActivity.this, Registration2Activity.class)
                         .putExtra(Constants.USER, user)
                         .putExtra(Constants.ADDRESS, address));
@@ -425,13 +525,17 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         resetProgressView();
         switch (CURRENT_VIEW_STATE){
             case 1:
-                progressView1.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
+                progressView1.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary2));
                 super.onBackPressed();
                 break;
 
             case 2:
                 CURRENT_VIEW_STATE = 1;
-                progressView1.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary));
+                etOtp1.setText("");
+                etOtp2.setText("");
+                etOtp3.setText("");
+                etOtp4.setText("");
+                progressView1.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary2));
                 viewSwitcher.showPrevious();
                 break;
         }
@@ -452,7 +556,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
         return code;
     }
-
 
     @Override
     protected void onStart() {
@@ -510,6 +613,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         body.put("email", user.email);
         body.put("userType", "artist");
         body.put("socialId", TextUtils.isEmpty(user.socialId)?"":user.socialId);
+
         new HttpTask(new HttpTask.Builder(this, "phonVerification", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
@@ -518,7 +622,16 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             }
 
             @Override
-            public void ErrorListener(VolleyError error) {
+            public void ErrorListener(VolleyError error)
+            {
+                try{
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")){
+                        Mualab.getInstance().getSessionManager().logout();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
             }})
                 .setBody(body, HttpTask.ContentType.APPLICATION_JSON)
@@ -531,15 +644,50 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         String message = "";
         String otp = "";
         try {
+            /*{"status":"success","otp":5386,"users":null}*/
             JSONObject object = new JSONObject(response);
             status = object.getString("status");
-            message = object.getString("message");
-            otp = object.getString("otp");
+
+            if (object.has("message"))
+                message = object.getString("message");
+
+            if (status.equalsIgnoreCase("success")) {
+                otp = object.getString("otp");
+                showToast("OTP is - " +otp);
+                apiOTP = otp;
+                if (object.has("message")){
+                    message = object.getString("message");
+                    if (message.equals("Email already exist by social app")){
+                        Gson gson = new Gson();
+                        JSONObject userObj = object.getJSONObject("users");
+                        tempUser = gson.fromJson(String.valueOf(userObj), User.class);
+                    }
+                }
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("email", user.email);
+                jsonObject.put("phone", user.contactNo);
+                jsonObject.put("code", user.countryCode);
+                jsonObject.put("otp", apiOTP);
+                SharedPreferanceUtils.setParam(RegistrationActivity.this, "OTP", jsonObject.toString());
+
+                if(!isResendOTP)
+                    nextScreen();
+
+            }else if (otp.equals("already exist")) {
+                showToast("This number already registered");
+            } else if (status.equalsIgnoreCase("fail")) {
+                showToast(message);
+            }else {
+                showToast(message);
+            }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if (status.equalsIgnoreCase("success")) {
+   /*     if (status.equalsIgnoreCase("success")) {
             apiOTP = otp;
             JSONObject jsonObject = new JSONObject();
             try {
@@ -548,28 +696,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 jsonObject.put("code", user.countryCode);
                 jsonObject.put("otp", apiOTP);
                 SharedPreferanceUtils.setParam(RegistrationActivity.this, "OTP", jsonObject.toString());
-                //startTimear();
-
-                /*if(IS_DEBUG_MODE){
-
-                  new CountDownTimer(10000, 1000) {
-                        public void onTick(long millisUntilFinished) {
-
-                        }
-
-                        public void onFinish() {
-
-                            inputList.clear();
-                            user.otp = apiOTP;
-                            for(int i=0; i<apiOTP.length(); i++){
-                                tvOtp[i].setText(String.format("%s", apiOTP.charAt(i)));
-                                inputList.add(Character.getNumericValue(apiOTP.charAt(i)));
-                            }
-
-                           // MyToast.getInstance(RegistrationActivity.this).showDasuAlert("Development Mode","otp are automatic fill ");
-                        }
-                    }.start();
-                }*/
 
                 if(!isResendOTP)
                     nextScreen();
@@ -582,7 +708,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         } else if (status.equalsIgnoreCase("fail")) {
             showToast(message);
 
-        }
+        }*/
     }
 
     /*private void startTimear(){

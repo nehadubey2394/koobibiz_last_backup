@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/topLayout"
+        layout="@layout/header_layout_for_allscreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentTop="true" />
+
+    <ProgressBar
+        android:id="@+id/pbLoder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/searchView"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        app:cardElevation="2dp"
+        android:layout_below="@+id/topLayout"
+        android:background="@drawable/bg_searchbox_circle"
+        >
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/searchview"
+            android:theme="@style/SearchboardSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:iconifiedByDefault="false"
+            app:searchIcon="@null"
+            android:background="@null"
+            app:queryBackground="@color/white"
+            android:lineSpacingExtra="0dp"
+            android:lineSpacingMultiplier="0"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center"
+            app:queryHint="Search Staff.."/>
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvMyStaff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchView"
+        android:overScrollMode="never"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:padding="4dp"/>
+
+
+    <TextView
+        android:id="@+id/tvNoDataFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_data_available"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_regular"
+        android:layout_marginStart="10dp" />
+
+</RelativeLayout>

@@ -27,7 +27,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/app_logo_500x333" />
+            android:src="@drawable/app_logo" />
 
         <TextView
             android:id="@+id/tvHeader"
@@ -37,6 +37,7 @@
             android:lineSpacingExtra="5dp"
             android:gravity="center"
             android:textSize="18sp"
+            android:visibility="gone"
             android:text="@string/welcome_to"/>
 
     </LinearLayout>

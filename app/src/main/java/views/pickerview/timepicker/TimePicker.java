@@ -20,11 +20,11 @@ import static views.pickerview.MyTimePickerDialog.mIntervel;
 public class TimePicker extends FrameLayout {
 
     public static final NumberPicker.Formatter TWO_DIGIT_FORMATTER = new Formatter() {
-                @Override
-                public String format(int value) {
-                    return String.format(Locale.getDefault(),"%02d", value);
-                }
-            };
+        @Override
+        public String format(int value) {
+            return String.format(Locale.getDefault(),"%02d", value);
+        }
+    };
 
     public static final NumberPicker.Formatter FIVE_MINUTE_FORMATTER = new Formatter() {
         @Override
@@ -38,7 +38,7 @@ public class TimePicker extends FrameLayout {
     // state
     private int mCurrentHour = 0; // 0-23
     private int mCurrentMinute = 0; // 0-59
-    public static int mMaxHours = 23; // 0- 23
+    public static int mMaxHours = 03; // 0- 23
 
     // ui components
     private final NumberPicker mHourPicker;
@@ -62,6 +62,7 @@ public class TimePicker extends FrameLayout {
 
         // hour
         mHourPicker = findViewById(R.id.hour);
+       // mHourPicker.setMaxValue(3);
         mHourPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -71,11 +72,20 @@ public class TimePicker extends FrameLayout {
                 }else if(oldVal==0){
                     mMinutePicker.setMinValue(0);
                 }
+
+                mMinutePicker.setMaxValue(5);
+
+               // mMinutePicker.setMaxValue(5);
+                /*if (newVal==3 || newVal>=3)
+                    mMinutePicker.setMaxValue(0);
+                else
+                    mMinutePicker.setMaxValue(5);*/
             }
         });
 
         // digits of minute
         mMinutePicker = findViewById(R.id.minute);
+        mMinutePicker.setMaxValue(5);
         mMinutePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker spinner, int oldVal, int newVal) {

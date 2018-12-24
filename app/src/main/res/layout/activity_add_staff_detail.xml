@@ -3,171 +3,346 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen_bg_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
-    tools:context=".modules.add_staff.activity.AddStaffDetailActivity">
+    android:focusableInTouchMode="true"
+    tools:context=".modules.business_setup.new_add_staff.AddStaffDetailActivity">
 
     <include
-        android:id="@+id/header"
-        layout="@layout/header_layout_bookingdetail"
+        android:id="@+id/topLayout"
+        layout="@layout/header_layout_for_allscreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
         android:layout_alignParentTop="true" />
 
-    <RelativeLayout
-        android:id="@+id/rlContainer"
+    <ScrollView
+        android:layout_below="@+id/topLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/header"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
         >
 
         <LinearLayout
-            android:id="@+id/llDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:padding="16dp"
-            android:orientation="vertical"
-            android:background="@drawable/gray_broder_white_bg">
-
-            <TextView
-                android:id="@+id/tvJobTitle"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:hint="@string/enter_job_title"
-                android:textColorHint="@color/text_color"
-                android:textColor="@color/text_color"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="14sp"
-                android:gravity="center_vertical"
-                android:drawableRight="@drawable/black_down_arrow_ico"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="2dp"
-                android:background="@color/gray"/>
-
-            <TextView
-                android:id="@+id/tvServices"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="@string/text_services"
-                android:textColor="@color/text_color"
-                android:textColorHint="@color/text_color"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="14sp"
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical"
-                android:drawableRight="@drawable/black_down_arrow_ico"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="2dp"
-                android:background="@color/gray"/>
-
-            <TextView
-                android:id="@+id/tvSocialMedia"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:hint="@string/social_media_access"
-                android:textColor="@color/text_color"
-                android:textColorHint="@color/text_color"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="14sp"
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical"
-                android:drawableRight="@drawable/black_down_arrow_ico"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="2dp"
-                android:background="@color/gray"/>
-
-            <EditText
-                android:id="@+id/tvHoliday"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:hint="@string/holiday_allocation"
-                android:textColor="@color/text_color"
-                android:textColorHint="@color/text_color"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="14sp"
-                android:background="@null"
-                android:imeOptions="actionDone"
-                android:maxLength="3"
-                android:cursorVisible="false"
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical"
-                android:inputType="number" />
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/llSetWh"
-            android:layout_below="@+id/llDetail"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:background="@drawable/gray_broder_white_bg">
-
-            <TextView
-                android:layout_width="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/lyArtistDetail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/set_working_hours"
-                android:textSize="14sp"
-                android:paddingLeft="10dp"
-                android:layout_alignParentLeft="true"
-                android:textColor="@color/text_color"
-                android:fontFamily="@font/roboto_medium"
-                />
+                android:gravity="center_vertical"
+                android:visibility="visible"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btnEditWhs"
-                android:layout_width="60dp"
-                android:layout_height="26dp"
-                style="@style/My_Button_Small.Invert"
-                android:text="@string/edit"
-                android:layout_marginRight="14dp"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_vertical"
-                />
-        </RelativeLayout>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivHeaderProfile"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    app:civ_border_width="2dp"
+                    android:src="@drawable/defoult_user_img"
+                    android:background="@drawable/gradient_circle_img_with_stroke"
+                    app:civ_border_color="@color/transparent"
+                    />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/llSetWh"
-            android:gravity="center"
-            android:layout_marginBottom="5dp"
-            >
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/text_color"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:maxWidth="180dp"
+                    android:layout_marginLeft="8dp"
+                    android:ems="10"
+                    android:ellipsize="end"
+                    android:text=""
+                    android:maxLines="1"/>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btnSave"
-                style="@style/My_Button_Small.Invert"
-                android:layout_width="78dp"
-                android:layout_height="30dp"
-                android:text="@string/save"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textSize="14sp"
-                />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_line" />
+
+
+            <RelativeLayout
+                android:id="@+id/rlJobTitle"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_vertical">
+
+                <Spinner
+                    android:id="@+id/spJobTitle"
+                    android:overlapAnchor="false"
+                    android:background="@null"
+                    android:popupBackground="@color/light_gray"
+                    android:textColor="@color/text_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:prompt="@string/business_type"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:id="@+id/textv1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/enter_job_title"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tvJobTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="240dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:layout_marginTop="1dp"
+                        android:text=""
+                        android:textColor="@color/gray" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:rotation="270"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/back_icon"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/gray_line" />
+
+
+            <RelativeLayout
+                android:id="@+id/rlServices"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/text_services"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:background="@drawable/back_icon"
+                    android:visibility="visible" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/gray_line" />
+
+            <RelativeLayout
+                android:id="@+id/rlMediaAccess"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical">
+
+                <Spinner
+                    android:id="@+id/spMediaAccess"
+                    android:overlapAnchor="false"
+                    android:background="@null"
+                    android:popupBackground="@color/light_gray"
+                    android:textColor="@color/text_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:prompt="@string/business_type"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/social_media_access"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tvSocialMedia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="240dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:layout_marginTop="1dp"
+                        android:text=""
+                        android:textColor="@color/gray" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:rotation="270"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/back_icon"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:background="@color/gray_line" />
+
+            <LinearLayout
+                android:id="@+id/rlHoliday"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/holiday_allocation"
+                    android:textColor="@color/black" />
+
+                <EditText
+                    android:id="@+id/etHoliday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="14sp"
+                    android:ems="18"
+                    android:hint="@string/holiday_allocation"
+                    android:background="@null"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/gray"
+                    android:imeOptions="actionDone"
+                    android:maxLength="3"
+                    android:inputType="number"/>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/gray_line" />
+
+            <RelativeLayout
+                android:id="@+id/rlWorkingHours"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/working_hours"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:background="@drawable/back_icon"
+                    android:visibility="visible" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/gray_line" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </ScrollView>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        style="@style/My_Button.Invert"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/save_continue"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        />
 
 </RelativeLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MualabBIZ</string>
+    <string name="app_name">KoobiBIZ</string>
     <string name="fb_app_id">1950251375263506</string>
     <string name="fb_app_secret">565aa2c50ec9a753713890245f08fb8f</string>
     <string name="consumer_key">7z5xrHH8AgQieg4JxUavnu434</string>
@@ -8,7 +8,8 @@
 
     <!--LoginActivity-->
     <string name="signup_as_service_provider"><b>SignUp</b> as <b>Service Provider</b></string>
-    <string name="email_or_username">Email Or Username</string>
+    <string name="username_or_email">Username or Email</string>
+    <string name="email_or_username">Email or Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="forgot_password">Forgot Password?</string>
@@ -21,6 +22,8 @@
     <!--Forgot password screen-->
     <string name="remind_my_password">Remind My Password</string>
     <string name="forgot_pwd_remind_txt">We will send you a message with a link to reset your password.</string>
+    <string name="enter_your_username_or_email">Enter your username or email and we\'ll
+        Send you a link to get back into your account.</string>
     <string name="enter_the_email">Enter the e-mail</string>
     <string name="send_password_reset">Send password reset</string>
     <string name="reset_password">Reset Password</string>
@@ -30,6 +33,7 @@
     <string name="business">Business</string>
     <string name="email_id">Email Id</string>
     <string name="phone_number">Phone Number</string>
+    <string name="contact_number">Contact Number</string>
     <string name="continue_txt">Continue</string>
     <string name="country_activity">Choose a country</string>
     <string name="search">Search</string>
@@ -41,8 +45,9 @@
     <string name="create_profile">Create Profile</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
+    <string name="date_of_birth">Date Of Birth</string>
     <string name="business_name">Business Name</string>
-    <string name="choose_username">Choose a User Name</string>
+    <string name="choose_username">Enter Username</string>
     <!--Registration view4-->
     <string name="create_password">Create Password</string>
     <string name="confirm_password">Confirm Password</string>
@@ -89,7 +94,7 @@
     <string name="error_invalid_password_number">Your password must have at least one number.</string>
     <string name="error_invalid_password_special_character">Your password must have at least one special character.</string>
     <string name="error_confirm_password_not_match">Password and confirm password do not match.</string>
-    <string name="error_password_vailidation">Use at least 8 characters, include both one uppercase letter and one number.</string>
+    <string name="error_password_vailidation">Use 8 or more characters including uppercase letter and numbers</string>
 
     <string name="error_phone_no_reuired">Please enter a phone number</string>
     <string name="error_phone_no_length">Phone number min 4 and max 15</string>
@@ -222,7 +227,7 @@
 
     <string name="text_today">Today</string>
     <string name="text_available_time">Available Time</string>
-    <string name="no_data_available">No data found</string>
+    <string name="no_data_available">No Result Found</string>
     <string name="there_are_no_available_slots_please_select_another_day">There are no available slots. Please select another day.</string>
     <string name="appoinment_info">Appointment Info :</string>
     <string name="appoinment">Appointment</string>
@@ -276,7 +281,7 @@
     <string name="inbox">Inbox</string>
     <string name="add_new_user">Add new staff</string>
     <string name="search_users_by_username_and_email">Search users by username and email</string>
-    <string name="enter_job_title">Enter Job Title</string>
+    <string name="enter_job_title">Select Job Title</string>
     <string name="social_media_access">Social Media Access</string>
     <string name="holiday_allocation">Holiday Allocation</string>
     <string name="set_working_hours">Set Working Hours :</string>
@@ -324,4 +329,47 @@
     <string name="complete_booking">Complete Booking</string>
     <string name="booking">Booking</string>
     <string name="total">Total</string>
+    <string name="it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable">It is a long established fact that a reader will bedistracted by the readable</string>
+    <string name="add_category">Add Category</string>
+    <string name="add_business_type">Add Business Type</string>
+    <string name="text_continue">Continue</string>
+    <string name="pending_approval">Pending Approval</string>
+    <string name="add_services">Add Services</string>
+    <string name="your_service_category"><![CDATA[Your Service & Category]]></string>
+    <string name="service_name">Service Name</string>
+    <string name="booking_type">Booking Type</string>
+    <string name="service_description">Service Description</string>
+    <string name="business_type">Business Type</string>
+    <string name="category">Category</string>
+    <string name="pound_symbol">£</string>
+    <string name="edit_continue"><![CDATA[Edit & Continue]]></string>
+    <string name="enter_your_email_address_and_mobile_number">Enter your Email Address and Mobile Number</string>
+    <string name="please_enter_your_4_digit_verification_code">Please enter your 4 digit verification code</string>
+    <string name="set_up_your_business">Set Up Your Business !</string>
+    <string name="set_up_your_basic_info">Set Up Your Basic Info !</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="username">Username</string>
+    <string name="enter_your_business_name">Enter Your Business Name</string>
+    <string name="select_booking_type">Select Booking Type</string>
+    <string name="welcome_to_koobi">Welcome to Koobi</string>
+    <string name="you_just_need_to_put_some_more_information_before_you_start_taking_bookings">You just need to put some more information before you start taking bookings</string>
+    <string name="what_type_of_booking_will_you_take">What type of booking will you take?</string>
+    <string name="set_business_address">Set Business Address</string>
+    <string name="return_location">Return Location</string>
+    <string name="radius_of_area_coverage">Radius Of Area Coverage</string>
+    <string name="add_your_business_operation_hours">Add your business operation hours</string>
+    <string name="lorem_ipsum_is_simply_dummy_text_of_the_printing_and_typesetting_industry">Lorem Ipsum is simply dummy text of the printing and typesetting industry</string>
+    <string name="break_between_appointment">Break Between Appointment</string>
+    <string name="this_is_the_free_time_you_wish_to_be_allocated_inbetween_each_booking">This is the free time you wish to be allocated inbetween each booking</string>
+    <string name="enter_business_contact_number">Enter Business Contact Number</string>
+    <string name="business_info">Business Info</string>
+    <string name="payment_setup">Payment Setup</string>
+    <string name="my_staff">My Staff</string>
+    <string name="add_staff">Add Staff</string>
+    <string name="holiday_planner">Holiday Planner</string>
+    <string name="save_continue"><![CDATA[Save & Continue]]></string>
+    <string name="merge">Merge</string>
+    <string name="create_new">Create New</string>
+    <string name="you_already_have_an_existing_social_account_using_this_email_and_phone_number_would_you_like_to_merge_your_existing_social_profile_rahman1_with_your_biz_account_or_create_a_new_social_account_for_your_biz_profile">You already have an existing social account using this email and phone number! Would you like to merge your existing social profile @rahman1 with your biz account or create a new social account for your biz profile?</string>
+    <string name="invitation">Invitation</string>
 </resources>

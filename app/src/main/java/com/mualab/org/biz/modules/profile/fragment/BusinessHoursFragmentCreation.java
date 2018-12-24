@@ -166,7 +166,7 @@ public class BusinessHoursFragmentCreation extends ProfileCreationBaseFragment {
         return businessDays;
     }
 
-    /*update data into server db*/
+    /*update data into server db_modle*/
     private void updateDataIntoServerDb(){
 
         if (!ConnectionDetector.isConnected()) {

@@ -2,6 +2,7 @@ package com.mualab.org.biz.modules.profile;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,29 +10,18 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.modules.BaseActivity;
-import com.mualab.org.biz.modules.MainActivity;
-import com.mualab.org.biz.modules.profile.fragment.BusinessHoursFragmentCreation;
-import com.mualab.org.biz.modules.profile.fragment.CategoriesFragmentCreation;
-import com.mualab.org.biz.modules.profile.fragment.FragmentAddStaff;
-import com.mualab.org.biz.modules.profile.fragment.FragmentListner;
-import com.mualab.org.biz.modules.profile.fragment.OutcallOptionsFragmentCreation;
-import com.mualab.org.biz.modules.profile.fragment.ServicesFragmentCreation;
-import com.mualab.org.biz.modules.profile.fragment.StripAccountFragment;
-import com.mualab.org.biz.modules.profile.fragment.SubCategoriesFragment;
-import com.mualab.org.biz.modules.profile.fragment.UploadCertificationFragment;
-import com.mualab.org.biz.modules.profile.fragment.ZoomOutPageTransformer;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
@@ -41,12 +31,28 @@ import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.SubCategory;
 import com.mualab.org.biz.model.TimeSlot;
+import com.mualab.org.biz.modules.BaseActivity;
+import com.mualab.org.biz.modules.MainActivity;
+import com.mualab.org.biz.modules.profile.fragment.BusinessHoursFragmentCreation;
+import com.mualab.org.biz.modules.profile.fragment.FragmentAddStaff;
+import com.mualab.org.biz.modules.profile.fragment.FragmentListner;
+import com.mualab.org.biz.modules.profile.fragment.NewBusinessCategoryFragments.AddNewBusinessTypeFragment;
+import com.mualab.org.biz.modules.profile.fragment.NewBusinessCategoryFragments.AddNewCategoryFragment;
+import com.mualab.org.biz.modules.profile.fragment.NewBusinessCategoryFragments.AddedCategoryFragment;
+import com.mualab.org.biz.modules.profile.fragment.NewBusinessCategoryFragments.AddedServicesFragment;
+import com.mualab.org.biz.modules.profile.fragment.NewBusinessCategoryFragments.MyBusinessTypeFragment;
+import com.mualab.org.biz.modules.profile.fragment.OutcallOptionsFragmentCreation;
+import com.mualab.org.biz.modules.profile.fragment.StripAccountFragment;
+import com.mualab.org.biz.modules.profile.fragment.UploadCertificationFragment;
+import com.mualab.org.biz.modules.profile.fragment.ZoomOutPageTransformer;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.KeyboardUtil;
+import com.mualab.org.biz.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +71,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
     private List<MyViews> views = new ArrayList<>();
     private ProgressView progressView;
-    private TextView tvHeaderText,tv_skip;
+    private TextView tvHeaderText,tv_skip,tv_logout;
     private ImageView iv_back;
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -78,6 +84,8 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
      * The pager adapter, which provides the pages to the view pager widget.
      */
     public PagerAdapter mPagerAdapter;
+    SparseArray<Fragment> registeredFragments = new SparseArray<>();
+
 
     class MyViews{
         Fragment fragment;
@@ -140,10 +148,12 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
             actionBar.setDisplayShowCustomEnabled(true);
         }
 
+        Utils.showDebugDBAddressLogToast();
 
 
         iv_back = findViewById(R.id.iv_back);
         tv_skip = findViewById(R.id.tv_skip);
+        tv_logout = findViewById(R.id.tv_logout);
         iv_back.setVisibility(View.GONE);
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +167,14 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
             public void onClick(View v) {
                 if(views.size()>mPager.getCurrentItem())
                     mPager.setCurrentItem(mPager.getCurrentItem() + 1);
+            }
+        });
+
+        findViewById(R.id.tv_logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Mualab.getInstance().getSessionManager().logout();
+
             }
         });
 
@@ -185,13 +203,19 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
     }
 
-
     private void viewDidLoad(){
         views.add(new MyViews("Business Hours", BusinessHoursFragmentCreation.newInstance()));
         views.add(new MyViews("Outcall Options", OutcallOptionsFragmentCreation.newInstance()));
-        views.add(new MyViews("Services", ServicesFragmentCreation.newInstance()));
-        views.add(new MyViews("Categories", CategoriesFragmentCreation.newInstance()));
-        views.add(new MyViews("Sub Category", SubCategoriesFragment.newInstance()));
+        // views.add(new MyViews("Business Type", ServicesFragmentCreation.newInstance()));
+        views.add(new MyViews("Business Type", MyBusinessTypeFragment.newInstance()));
+        views.add(new MyViews("Add Business Type", AddNewBusinessTypeFragment.newInstance()));
+        views.add(new MyViews("Service Category", AddedCategoryFragment.newInstance()));
+        views.add(new MyViews("Add New Service Category", AddNewCategoryFragment.newInstance()));
+        views.add(new MyViews("Services", AddedServicesFragment.newInstance()));
+
+        //  views.add(new MyViews("Business Type2", AddNewBusinessTypeActivity.newInstance()));
+        //views.add(new MyViews("Categories", CategoriesFragmentCreation.newInstance()));
+        // views.add(new MyViews("Sub Category", SubCategoriesFragment.newInstance()));
         views.add(new MyViews("Upload Certification", UploadCertificationFragment.newInstance()));
 
         if(Mualab.getInstance().getBusinessProfileSession().getBankStatus()!=1)
@@ -213,10 +237,25 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
             @Override
             public void onPageSelected(int position) {
                 tv_skip.setVisibility(View.GONE);
+                tv_logout.setVisibility(View.GONE);
                 iv_back.setVisibility(position==0?View.GONE:View.VISIBLE);
 
                 progressView.setProgressIndex(position);
-                tvHeaderText.setText(views.get(position).title);
+                switch (views.get(position).title) {
+                    case "Add Business Type":
+                        tv_logout.setVisibility(View.VISIBLE);
+                        tvHeaderText.setText("Business Type");
+                        break;
+                    case "Add New Service Category":
+                    case "Service Category":
+                        tv_logout.setVisibility(View.VISIBLE);
+                        tvHeaderText.setText("Service Category");
+                        break;
+                    default:
+                        tvHeaderText.setText(views.get(position).title);
+                        break;
+                }
+
                 KeyboardUtil.hideKeyboard(mPager,BusinessProfileActivity.this);
 
                 if(views.get(position).title.equals("Banking Details") || views.get(position).title.equals("Upload Certification"))
@@ -238,7 +277,6 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         int index = Mualab.getInstance().getBusinessProfileSession().getStepIndex();
         mPager.setCurrentItem(index);
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -334,7 +372,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
                         pSession.updateAddress(bsp.address);
                         pSession.updateOutcallPreprationTime(bsp.outCallpreprationTime);
                         pSession.updateIncallPreprationTime(bsp.inCallpreprationTime);
-                        pSession.updateServiceType(bsp.serviceType);
+                        //      pSession.updateServiceType(bsp.serviceType);
                         pSession.updateBankStatus(bsp.bankStatus);
 
 
@@ -378,6 +416,15 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
 
             @Override
             public void ErrorListener(VolleyError error) {
+                try {
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")) {
+                        Mualab.getInstance().getSessionManager().logout();
+                        //      MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 // Log.d("", error.getLocalizedMessage());
                 Progress.hide(BusinessProfileActivity.this);
             }})
@@ -434,7 +481,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
      */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+    public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
         private ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -449,6 +496,24 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         public int getCount() {
             return views.size();
         }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            registeredFragments.put(position, fragment);
+            return fragment;
+
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            registeredFragments.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        public Fragment getRegisteredFragment(int position) {
+            return registeredFragments.get(position);
+        }
     }
 
     private void completProfile(){
@@ -457,7 +522,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         new HttpTask(new HttpTask.Builder(this, "skipPage", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
-                session.setBusinessProfileComplete(true);
+                //   session.setBusinessProfileComplete(true);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -478,9 +543,10 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
     @Override
     protected void onDestroy() {
         PreRegistrationSession preSession = new PreRegistrationSession(this);
-        if (mPager.getCurrentItem() == 0) {
+        if (mPager!=null && mPager.getCurrentItem() == 0) {
             preSession.updateRegStep(0);
         }
         super.onDestroy();
     }
+
 }

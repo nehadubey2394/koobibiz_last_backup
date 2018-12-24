@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/screen_bg_color"
     android:fitsSystemWindows="true"
-    tools:context=".modules.add_staff.activity.AddStaffDetailActivity">
+    tools:context=".modules.business_setup.new_add_staff.AddStaffDetailActivity">
 
     <include
         android:id="@+id/header"

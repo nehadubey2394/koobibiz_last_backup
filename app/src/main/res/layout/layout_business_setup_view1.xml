@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/llBusinessInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/ic_buisness_info_ico"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_color"
+                    android:text="@string/business_info"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llServices"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/ic_services_ico"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_color"
+                    android:text="@string/text_services"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llWorkingHours"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/ic_working_hours_ico"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_color"
+                    android:text="@string/working_hours"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/llCertificates"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/ic_certificate_ico"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_color"
+                    android:text="@string/text_certificate"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llVoucherCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/ic_voucher"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:textColor="@color/text_color"
+                    android:text="@string/voucher_code"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llPaymentSeup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/ic_payment_setup_ico"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_color"
+                    android:text="@string/payment_setup"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llRow3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:visibility="gone"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:id="@+id/llInvitation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/ic_invitation_ico"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_color"
+                    android:text="@string/invitation"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

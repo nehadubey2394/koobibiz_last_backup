@@ -6,9 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,8 +25,10 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.Address;
+import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.Helper;
@@ -58,16 +60,11 @@ public class AddAddressActivity extends AppCompatActivity {
     private String errorMsg;
     //private FetchAddressIntentService fetchAddressIntentService;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_address);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar!=null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-        }
+
 
         ed_city = findViewById(R.id.ed_city);
         ed_state = findViewById(R.id.ed_state);
@@ -77,6 +74,13 @@ public class AddAddressActivity extends AppCompatActivity {
         ed_pinCode = findViewById(R.id.ed_pinCode);
         edInputPostcode = findViewById(R.id.edInputPostcode);
         edHouseNumber = findViewById(R.id.edHouseNumber);
+
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
       /*  Intent dataIntent = getIntent();
         if(intent!=null){
@@ -117,6 +121,60 @@ public class AddAddressActivity extends AppCompatActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        TextView tvSave = findViewById(R.id.tvSave);
+
+        tvSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                city = ed_city.getText().toString().trim();
+                state = ed_state.getText().toString().trim();
+                country = ed_country.getText().toString().trim();
+                postalCode = ed_pinCode.getText().toString().trim();
+                stAddress1 = ed_locality.getText().toString().trim();
+                stAddress2 = ed_opetionalAddress.getText().toString().trim();
+                houseNumber = edHouseNumber.getText().toString().trim();
+                //fullAddress = ed_locality.getText().toString().trim();
+                if(validateAddress()) {
+                    if (!stAddress1.equals("") && latitude!=null && !latitude.isEmpty()){
+                        if (TextUtils.isEmpty(placeName) || placeName.contains("S") ||
+                                placeName.contains("N") || placeName.contains("E")
+                                || placeName.contains("°"))
+                            placeName = stAddress1;
+
+                        PreRegistrationSession bpSession  = Mualab.getInstance().getBusinessProfileSession();
+
+                        Address address = new Address();
+                        address.city = city;
+                        address.country = country;
+                        address.state = state;
+                        address.postalCode = postalCode;
+                        address.stAddress1 = stAddress1;
+                        address.stAddress2 = stAddress2;
+                        address.placeName = placeName;
+                        address.houseNumber = houseNumber;
+                        //address.fullAddress = fullAddress;
+                        address.latitude = latitude;
+                        address.longitude = longitude;
+
+                        Intent intent2 = new Intent();
+                        intent2.putExtra("address", address);
+                        setResult(RESULT_OK, intent2);
+                        finish();
+                        // bpSession.updateAddress(address);
+                        //   bpSession.getBusinessProfile().address = address;
+                        //  setResult(address);
+
+
+                    }else
+                        MyToast.getInstance(AddAddressActivity.this).showDasuAlert(getString(R.string.error_required_field));
+
+
+
+                }else
+                    MyToast.getInstance(AddAddressActivity.this).showDasuAlert(getString(R.string.error_required_field));
             }
         });
 
@@ -173,45 +231,46 @@ public class AddAddressActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_save:
-                city = ed_city.getText().toString().trim();
-                state = ed_state.getText().toString().trim();
-                country = ed_country.getText().toString().trim();
-                postalCode = ed_pinCode.getText().toString().trim();
-                stAddress1 = ed_locality.getText().toString().trim();
-                stAddress2 = ed_opetionalAddress.getText().toString().trim();
-                houseNumber = edHouseNumber.getText().toString().trim();
-                //fullAddress = ed_locality.getText().toString().trim();
-                if(validateAddress()){
+    /*  @Override
+      public boolean onOptionsItemSelected(MenuItem item) {
+          // Handle item selection
+          switch (item.getItemId()) {
+              case R.id.action_save:
+                  city = ed_city.getText().toString().trim();
+                  state = ed_state.getText().toString().trim();
+                  country = ed_country.getText().toString().trim();
+                  postalCode = ed_pinCode.getText().toString().trim();
+                  stAddress1 = ed_locality.getText().toString().trim();
+                  stAddress2 = ed_opetionalAddress.getText().toString().trim();
+                  houseNumber = edHouseNumber.getText().toString().trim();
+                  //fullAddress = ed_locality.getText().toString().trim();
+                  if(validateAddress()){
 
-                    if(TextUtils.isEmpty(placeName) || placeName.contains("S")||
-                            placeName.contains("N") || placeName.contains("E") || placeName.contains("°"))
-                        placeName = stAddress1;
-                    Address address = new Address();
-                    address.city = city;
-                    address.country =  country;
-                    address.state = state;
-                    address.postalCode = postalCode;
-                    address.stAddress1 = stAddress1;
-                    address.stAddress2 = stAddress2;
-                    address.placeName = placeName;
-                    address.houseNumber = houseNumber;
-                    //address.fullAddress = fullAddress;
-                    address.latitude = latitude;
-                    address.longitude = longitude;
-                    setResult(address);
-                }else MyToast.getInstance(this).showDasuAlert(getString(R.string.error_required_field));
+                      if(TextUtils.isEmpty(placeName) || placeName.contains("S")||
+                              placeName.contains("N") || placeName.contains("E")
+                              || placeName.contains("°"))
+                          placeName = stAddress1;
+                      Address address = new Address();
+                      address.city = city;
+                      address.country =  country;
+                      address.state = state;
+                      address.postalCode = postalCode;
+                      address.stAddress1 = stAddress1;
+                      address.stAddress2 = stAddress2;
+                      address.placeName = placeName;
+                      address.houseNumber = houseNumber;
+                      //address.fullAddress = fullAddress;
+                      address.latitude = latitude;
+                      address.longitude = longitude;
+                      setResult(address);
+                  }else MyToast.getInstance(this).showDasuAlert(getString(R.string.error_required_field));
 
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
+                  return true;
+              default:
+                  return super.onOptionsItemSelected(item);
+          }
+      }
+  */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -219,11 +278,14 @@ public class AddAddressActivity extends AppCompatActivity {
     }
 
     private boolean validateAddress(){
-        return !(TextUtils.isEmpty(city) || TextUtils.isEmpty(houseNumber) //|| TextUtils.isEmpty(state)
+        return !TextUtils.isEmpty(postalCode) || TextUtils.isEmpty(stAddress1)
+                && TextUtils.isEmpty(latitude) && TextUtils.isEmpty(longitude);
+
+       /* return !(TextUtils.isEmpty(city) || TextUtils.isEmpty(houseNumber) //|| TextUtils.isEmpty(state)
                 || TextUtils.isEmpty(postalCode) || TextUtils.isEmpty(stAddress1)
                 || TextUtils.isEmpty(latitude) || TextUtils.isEmpty(longitude)
                 //|| TextUtils.isEmpty(fullAddress)
-        );
+        );*/
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -353,4 +415,9 @@ public class AddAddressActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

@@ -11,8 +11,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.mualab.org.biz.BuildConfig;
-import com.mualab.org.biz.db.AppDatabase;
-import com.mualab.org.biz.model.Location;
+import com.mualab.org.biz.modules.profile.new_db.NewAppDatabase;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 
@@ -38,10 +37,11 @@ public class Mualab extends Application {
     private PreRegistrationSession bpSession;
     private RequestQueue mRequestQueue;
 
-    private static final String DATABASE_NAME = "MualabDb";
+    private static final String DATABASE_NAME = "NewMualabDb";
     private static final String PREFERENCES = "Room.preferences";
     private static final String KEY_FORCE_UPDATE = "force_update";
-    private AppDatabase database;
+  //  private AppDatabase database;
+    private NewAppDatabase newAppDatabase;
 
 
     public static Mualab getInstance() {
@@ -60,15 +60,27 @@ public class Mualab extends Application {
         FirebaseApp.initializeApp(this);
 
         // create database
-        database = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, DATABASE_NAME)
+       /* database = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, DATABASE_NAME)
                 .addMigrations(AppDatabase.MIGRATION_1_2)
+                .build();*/
+
+        newAppDatabase = Room.databaseBuilder(getApplicationContext(),
+                NewAppDatabase.class, DATABASE_NAME)
+                .fallbackToDestructiveMigration()
                 .build();
 
         // ref = FirebaseDatabase.getInstance().getReference();
     }
 
+/*
     public AppDatabase getDB(){
         return database;
+    }
+*/
+
+    public NewAppDatabase getDB(){
+        return newAppDatabase;
     }
 
     public boolean isForceUpdate(){

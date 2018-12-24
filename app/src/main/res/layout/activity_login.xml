@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:layout_marginBottom="10dp"
     tools:context=".modules.authentication.LoginActivity">
 
     <!--<ImageView
@@ -17,10 +18,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/createNewAccount"
-        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:layout_marginTop="60dp"
         android:orientation="vertical">
 
         <ImageView
@@ -28,13 +29,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/app_logo_500x333" />
+            android:padding="5dp"
+            android:src="@drawable/app_logo" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            android:layout_margin="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
             android:padding="16dp"
             android:orientation="vertical">
 
@@ -51,8 +56,9 @@
                     style="@style/My_Edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/email_or_username"
+                    android:hint="@string/username_or_email"
                     android:inputType="textPersonName" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
