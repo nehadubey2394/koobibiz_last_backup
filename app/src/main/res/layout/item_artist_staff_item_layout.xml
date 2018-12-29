@@ -44,6 +44,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
+            android:layout_toLeftOf="@+id/tvStatus"
             android:orientation="horizontal"
             android:layout_centerInParent="true"
             android:background="@color/white"
@@ -98,18 +99,6 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Request sent"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:visibility="gone"
-                android:fontFamily="@font/roboto_regular"
-                android:textColor="@color/gray"
-                android:layout_gravity="center_vertical"/>
-
         </LinearLayout>
 
         <View
@@ -118,6 +107,21 @@
             android:background="@color/gray_line"
             android:layout_alignParentBottom="true"
             />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request sent"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            android:layout_gravity="center_vertical"/>
 
 
     </RelativeLayout>

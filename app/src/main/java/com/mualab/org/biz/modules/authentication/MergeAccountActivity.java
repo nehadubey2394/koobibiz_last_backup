@@ -32,8 +32,8 @@ import java.util.Map;
 
 public class MergeAccountActivity extends AppCompatActivity {
     private User user;
-    private  String str1="You already have an existing social account using this email and phone number! Would you like to merge your existing social profile "
-            ,str2=" with your biz account or create a new social account for your biz profile?";
+    private  String str1="You already have an existing social account using this email and phone number! Would you like to merge your existing social profile_setup "
+            ,str2=" with your biz account or create a new social account for your biz profile_setup?";
     private Session session;
 
     @Override

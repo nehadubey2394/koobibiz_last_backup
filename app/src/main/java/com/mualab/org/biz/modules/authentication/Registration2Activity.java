@@ -28,6 +28,7 @@ import com.image.cropper.CropImage;
 import com.image.cropper.CropImageView;
 import com.image.picker.ImagePicker;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.custom_dob_picker.DatePickerDialog;
 import com.mualab.org.biz.custom_dob_picker.OnDateChangedListener;
 import com.mualab.org.biz.custom_dob_picker.SpinnerDatePickerDialogBuilder;
@@ -425,6 +426,8 @@ public class Registration2Activity extends AppCompatActivity implements
                         session.createSession(user);
                         session.setPassword(user.password);
                         checkUserRember(user);
+
+                        Mualab.getInstance().getBusinessProfileSession().updateRegStep(0);
 
                         session.setBusinessProfileComplete(false);
 

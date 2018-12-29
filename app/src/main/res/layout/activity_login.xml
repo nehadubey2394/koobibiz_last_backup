@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:orientation="vertical">
 
         <ImageView
@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="5dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/app_logo" />
 
         <LinearLayout
@@ -127,7 +128,7 @@
         android:textSize="16sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:textColor="@drawable/tv_selector"
         android:text="@string/click_here_for_social_app"/>
 

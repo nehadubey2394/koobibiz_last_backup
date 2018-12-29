@@ -5,9 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
@@ -30,15 +28,14 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.serializer.TimeSlotSerializer;
-import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
-import com.mualab.org.biz.modules.add_staff.fragments.ArtistLastServicesFragment;
 import com.mualab.org.biz.modules.add_staff.listner.EditWorkingHours;
-import com.mualab.org.biz.modules.profile.fragment.FragmentListner;
+import com.mualab.org.biz.modules.profile_setup.fragment.FragmentListner;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -63,7 +60,6 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
     private boolean isChangeOccured = false;
     private String whJsonArray;
     private TextView tvUserName;
-    private PreRegistrationSession pSession;
     private List<TimeSlot> slotList;
     private ImageView ivHeaderProfile;
     private RelativeLayout rlJobTitle,rlServices,rlMediaAccess,rlWorkingHours;
@@ -122,7 +118,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
         etHoliday = findViewById(R.id.etHoliday);
         etHoliday = findViewById(R.id.etHoliday);
 
-        pSession = Mualab.getInstance().getBusinessProfileSession();
+        PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
 
         //   apiForGetStaffDetail();
 
@@ -132,6 +128,30 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
             sIds.add(staffDetail.staffServices.get(i).artistServiceId);
         }
         List<BusinessDayForStaff> businessDays = pSession.getBusinessProfile().dayForStaffs;
+
+        /*   if (pSession.getBusinessProfile().dayForStaffs.size()!=0)
+            businessDays = pSession.getBusinessProfile().dayForStaffs;
+       else {
+            for(int i =0; i<pSession.getBusinessProfile().businessDays.size();  i++) {
+                BusinessDayForStaff businessDayForStaff = new BusinessDayForStaff();
+                BusinessDay businessDay = new BusinessDay();
+                businessDayForStaff.day = businessDay.dayId;
+
+                for(BusinessDay tmpDay : pSession.getBusinessProfile().businessDays){
+                    if(tmpDay.dayId == dayId){
+                        tmpDay.isOpen = true;
+                        tmpDay.addTimeSlot(slot);
+                        break;
+                    }
+                }
+
+                businessDayForStaff.startTime = businessDay.startTime;
+                businessDayForStaff.endTime = objSlots.getString("endTime");
+                bsp.dayForStaffs.add(businessDayForStaff);
+            }
+
+        }
+*/
         Gson gson = new GsonBuilder().registerTypeAdapter(TimeSlot.class, new TimeSlotSerializer()).create();
         if ((staffDetail != null ? staffDetail.staffHoursList.size() : 0) !=0){
             whJsonArray = gson.toJson(staffDetail.staffHoursList);

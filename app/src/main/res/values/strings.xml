@@ -34,6 +34,7 @@
     <string name="email_id">Email Id</string>
     <string name="phone_number">Phone Number</string>
     <string name="contact_number">Contact Number</string>
+    <string name="biz_contact_number">Business Contact Number</string>
     <string name="continue_txt">Continue</string>
     <string name="country_activity">Choose a country</string>
     <string name="search">Search</string>
@@ -372,4 +373,9 @@
     <string name="create_new">Create New</string>
     <string name="you_already_have_an_existing_social_account_using_this_email_and_phone_number_would_you_like_to_merge_your_existing_social_profile_rahman1_with_your_biz_account_or_create_a_new_social_account_for_your_biz_profile">You already have an existing social account using this email and phone number! Would you like to merge your existing social profile @rahman1 with your biz account or create a new social account for your biz profile?</string>
     <string name="invitation">Invitation</string>
+    <string name="message">Message</string>
+    <string name="business_email">Business Email</string>
+    <string name="business_location_address">Business Location Address</string>
+    <string name="service_break">Service Break</string>
+    <string name="operation_hours">Operation Hours</string>
 </resources>

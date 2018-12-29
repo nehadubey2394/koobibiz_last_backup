@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:focusableInTouchMode="true"
-    tools:context=".modules.profile.fragment.ServicesFragmentCreation">
+    tools:context=".modules.profile_setup.fragment.ServicesFragmentCreation">
 
     <include
         android:id="@+id/headerLayout"

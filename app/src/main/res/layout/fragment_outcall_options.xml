@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:focusable="false"
     android:scrollbars="none"
-    tools:context=".modules.profile.fragment.OutcallOptionsFragmentCreation">
+    tools:context=".modules.profile_setup.fragment.OutcallOptionsFragmentCreation">
 
     <LinearLayout
         android:layout_width="match_parent"

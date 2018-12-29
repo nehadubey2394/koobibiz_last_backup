@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".modules.profile.BusinessProfileActivity">
+    tools:context=".modules.profile_setup.BusinessProfileActivity">
 
     <include
         android:id="@+id/headerLayout"

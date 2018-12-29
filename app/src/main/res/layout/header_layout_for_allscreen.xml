@@ -27,27 +27,46 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true" />
 
+        <Spinner
+            android:id="@+id/spBizName"
+            android:overlapAnchor="false"
+            android:background="@null"
+            android:popupBackground="@color/white"
+            android:textColor="@color/text_color"
+            android:layout_width="@dimen/_230sdp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:prompt="@string/business_type"
+            />
+
+
         <TextView
             android:id="@+id/tvHeaderTitle"
             android:layout_width="wrap_content"
+            android:gravity="center"
             android:layout_height="wrap_content"
+            android:maxWidth="@dimen/_220sdp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/title_bookings"
             android:textSize="18sp"
             android:fontFamily="@font/roboto_bold"
             android:textColor="@color/text_color"
             android:layout_centerInParent="true"/>
 
+
         <ImageView
             android:id="@+id/ivDropDown"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:padding="5dp"
-            android:rotation="270"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:padding="2dp"
             android:visibility="gone"
+            android:clickable="false"
             android:layout_toRightOf="@+id/tvHeaderTitle"
-            android:layout_marginLeft="2dp"
-            android:src="@drawable/back_icon"
-            android:layout_centerVertical="true" />
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/drop_down_ico"
+            android:layout_marginTop="20dp"
+             />
 
 
         <ImageView

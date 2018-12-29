@@ -1,7 +1,6 @@
 package com.mualab.org.biz.modules.business_setup.new_add_staff.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +12,7 @@ import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.modules.business_setup.new_add_staff.AddStaffServiceDetailActivity;
-import com.mualab.org.biz.modules.profile.activity.ServiceDetailActivity;
-import com.mualab.org.biz.modules.profile.db_modle.Services;
+import com.mualab.org.biz.modules.profile_setup.db_modle.Services;
 
 import java.util.List;
 

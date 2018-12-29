@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,6 +45,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import views.refreshview.CircleHeaderView;
+import views.refreshview.OnRefreshListener;
+import views.refreshview.RjRefreshLayout;
+
 public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAdapter.OnStaffClickListener {
 
     private  String TAG = AddNewStaffActivity.class.getName();
@@ -56,6 +61,8 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
     private String searchText = "";
     private ProgressBar pbLoder;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private RjRefreshLayout mRefreshLayout;
+    private boolean isPulltoRefrash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +82,7 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
         tvHeaderTitle.setText(getString(R.string.add_staff));
 
         searchview = findViewById(R.id.searchview);
-
+        mRefreshLayout =  findViewById(R.id.mSwipeRefreshLayout);
         rvMyStaff = findViewById(R.id.rvMyStaff);
         LinearLayoutManager layoutManager = new LinearLayoutManager(AddNewStaffActivity.this);
         rvMyStaff.setLayoutManager(layoutManager);
@@ -93,6 +100,23 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
                 }
             };
         }
+
+        final CircleHeaderView header = new CircleHeaderView(AddNewStaffActivity.this);
+
+        mRefreshLayout.addHeader(header);
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                scrollListener.resetState();
+                isPulltoRefrash = true;
+                apiForGetAllStaff(0);
+            }
+
+            @Override
+            public void onLoadMore() {
+                Log.e(TAG, "onLoadMore: ");
+            }
+        });
 
         //  rvMyStaff.setNestedScrollingEnabled(false);
 
@@ -150,7 +174,11 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
     }
 
     private void apiForGetAllStaff(final int page){
-        pbLoder.setVisibility(View.VISIBLE);
+        if(isPulltoRefrash)
+            pbLoder.setVisibility(View.GONE);
+        else
+            pbLoder.setVisibility(View.VISIBLE);
+
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
 
@@ -189,6 +217,14 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
                         rvMyStaff.setVisibility(View.VISIBLE);
                         tvNoDataFound.setVisibility(View.GONE);
 
+                        if(isPulltoRefrash){
+                            isPulltoRefrash = false;
+                            artistStaffs.clear();
+                            mRefreshLayout.stopRefresh(true, 500);
+                            int prevSize = artistStaffs.size();
+                            staffAdapter.notifyItemRangeRemoved(0, prevSize);
+                        }
+
                         JSONArray jsonArray = js.getJSONArray("artistList");
                         if (jsonArray!=null && jsonArray.length()!=0) {
                             for (int i=0; i<jsonArray.length(); i++){
@@ -204,6 +240,18 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
                         }
 
                         staffAdapter.notifyDataSetChanged();
+
+                        if (artistStaffs.size() == 0) {
+                            rvMyStaff.setVisibility(View.GONE);
+                            tvNoDataFound.setVisibility(View.VISIBLE);
+                            if(isPulltoRefrash){
+                                isPulltoRefrash = false;
+                                mRefreshLayout.stopRefresh(false, 500);
+
+                            }
+                        }
+
+
                     }else {
                         rvMyStaff.setVisibility(View.GONE);
                         tvNoDataFound.setVisibility(View.VISIBLE);
@@ -213,12 +261,32 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
                     pbLoder.setVisibility(View.GONE);
                     Progress.hide(AddNewStaffActivity.this);
                     e.printStackTrace();
+                    staffAdapter.notifyDataSetChanged();
+
+                    if (artistStaffs.size() == 0) {
+                        rvMyStaff.setVisibility(View.GONE);
+                        tvNoDataFound.setVisibility(View.VISIBLE);
+                        if(isPulltoRefrash){
+                            isPulltoRefrash = false;
+                            mRefreshLayout.stopRefresh(false, 500);
+
+                        }
+                    }
                 }
             }
 
             @Override
             public void ErrorListener(VolleyError error) {
                 pbLoder.setVisibility(View.GONE);
+
+                if(isPulltoRefrash){
+                    isPulltoRefrash = false;
+                    mRefreshLayout.stopRefresh(false, 500);
+                    int prevSize = artistStaffs.size();
+                    artistStaffs.clear();
+                    staffAdapter.notifyItemRangeRemoved(0, prevSize);
+                }
+
                 try{
                     Helper helper = new Helper();
                     if (helper.error_Messages(error).contains("Session")){
@@ -358,6 +426,10 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==60 && resultCode!=0){
+            searchview.clearFocus();
+            KeyboardUtil.hideKeyboard(searchview, AddNewStaffActivity.this);
+            EditText et = searchview.findViewById(R.id.search_src_text);
+            et.setText("");
             apiForGetAllStaff(0);
         }
     }

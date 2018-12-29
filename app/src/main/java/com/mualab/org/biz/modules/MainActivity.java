@@ -27,12 +27,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
-import com.mualab.org.biz.modules.add_staff.fragments.ArtistSettingsFragment;
 import com.mualab.org.biz.modules.booking.fragments.AddFragment;
 import com.mualab.org.biz.modules.booking.fragments.BookingsFragment;
 import com.mualab.org.biz.modules.booking.listner.OnRefreshListener;
 import com.mualab.org.biz.modules.business_setup.BaseBusinessSetupFragment;
-import com.mualab.org.biz.modules.profile.BusinessProfileActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.helper.Constants;
@@ -41,8 +39,7 @@ import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.TimeSlot;
-import com.mualab.org.biz.modules.profile.activity.NewBusinessInfoActivity;
-import com.mualab.org.biz.modules.profile.activity.NewBusinessSetUpActivity;
+import com.mualab.org.biz.modules.profile_setup.activity.NewBusinessSetUpActivity;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -129,8 +126,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         ibtnUser.setOnClickListener(this);
         ivHeaderBack.setOnClickListener(this);
 
-        if(!session.isBusinessProfileComplete())
+        int index = Mualab.getInstance().getBusinessProfileSession().getStepIndex();
+
+        if(index==5 || !session.isBusinessProfileComplete()) {
             getBusinessProfile();
+        }
         else
             replaceFragment(BookingsFragment.newInstance(""), false);
 
@@ -226,6 +226,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                         overridePendingTransition(0,0);
                         finish();
                     }else {
+                        PreRegistrationSession bpSession = Mualab.getInstance().getBusinessProfileSession();
+                        bpSession.updateRegStep(6);
                         //getDeviceLocation();
                         replaceFragment(BookingsFragment.newInstance(""), false);
                     }
@@ -316,7 +318,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 break;
             case R.id.ibtnBookings:
                 if (clickedId!=1){
-                    topLayout1.setVisibility(View.VISIBLE);
+                    ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
                     clickedId = 1;
                     ibtnBookings.setImageResource(R.drawable.active_calender_ico);                     replaceFragment(new BookingsFragment(), false);
@@ -325,7 +327,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             case R.id.ibtnChart:
                 if (clickedId!=2){
-                    topLayout1.setVisibility(View.VISIBLE);
+                    ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
                     clickedId = 2;
                     ibtnChart.setImageResource(R.drawable.active_chart_ico);
@@ -335,7 +337,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             case R.id.ibtnAdd:
                 if (clickedId!=3){
-                    topLayout1.setVisibility(View.VISIBLE);
+                    ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
                     clickedId = 3;
                     ibtnAdd.setImageResource(R.drawable.active_add_ico);
@@ -345,7 +347,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             case R.id.ibtnNotification:
                 if (clickedId!=4){
-                    topLayout1.setVisibility(View.VISIBLE);
+                    ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
                     clickedId = 4;
                     ibtnNotification.setImageResource(R.drawable.active_notification_ico);
@@ -355,7 +357,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             case R.id.ibtnUser:
                 if (clickedId!=5){
-                    topLayout1.setVisibility(View.GONE);
+                    // ivDropDown.setVisibility(View.VISIBLE);
                     setInactiveTab();
                     clickedId = 5;
                     ibtnUser.setImageResource(R.drawable.active_user_ico);
@@ -468,7 +470,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             super.onBackPressed();
         }
     }
-
 
     @Override
     public void onRequestChanged(boolean isShow) {

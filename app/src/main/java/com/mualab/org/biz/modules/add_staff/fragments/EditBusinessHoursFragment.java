@@ -22,7 +22,7 @@ import com.mualab.org.biz.model.serializer.EditTimeSlotSerializer;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.AddStaffDetailActivity;
 import com.mualab.org.biz.modules.add_staff.adapter.AdapterEditBusinessDays;
 import com.mualab.org.biz.modules.add_staff.listner.EditWorkingHours;
-import com.mualab.org.biz.modules.profile.fragment.ProfileCreationBaseFragment;
+import com.mualab.org.biz.modules.profile_setup.fragment.ProfileCreationBaseFragment;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.util.CalanderUtils;
 import com.mualab.org.biz.util.ConnectionDetector;

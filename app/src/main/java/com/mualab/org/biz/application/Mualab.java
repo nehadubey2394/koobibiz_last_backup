@@ -11,7 +11,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.mualab.org.biz.BuildConfig;
-import com.mualab.org.biz.modules.profile.new_db.NewAppDatabase;
+import com.mualab.org.biz.modules.profile_setup.new_db.NewAppDatabase;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 

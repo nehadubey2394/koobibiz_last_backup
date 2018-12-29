@@ -146,7 +146,7 @@ public class PreRegistrationSession {
     }
 
 
-    /* Get business profile models*/
+    /* Get business profile_setup models*/
 
     public int getStepIndex(){
         return mypref.getInt("stepIndex", 0);
@@ -192,7 +192,7 @@ public class PreRegistrationSession {
         return mypref.getString("outcallPreprationTime", "HH:MM");
     }
 
-    /* update business profile*/
+    /* update business profile_setup*/
 
     public void updateBusinessName(String businessName){
         editor.putString("businessName", businessName);
@@ -246,7 +246,7 @@ public class PreRegistrationSession {
         editor.apply();
     }
 
-    /* clear business profile*/
+    /* clear business profile_setup*/
     public void clearSession() {
         editor.clear();
         editor.apply();

@@ -68,6 +68,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private String apiOTP="";
     private User user,tempUser;
     private Address address;
+    private int otpSize;
 
     private SmsVerifyCatcher smsVerifyCatcher;
     private boolean isResendOTP;
@@ -434,6 +435,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         etOtp3 = findViewById(R.id.etOtp3);
         etOtp4 = findViewById(R.id.etOtp4);
 
+
         etOtp1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -447,6 +449,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void afterTextChanged(Editable editable) {
+                otpSize++;
                 if (editable.length() ==1) {
                     etOtp2.requestFocus();
                 }
@@ -466,8 +469,11 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void afterTextChanged(Editable editable) {
+                otpSize ++;
                 if (editable.length() ==1) {
                     etOtp3.requestFocus();
+                }else {
+                    etOtp2.requestFocus();
                 }
             }
         });
@@ -485,9 +491,31 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void afterTextChanged(Editable editable) {
+                otpSize++;
                 if (editable.length() ==1) {
                     etOtp4.requestFocus();
+                }else {
+                    etOtp2.requestFocus();
                 }
+            }
+        });
+
+        etOtp4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                otpSize++;
+                if (editable.length() ==0)
+                    etOtp3.requestFocus();
             }
         });
 

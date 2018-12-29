@@ -62,7 +62,7 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
 
         if (day.isExpand) {
             RelativeLayout.LayoutParams layout_description =
-                    new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 170);
+                    new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,  RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             holder.rlParent.setLayoutParams(layout_description);
         }else {

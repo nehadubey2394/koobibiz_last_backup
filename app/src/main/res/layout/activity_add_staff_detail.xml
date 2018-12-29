@@ -274,7 +274,7 @@
                     android:maxWidth="240dp"
                     android:textSize="14sp"
                     android:ems="18"
-                    android:hint="@string/holiday_allocation"
+                    android:hint="00"
                     android:background="@null"
                     android:fontFamily="@font/roboto_regular"
                     android:textColor="@color/gray"

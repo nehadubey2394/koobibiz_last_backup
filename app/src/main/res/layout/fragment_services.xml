@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragContainer"
-    tools:context=".modules.profile.fragment.ServicesFragmentCreation">
+    tools:context=".modules.profile_setup.fragment.ServicesFragmentCreation">
 
     <LinearLayout
         android:layout_width="match_parent"

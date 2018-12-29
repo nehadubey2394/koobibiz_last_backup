@@ -7,13 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mualab.org.biz.R;
@@ -25,24 +22,14 @@ import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.serializer.EditTimeSlotSerializer;
-import com.mualab.org.biz.model.serializer.TimeSlotSerializer;
-import com.mualab.org.biz.modules.add_staff.listner.EditWorkingHours;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.adapter.WorkingHoursAdapter;
-import com.mualab.org.biz.modules.profile.adapter.AdapterBusinessDays;
 import com.mualab.org.biz.session.PreRegistrationSession;
-import com.mualab.org.biz.task.HttpResponceListner;
-import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.CalanderUtils;
 import com.mualab.org.biz.util.ConnectionDetector;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class StaffWorkingHoursActivity extends AppCompatActivity implements View.OnClickListener {
     private PreRegistrationSession bpSession;

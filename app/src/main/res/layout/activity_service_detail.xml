@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:background="@color/white"
-    tools:context=".modules.profile.activity.AddServiceFieldsActivity">
+    tools:context=".modules.profile_setup.activity.AddServiceFieldsActivity">
 
     <include
         android:id="@+id/headerLayout"

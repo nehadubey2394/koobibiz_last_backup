@@ -57,17 +57,25 @@
 
     </android.support.v7.widget.CardView>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMyStaff"
+    <views.refreshview.RjRefreshLayout
+        android:id="@+id/mSwipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/searchView"
-        android:overScrollMode="never"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:padding="4dp"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvMyStaff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:padding="4dp"/>
+
+
+    </views.refreshview.RjRefreshLayout>
 
 
     <TextView

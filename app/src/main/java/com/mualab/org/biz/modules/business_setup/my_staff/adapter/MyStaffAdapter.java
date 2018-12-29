@@ -237,6 +237,13 @@ public class MyStaffAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     JSONObject object3 = staffServiceArray.getJSONObject(k);
                                     Gson gson = new Gson();
                                     AddedStaffServices item3 = gson.fromJson(String.valueOf(object3), AddedStaffServices.class);
+                                    if (!item3.inCallPrice.equals("0.0"))
+                                        item3.bookingType = "Incall";
+                                    else if (!item3.outCallPrice.equals("0.0"))
+                                        item3.bookingType = "Outcall";
+                                    else if (!item3.inCallPrice.equals("0.0") && !item3.outCallPrice.equals("0.0"))
+                                        item3.bookingType = "Both";
+
                                     item.staffServices.add(item3);
                                 }
                             }

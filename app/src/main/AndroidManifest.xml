@@ -77,7 +77,7 @@
             android:name="com.image.cropper.CropImageActivity"
             android:theme="@style/AppTheme.DarkActionBar" />
         <activity
-            android:name=".modules.profile.BusinessProfileActivity"
+            android:name=".modules.profile_setup.BusinessProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan" />
@@ -143,15 +143,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack" />
         <activity
-            android:name=".modules.company_management.activity.CompaniesListActivity"
+            android:name=".modules.old_company_management.activity.CompaniesListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack" />
         <activity
-            android:name=".modules.company_management.activity.CompanyDetailActivity"
+            android:name=".modules.old_company_management.activity.CompanyDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack" />
         <activity
-            android:name=".modules.company_management.activity.CompanyServicesActivity"
+            android:name=".modules.old_company_management.activity.CompanyServicesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack" />
         <activity
@@ -189,59 +189,59 @@
         </service>
 
         <activity
-            android:name=".modules.profile.activity.AddNewServiceActivity"
+            android:name=".modules.profile_setup.activity.AddNewServiceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack" />
         <activity
-            android:name=".modules.profile.activity.AddServiceFieldsActivity"
+            android:name=".modules.profile_setup.activity.AddServiceFieldsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack" />
         <activity
-            android:name=".modules.profile.activity.ServiceDetailActivity"
+            android:name=".modules.profile_setup.activity.ServiceDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack" />
         <activity
-            android:name=".modules.profile.activity.EditServiceActivity"
+            android:name=".modules.profile_setup.activity.EditServiceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="stateHidden|adjustNothing" />
         <activity
-            android:name=".modules.profile.activity.AddNewCategoryActivity"
+            android:name=".modules.profile_setup.activity.AddNewCategoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".modules.profile.activity.NewBusinessSetUpActivity"
+            android:name=".modules.profile_setup.activity.NewBusinessSetUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.NewBusinessInfoActivity"
+            android:name=".modules.profile_setup.activity.NewBusinessInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.BookingTypeActivity"
+            android:name=".modules.profile_setup.activity.BookingTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.WorkingHoursActivity"
+            android:name=".modules.profile_setup.activity.WorkingHoursActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.BreakTimeActivity"
+            android:name=".modules.profile_setup.activity.BreakTimeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.AddBusinessRadiusActivity"
+            android:name=".modules.profile_setup.activity.AddBusinessRadiusActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.MyBusinessTypeActivity"
+            android:name=".modules.profile_setup.activity.MyBusinessTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
@@ -255,27 +255,27 @@
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.MyAddedCategoryTypeActivity"
+            android:name=".modules.profile_setup.activity.MyAddedCategoryTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.AddNewBusinessTypeActivity"
+            android:name=".modules.profile_setup.activity.AddNewBusinessTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.AddedServiceActivity"
+            android:name=".modules.profile_setup.activity.AddedServiceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.AddBankAccountActivity"
+            android:name=".modules.profile_setup.activity.AddBankAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.profile.activity.NewAddressActivity"
+            android:name=".modules.profile_setup.activity.NewAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
@@ -309,7 +309,32 @@
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".modules.authentication.MergeAccountActivity"
+        <activity
+            android:name=".modules.authentication.MergeAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.invitation.InvitationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.invitation.InvitationDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.OtherBusinessWorkingHours.OperationHoursActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.business_info.BusinessInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+        <activity android:name=".modules.business_setup.Services.CompanyServicesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>

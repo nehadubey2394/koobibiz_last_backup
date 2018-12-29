@@ -58,7 +58,7 @@ public class User implements Serializable{
     @SerializedName("isDocument")
     public int isProfileComplete;
 
-    /*Business profile*/
+    /*Business profile_setup*/
     public String businessType;
     public String bio;
     public String radius;

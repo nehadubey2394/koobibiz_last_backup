@@ -13,13 +13,13 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
-import com.mualab.org.biz.modules.profile.db_modle.Services;
+import com.mualab.org.biz.modules.profile_setup.db_modle.Services;
 import com.mualab.org.biz.session.PreRegistrationSession;
 
 public class AddStaffServiceDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String TAG = AddStaffServiceDetailActivity.class.getName();
-    private String sInCallPrice="",sOutCallPrice="",
+    private String sInCallPrice="",sOutCallPrice="",holdInCallP,holdOutCallp,holdBookingType,
             sBookingType="",complieTime="";
     private long mLastClickTime = 0;
     private Services services;
@@ -36,24 +36,43 @@ public class AddStaffServiceDetailActivity extends AppCompatActivity implements 
         //   ((AddNewStaffActivity) mContext).setTitle();
         services = (Services) getIntent().getSerializableExtra("serviceItem");
 
+        if (services.inCallPrice!=0){
+            holdInCallP = String.valueOf(services.inCallPrice);
+        }
+
+        if (services.outCallPrice!=0) {
+            holdOutCallp = String.valueOf(services.outCallPrice);
+        }
+
+
         if (services.isSelected){
             sBookingType = services.edtBookingType;
+            holdBookingType = services.edtBookingType;
             complieTime = services.edtCompletionTime;
 
-            if (services.edtInCallPrice!=0)
+            if (services.edtInCallPrice!=0) {
                 sInCallPrice = String.valueOf(services.edtInCallPrice);
+              //  holdInCallP = String.valueOf(services.edtInCallPrice);
+            }
 
-            if (services.edtOutCallPrice!=0)
+            if (services.edtOutCallPrice!=0) {
                 sOutCallPrice = String.valueOf(services.edtOutCallPrice);
+               // holdOutCallp = String.valueOf(services.edtOutCallPrice);
+            }
         }else {
             sBookingType = services.bookingType;
+            holdBookingType = services.bookingType;
             complieTime = services.completionTime;
 
-            if (services.inCallPrice!=0)
+            if (services.inCallPrice!=0){
                 sInCallPrice = String.valueOf(services.inCallPrice);
+             //   holdInCallP = String.valueOf(services.inCallPrice);
+            }
 
-            if (services.outCallPrice!=0)
+            if (services.outCallPrice!=0) {
                 sOutCallPrice = String.valueOf(services.outCallPrice);
+             //   holdOutCallp = String.valueOf(services.outCallPrice);
+            }
 
         }
 
@@ -118,9 +137,41 @@ public class AddStaffServiceDetailActivity extends AppCompatActivity implements 
 
 
             case R.id.rlPrice:
+
                 Intent intent2 = new Intent(AddStaffServiceDetailActivity.this, ChangeServiceDetailActivity.class);
-                intent2.putExtra("inCallPrice", sInCallPrice);
-                intent2.putExtra("outCallPrice", sOutCallPrice);
+                //  intent2.putExtra("inCallPrice", sInCallPrice);
+                //  intent2.putExtra("outCallPrice", sOutCallPrice);
+
+                switch (sBookingType) {
+                    case "Incall":
+                        if (!sInCallPrice.equals(""))
+                            intent2.putExtra("inCallPrice", sInCallPrice);
+                        else
+                            intent2.putExtra("inCallPrice", holdInCallP);
+                        break;
+                    case "Outcall":
+                        if (!sOutCallPrice.equals(""))
+                            intent2.putExtra("outCallPrice", sOutCallPrice);
+                        else
+                            intent2.putExtra("outCallPrice", holdOutCallp);
+
+                        break;
+                    case "Both":
+
+                        if (!sInCallPrice.equals(""))
+                            intent2.putExtra("inCallPrice", sInCallPrice);
+                        else
+                            intent2.putExtra("inCallPrice", holdInCallP);
+
+                        if (!sOutCallPrice.equals(""))
+                            intent2.putExtra("outCallPrice", sOutCallPrice);
+                        else
+                            intent2.putExtra("outCallPrice", holdOutCallp);
+
+
+                        break;
+                }
+
                 intent2.putExtra("bookingType", sBookingType);
                 intent2.putExtra("keyField", "price");
                 intent2.putExtra("service", services);
@@ -259,8 +310,11 @@ public class AddStaffServiceDetailActivity extends AppCompatActivity implements 
                     break;
                 case 30:
                     sBookingType =  data.getStringExtra("bookingType");
-                    sOutCallPrice =  "";
-                    sInCallPrice =  "";
+                  /*  if (!sBookingType.equals(holdBookingType)){
+                        sOutCallPrice =  "";
+                        sInCallPrice =  "";
+                    }*/
+
                     break;
 
                 case 50:

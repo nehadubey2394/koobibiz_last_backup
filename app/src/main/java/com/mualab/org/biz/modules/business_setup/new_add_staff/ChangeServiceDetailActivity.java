@@ -18,7 +18,7 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.BusinessProfile;
-import com.mualab.org.biz.modules.profile.db_modle.Services;
+import com.mualab.org.biz.modules.profile_setup.db_modle.Services;
 import com.mualab.org.biz.session.PreRegistrationSession;
 
 import java.util.ArrayList;
@@ -63,6 +63,8 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
         TextView tvHeaderText = findViewById(R.id.tvHeaderText);
         ImageView iv_back = findViewById(R.id.iv_back);
 
+        ImageView ivBookingTypeAerrow = findViewById(R.id.ivBookingTypeAerrow);
+
         if (commingFrom.equals("AddStaffServiceDetailActivity"))
             tvHeaderText.setText(getString(R.string.text_services));
         else
@@ -80,17 +82,25 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
         Services service = (Services) getIntent().getSerializableExtra("service");
         String serviceType = service.bookingType;
 
+        final Spinner spBookingType = findViewById(R.id.spBookingType);
+
         switch (serviceType) {
             case "Both":
                 arrayList.add("Both");
                 arrayList.add("Incall");
                 arrayList.add("Outcall");
+                ivBookingTypeAerrow.setVisibility(View.VISIBLE);
+                spBookingType.setEnabled(true);
                 break;
             case "Outcall":
                 arrayList.add("Outcall");
+                ivBookingTypeAerrow.setVisibility(View.GONE);
+                spBookingType.setEnabled(false);
                 break;
             case "Incall":
                 arrayList.add("Incall");
+                ivBookingTypeAerrow.setVisibility(View.GONE);
+                spBookingType.setEnabled(false);
                 break;
         }
 
@@ -117,7 +127,6 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
             }
         }
 
-        final Spinner spBookingType = findViewById(R.id.spBookingType);
         ArrayAdapter arrayAdapter = new ArrayAdapter(ChangeServiceDetailActivity.this
                 ,R.layout.layout_spinner_items, arrayList);
 
@@ -167,7 +176,7 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
                             llOutCallPrice.setVisibility(View.VISIBLE);
                             etOutCallPrice.setText(outCallPrice);
                             break;
-                        default:
+                        case "Both":
                             etInCallPrice.setText(inCallPrice);
                             etOutCallPrice.setText(outCallPrice);
                             llInCallPrice.setVisibility(View.VISIBLE);
@@ -183,7 +192,7 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
                         llInCallPrice.setVisibility(View.GONE);
                         llOutCallPrice.setVisibility(View.VISIBLE);
                         etOutCallPrice.setText(outCallPrice);
-                    }else {
+                    }else  if ( bsp.serviceType==3){
                         etInCallPrice.setText(inCallPrice);
                         etOutCallPrice.setText(outCallPrice);
                         llInCallPrice.setVisibility(View.VISIBLE);
@@ -371,7 +380,7 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
         mTimePicker.show();
     }*/
 
-    public void showPicker(){
+   /* public void showPicker(){
         int hours = 01;
 
         MyTimePickerDialog mTimePicker = new MyTimePickerDialog(ChangeServiceDetailActivity.this, new MyTimePickerDialog.OnTimeSetListener() {
@@ -382,7 +391,38 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
             }
         }, getString(R.string.time_for_completion), hours, 00, 10, 3);
         mTimePicker.show();
+    }*/
+
+
+
+    public void showPicker(){
+        int hours = 01;
+
+        /*MyTimePickerDialog mTimePicker = new MyTimePickerDialog(ChangeServiceDetailActivity.this, new MyTimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hours, int minute) {
+                tvCompletionTime.setText(String.format("%s:%s", String.format("%02d", hours), String.format("%02d", minute)));
+
+            }
+        }, getString(R.string.time_for_completion), hours, 00, 10, 3);
+        mTimePicker.show();*/
+
+        MyTimePickerDialog mTimePicker = new MyTimePickerDialog(ChangeServiceDetailActivity.this,
+                new MyTimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hours, int minute) {
+                        if (hours>3){
+                            MyToast.getInstance(ChangeServiceDetailActivity.this).showDasuAlert("Maximum break time limit is 3:00 hours");
+                        }else {
+                            tvCompletionTime.setText(String.format("%s:%s", String.format("%02d", hours), String.format("%02d", minute)));
+                        }
+
+                    }
+                }, "", hours, 00,10);
+
+        mTimePicker.show();
     }
+
 
     @Override
     public void onBackPressed() {

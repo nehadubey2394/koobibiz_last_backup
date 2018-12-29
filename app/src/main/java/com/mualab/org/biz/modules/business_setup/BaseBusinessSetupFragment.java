@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,15 +26,24 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.BusinessDay;
+import com.mualab.org.biz.model.BusinessProfile;
+import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.model.company_management.ComapnySelectedServices;
 import com.mualab.org.biz.model.company_management.CompanyDetail;
 import com.mualab.org.biz.modules.MainActivity;
+import com.mualab.org.biz.modules.business_setup.OtherBusinessWorkingHours.OperationHoursActivity;
+import com.mualab.org.biz.modules.business_setup.Services.CompanyServicesActivity;
+import com.mualab.org.biz.modules.business_setup.business_info.BusinessInfoActivity;
+import com.mualab.org.biz.modules.business_setup.invitation.InvitationActivity;
 import com.mualab.org.biz.modules.business_setup.my_staff.MyStaffActivity;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.AddNewStaffActivity;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.adapter.CompanyListSppinnerAdapter;
 import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
+import com.mualab.org.biz.modules.profile_setup.activity.WorkingHoursActivity;
+import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -43,10 +54,15 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -54,15 +70,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class BaseBusinessSetupFragment extends Fragment implements View.OnClickListener {
     private String mParam1;
     private Context mContext;
-    private TextView tvBusinessName,tvServiceType,tvRatingCount,tvBusiness,tvStaff;
+    private TextView tvBusinessName,tvServiceType,tvRatingCount,tvBusiness,tvStaff,
+            tvHeaderTitle;
     private RatingBar rating;
     private CircleImageView iv_Profile;
     private ImageView ivActive,ivDropDown;
     private LinearLayout vPanel1;
     private LinearLayout vPanel2;
-    private View viewBiz,viewStaff;
+    private LinearLayout llRow3,llRow2,llTabs;
+    private RelativeLayout llLineView;
+    private View viewBiz,viewStaff,line2;
     private List<CompanyDetail> companyList;
     private CompanyListSppinnerAdapter arrayAdapter;
+    private int currentSelectedBusiness;
 
     public BaseBusinessSetupFragment() {
         // Required empty public constructor
@@ -110,7 +130,8 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         companyList = new ArrayList<>();
         tvBusinessName =  rootView.findViewById(R.id.tvBusinessName);
         rating =  rootView.findViewById(R.id.rating);
-        ivDropDown = rootView.findViewById(R.id.ivDropDown);
+        // ivDropDown = rootView.findViewById(R.id.ivDropDown);
+        // tvHeaderTitle =  rootView.findViewById(R.id.tvHeaderTitle);
         tvRatingCount =  rootView.findViewById(R.id.tvRatingCount);
         tvStaff =  rootView.findViewById(R.id.tvStaff);
         tvServiceType =  rootView.findViewById(R.id.tvServiceType);
@@ -119,15 +140,24 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         ivActive =  rootView.findViewById(R.id.ivActive);
         vPanel1 =  rootView.findViewById(R.id.vPanel1);
         vPanel2 =  rootView.findViewById(R.id.vPanel2);
-        LinearLayout llRow3 = rootView.findViewById(R.id.llRow3);
+        llRow3 = rootView.findViewById(R.id.llRow3);
+        llRow2 = rootView.findViewById(R.id.llRow2);
+        llTabs = rootView.findViewById(R.id.llTabs);
+        llLineView = rootView.findViewById(R.id.llLineView);
         viewBiz =  rootView.findViewById(R.id.viewBiz);
         viewStaff =  rootView.findViewById(R.id.viewStaff);
+        line2 =  rootView.findViewById(R.id.line2);
 
-
-        final Spinner spBizName = rootView.findViewById(R.id.spBizName);
+        final Spinner spBizName = ((MainActivity) mContext).findViewById(R.id.spBizName);
+        ivDropDown= ((MainActivity) mContext).findViewById(R.id.ivDropDown);
+        tvHeaderTitle= ((MainActivity) mContext).findViewById(R.id.tvHeaderTitle);
 
         LinearLayout llAddStaff = rootView.findViewById(R.id.llAddStaff);
         LinearLayout llMyStaff = rootView.findViewById(R.id.llMyStaff);
+        LinearLayout llWorkingHours = rootView.findViewById(R.id.llWorkingHours);
+        LinearLayout llServices = rootView.findViewById(R.id.llServices);
+        LinearLayout llBusinessInfo = rootView.findViewById(R.id.llBusinessInfo);
+        LinearLayout llInvitation = rootView.findViewById(R.id.llInvitation);
 
         arrayAdapter = new CompanyListSppinnerAdapter(mContext,
                 companyList);
@@ -140,7 +170,22 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                 spBizName.setPrompt("");
                 TextView textView =  view.findViewById(R.id.tvSpItem);
                 textView.setText("");
+                tvHeaderTitle.setText(companyList.get(i).businessName);
+                currentSelectedBusiness = i;
 
+                if (i==0) {
+                    llRow2.setVisibility(View.VISIBLE);
+                    llRow3.setVisibility(View.VISIBLE);
+                    llTabs.setVisibility(View.VISIBLE);
+                    llLineView.setVisibility(View.VISIBLE);
+                    line2.setVisibility(View.GONE);
+                }else {
+                    llRow2.setVisibility(View.GONE);
+                    llRow3.setVisibility(View.GONE);
+                    llTabs.setVisibility(View.GONE);
+                    llLineView.setVisibility(View.GONE);
+                    line2.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -153,8 +198,12 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
         tvStaff.setOnClickListener(this);
         tvBusiness.setOnClickListener(this);
+        llInvitation.setOnClickListener(this);
         llAddStaff.setOnClickListener(this);
         llMyStaff.setOnClickListener(this);
+        llServices.setOnClickListener(this);
+        llWorkingHours.setOnClickListener(this);
+        llBusinessInfo.setOnClickListener(this);
 
         apiForGetProfile();
 
@@ -169,12 +218,70 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+
         switch (view.getId()){
+            case R.id.llBusinessInfo:
+
+                Intent intent2 = new Intent(mContext, BusinessInfoActivity.class);
+                if (currentSelectedBusiness==0) {
+                    MyToast.getInstance(mContext).showDasuAlert("Under development");
+                    //  intent2.putExtra("businessId",String.valueOf(user.id));
+                }else {
+                    if (companyList.size()!=0) {
+                        intent2.putExtra("businessId", companyList.get(currentSelectedBusiness).businessId);
+                        startActivity(intent2);
+                    }
+                }
+                break;
+
+            case R.id.llServices:
+                Intent intent3 = new Intent(mContext, CompanyServicesActivity.class);
+                if (currentSelectedBusiness==0) {
+                    MyToast.getInstance(mContext).showDasuAlert("Under development");
+                }else {
+                    if (companyList.size()!=0) {
+                        intent3.putExtra("businessId", companyList.get(currentSelectedBusiness).businessId);
+                        intent3.putExtra("staffId", companyList.get(currentSelectedBusiness)._id);
+                        startActivity(intent3);
+                    }
+                }
+                break;
+
+            case R.id.llWorkingHours:
+                if (currentSelectedBusiness==0) {
+                    MyToast.getInstance(mContext).showDasuAlert("Under development");
+                    /*Intent intent = new Intent(mContext, WorkingHoursActivity.class);
+                    intent.putExtra("fromTag", "BaseBusinessSetupFragment");
+                    startActivity(intent);*/
+
+                   /* Intent intent = new Intent(mContext, OperationHoursActivity.class);
+                    Bundle args = new Bundle();
+                    args.putSerializable("workingHours",(Serializable)getBusinessdays());
+                    intent.putExtra("BUNDLE",args);
+                    startActivity(intent);*/
+                }else {
+                    if (companyList.size()!=0) {
+                        Intent intent = new Intent(mContext, OperationHoursActivity.class);
+                        Bundle args = new Bundle();
+                        args.putSerializable("workingHours",(Serializable)companyList.get(currentSelectedBusiness).businessDays);
+                        intent.putExtra("BUNDLE",args);
+                        startActivity(intent);
+                    }
+
+                }
+                break;
+
             case R.id.llMyStaff:
                 startActivity(new Intent(mContext,MyStaffActivity.class));
                 break;
             case R.id.llAddStaff:
                 startActivity(new Intent(mContext,AddNewStaffActivity.class));
+                break;
+
+            case R.id.llInvitation:
+                startActivity(new Intent(mContext,InvitationActivity.class));
                 break;
 
             case R.id.tvBusiness:
@@ -201,6 +308,12 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         }
     }
 
+    private List<BusinessDay> getBusinessdays(){
+        PreRegistrationSession bpSession = Mualab.getInstance().getBusinessProfileSession();
+        BusinessProfile businessProfile =  bpSession.getBusinessProfile();
+        return businessProfile.businessDays;
+    }
+
     private void apiForGetProfile(){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
@@ -220,6 +333,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         Map<String, String> params = new HashMap<>();
         params.put("userId", String.valueOf(user.id));
         params.put("loginUserId", String.valueOf(user.id));
+        // params.put("viewBy", String.valueOf(user.id));
 
         HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "getProfile", new HttpResponceListner.Listener() {
             @Override
@@ -274,7 +388,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
     private void apiForCompanyDetail(){
         Session session = Mualab.getInstance().getSessionManager();
-        User user = session.getUser();
+        final User user = session.getUser();
 
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
@@ -303,6 +417,10 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                         companyList.clear();
                         ivDropDown.setVisibility(View.VISIBLE);
 
+                        CompanyDetail item1 = new CompanyDetail();
+                        item1.businessName = getString(R.string.title_buisness_admin);
+                        companyList.add(item1);
+
                         JSONArray jsonArray = js.getJSONArray("businessList");
 
                         if (jsonArray!=null && jsonArray.length()!=0) {
@@ -321,18 +439,120 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                                 item.profileImage = object.getString("profileImage");
                                 item.address = object.getString("address");
                                 item.userName = object.getString("userName");
-                                item.status  = js.getString("status");
+                                item.status  = object.getString("status");
 
                                 JSONArray staffHoursArray = object.getJSONArray("staffHours");
+
+                                BusinessProfile bsp = new BusinessProfile();
+
                                 if (staffHoursArray!=null && staffHoursArray.length()!=0) {
+                                    bsp.businessDays = getBusinessDay();
+
+                                    Set<BusinessDay> daySet = new HashSet<>();
+
                                     for (int j=0; j<staffHoursArray.length(); j++){
                                         JSONObject object2 = staffHoursArray.getJSONObject(j);
                                         BusinessDayForStaff item2 = new BusinessDayForStaff();
+
+                                        BusinessDay day = new BusinessDay();
+                                        int dayId = object2.getInt("day");
+                                        TimeSlot slot = new TimeSlot(dayId);
+                                        slot.startTime = object2.getString("startTime");
+                                        slot.endTime = object2.getString("endTime");
+
+                                       /* if (dayId==0) {
+                                            day.dayName = getString(R.string.monday);
+                                            day.isOpen = true;
+                                            day.isExpand = true;
+                                        }
+                                        else if (dayId==1) {
+                                            day.dayName = getString(R.string.tuesday);
+                                            day.isOpen = true;
+                                            day.isExpand = true;
+                                        }
+                                        else if (dayId==2) {
+                                            day.dayName = getString(R.string.wednesday);
+                                            day.isOpen = true;
+                                            day.isExpand = true;
+                                        }
+                                        else if (dayId==3) {
+                                            day.dayName = getString(R.string.thursday);
+                                            day.isOpen = true;
+                                            day.isExpand = true;
+                                        }
+                                        else if (dayId==4) {
+                                            day.dayName = getString(R.string.frieday);
+                                            day.isOpen = true;
+                                            day.isExpand = true;
+                                        }
+                                        else    if (dayId==5) {
+                                            day.dayName = getString(R.string.saturday);
+                                            day.isOpen = true;
+                                            day.isExpand = true;
+                                        }
+                                        else if (dayId==6) {
+                                            day.dayName = getString(R.string.sunday);
+                                            day.isOpen = true;
+                                            day.isExpand = true;
+                                        }
+
+                                        day.addTimeSlot(slot);
+                                        item.businessDays.add(day);*/
+
                                         item2.day = Integer.parseInt(object2.getString("day"));
                                         item2.endTime = object2.getString("endTime");
                                         item2.startTime = object2.getString("startTime");
                                         item.staffHoursList.add(item2);
+
+                                        for(BusinessDay tmpDay : bsp.businessDays){
+                                            if(tmpDay.dayId == dayId){
+                                                tmpDay.isOpen = true;
+                                                day.isExpand = true;
+                                              /*  if (dayId==0) {
+                                                    day.dayName = getString(R.string.monday);
+                                                }
+                                                else if (dayId==1) {
+                                                    day.dayName = getString(R.string.tuesday);
+                                                }
+                                                else if (dayId==2) {
+                                                    day.dayName = getString(R.string.wednesday);
+                                                }
+                                                else if (dayId==3) {
+                                                    day.dayName = getString(R.string.thursday);
+                                                }
+                                                else if (dayId==4) {
+                                                    day.dayName = getString(R.string.frieday);
+                                                }
+                                                else    if (dayId==5) {
+                                                    day.dayName = getString(R.string.saturday);
+                                                }
+                                                else if (dayId==6) {
+                                                    day.dayName = getString(R.string.sunday);
+                                                }*/
+                                                tmpDay.addTimeSlot(slot);
+                                                daySet.add(tmpDay);
+                                                // item.businessDays.add(tmpDay);
+                                                break;
+                                            }
+                                        }
                                     }
+
+                                    item.businessDays.addAll(daySet);
+
+                                    Collections.sort(item.businessDays, new Comparator<BusinessDay>() {
+
+                                        @Override
+                                        public int compare(BusinessDay a1, BusinessDay a2) {
+
+                                            if (a1.dayId == 0 || a2.dayId == 0)
+                                                return -1;
+                                            else {
+                                                Long long1 = (long) a1.dayId;
+                                                Long long2 = (long) a2.dayId;
+                                                return long1.compareTo(long2);
+                                            }
+                                        }
+                                    });
                                 }
 
                                 JSONArray staffServiceArray = object.getJSONArray("staffService");
@@ -346,10 +566,13 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                                 if (item.status.equals("1"))
                                     companyList.add(item);
                             }
+
+                            if (companyList.size()==0)
+                                ivDropDown.setVisibility(View.GONE);
+
                             arrayAdapter.notifyDataSetChanged();
                         }else {
                             ivDropDown.setVisibility(View.GONE);
-                            tvStaff.setClickable(true);
                             tvStaff.setClickable(true);
                         }
 
@@ -386,6 +609,49 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         task.execute(this.getClass().getName());
     }
 
+    private List<BusinessDay> getBusinessDay(){
+
+        List<BusinessDay>businessDays = new ArrayList<>();
+
+        BusinessDay day1 = new BusinessDay();
+        day1.dayName = getString(R.string.monday);
+        day1.dayId = 0;
+        //day1.addTimeSlot(new TimeSlot(1));
+
+        BusinessDay day2 = new BusinessDay();
+        day2.dayName = getString(R.string.tuesday);
+        day2.dayId = 1;
+
+        BusinessDay day3 = new BusinessDay();
+        day3.dayName = getString(R.string.wednesday);
+        day3.dayId = 2;
+
+        BusinessDay day4 = new BusinessDay();
+        day4.dayName = getString(R.string.thursday);
+        day4.dayId = 3;
+
+        BusinessDay day5 = new BusinessDay();
+        day5.dayName = getString(R.string.frieday);
+        day5.dayId = 4;
+
+        BusinessDay day6 = new BusinessDay();
+        day6.dayName = getString(R.string.saturday);
+        day6.dayId = 5;
+
+        BusinessDay day7 = new BusinessDay();
+        day7.dayName = getString(R.string.sunday);
+        day7.dayId = 6;
+
+        businessDays.add(day1);
+        businessDays.add(day2);
+        businessDays.add(day3);
+        businessDays.add(day4);
+        businessDays.add(day5);
+        businessDays.add(day6);
+        businessDays.add(day7 );
+        return businessDays;
+    }
+
     private void setProfileData(UserProfileData profileData){
         if (profileData!=null){
             tvRatingCount.setText("("+profileData.reviewCount+")");
@@ -417,6 +683,5 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         }
 
     }
-
 
 }

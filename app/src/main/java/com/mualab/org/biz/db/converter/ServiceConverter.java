@@ -4,8 +4,7 @@ import android.arch.persistence.room.TypeConverter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mualab.org.biz.model.Category;
-import com.mualab.org.biz.modules.profile.modle.AddedCategory;
+import com.mualab.org.biz.modules.profile_setup.modle.AddedCategory;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

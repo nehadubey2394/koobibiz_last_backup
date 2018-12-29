@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:focusableInTouchMode="true"
-    tools:context=".modules.profile.activity.AddNewServiceActivity">
+    tools:context=".modules.profile_setup.activity.AddNewServiceActivity">
 
     <include
         android:id="@+id/topLayout"
