@@ -333,8 +333,18 @@
             android:name=".modules.business_setup.business_info.BusinessInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.Services.CompanyServicesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".modules.business_setup.certificate.AllCertificatesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
-        <activity android:name=".modules.business_setup.Services.CompanyServicesActivity"
+
+        <activity android:name=".modules.business_setup.certificate.AddCertificateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>

@@ -36,7 +36,6 @@ public class StaffWorkingHoursActivity extends AppCompatActivity implements View
     private List<BusinessDay> businessDays;
     protected User user;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +46,20 @@ public class StaffWorkingHoursActivity extends AppCompatActivity implements View
     private void init(){
         if(user==null) user = Mualab.getInstance().getSessionManager().getUser();
         bpSession  = Mualab.getInstance().getBusinessProfileSession();
-        businessDays =  getBusinessdays();
+
+        Bundle args = getIntent().getBundleExtra("BUNDLE");
+        if (args!=null && args.containsKey("edtTimeSlotList"))
+            businessDays = (List<BusinessDay>) args.getSerializable("edtTimeSlotList");
+        else
+            businessDays =  getBusinessdays();
+
         ImageView ivKoobiLogo = findViewById(R.id.ivKoobiLogo);
         ivKoobiLogo.setVisibility(View.GONE);
         ImageView iv_back = findViewById(R.id.iv_back);
         TextView tvHeaderText = findViewById(R.id.tvHeaderText);
         AppCompatButton btnContinue = findViewById(R.id.btnContinue);
         tvHeaderText.setVisibility(View.VISIBLE);
-        tvHeaderText.setText("Operation Hours");
+        tvHeaderText.setText(getString(R.string.operation_hours));
 
         WorkingHoursAdapter adapter = new WorkingHoursAdapter(StaffWorkingHoursActivity.this, businessDays);
         RecyclerView rvBusinessDay = findViewById(R.id.rvBusinessDay);
@@ -129,12 +134,13 @@ public class StaffWorkingHoursActivity extends AppCompatActivity implements View
 
     private List<BusinessDay> getBusinessdays(){
         BusinessProfile businessProfile =  bpSession.getBusinessProfile();
-        if(businessProfile!=null && businessProfile.businessDays!=null)
+        return businessProfile.businessDays;
+       /* if(businessProfile!=null && businessProfile.businessDays!=null)
             if (businessProfile.businessDays.size()!=0)
                 return businessProfile.businessDays;
             else
                 return createDefaultBusinessHours();
-        else return  createDefaultBusinessHours();
+        else return  createDefaultBusinessHours();*/
     }
 
     private  List<BusinessDay> createDefaultBusinessHours(){
@@ -191,7 +197,6 @@ public class StaffWorkingHoursActivity extends AppCompatActivity implements View
         return businessDays;
     }
 
-
     private void updateData(){
         //List<BusinessDay> businessDays = getBusinessdays(); // getting business hours slots like opening/closing time
         List<TimeSlot> slotList = new ArrayList<>();
@@ -222,11 +227,12 @@ public class StaffWorkingHoursActivity extends AppCompatActivity implements View
         Intent intent = new Intent();
 
         Bundle args = new Bundle();
-        args.putSerializable("ARRAYLIST",(Serializable)slotList2);
+        //  args.putSerializable("ARRAYLIST",(Serializable)slotList2);
+        args.putSerializable("ARRAYLIST",(Serializable)businessDays);
         args.putString("jsonArray",whJsonArray);
         intent.putExtra("BUNDLE",args);
-      //  intent.putExtra("jsonArray", whJsonArray);
-      //  intent.putParcelableArrayListExtra("slotList", slotList2);
+        //  intent.putExtra("jsonArray", whJsonArray);
+        //  intent.putParcelableArrayListExtra("slotList", slotList2);
         setResult(RESULT_OK, intent);
         finish();
 

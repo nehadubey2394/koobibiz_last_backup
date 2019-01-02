@@ -115,6 +115,8 @@ public class NewBaseActivity extends AppCompatActivity {
                             slot.id = objSlots.getInt("_id");
                             slot.startTime = objSlots.getString("startTime");
                             slot.endTime = objSlots.getString("endTime");
+                            slot.minStartTime = objSlots.getString("startTime");
+                            slot.maxEndTime = objSlots.getString("endTime");
                             slot.edtStartTime = objSlots.getString("startTime");
                             slot.edtEndTime = objSlots.getString("endTime");
                             slot.status = objSlots.getInt("status");

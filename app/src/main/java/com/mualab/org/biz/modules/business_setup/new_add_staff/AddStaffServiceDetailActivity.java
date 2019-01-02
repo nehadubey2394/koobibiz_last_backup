@@ -52,12 +52,12 @@ public class AddStaffServiceDetailActivity extends AppCompatActivity implements 
 
             if (services.edtInCallPrice!=0) {
                 sInCallPrice = String.valueOf(services.edtInCallPrice);
-              //  holdInCallP = String.valueOf(services.edtInCallPrice);
+                //  holdInCallP = String.valueOf(services.edtInCallPrice);
             }
 
             if (services.edtOutCallPrice!=0) {
                 sOutCallPrice = String.valueOf(services.edtOutCallPrice);
-               // holdOutCallp = String.valueOf(services.edtOutCallPrice);
+                // holdOutCallp = String.valueOf(services.edtOutCallPrice);
             }
         }else {
             sBookingType = services.bookingType;
@@ -66,12 +66,12 @@ public class AddStaffServiceDetailActivity extends AppCompatActivity implements 
 
             if (services.inCallPrice!=0){
                 sInCallPrice = String.valueOf(services.inCallPrice);
-             //   holdInCallP = String.valueOf(services.inCallPrice);
+                //   holdInCallP = String.valueOf(services.inCallPrice);
             }
 
             if (services.outCallPrice!=0) {
                 sOutCallPrice = String.valueOf(services.outCallPrice);
-             //   holdOutCallp = String.valueOf(services.outCallPrice);
+                //   holdOutCallp = String.valueOf(services.outCallPrice);
             }
 
         }

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".modules.business_setup.certificate.AllCertificatesActivity">
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_layout_for_allscreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/rl_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp"
+        android:layout_below="@+id/header"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/ivCertificate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            android:scaleType="fitXY"
+            android:layout_centerInParent="true"
+            android:background="@drawable/gallery_placeholder"
+            />
+
+        <ImageView
+            android:id="@+id/ivCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/camera_ico"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_imageView"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Title"/>
+
+    <EditText
+        android:id="@+id/etCertificateTitle"
+        android:layout_below="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Enter Title"
+        android:paddingLeft="8dp"
+        android:background="@drawable/bg_gray_rect"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/text_color"
+        android:textColorHint="@color/gray"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="14sp"
+        />
+    <TextView
+        android:id="@+id/tvCertificateDescr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etCertificateTitle"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="15dp"
+        android:imeOptions="actionDone"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/description"/>
+
+    <EditText
+        android:id="@+id/etDescr"
+        android:layout_below="@+id/tvCertificateDescr"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Enter Description ..."
+        android:paddingLeft="8dp"
+        android:gravity="start"
+        android:background="@drawable/bg_gray_rect"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/text_color"
+        android:textColorHint="@color/gray"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="14sp"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        style="@style/My_Button.Invert"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/continue_txt" />
+
+
+</RelativeLayout>

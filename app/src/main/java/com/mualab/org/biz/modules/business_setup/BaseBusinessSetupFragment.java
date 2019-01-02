@@ -6,12 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -19,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.mualab.org.biz.R;
@@ -26,6 +26,7 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.TimeSlot;
@@ -37,6 +38,7 @@ import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.modules.business_setup.OtherBusinessWorkingHours.OperationHoursActivity;
 import com.mualab.org.biz.modules.business_setup.Services.CompanyServicesActivity;
 import com.mualab.org.biz.modules.business_setup.business_info.BusinessInfoActivity;
+import com.mualab.org.biz.modules.business_setup.certificate.AllCertificatesActivity;
 import com.mualab.org.biz.modules.business_setup.invitation.InvitationActivity;
 import com.mualab.org.biz.modules.business_setup.my_staff.MyStaffActivity;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.AddNewStaffActivity;
@@ -52,6 +54,7 @@ import com.mualab.org.biz.util.Helper;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -83,6 +86,8 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
     private List<CompanyDetail> companyList;
     private CompanyListSppinnerAdapter arrayAdapter;
     private int currentSelectedBusiness;
+    private  Session session;
+    private User user;
 
     public BaseBusinessSetupFragment() {
         // Required empty public constructor
@@ -123,6 +128,8 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
     }
 
     private void initView(){
+        session = Mualab.getInstance().getSessionManager();
+        user = session.getUser();
         ((MainActivity) mContext).setTitle(getString(R.string.title_buisness_admin));
     }
 
@@ -158,6 +165,9 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         LinearLayout llServices = rootView.findViewById(R.id.llServices);
         LinearLayout llBusinessInfo = rootView.findViewById(R.id.llBusinessInfo);
         LinearLayout llInvitation = rootView.findViewById(R.id.llInvitation);
+        LinearLayout llCertificates = rootView.findViewById(R.id.llCertificates);
+        LinearLayout llVoucherCode = rootView.findViewById(R.id.llVoucherCode);
+        LinearLayout llPaymentSeup = rootView.findViewById(R.id.llPaymentSeup);
 
         arrayAdapter = new CompanyListSppinnerAdapter(mContext,
                 companyList);
@@ -204,8 +214,13 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         llServices.setOnClickListener(this);
         llWorkingHours.setOnClickListener(this);
         llBusinessInfo.setOnClickListener(this);
+        llCertificates.setOnClickListener(this);
+        llVoucherCode.setOnClickListener(this);
+        llPaymentSeup.setOnClickListener(this);
 
         apiForGetProfile();
+
+        getBusinessProfile();
 
         Session session = Mualab.getInstance().getSessionManager();
         if (session.getUser().businessType.equals("independent")) {
@@ -251,16 +266,10 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
             case R.id.llWorkingHours:
                 if (currentSelectedBusiness==0) {
-                    MyToast.getInstance(mContext).showDasuAlert("Under development");
-                    /*Intent intent = new Intent(mContext, WorkingHoursActivity.class);
+                    Intent intent = new Intent(mContext, WorkingHoursActivity.class);
                     intent.putExtra("fromTag", "BaseBusinessSetupFragment");
-                    startActivity(intent);*/
+                    startActivity(intent);
 
-                   /* Intent intent = new Intent(mContext, OperationHoursActivity.class);
-                    Bundle args = new Bundle();
-                    args.putSerializable("workingHours",(Serializable)getBusinessdays());
-                    intent.putExtra("BUNDLE",args);
-                    startActivity(intent);*/
                 }else {
                     if (companyList.size()!=0) {
                         Intent intent = new Intent(mContext, OperationHoursActivity.class);
@@ -282,6 +291,10 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
             case R.id.llInvitation:
                 startActivity(new Intent(mContext,InvitationActivity.class));
+                break;
+
+            case R.id.llCertificates:
+                startActivity(new Intent(mContext,AllCertificatesActivity.class));
                 break;
 
             case R.id.tvBusiness:
@@ -306,12 +319,6 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                 tvBusiness.setTextColor(getResources().getColor(R.color.gray));
                 break;
         }
-    }
-
-    private List<BusinessDay> getBusinessdays(){
-        PreRegistrationSession bpSession = Mualab.getInstance().getBusinessProfileSession();
-        BusinessProfile businessProfile =  bpSession.getBusinessProfile();
-        return businessProfile.businessDays;
     }
 
     private void apiForGetProfile(){
@@ -458,46 +465,9 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                                         int dayId = object2.getInt("day");
                                         TimeSlot slot = new TimeSlot(dayId);
                                         slot.startTime = object2.getString("startTime");
+                                        slot.minStartTime = object2.getString("startTime");
                                         slot.endTime = object2.getString("endTime");
-
-                                       /* if (dayId==0) {
-                                            day.dayName = getString(R.string.monday);
-                                            day.isOpen = true;
-                                            day.isExpand = true;
-                                        }
-                                        else if (dayId==1) {
-                                            day.dayName = getString(R.string.tuesday);
-                                            day.isOpen = true;
-                                            day.isExpand = true;
-                                        }
-                                        else if (dayId==2) {
-                                            day.dayName = getString(R.string.wednesday);
-                                            day.isOpen = true;
-                                            day.isExpand = true;
-                                        }
-                                        else if (dayId==3) {
-                                            day.dayName = getString(R.string.thursday);
-                                            day.isOpen = true;
-                                            day.isExpand = true;
-                                        }
-                                        else if (dayId==4) {
-                                            day.dayName = getString(R.string.frieday);
-                                            day.isOpen = true;
-                                            day.isExpand = true;
-                                        }
-                                        else    if (dayId==5) {
-                                            day.dayName = getString(R.string.saturday);
-                                            day.isOpen = true;
-                                            day.isExpand = true;
-                                        }
-                                        else if (dayId==6) {
-                                            day.dayName = getString(R.string.sunday);
-                                            day.isOpen = true;
-                                            day.isExpand = true;
-                                        }
-
-                                        day.addTimeSlot(slot);
-                                        item.businessDays.add(day);*/
+                                        slot.maxEndTime = object2.getString("endTime");
 
                                         item2.day = Integer.parseInt(object2.getString("day"));
                                         item2.endTime = object2.getString("endTime");
@@ -683,5 +653,126 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         }
 
     }
+
+    private void getBusinessProfile(){
+        //progress_bar.setVisibility(View.VISIBLE);
+        new HttpTask(new HttpTask.Builder(mContext, "getbusinessProfile", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    // progress_bar.setVisibility(View.GONE);
+
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonObject.getJSONArray("artistRecord");
+
+                    if(jsonArray.length()>0){
+                        PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
+                        JSONObject obj = jsonArray.getJSONObject(0);
+                        BusinessProfile bsp = new BusinessProfile();
+
+                        bsp.address = new Address();
+                        bsp.address.postalCode = obj.getString("businesspostalCode");
+                        bsp.address.stAddress1 = obj.getString("address");
+                        bsp.address.stAddress2 = obj.getString("address2");
+                        bsp.address.city = obj.getString("city");
+                        bsp.address.state = obj.getString("state");
+                        bsp.address.country = obj.getString("country");
+                        bsp.address.latitude = obj.getString("latitude");
+                        bsp.address.longitude = obj.getString("longitude");
+
+                        bsp.bio = obj.getString("bio");
+                        bsp.bankStatus = obj.getInt("bankStatus");
+
+                        if(obj.has("radius")){
+                            String r = obj.getString("radius");
+                            if(!TextUtils.isEmpty(r))
+                                bsp.radius = obj.getInt("radius");
+                        }
+
+                        if(obj.has("serviceType"))
+                            bsp.serviceType = obj.getInt("serviceType");
+                        if(obj.has("inCallpreprationTime"))
+                            bsp.inCallpreprationTime = obj.getString("inCallpreprationTime");
+                        if(obj.has("outCallpreprationTime"))
+                            bsp.outCallpreprationTime = obj.getString("outCallpreprationTime");
+
+                        pSession.updateRadius(bsp.radius);
+                        pSession.updateAddress(bsp.address);
+                        pSession.updateOutcallPreprationTime(bsp.outCallpreprationTime);
+                        pSession.updateIncallPreprationTime(bsp.inCallpreprationTime);
+                        pSession.updateServiceType(bsp.serviceType);
+                        pSession.updateBankStatus(bsp.bankStatus);
+
+                        // List<BusinessDayForStaff>dayArrayList = new ArrayList<>();
+
+                        JSONArray businessArray = obj.getJSONArray("businessHour");
+                        bsp.businessDays = getBusinessDay();
+
+                        for(int i =0; i<businessArray.length();  i++){
+                            BusinessDayForStaff businessDayForStaff = new BusinessDayForStaff();
+                            JSONObject objSlots = businessArray.getJSONObject(i);
+                            int dayId = objSlots.getInt("day");
+                            TimeSlot slot = new TimeSlot(dayId);
+                            slot.id = objSlots.getInt("_id");
+                            slot.startTime = objSlots.getString("startTime");
+                            slot.endTime = objSlots.getString("endTime");
+
+                            slot.minStartTime = objSlots.getString("startTime");
+                            slot.maxEndTime = objSlots.getString("endTime");
+
+                            slot.edtStartTime = objSlots.getString("startTime");
+
+                            slot.edtEndTime = objSlots.getString("endTime");
+                            slot.status = objSlots.getInt("status");
+
+                            businessDayForStaff.day = objSlots.getInt("day");
+                            businessDayForStaff.startTime = objSlots.getString("startTime");
+                            businessDayForStaff.endTime = objSlots.getString("endTime");
+                            bsp.dayForStaffs.add(businessDayForStaff);
+
+                            for(BusinessDay tmpDay : bsp.businessDays){
+                                if(tmpDay.dayId == dayId){
+                                    tmpDay.isOpen = true;
+                                    tmpDay.addTimeSlot(slot);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(businessArray.length()>0)
+                            pSession.createBusinessProfile(bsp);
+
+                        PreRegistrationSession bpSession = Mualab.getInstance().getBusinessProfileSession();
+                        bpSession.updateRegStep(6);
+                    }
+
+
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+
+                try {
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")) {
+                        Mualab.getInstance().getSessionManager().logout();
+                        //      MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }})
+                .setMethod(Request.Method.GET)
+                .setAuthToken(session.getAuthToken()))
+                .execute("getbusinessProfile");
+    }
+
 
 }

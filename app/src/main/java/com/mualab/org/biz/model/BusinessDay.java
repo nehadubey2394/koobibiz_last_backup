@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import views.pickerview.DayOfWeek;
-
 public class BusinessDay implements Serializable {
 
     public int id;
@@ -16,12 +14,17 @@ public class BusinessDay implements Serializable {
     public String dayName;
     public boolean isOpen;
     public boolean isExpand;
+    public boolean isHide;
     public ArrayList<TimeSlot> slots = new ArrayList<>();
+    public ArrayList<TimeSlot> tempSlots = new ArrayList<>();
 
 
     public void addTimeSlot(TimeSlot slot){
         if(slots==null) slots= new ArrayList<>();
         slots.add(slot);
+
+        if(tempSlots==null) tempSlots= new ArrayList<>();
+        tempSlots.add(slot);
     }
 
     public int getTimeSlotSize(){

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.TimeSlot;
-import com.mualab.org.biz.modules.add_staff.adapter.AdapterEditBusinessDays;
 import com.mualab.org.biz.util.CalanderUtils;
 
 import java.text.ParseException;
@@ -36,9 +36,7 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
     private List<BusinessDay> businessDaysList;
     private Context mContext;
     private Date st1 = null,et1=null;
-    private String dayId="";
     private SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-    private int parentPostion;
 
     public WorkingHoursAdapter(Context mContext, List<BusinessDay> businessHours) {
         this.mContext = mContext;
@@ -89,7 +87,10 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
 
                 if(isChecked && (day.slots==null || day.slots.size()==0)){
                     assert day.slots != null;
-                    day.slots.add(new TimeSlot(day.dayId));
+                    if (day.tempSlots.size()!=0)
+                        day.slots.addAll(day.tempSlots);
+                    else
+                        day.slots.add(new TimeSlot(day.dayId));
                 }else if(!isChecked){
                     day.slots.clear();
                     //day.addTimeSlot(new TimeSlot(-1));
@@ -135,7 +136,6 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            parentPostion = getAdapterPosition();
 
             switch (v.getId()){
 
@@ -162,10 +162,9 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         }
     }
 
-    private void picTimeSlot(final AdapterTimeSlot adapter, final ArrayList<TimeSlot> timeSlots, final int position){
+    private synchronized void picTimeSlot(final AdapterTimeSlot adapter, final ArrayList<TimeSlot> timeSlots, final int position){
 
         if(timeSlots.size()>0){
-
             final TimeSlot timeSlot = timeSlots.get(position);
 
             DualTimePickerPopWin timePickerPopWin = new DualTimePickerPopWin.Builder(mContext,
@@ -173,16 +172,35 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                         @Override
                         public void onTimePickCompleted(String startTime, String endTime, String time) {
                             Date st2 = null,et2 = null;
+                            Date minStartTime = null,minEndTime;
 
                             try {
-                                BusinessDay day = businessDaysList.get(parentPostion);
-
+                              /*  TimeSlot timeSlot = timeSlots.get(position);
+                                BusinessDay day = businessDaysList.get(timeSlot.bizdayPosition);  //parentPostion */
                                 //      st1 = sdf.parse(timeSlot.startTime);
                                 //     et1 = sdf.parse(timeSlot.endTime);
                                 st2 = sdf.parse(startTime);
                                 et2 = sdf.parse(endTime);
 
-                                if(day.getTimeSlotSize()<=1){
+                                minStartTime = sdf.parse(timeSlot.minStartTime);
+                                minEndTime = sdf.parse(timeSlot.maxEndTime);
+
+                                Log.e("Date Old", st1+" "+et1);
+                                Log.e("Date NEw", st2+" "+et2);
+
+                                if ((st2.after(minStartTime) || st2.equals(minStartTime)) &&
+                                        (et2.before(minEndTime) || et2.equals(minEndTime))){
+                                    setTime(timeSlot,position,startTime,endTime,time,timeSlots,adapter);
+                                }else
+                                    MyToast.getInstance(mContext).showDasuAlert("You can't select other time apart from your business timing");
+
+
+                             /*   if ((st2.after(st1) || st2.equals(st1)) && (et2.before(et1) || et2.equals(et1))){
+                                    setTime(timeSlot,position,startTime,endTime,time,timeSlots,adapter);
+                                }else
+                                    MyToast.getInstance(mContext).showDasuAlert("You can't select other time apart from your business timing");
+*/
+                                /*if(day.getTimeSlotSize()<=1){
                                     if ((st2.after(st1) || st2.equals(st1)) && (et2.before(et1) || et2.equals(et1))){
                                         setTime(timeSlot,position,startTime,endTime,time,timeSlots,adapter);
                                     }else
@@ -194,7 +212,7 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                                         MyToast.getInstance(mContext).showDasuAlert("You can't select other time apart from your business timing");
 
                                     //  setTime(timeSlot,position,startTime,endTime,time,timeSlots,adapter);
-                                }
+                                }*/
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -225,28 +243,26 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
 
                 TimeSlot tmp = timeSlots.get(i);
 
-                if(i==position) {
+                if(i==position)
                     continue;
-                }
-                else {
+                if(new CalanderUtils().compareTime(tmp.startTime, tmp.endTime, startTime)){
+                    MyToast.getInstance(mContext).showDasuAlert(mContext.getString(R.string.error_timeslot_intersect));
+                    break;
+                }else {
 
-                    if(new CalanderUtils().compareTime(tmp.startTime, tmp.endTime, startTime)){
-                        MyToast.getInstance(mContext).showDasuAlert(mContext.getString(R.string.error_timeslot_intersect));
-                        break;
-                    }else {
-
-                        timeSlot.startTime = startTime;
-                        timeSlot.endTime = endTime;
-                        timeSlot.slotTime = time;
-                        timeSlot.edtStartTime = startTime;
-                        timeSlot.edtEndTime = endTime;
-                        adapter.notifyDataSetChanged();
-                    }
+                    timeSlot.startTime = startTime;
+                    timeSlot.endTime = endTime;
+                    timeSlot.slotTime = time;
+                    timeSlot.edtStartTime = startTime;
+                    timeSlot.edtEndTime = endTime;
+                    adapter.notifyDataSetChanged();
                 }
+
             }
         }
     }
 
+    //child list adapter
     public class AdapterTimeSlot extends ArrayAdapter<TimeSlot> {
 
         private ArrayList<TimeSlot> timeSlots = new ArrayList<>();
@@ -308,20 +324,20 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                     //picTimeSlot(AdapterTimeSlot.this,timeSlots,position);
                     BusinessDay day = businessDaysList.get(position);
 
-                    if (dayId.isEmpty() || !dayId.equals(String.valueOf(day.dayId))){
-                        if (st1==null || et1==null){
-                            try {
-                                dayId = String.valueOf(day.dayId);
-                                st1 = sdf.parse(timeSlot.startTime);
-                                et1 = sdf.parse(timeSlot.endTime);
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    //if (dayId.isEmpty() || !dayId.equals(String.valueOf(day.dayId))){
+                    //  if (st1==null || et1==null){
+                    try {
+                        st1 = sdf.parse(timeSlot.startTime);
+                        et1 = sdf.parse(timeSlot.endTime);
+                        picTimeSlot(AdapterTimeSlot.this,timeSlots,position);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        MyToast.getInstance(mContext).showDasuAlert("Error");
                     }
+                    // }
+                    // }
 
-                    picTimeSlot(AdapterTimeSlot.this,timeSlots,position);
+
                 }
             });
 
@@ -330,19 +346,18 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                 public void onClick(View v) {
                     // picTimeSlot(AdapterTimeSlot.this,timeSlots,position);
                     BusinessDay day = businessDaysList.get(position);
-                    if (dayId.isEmpty() || !dayId.equals(String.valueOf(day.dayId))){
-                        if (st1==null || et1==null){
-                            try {
-                                dayId = String.valueOf(day.dayId);
-                                st1 = sdf.parse(timeSlot.startTime);
-                                et1 = sdf.parse(timeSlot.endTime);
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    // if (dayId.isEmpty() || !dayId.equals(String.valueOf(day.dayId))){
+                    // if (st1==null || et1==null){
+                    try {
+                        st1 = sdf.parse(timeSlot.startTime);
+                        et1 = sdf.parse(timeSlot.endTime);
+                        picTimeSlot(AdapterTimeSlot.this,timeSlots,position);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        MyToast.getInstance(mContext).showDasuAlert("Error");
                     }
-                    picTimeSlot(AdapterTimeSlot.this,timeSlots,position);
+                    //  }
+                    // }
                 }
             });
 

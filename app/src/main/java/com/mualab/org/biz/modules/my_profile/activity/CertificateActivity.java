@@ -131,7 +131,7 @@ public class CertificateActivity extends AppCompatActivity implements OnCertific
                             JSONObject cObj = (JSONObject) jsonArray.get(i);
                             Certificate item = gson.fromJson(String.valueOf(cObj), Certificate.class);
                             item.status = cObj.getInt("status");
-                            item.id = cObj.getInt("_id");
+                            item._id = cObj.getInt("_id");
                             certificates.add(item);
                         }
                         certificatesListAdapter.notifyDataSetChanged();
@@ -236,7 +236,7 @@ public class CertificateActivity extends AppCompatActivity implements OnCertific
 
         Map<String, String> params = new HashMap<>();
         params.put("artistId", String.valueOf(user.id));
-        params.put("certificateId",""+certificate.id);
+        params.put("certificateId",""+certificate._id);
 
         HttpTask task = new HttpTask(new HttpTask.Builder(CertificateActivity.this, "deleteCertificate", new HttpResponceListner.Listener() {
             @Override
@@ -310,7 +310,7 @@ public class CertificateActivity extends AppCompatActivity implements OnCertific
                         Gson gson = new Gson();
                         Certificate item = gson.fromJson(String.valueOf(jsonObject), Certificate.class);
                         item.status = jsonObject.getInt("status");
-                        item.id = jsonObject.getInt("_id");
+                        item._id = jsonObject.getInt("_id");
                         certificates.add(item);
                         certificatesListAdapter.notifyDataSetChanged();
                     }else {

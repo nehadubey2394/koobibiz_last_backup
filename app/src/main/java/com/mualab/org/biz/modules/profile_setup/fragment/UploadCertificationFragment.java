@@ -148,7 +148,7 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
 
         if(certificates.size()>0){
             Certificate tmp = certificates.get(0);
-            if(tmp.id!=-1){
+            if(tmp._id!=-1){
                 //btnAddMore.setVisibility(certificates.get(0).id==-1?View.VISIBLE:View.GONE);
                 //dotsView.setVisibility(certificates.get(0).id==-1?View.INVISIBLE:View.VISIBLE);
                 btnAddMore.setVisibility(View.VISIBLE);
@@ -268,7 +268,7 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
                         for(int i=0; i<jsonArray.length(); i++){
                             JSONObject cObj = (JSONObject) jsonArray.get(i);
                             Certificate certificate = new Certificate();
-                            certificate.id = cObj.getInt("_id");
+                            certificate._id = cObj.getInt("_id");
                             certificate.imageUri = cObj.getString("certificateImage");
                             certificate.status = cObj.getInt("status");
                             certificates.add(certificate);
@@ -356,12 +356,12 @@ public class UploadCertificationFragment extends ProfileCreationBaseFragment imp
 
                     if (status.equalsIgnoreCase("success")) {
 
-                        if(certificates.size()==1 && certificates.get(0).id==-1)
+                        if(certificates.size()==1 && certificates.get(0)._id==-1)
                             certificates.remove(0);
 
                         JSONObject jsonObject = js.getJSONObject("certificate");
                         Certificate certificate = new Certificate();
-                        certificate.id = jsonObject.getInt("_id");
+                        certificate._id = jsonObject.getInt("_id");
                         certificate.imageUri = jsonObject.getString("certificateImage");
                         certificate.status = jsonObject.getInt("status");
                         certificates.add(certificate);

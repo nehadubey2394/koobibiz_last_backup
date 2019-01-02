@@ -92,9 +92,9 @@ public class AdapterUploadCertificate extends RecyclerView.Adapter<AdapterUpload
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Certificate cf = certificates.get(position);
-        holder.civ_picImage.setVisibility(cf.id==-1?View.VISIBLE:View.GONE);
-        holder.ivCertificate.setVisibility(cf.id==-1?View.GONE:View.VISIBLE);
-        holder.civDeleteBtn.setVisibility(cf.id==-1?View.GONE:View.VISIBLE);
+        holder.civ_picImage.setVisibility(cf._id==-1?View.VISIBLE:View.GONE);
+        holder.ivCertificate.setVisibility(cf._id==-1?View.GONE:View.VISIBLE);
+        holder.civDeleteBtn.setVisibility(cf._id==-1?View.GONE:View.VISIBLE);
         // listner.onUpdateIndex(position);
         if(!TextUtils.isEmpty(cf.imageUri)){
             Picasso.with(context).load(cf.imageUri).into(holder.ivCertificate);
@@ -116,7 +116,7 @@ public class AdapterUploadCertificate extends RecyclerView.Adapter<AdapterUpload
 
         final int index = vh.getAdapterPosition();
         Map<String, String> body = new HashMap<>();
-        body.put("certificateId",""+certificate.id);
+        body.put("certificateId",""+certificate._id);
 
         new HttpTask(new HttpTask.Builder(context, "deleteCertificate", new HttpResponceListner.Listener() {
             @Override
