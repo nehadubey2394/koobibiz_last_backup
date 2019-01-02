@@ -96,12 +96,7 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                     day.slots.clear();
                 }
 */
-                if(isChecked){
-                    day.isOpen = false;
-                }else if(!isChecked){
-                    day.isOpen = true;
-                    //day.slots.clear();
-                }
+                day.isOpen = !isChecked;
                 notifyItemChanged(pos);
             }
         });
