@@ -85,15 +85,22 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                 BusinessDay day = businessDaysList.get(pos);
                 day.isOpen = isChecked;
 
-                if(isChecked && (day.slots==null || day.slots.size()==0)){
+            /*    if(isChecked && (day.slots==null || day.slots.size()==0)){
                     assert day.slots != null;
                     if (day.tempSlots.size()!=0)
                         day.slots.addAll(day.tempSlots);
                     else
                         day.slots.add(new TimeSlot(day.dayId));
+
                 }else if(!isChecked){
                     day.slots.clear();
-                    //day.addTimeSlot(new TimeSlot(-1));
+                }
+*/
+                if(isChecked){
+                    day.isOpen = false;
+                }else if(!isChecked){
+                    day.isOpen = true;
+                    //day.slots.clear();
                 }
                 notifyItemChanged(pos);
             }
