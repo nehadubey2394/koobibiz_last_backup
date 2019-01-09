@@ -4,15 +4,16 @@ package com.mualab.org.biz.modules.my_profile.fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -22,48 +23,71 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.baselistner.BaseListner;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.listner.RecyclerViewScrollListener;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.model.UserProfileData;
-import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.modules.my_profile.activity.CertificateActivity;
+import com.mualab.org.biz.modules.my_profile.activity.CommentsActivity;
+import com.mualab.org.biz.modules.my_profile.activity.FollowersActivity;
 import com.mualab.org.biz.modules.my_profile.activity.ProfileActivity;
+import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
+import com.mualab.org.biz.modules.my_profile.model.Feeds;
+import com.mualab.org.biz.modules.my_profile.activity.ArtistServicesActivity;
+import com.mualab.org.biz.modules.my_profile.adapter.feeds.FeedAdapter;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Constant;
 import com.mualab.org.biz.util.Helper;
+import com.mualab.org.biz.util.WrapContentLinearLayoutManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import views.refreshview.CircleHeaderView;
+import views.refreshview.OnRefreshListener;
+import views.refreshview.RjRefreshLayout;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener {
-    private String mParam1;
+public class ProfileFragment extends FeedBaseFragment implements View.OnClickListener,FeedAdapter.Listener {
+    private String mParam1,TAG = this.getClass().getName();
     private Context mContext;
-    private TextView tvImages,tvVideos,tvFeeds,tv_dot1,tv_dot2,tv_gender,tvCertificateCount,tvServiceCount,tvRatingCount,tv_username,tv_ProfileName,
-            tv_profile_following,tv_profile_followers,tv_profile_post,tv_distance;
+    private TextView tvImages,tvVideos,tvFeeds,tv_msg,tv_no_data_msg,tv_dot1,tv_dot2;
     private ImageView iv_profile_back ,iv_profile_forward,ivActive;
-    private CircleImageView iv_Profile;
-    private LinearLayout lyImage,lyVideos,lyFeed,lowerLayout2,lowerLayout1;
+    private LinearLayout lowerLayout1,lowerLayout2,ll_progress;
     private RecyclerView rvFeed;
-    private RatingBar rating;
+    private RjRefreshLayout mRefreshLayout;
+    private RecyclerViewScrollListener endlesScrollListener;
+    private int CURRENT_FEED_STATE = 0,lastFeedTypeId;
+    private String feedType = "";
+    private FeedAdapter feedAdapter;
+    private List<Feeds> feeds;
+    private boolean isPulltoRefrash = false;
+    private  long mLastClickTime = 0;
+
+    private View view;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
-
 
     public static ProfileFragment newInstance(String param1) {
         ProfileFragment fragment = new ProfileFragment();
@@ -76,6 +100,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        feeds = new ArrayList<>();
         if (getArguments() != null) {
             //  mParam1 = getArguments().getString("param1");
         }
@@ -84,11 +109,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        initView(rootView);
+        initView(view);
         // Inflate the layout for this fragment
-        return rootView;
+        return view;
     }
 
     @Override
@@ -97,44 +122,92 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         this.mContext = context;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        apiForGetProfile();
+
+        rvFeed =  view.findViewById(R.id.rvFeed);
+        // rvFeed.setNestedScrollingEnabled(false);
+
+        WrapContentLinearLayoutManager lm = new WrapContentLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        rvFeed.setItemAnimator(null);
+        rvFeed.setLayoutManager(lm);
+        rvFeed.setHasFixedSize(true);
+
+        feedAdapter = new FeedAdapter(mContext, feeds, this);
+        endlesScrollListener = new RecyclerViewScrollListener(lm) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if(feedAdapter!=null){
+                    feedAdapter.showHideLoading(true);
+                    apiForGetAllFeeds(page, 10, false);
+                }
+            }
+
+            @Override
+            public void onScroll(RecyclerView view, int dx, int dy) {
+
+            }
+        };
+
+        rvFeed.setAdapter(feedAdapter);
+        rvFeed.addOnScrollListener(endlesScrollListener);
+
+        mRefreshLayout =  view.findViewById(R.id.mSwipeRefreshLayout);
+        mRefreshLayout.setNestedScrollingEnabled(false);
+        final CircleHeaderView header = new CircleHeaderView(getContext());
+        mRefreshLayout.addHeader(header);
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                endlesScrollListener.resetState();
+                isPulltoRefrash = true;
+                apiForGetAllFeeds(0, 10, false);
+            }
+
+            @Override
+            public void onLoadMore() {
+                Log.e(TAG, "onLoadMore: ");
+            }
+        });
+
+        rvFeed.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                if(e.getAction() == MotionEvent.ACTION_UP)
+                    hideQuickView();
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent event) {
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            }});
+    }
+
     private void initView(View view){
-        rvFeed = (RecyclerView) view.findViewById(R.id.recyclerView);
-   /*     rvFeed.setLayoutManager(new GridLayoutManager(mContext, 3));
-        imagesAdapter = new ImagesAdapter(mContext,allfeedsList, IMAGE_STATE);*/
-
-        rvFeed.setNestedScrollingEnabled(false);
-        /*rvFeed.setHasFixedSize(true);
-        rvFeed.setItemViewCacheSize(20);
-        rvFeed.setDrawingCacheEnabled(true);
-        rvFeed.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);*/
-
-        iv_Profile =  view.findViewById(R.id.iv_Profile);
-        ivActive =  view.findViewById(R.id.ivActive);
-
-        rating =  view.findViewById(R.id.rating);
 
         tvImages = view.findViewById(R.id.tv_image);
         tvVideos = view.findViewById(R.id.tv_videos);
         tvFeeds =  view.findViewById(R.id.tv_feed);
-        tv_ProfileName =  view.findViewById(R.id.tv_ProfileName);
-        tv_username =  view.findViewById(R.id.tv_username);
-        tvRatingCount =  view.findViewById(R.id.tvRatingCount);
-        lyImage =  view.findViewById(R.id.ly_images);
-        lyVideos = view.findViewById(R.id.ly_videos);
-        lyFeed =  view.findViewById(R.id.ly_feeds);
-
         tv_dot1 =  view.findViewById(R.id.tv_dot1);
         tv_dot2 =  view.findViewById(R.id.tv_dot2);
-        tv_distance =  view.findViewById(R.id.tv_distance);
-        tv_profile_post =  view.findViewById(R.id.tv_profile_post);
-        tv_profile_following =  view.findViewById(R.id.tv_profile_following);
-        tv_profile_followers =  view.findViewById(R.id.tv_profile_followers);
-        tvServiceCount =  view.findViewById(R.id.tvServiceCount);
-        tvCertificateCount =  view.findViewById(R.id.tvCertificateCount);
 
-        lyImage =  view.findViewById(R.id.ly_images);
-        lyVideos = view.findViewById(R.id.ly_videos);
-        lyFeed =  view.findViewById(R.id.ly_feeds);
+        LinearLayout lyImage = view.findViewById(R.id.ly_images);
+        LinearLayout lyVideos = view.findViewById(R.id.ly_videos);
+        LinearLayout lyFeed = view.findViewById(R.id.ly_feeds);
+
+        LinearLayout llServices = view.findViewById(R.id.llServices);
+        LinearLayout llCertificate = view.findViewById(R.id.llCertificate);
+        LinearLayout llAboutUs = view.findViewById(R.id.llAboutUs);
+        LinearLayout llFollowers = view.findViewById(R.id.llFollowers);
+        LinearLayout llFollowing = view.findViewById(R.id.llFollowing);
+        LinearLayout llPost = view.findViewById(R.id.llPost);
 
         lowerLayout2 =  view.findViewById(R.id.lowerLayout2);
         lowerLayout1 =  view.findViewById(R.id.lowerLayout);
@@ -143,9 +216,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         iv_profile_back =  view.findViewById(R.id.iv_profile_back);
         iv_profile_forward =  view.findViewById(R.id.iv_profile_forward);
 
+        tv_msg = view.findViewById(R.id.tv_msg);
+        tv_no_data_msg = view.findViewById(R.id.tv_no_data_msg);
+        ll_progress = view.findViewById(R.id.ll_progress);
+
         lyImage.setOnClickListener(this);
         lyVideos.setOnClickListener(this);
         lyFeed.setOnClickListener(this);
+
+        llServices.setOnClickListener(this);
+        llCertificate.setOnClickListener(this);
+        llAboutUs.setOnClickListener(this);
+        llFollowers.setOnClickListener(this);
+        llFollowing.setOnClickListener(this);
+        llPost.setOnClickListener(this);
         //  profile_btton_back.setOnClickListener(this);
         iv_profile_back.setOnClickListener(this);
         iv_profile_forward.setOnClickListener(this);
@@ -153,21 +237,61 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         iv_profile_back.setEnabled(false);
         iv_profile_forward.setEnabled(true);
 
-        apiForGetProfile();
-
     }
 
     @Override
     public void onClick(View view) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         switch (view.getId()){
             case R.id.rlProfile:
-                startActivity(new Intent(mContext,ProfileActivity.class));
+                //      startActivity(new Intent(mContext,ProfileActivity.class));
                 break;
+
+            case R.id.ly_feeds:
+            case R.id.ly_images:
+            case R.id.ly_videos:
+                updateViewType(view.getId());
+                break;
+
+            case R.id.llServices:
+                startActivity(new Intent(mContext,ArtistServicesActivity.class));
+                break;
+
+            case R.id.llAboutUs:
+                MyToast.getInstance(mContext).showDasuAlert("Under development");
+                break;
+
+            case R.id.llCertificate:
+                Intent intent = new Intent(mContext, CertificateActivity.class);
+                startActivityForResult(intent, 10);
+                break;
+
+            case R.id.llFollowing:
+                Intent intent1 = new Intent(mContext,FollowersActivity.class);
+                intent1.putExtra("isFollowers",false);
+                startActivityForResult(intent1,10);
+                break;
+
+            case R.id.llFollowers:
+                Intent intent2 = new Intent(mContext,FollowersActivity.class);
+                intent2.putExtra("isFollowers",true);
+                startActivityForResult(intent2,10);
+                //startActivity(new Intent(mContext,FollowersActivity.class));
+                break;
+
+            case R.id.llPost:
+                updateViewType(R.id.ly_feeds);
+                break;
+
             case R.id.iv_profile_back:
                 iv_profile_back.setEnabled(false);
-                iv_profile_forward.setClickable(true);
-                iv_profile_back.setClickable(false);
                 iv_profile_forward.setEnabled(true);
+                iv_profile_back.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                iv_profile_forward.setColorFilter(ContextCompat.getColor(mContext, R.color.text_color), android.graphics.PorterDuff.Mode.MULTIPLY);
                 Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.move_left);
                 lowerLayout1.startAnimation(anim);
                 lowerLayout2.setVisibility(View.GONE);
@@ -178,8 +302,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.iv_profile_forward:
                 iv_profile_back.setEnabled(true);
                 iv_profile_forward.setEnabled(false);
-                iv_profile_back.setClickable(true);
-                iv_profile_forward.setClickable(false);
+                iv_profile_forward.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                iv_profile_back.setColorFilter(ContextCompat.getColor(mContext, R.color.text_color), android.graphics.PorterDuff.Mode.MULTIPLY);
                 Animation anim2 = AnimationUtils.loadAnimation(mContext, R.anim.move_right);
                 lowerLayout2.startAnimation(anim2);
                 lowerLayout1.setVisibility(View.GONE);
@@ -190,26 +314,24 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
-    private void updateViewType(UserProfileData profileData,int id){
-        // ivImages.setImageResource(R.drawable.active_picture_icon);
-        // tvImages.setTextColor(ContextCompat.getColor(mContext,R.color.gray));
-        // lyImage.setBackgroundResource(R.drawable.rectangular_grey_border);
-
-
-        // ivVideos.setImageResource(R.drawable.active_video_icon);
-        // tvVideos.setTextColor(ContextCompat.getColor(mContext,R.color.gray));
-        // lyVideos.setBackgroundResource(R.drawable.rectangular_grey_border);
-
-        // ivFeeds.setImageResource(R.drawable.feeds_icon);
-        // tvFeeds.setTextColor(ContextCompat.getColor(mContext,R.color.gray));
-        // lyFeed.setBackgroundResource(R.drawable.rectangular_grey_border);
-
-        int numberOfColumns = 3;
+    private void setProfileData(UserProfileData profileData){
+        TextView  tv_ProfileName =  view.findViewById(R.id.tv_ProfileName);
+        TextView   tv_username =  view.findViewById(R.id.tv_username);
+        TextView   tvRatingCount =  view.findViewById(R.id.tvRatingCount);
+        TextView   tv_distance =  view.findViewById(R.id.tv_distance);
+        TextView   tv_profile_post =  view.findViewById(R.id.tv_profile_post);
+        TextView  tv_profile_following =  view.findViewById(R.id.tv_profile_following);
+        TextView  tv_profile_followers =  view.findViewById(R.id.tv_profile_followers);
+        TextView  tvServiceCount =  view.findViewById(R.id.tvServiceCount);
+        TextView  tvCertificateCount =  view.findViewById(R.id.tvCertificateCount);
+        CircleImageView iv_Profile =  view.findViewById(R.id.iv_Profile);
+        ImageView ivActive =  view.findViewById(R.id.ivActive);
+        RatingBar rating =  view.findViewById(R.id.rating);
 
         if (profileData!=null){
-            tv_ProfileName.setText(profileData.firstName);
-            tv_username.setText(profileData.userName);
+            tv_distance.setText(profileData.radius+" Miles");
+            tv_ProfileName.setText(profileData.firstName+" "+profileData.lastName);
+            tv_username.setText("@"+profileData.userName);
             tv_profile_followers.setText(profileData.followersCount);
             tv_profile_following.setText(profileData.followingCount);
             tv_profile_post.setText(profileData.postCount);
@@ -217,6 +339,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             tvCertificateCount.setText(profileData.certificateCount);
             tvServiceCount.setText(profileData.serviceCount);
             rating.setRating(Float.parseFloat(profileData.ratingCount));
+
+            if (profileData.isCertificateVerify.equals("0")){
+                ivActive.setVisibility(View.VISIBLE);
+            }
 
             Picasso.with(mContext).load(profileData.profileImage).placeholder(R.drawable.defoult_user_img).
                     fit().into(iv_Profile);
@@ -236,7 +362,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 lowerLayout2.setVisibility(View.VISIBLE);
                 tv_dot1.setVisibility(View.GONE);
                 tv_dot2.setVisibility(View.GONE);
-                tv_distance.setVisibility(View.GONE);
+                // tv_distance.setVisibility(View.GONE);
                 ivActive.setVisibility(View.GONE);
             }else {
                 iv_profile_back.setVisibility(View.VISIBLE);
@@ -245,58 +371,61 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 lowerLayout2.setVisibility(View.GONE);
                 tv_dot1.setVisibility(View.VISIBLE);
                 tv_dot2.setVisibility(View.VISIBLE);
-                tv_distance.setVisibility(View.VISIBLE);
+                // tv_distance.setVisibility(View.VISIBLE);
                 ivActive.setVisibility(View.VISIBLE);
             }
         }
 
-        switch (id){
+    }
+
+    private void updateViewType(int id){
+        tvVideos.setTextColor(getResources().getColor(R.color.text_color));
+        tvImages.setTextColor(getResources().getColor(R.color.text_color));
+        tvFeeds.setTextColor(getResources().getColor(R.color.text_color));
+        endlesScrollListener.resetState();
+        int prevSize = feeds.size();
+
+        switch (id) {
+            case R.id.ly_feeds:
+                //addRemoveHeader(true);
+                tvFeeds.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                if (lastFeedTypeId != R.id.ly_feeds){
+                    feeds.clear();
+                    feedType = "";
+                    CURRENT_FEED_STATE = Constant.FEED_STATE;
+                    feedAdapter.notifyItemRangeRemoved(0, prevSize);
+                    apiForGetAllFeeds(0, 10, true);
+                }
+                break;
+
             case R.id.ly_images:
-               /* ivImages.setImageResource(R.drawable.inactive_picture_icon);
-                tvImages.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                setGradent(tvImages, startEndColor);
-                //  lyImage.setBackgroundResource(R.drawable.rectangular_feed_primary_border);
-                *//*imagesAdapter = new ImagesAdapter(mContext,allfeedsList,IMAGE_STATE);
-                rvFeed.setAdapter(imagesAdapter);*//*
-                imagesAdapter = new ImagesAdapter(mContext,allfeedsList,IMAGE_STATE);
-                rvFeed.setAdapter(imagesAdapter);
-                // setUpRecycleView(true, imagesAdapter);
-                if(lastFeedTypeId!= R.id.ly_images)
-                    apiForImageAndVideos("image","","0","10",IMAGE_STATE);*/
+                tvImages.setTextColor(getResources().getColor(R.color.colorPrimary));
+                // addRemoveHeader(false);
+                if (lastFeedTypeId != R.id.ly_images){
+                    feeds.clear();
+                    feedType = "image";
+                    CURRENT_FEED_STATE = Constant.IMAGE_STATE;
+                    feedAdapter.notifyItemRangeRemoved(0, prevSize);
+                    apiForGetAllFeeds( 0, 10, true);
+                }
+
                 break;
 
             case R.id.ly_videos:
-              /*  ivVideos.setImageResource(R.drawable.video_icon);
-                // tvVideos.setTextColor(ContextCompat.getColor(mContext,R.color.white));
-                //lyVideos.setBackgroundResource(R.drawable.rectangular_feed_primary_border);
-                setGradent(tvVideos, startEndColor);
-
-                imagesAdapter = new ImagesAdapter(mContext,allfeedsList,VIDEO_STATE);
-                rvFeed.setLayoutManager(new GridLayoutManager(mContext, numberOfColumns, LinearLayoutManager.VERTICAL,false));
-                rvFeed.setAdapter(imagesAdapter);
-
-                *//*imagesAdapter = new ImagesAdapter(mContext,allfeedsList,VIDEO_STATE);
-                setUpRecycleView(true,imagesAdapter);*//*
-
-                if(lastFeedTypeId!= R.id.ly_videos)
-                    apiForImageAndVideos("video","","0","10",VIDEO_STATE);*/
-                break;
-
-            case R.id.ly_feeds:
-             /*   ivFeeds.setImageResource(R.drawable.video_icon);
-                // tvFeeds.setTextColor(ContextCompat.getColor(mContext,R.color.white));
-                // lyFeed.setBackgroundResource(R.drawable.rectangular_feed_primary_border);
-                setGradent(tvFeeds, startEndColor);
-
-                feedAdapter = new FeedAdapter(mContext, allfeedsList);
-                rvFeed.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
-                rvFeed.setAdapter(feedAdapter);
-
-                *//*feedAdapter = new FeedAdapter(mContext, allfeedsList);
-                setUpRecycleView(false, feedAdapter);*//*
-                apiForImageAndVideos("","","0","50",FEED_STATE);*/
+                tvVideos.setTextColor(getResources().getColor(R.color.colorPrimary));
+                // addRemoveHeader(false);
+                if (lastFeedTypeId != R.id.ly_videos){
+                    feeds.clear();
+                    feedType = "video";
+                    CURRENT_FEED_STATE = Constant.VIDEO_STATE;
+                    feedAdapter.notifyItemRangeRemoved(0, prevSize);
+                    apiForGetAllFeeds( 0, 10, true);
+                }
                 break;
         }
+
+        lastFeedTypeId = id;
         //  lastFeedTypeId = id;
     }
 
@@ -318,27 +447,34 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         Map<String, String> params = new HashMap<>();
         params.put("userId", String.valueOf(user.id));
+        params.put("loginUserId", String.valueOf(user.id));
 
         HttpTask task = new HttpTask(new HttpTask.Builder(mContext, "getProfile", new HttpResponceListner.Listener() {
             @Override
             public void onResponse(String response, String apiName) {
                 try {
+                    if(feeds!=null && feeds.size()==0)
+                        updateViewType(R.id.ly_feeds);
+
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
                     String message = js.getString("message");
-
+                    Progress.hide(mContext);
                     if (status.equalsIgnoreCase("success")) {
                         JSONArray userDetail = js.getJSONArray("userDetail");
                         JSONObject object = userDetail.getJSONObject(0);
                         Gson gson = new Gson();
+
                         UserProfileData profileData = gson.fromJson(String.valueOf(object), UserProfileData.class);
 
                         //   profileData = gson.fromJson(response, UserProfileData.class);
-                        updateViewType(profileData,R.id.ly_videos);
+                        setProfileData(profileData);
+                        // updateViewType(profileData,R.id.ly_videos);
 
                     }else {
                         MyToast.getInstance(mContext).showDasuAlert(message);
                     }
+                    updateViewType(R.id.ly_feeds);
                 } catch (Exception e) {
                     Progress.hide(mContext);
                     e.printStackTrace();
@@ -348,6 +484,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             @Override
             public void ErrorListener(VolleyError error) {
                 try{
+                    updateViewType(R.id.ly_feeds);
                     Helper helper = new Helper();
                     if (helper.error_Messages(error).contains("Session")){
                         Mualab.getInstance().getSessionManager().logout();
@@ -360,11 +497,215 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             }})
                 .setAuthToken(user.authToken)
-                .setProgress(true)
+                .setProgress(false)
                 .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
         //.setBody(params, "application/x-www-form-urlencoded"));
 
-        task.execute(this.getClass().getName());
+        task.execute(getClass().getName());
     }
 
+    private void apiForGetAllFeeds(final int page, final int feedLimit, final boolean isEnableProgress){
+        tv_no_data_msg.setVisibility(View.GONE);
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if(isConnected){
+                        dialog.dismiss();
+                        apiForGetAllFeeds(page, feedLimit, isEnableProgress);
+                    }
+
+                }
+            }).show();
+        }
+
+        User currentUser = Mualab.getInstance().getSessionManager().getUser();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("feedType", feedType);
+        params.put("search", "");
+        params.put("page", String.valueOf(page));
+        params.put("limit", String.valueOf(feedLimit));
+        // params.put("type", "newsFeed");
+        params.put("userId", ""+currentUser.id);
+        // params.put("appType", "user");
+        Mualab.getInstance().cancelPendingRequests(this.getClass().getName());
+        new HttpTask(new HttpTask.Builder(mContext, "profileFeed", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                ll_progress.setVisibility(View.GONE);
+                feedAdapter.showHideLoading(false);
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+
+                    if (status.equalsIgnoreCase("success")) {
+                        //removeProgress();
+                        ParseAndUpdateUI(page,response);
+
+                    }else MyToast.getInstance(mContext).showSmallMessage(message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // MyToast.getInstance(mContext).showSmallMessage(getString(R.string.msg_some_thing_went_wrong));
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                ll_progress.setVisibility(View.GONE);
+                if(isPulltoRefrash){
+                    isPulltoRefrash = false;
+                    mRefreshLayout.stopRefresh(false, 500);
+                    int prevSize = feeds.size();
+                    feeds.clear();
+                    feedAdapter.notifyItemRangeRemoved(0, prevSize);
+                }
+                //MyToast.getInstance(mContext).showSmallMessage(getString(R.string.msg_some_thing_went_wrong));
+            }})
+                .setAuthToken(currentUser.authToken)
+                .setParam(params)
+                .setMethod(Request.Method.POST)
+                .setProgress(false)
+                .setBodyContentType(HttpTask.ContentType.X_WWW_FORM_URLENCODED))
+                .execute(TAG);
+        ll_progress.setVisibility(isEnableProgress?View.VISIBLE:View.GONE);
+    }
+
+    private void ParseAndUpdateUI(final int page,final String response) {
+
+        try {
+            JSONObject js = new JSONObject(response);
+            String status = js.getString("status");
+            // String message = js.getString("message");
+
+            if (status.equalsIgnoreCase("success")) {
+                rvFeed.setVisibility(View.VISIBLE);
+                JSONArray array = js.getJSONArray("AllFeeds");
+                if(isPulltoRefrash){
+                    isPulltoRefrash = false;
+                    mRefreshLayout.stopRefresh(true, 500);
+                    int prevSize = feeds.size();
+                    feeds.clear();
+                    feedAdapter.notifyItemRangeRemoved(0, prevSize);
+                }
+
+                Gson gson = new Gson();
+                if (array.length()!=0){
+                    for (int i = 0; i < array.length(); i++) {
+
+                        try{
+                            JSONObject jsonObject = array.getJSONObject(i);
+                            Feeds feed = gson.fromJson(String.valueOf(jsonObject), Feeds.class);
+
+                            /*tmp get data and set into actual json format*/
+                            if(feed.userInfo!=null && feed.userInfo.size()>0){
+                                Feeds.User user = feed.userInfo.get(0);
+                                feed.userName = user.userName;
+                                feed.fullName = user.firstName+" "+user.lastName;
+                                feed.profileImage = user.profileImage;
+                                feed.userId = user._id;
+                                feed.crd =feed.timeElapsed;
+                            }
+
+                            if(feed.feedData!=null && feed.feedData.size()>0){
+
+                                feed.feed = new ArrayList<>();
+                                feed.feedThumb = new ArrayList<>();
+
+                                for(Feeds.Feed tmp : feed.feedData){
+                                    feed.feed.add(tmp.feedPost);
+                                    if(!TextUtils.isEmpty(feed.feedData.get(0).videoThumb))
+                                        feed.feedThumb.add(tmp.feedPost);
+                                }
+
+                                if(feed.feedType.equals("video"))
+                                    feed.videoThumbnail = feed.feedData.get(0).videoThumb;
+                            }
+
+                            feeds.add(feed);
+
+                        }catch (JsonParseException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }else if (page==0 || feeds.size()==0){
+                    tv_no_data_msg.setVisibility(View.VISIBLE);
+                    rvFeed.setVisibility(View.GONE);
+                }
+                // loop end.
+
+                feedAdapter.notifyDataSetChanged();
+                //updateViewType(R.id.ly_feeds);
+
+            } else if (status.equals("fail") && feeds.size()==0) {
+                rvFeed.setVisibility(View.GONE);
+                tv_msg.setVisibility(View.VISIBLE);
+
+                if(isPulltoRefrash){
+                    isPulltoRefrash = false;
+                    mRefreshLayout.stopRefresh(false, 500);
+
+                }
+                feedAdapter.notifyDataSetChanged();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            feedAdapter.notifyDataSetChanged();
+            //MyToast.getInstance(mContext).showSmallCustomToast(getString(R.string.alert_something_wenjt_wrong));
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Mualab.getInstance().cancelPendingRequests(TAG);
+        mContext = null;
+        tvImages = null;
+        tvVideos = null;
+        tvFeeds = null;
+        tv_msg = null;
+        ll_progress = null;
+        endlesScrollListener = null;
+        feedAdapter = null;
+        feeds = null;
+        rvFeed = null;
+    }
+
+    @Override
+    public void onCommentBtnClick(Feeds feed, int pos) {
+        Intent intent = new Intent(mContext, CommentsActivity.class);
+        intent.putExtra("feed_id", feed._id);
+        intent.putExtra("feedPosition", pos);
+        intent.putExtra("feed", feed);
+        startActivityForResult(intent, Constant.ACTIVITY_COMMENT);
+    }
+
+    @Override
+    public void onLikeListClick(Feeds feed) {
+        User currentUser = Mualab.getInstance().getSessionManager().getUser();
+        if(mContext instanceof ProfileActivity){
+            ((ProfileActivity) mContext).addFragment(LikeFragment.newInstance(feed._id, Integer.parseInt(currentUser.id)), true);
+        }
+    }
+
+    @Override
+    public void onFeedClick(Feeds feed, int index, View v) {
+        publicationQuickView(feed, index);
+    }
+
+    @Override
+    public void onClickProfileImage(Feeds feed, ImageView v) {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10) {
+            apiForGetProfile();
+            // apiForGetAllFeeds(0, 10, true);
+        }
+    }
 }

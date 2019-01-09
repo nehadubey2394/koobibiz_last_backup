@@ -98,8 +98,8 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
     }
 
     private void initView(View rootView){
-        // if(mContext instanceof AddStaffActivity) {
-        //   ((AddStaffActivity) mContext).setTitle();
+        // if(mContext instanceof AddNewStaffActivity) {
+        //   ((AddNewStaffActivity) mContext).setTitle();
 
         artistStaffs = new ArrayList<>();
         staffAdapter = new AllStaffAdapter(mContext, artistStaffs);
@@ -219,7 +219,7 @@ public class SearchStaffFragment extends Fragment implements View.OnClickListene
 
                                 artistStaffs.add(item);
                             }
-                        }else {
+                        }else if (artistStaffs.size()==0 && page==0){
                             rvAllStaff.setVisibility(View.GONE);
                             tvNoDataFound.setVisibility(View.VISIBLE);
                         }

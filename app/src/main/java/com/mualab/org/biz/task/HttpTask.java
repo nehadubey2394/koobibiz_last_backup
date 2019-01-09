@@ -20,6 +20,8 @@ import com.mualab.org.biz.dialogs.ServerErrorDialog;
 import com.mualab.org.biz.helper.MyToast;
 
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -195,7 +197,7 @@ public class HttpTask {
                 listener.ErrorListener(error);
                 if(progress)
                     Progress.hide(context);
-                handleError(error);
+               // handleError(error);
             }
         }){
             @Override
@@ -269,7 +271,7 @@ public class HttpTask {
             @Override
             public void onErrorResponse(VolleyError error) {
                 listener.ErrorListener(error);
-                handleError(error);
+              //  handleError(error);
             }
         }) {
             @Override
@@ -291,7 +293,11 @@ public class HttpTask {
                 Map<String, DataPart> params = new HashMap<>();
                 if (key != null && bitmap != null) {
                     params.put(key, new DataPart("tmpImage.jpg", AppHelper.getFileDataFromDrawable(bitmap), "image/jpeg"));
-                }
+                }/*else {
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    params.put(key, new DataPart("", byteArrayOutputStream.toByteArray(), "image/jpeg"));
+
+                }*/
                 return params;
             }
         };

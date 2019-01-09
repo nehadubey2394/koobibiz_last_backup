@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/margin_left"
-        app:cardBackgroundColor="#F24c3549"
+        app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="10dp"
         android:layout_marginTop="50dp">
 
@@ -26,11 +26,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_medium"
                 android:text="Alert!"/>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
+                android:layout_height="1dp"
                 android:background="@color/white"/>
 
             <TextView
@@ -38,6 +40,8 @@
                 style="@style/TextView"
                 android:layout_margin="10dp"
                 android:gravity="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

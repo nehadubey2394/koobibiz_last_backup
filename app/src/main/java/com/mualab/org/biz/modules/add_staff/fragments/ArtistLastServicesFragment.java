@@ -546,7 +546,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                                 for(Map.Entry<String, SelectedServices> entry : localMap.entrySet()){
                                     SelectedServices  selectedServices = entry.getValue();
                                     if (object.getString("artistServiceId").equals(selectedServices.artistServiceId)) {
-                                        selectedServices._id = object.getString("_id");;
+                                        selectedServices._id = object.getString("_id");
                                         selectedServices.businessId = object.getString("businessId");;
                                         selectedServices.artistId = object.getString("artistId");;
                                         selectedServices.artistServiceId = object.getString("artistServiceId");;
@@ -571,7 +571,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
                         ((AllServicesActivity)mContext).finish();
 
                     }else {
-                        if (!message.equals("Service already added"))
+                        if (!message.equals("ArtistCategory already added"))
                             MyToast.getInstance(mContext).showDasuAlert(message);
                     }
                 } catch (Exception e) {

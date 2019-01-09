@@ -1,7 +1,9 @@
 package com.mualab.org.biz.util;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by dharmraj on 6/2/18.
@@ -32,96 +35,6 @@ public class CalanderUtils {
         }
         return time24hour;
     }
-
-
-    private class Time{
-        private int HOUR;
-        private int MINUTE;
-        private int AM_PM; //0-1
-
-        private Time(String time){
-
-            String newTime;
-            String timeArray[];
-
-            if(time.contains("AM") || time.contains("am")){
-                AM_PM = Calendar.AM;
-                newTime = time.replace("AM","");
-                newTime = newTime.replace("am","");
-            }else {
-                AM_PM = Calendar.PM;
-                newTime = time.replace("PM","");
-                newTime = newTime.replace("pm","");
-            }
-            newTime = newTime.trim();
-            timeArray = newTime.split(":");
-
-            HOUR = Integer.parseInt(timeArray[0]);
-            MINUTE = Integer.parseInt(timeArray[1]);
-        }
-    }
-
-
-    private Calendar setCalendar(Time time) {
-
-        /**/
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.AM_PM, time.AM_PM);
-        c.set(Calendar.HOUR, time.HOUR);
-        c.set(Calendar.MINUTE, time.MINUTE);
-        c.set(Calendar.SECOND, 00);
-        c.set(Calendar.MILLISECOND, 00);
-
-        GregorianCalendar calendar = (GregorianCalendar) c;
-        calendar.set(Calendar.AM_PM, time.AM_PM);
-        calendar.set(Calendar.HOUR, time.HOUR);
-        calendar.set(Calendar.MINUTE, time.MINUTE);
-        calendar.set(Calendar.SECOND, 00);
-        calendar.set(Calendar.MILLISECOND, 00);
-
-        /* Calendar calendar1 = setCalendar(new Time(startTime));
-            Calendar calendar2 = setCalendar(new Time(endTime));
-            Calendar calendar3 = setCalendar(new Time(sTime1));
-            Calendar calendar4 = setCalendar(new Time(eTime2));
-
-           // boolean afterTime = x.after(calendar1.getTime()) || x.equals(calendar1.getTime());
-           // boolean beforTime = x.before(calendar2.getTime()) || x.equals(calendar2.getTime());
-
-           // int from = calendar1.get(Calendar.HOUR_OF_DAY) * 100 + calendar1.get(Calendar.MINUTE);
-            int from = calendar1.get(Calendar.HOUR_OF_DAY);
-            int to = calendar2.get(Calendar.HOUR_OF_DAY);
-            int t = calendar3.get(Calendar.HOUR_OF_DAY);
-            int am_pm1 = calendar1.get(Calendar.AM_PM); // 0 for am and 1 for PM
-            int am_pm2 = calendar2.get(Calendar.AM_PM); // 0 for am and 1 for PM
-            int am_pm3 = calendar3.get(Calendar.AM_PM);// 0 for am and 1 for PM
-            int am_pm4 = calendar4.get(Calendar.AM_PM);// 0 for am and 1 for PM
-*/
-        return calendar;
-    }
-
-    public boolean compareTime(String startTime, String endTime, String sTime1){
-        try {
-            SimpleDateFormat format = new SimpleDateFormat("hh:mm aa");
-            Date date1 = format.parse(startTime);
-            Date date2 = format.parse(endTime);
-            Date date3 = format.parse(sTime1);
-            //Date date4 = format.parse(eTime2);
-
-            if(date3.equals(date1) || date3.equals(date2)){
-                return true;
-            }else if(date3.after(date1) && date3.before(date2)){
-                return true;
-            }else if(date3.before(date1) || date3.before(date2))
-                return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return false;
-    }
-
-
 
     public static int getDayShift(Calendar calendar, boolean z) {
         int i = 0;
@@ -243,5 +156,152 @@ public class CalanderUtils {
             return 1;
         }
         return 0;
+    }
+
+    public static String getTimestamp(String format) {
+        return new SimpleDateFormat(format, Locale.US).format(new Date());
+    }
+
+    public static String getTimestamp() {
+        return String.valueOf(new Date().getTime());
+    }
+
+    public static String format12HourTime(String time, @NonNull String pFormat, @NonNull String dFormat) {
+        try {
+            SimpleDateFormat parseFormat = new SimpleDateFormat(pFormat, Locale.US);
+            SimpleDateFormat displayFormat = new SimpleDateFormat(dFormat, Locale.US);
+            Date dTime = parseFormat.parse(time);
+            return displayFormat.format(dTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String formatDate(String date, @NonNull String pFormat, @NonNull String dFormat) {
+        try {
+            SimpleDateFormat parseFormat = new SimpleDateFormat(pFormat, Locale.getDefault());
+            SimpleDateFormat displayFormat = new SimpleDateFormat(dFormat, Locale.getDefault());
+            Date dTime = parseFormat.parse(date);
+            return displayFormat.format(dTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static Date getDateFormat(String date, @NonNull String format) {
+        try {
+            SimpleDateFormat parseFormat = new SimpleDateFormat(format, Locale.getDefault());
+
+            return parseFormat.parse(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @NonNull
+    public static String getCurrentDate() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        return (year + "-" + month + "-" + day);
+    }
+
+    private String getCurrentTime() {
+        Calendar cal = Calendar.getInstance();
+        Date currentLocalTime = cal.getTime();
+        DateFormat date = new SimpleDateFormat("hh:mm a", Locale.US);
+        System.out.println("currentTime" + date.format(currentLocalTime));
+        return date.format(currentLocalTime);
+    }
+
+    private Calendar setCalendar(Time time) {
+
+        /**/
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.AM_PM, time.AM_PM);
+        c.set(Calendar.HOUR, time.HOUR);
+        c.set(Calendar.MINUTE, time.MINUTE);
+        c.set(Calendar.SECOND, 00);
+        c.set(Calendar.MILLISECOND, 00);
+
+        GregorianCalendar calendar = (GregorianCalendar) c;
+        calendar.set(Calendar.AM_PM, time.AM_PM);
+        calendar.set(Calendar.HOUR, time.HOUR);
+        calendar.set(Calendar.MINUTE, time.MINUTE);
+        calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.MILLISECOND, 00);
+
+        /* Calendar calendar1 = setCalendar(new Time(startTime));
+            Calendar calendar2 = setCalendar(new Time(endTime));
+            Calendar calendar3 = setCalendar(new Time(sTime1));
+            Calendar calendar4 = setCalendar(new Time(eTime2));
+
+           // boolean afterTime = x.after(calendar1.getTime()) || x.equals(calendar1.getTime());
+           // boolean beforTime = x.before(calendar2.getTime()) || x.equals(calendar2.getTime());
+
+           // int from = calendar1.get(Calendar.HOUR_OF_DAY) * 100 + calendar1.get(Calendar.MINUTE);
+            int from = calendar1.get(Calendar.HOUR_OF_DAY);
+            int to = calendar2.get(Calendar.HOUR_OF_DAY);
+            int t = calendar3.get(Calendar.HOUR_OF_DAY);
+            int am_pm1 = calendar1.get(Calendar.AM_PM); // 0 for am and 1 for PM
+            int am_pm2 = calendar2.get(Calendar.AM_PM); // 0 for am and 1 for PM
+            int am_pm3 = calendar3.get(Calendar.AM_PM);// 0 for am and 1 for PM
+            int am_pm4 = calendar4.get(Calendar.AM_PM);// 0 for am and 1 for PM
+*/
+        return calendar;
+    }
+
+    public boolean compareTime(String startTime, String endTime, String sTime1) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("hh:mm aa");
+            Date date1 = format.parse(startTime);
+            Date date2 = format.parse(endTime);
+            Date date3 = format.parse(sTime1);
+            //Date date4 = format.parse(eTime2);
+
+            if (date3.equals(date1) || date3.equals(date2)) {
+                return true;
+            } else if (date3.after(date1) && date3.before(date2)) {
+                return true;
+            } else if (date3.before(date1) || date3.before(date2))
+                return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    private class Time {
+        private int HOUR;
+        private int MINUTE;
+        private int AM_PM; //0-1
+
+        private Time(String time) {
+
+            String newTime;
+            String timeArray[];
+
+            if (time.contains("AM") || time.contains("am")) {
+                AM_PM = Calendar.AM;
+                newTime = time.replace("AM", "");
+                newTime = newTime.replace("am", "");
+            } else {
+                AM_PM = Calendar.PM;
+                newTime = time.replace("PM", "");
+                newTime = newTime.replace("pm", "");
+            }
+            newTime = newTime.trim();
+            timeArray = newTime.split(":");
+
+            HOUR = Integer.parseInt(timeArray[0]);
+            MINUTE = Integer.parseInt(timeArray[1]);
+        }
     }
 }

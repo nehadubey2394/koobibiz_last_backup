@@ -20,6 +20,9 @@ public class User implements Serializable{
     public String lastName;
     public String userName;
     public String businessName;
+    public String businessEmail;
+    public String businessContactNo;
+
     public String gender;
     public String dob;
     public String profileImage;
@@ -58,7 +61,7 @@ public class User implements Serializable{
     @SerializedName("isDocument")
     public int isProfileComplete;
 
-    /*Business profile*/
+    /*Business profile_setup*/
     public String businessType;
     public String bio;
     public String radius;

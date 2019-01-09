@@ -71,6 +71,7 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
                 day.isOpen = isChecked;
 
                 if(isChecked && (day.slots==null || day.slots.size()==0)){
+                    assert day.slots != null;
                     day.slots.add(new TimeSlot(day.dayId));
                 }else if(!isChecked){
                     day.slots.clear();
@@ -266,7 +267,7 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
 
             TextView tv_from =  v.findViewById(R.id.tv_from);
             TextView tv_to =  v.findViewById(R.id.tv_to);
-            View viewDivider = v.findViewById(R.id.viewDivider);
+            //View viewDivider = v.findViewById(R.id.viewDivider);
             //ImageView iv_delete = v.findViewById(R.id.iv_delete);
             LinearLayout ll_delete = v.findViewById(R.id.ll_delete);
             // Populate the data into the template view using the data object
@@ -274,7 +275,7 @@ public class AdapterEditBusinessDays extends RecyclerView.Adapter<AdapterEditBus
             tv_from.setText(String.format("From: %s", timeSlot.edtStartTime));
             tv_to.setText(String.format("To: %s", timeSlot.edtEndTime));
 
-            viewDivider.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
+            //viewDivider.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
             ll_delete.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
             ll_delete.setOnClickListener(new View.OnClickListener() {
                 @Override

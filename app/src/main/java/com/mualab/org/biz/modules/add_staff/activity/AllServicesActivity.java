@@ -60,7 +60,7 @@ public class AllServicesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_services);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+        //    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         init();
     }
 
@@ -201,7 +201,7 @@ public class AllServicesActivity extends AppCompatActivity {
                         finish();
 
                     }else {
-                        if (!message.equals("Service already added"))
+                        if (!message.equals("ArtistCategory already added"))
                             MyToast.getInstance(AllServicesActivity.this).showDasuAlert(message);
                     }
                 } catch (Exception e) {

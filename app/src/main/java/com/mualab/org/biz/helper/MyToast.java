@@ -67,7 +67,6 @@ public class MyToast {
         toast.setView(layout);
         toast.show();
 
-
     }
 
     /**
@@ -91,6 +90,7 @@ public class MyToast {
     public void showDasuAlert(String message){
         showDasuAlert("Alert!", message);
     }
+
     public void showDasuAlert(String title, String message) {
 
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();

@@ -30,7 +30,7 @@ public class AddStaffActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+     //   StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
         initView();
     }
 

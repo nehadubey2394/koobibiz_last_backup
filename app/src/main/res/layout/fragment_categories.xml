@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.profile.fragment.CategoriesFragmentCreation"
+    tools:context=".modules.profile_setup.fragment.CategoriesFragmentCreation"
     android:paddingLeft="@dimen/margin_left"
     android:paddingRight="@dimen/margin_right"
     android:gravity="center_horizontal"

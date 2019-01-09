@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -97,7 +98,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     private RecyclerView rycTimeSlot, rycToday, rycPending;
     private RelativeLayout rlStaffName;
     private int dayId, count = 0;
-    private boolean isToday = true, isCurrentDate = true,isCompanyFiltered = false;
+    private boolean isToday = true, isCurrentDate = true,isFiltered = false;
     private View rootView;
     private SimpleDateFormat dateSdf, timeSdf;
     private ProgressBar progress_bar;
@@ -118,7 +119,14 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Progress.show(mContext);
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Progress.hide(mContext);
+            }
+        },200);
     }
 
     @Override
@@ -203,7 +211,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
         rycToday.setNestedScrollingEnabled(false);
         rycPending.setAdapter(pendingBookingAdapter);
         pendingBookingAdapter.setCustomListener(BookingsFragment.this);
-        pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
+        pendingBookingAdapter.setNameVisibility(isFiltered);
         pendingBookingAdapter.setBookingClickListner(BookingsFragment.this);
 
         Session session = Mualab.getInstance().getSessionManager();
@@ -460,7 +468,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
 
         Map<String, String> params = new HashMap<>();
         if (user.businessType.equals("independent")){
-            if (isCompanyFiltered) {
+            if (isFiltered && !businessId.equals("")) {
                 params.put("artistId", businessId);
                 params.put("staffId", String.valueOf(user.id));
             }else {
@@ -491,6 +499,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                         bookingTimeSlots.clear();
                         rycTimeSlot.setVisibility(View.VISIBLE);
                         rycToday.setVisibility(View.VISIBLE);
+                        rycPending.setVisibility(View.VISIBLE);
                         tvNoData.setVisibility(View.GONE);
                         tvNoSlot.setVisibility(View.GONE);
                         bookingTimeSlots.clear();
@@ -501,8 +510,10 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                     } else {
                         progress_bar.setVisibility(View.GONE);
                         rycTimeSlot.setVisibility(View.GONE);
-                        tvNoData.setVisibility(View.VISIBLE);
                         rycTimeSlot.setVisibility(View.GONE);
+                        rycPending.setVisibility(View.GONE);
+                        rycToday.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
                         tvNoSlot.setVisibility(View.VISIBLE);
                     }
                     //  showToast(message);
@@ -679,7 +690,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                             if (arrBookingInfo.length()!=0)
                             {
                                 todayBookings.add(item);
-                                //   if (isCompanyFiltered && !item.bookStatus.equals("2"))
+                                //   if (isFiltered && !item.bookStatus.equals("2"))
                                 //       todayBookings.add(item);
 
                             }
@@ -755,9 +766,12 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                                 item.artistServiceName = serviceName;
                                 if (arrBookingInfo.length()!=0) {
                                     if (user.businessType.equals("independent")) {
-                                        if (staffId.equals("") && !isCompanyFiltered){
+                                        if (staffId.equals("") && !isFiltered){
                                             pendingBookings.add(item);
-                                        }else if (isCompanyFiltered){
+                                        }else if (businessId.equals("") && isFiltered){
+                                            pendingBookings.add(item);
+                                        }
+                                        else if (isFiltered){
                                             if (!item.bookStatus.equals("0"))
                                                 pendingBookings.add(item);
                                         }
@@ -941,6 +955,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
         args.putSerializable("ARRAYLIST", (Serializable) staffList);
         intent.putExtra("BUNDLE", args);
         intent.putExtra("bookingId", id);
+        intent.putExtra("isFiltered", isFiltered);
         startActivityForResult(intent, 2);
     }
 
@@ -954,7 +969,6 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                 tvPending.setTextColor(getResources().getColor(R.color.colorPrimary));
                 tvToday.setTextColor(getResources().getColor(R.color.white));
                 isToday = true;
-
                 apiForGetFreeSlots();
             }
         } else if (requestCode == 5) {
@@ -962,20 +976,20 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                 staffId = data.getStringExtra("staffId");
                 String staffName = data.getStringExtra("staffName");
                 rlStaffName.setVisibility(View.VISIBLE);
-                isCompanyFiltered = true;
+                isFiltered = true;
                 if (staffName.equals("My Booking")){
                     tvStaffName.setText(staffName);
-                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
-                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    todayBookingAdapter.setNameVisibility(isFiltered);
+                    pendingBookingAdapter.setNameVisibility(isFiltered);
                 }else  if (!staffId.equals("")) {
                     tvStaffName.setText(staffName);
-                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
-                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    todayBookingAdapter.setNameVisibility(isFiltered);
+                    pendingBookingAdapter.setNameVisibility(isFiltered);
                 }
                 else {
                     tvStaffName.setText("All Staff");
-                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
-                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    todayBookingAdapter.setNameVisibility(isFiltered);
+                    pendingBookingAdapter.setNameVisibility(isFiltered);
                 }
 
                 apiForGetFreeSlots();
@@ -984,18 +998,23 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
             if (data != null) {
                 businessId = data.getStringExtra("businessId");
                 String staffName = data.getStringExtra("businessName");
-                isCompanyFiltered = true;
+                isFiltered = true;
 
                 if (!businessId.equals("")) {
                     rlStaffName.setVisibility(View.VISIBLE);
                     tvStaffName.setText(staffName);
-                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
-                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    pendingBookingAdapter.setNameVisibility(isFiltered);
+                    todayBookingAdapter.setNameVisibility(isFiltered);
+                }else if (staffName.equals("My Booking")){
+                    rlStaffName.setVisibility(View.VISIBLE);
+                    tvStaffName.setText(staffName);
+                    pendingBookingAdapter.setNameVisibility(isFiltered);
+                    todayBookingAdapter.setNameVisibility(isFiltered);
                 }
                 else {
                     rlStaffName.setVisibility(View.GONE);
-                    todayBookingAdapter.setNameVisibility(isCompanyFiltered);
-                    pendingBookingAdapter.setNameVisibility(isCompanyFiltered);
+                    todayBookingAdapter.setNameVisibility(isFiltered);
+                    pendingBookingAdapter.setNameVisibility(isFiltered);
                 }
 
                 apiForGetFreeSlots();

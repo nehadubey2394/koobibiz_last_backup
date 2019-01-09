@@ -1,9 +1,9 @@
 package com.mualab.org.biz.modules.authentication;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +12,7 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.broadcast.OnSmsCatchListener;
 import com.mualab.org.biz.broadcast.SmsVerifyCatcher;
 import com.mualab.org.biz.dialogs.Progress;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +20,6 @@ public class OtpVerificationActivity extends AppCompatActivity {
 
     SmsVerifyCatcher smsVerifyCatcher;
     private TextView etFirst, etSecand, etThird, etFourth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +54,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
         findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Progress.show(OtpVerificationActivity.this);
 
                 new Handler().postDelayed(new Runnable() {
@@ -88,7 +89,6 @@ public class OtpVerificationActivity extends AppCompatActivity {
         }
         return code;
     }
-
 
     @Override
     protected void onStart() {

@@ -60,7 +60,6 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return artistsList.size();
     }
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_for_pendinglist, parent, false);
@@ -96,29 +95,34 @@ public class PendingBookingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
         if (user.businessType.equals("independent")) {
-           /* holder.btnAccept.setVisibility(View.GONE);
-            holder.btnCounter.setVisibility(View.GONE);
-            holder.btnReject.setVisibility(View.GONE);*/
             if (item.pendingBookingInfos.size()!=0) {
                 String currentString = item.pendingBookingInfos.get(0).companyName;
                 String[] separated = currentString.split(" ");
                 holder.tvStaffName.setText(separated[0]);
-            }
-            if (isFiltered)
-                holder.rlStaffName.setVisibility(View.VISIBLE);
-            else
-                holder.rlStaffName.setVisibility(View.GONE);
 
+                if (isFiltered) {
+                    holder.rlStaffName.setVisibility(View.VISIBLE);
+                    holder.tvDate.setText(item.pendingBookingInfos.get(0).bookingDate);
+                    holder.tvBookingTime.setText(item.pendingBookingInfos.get(0).startTime);
+                }
+                else
+                    holder.rlStaffName.setVisibility(View.GONE);
+            }
         }
         else {
             holder.rlStaffName.setVisibility(View.VISIBLE);
-            if (isFiltered){
-                if (user.id.equals(item.pendingBookingInfos.get(0).staffId))
-                    holder.tvStaffName.setText("My booking");
-                else
+            if (item.pendingBookingInfos.size()!=0) {
+                if (isFiltered) {
+                    holder.tvDate.setText(item.pendingBookingInfos.get(0).bookingDate);
+                    holder.tvBookingTime.setText(item.pendingBookingInfos.get(0).startTime);
+
+                    if (user.id.equals(item.pendingBookingInfos.get(0).staffId)) {
+                        holder.tvStaffName.setText("My booking");
+                    } else
+                        holder.tvStaffName.setText(item.pendingBookingInfos.get(0).staffName);
+                } else {
                     holder.tvStaffName.setText(item.pendingBookingInfos.get(0).staffName);
-            }else {
-                holder.tvStaffName.setText(item.pendingBookingInfos.get(0).staffName);
+                }
             }
         }
 

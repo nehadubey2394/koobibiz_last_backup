@@ -25,12 +25,11 @@ import views.calender.data.Event;
 
 public class MyFlexibleCalendar extends MyUICalendar {
 
+    public boolean isFirstimeLoad = true;
+    public boolean isTodayLoad = true;
     private CalendarAdapter mAdapter;
     private CalendarListener mListener;
     private int mInitHeight = 0;
-    public boolean isFirstimeLoad = true;
-    public boolean isTodayLoad = true;
-
     private Handler mHandler = new Handler();
     private boolean mIsWaitingForUpdate = false;
 
@@ -160,13 +159,13 @@ public class MyFlexibleCalendar extends MyUICalendar {
                 if (isToady(day)) {
 
                     mTxtTitle.setText(dateFormat.format(mAdapter.getCalendar().getTime()));
-                    txtDay.setBackgroundDrawable(getTodayItemBackgroundDrawable());
+                    txtDay.setBackground(getTodayItemBackgroundDrawable());
                     txtDay.setTextColor(getTodayItemTextColor());
 
                     if (isFirstimeLoad)
-                        txtDay.setBackgroundDrawable(getSelectedItemBackgroundDrawable());
+                        txtDay.setBackground(getSelectedItemBackgroundDrawable());
                     else
-                        txtDay.setBackgroundDrawable(getTodayItemBackgroundDrawable());
+                        txtDay.setBackground(getTodayItemBackgroundDrawable());
                 }
 
                 // set the selected item
@@ -234,9 +233,10 @@ public class MyFlexibleCalendar extends MyUICalendar {
                 txtDayOfWeek.setText(dayOfWeekIds[(i + getFirstDayOfWeek()) % 7]);
                 txtDayOfWeek.setTextColor(getResources().getColor(R.color.colorPrimary));
 
+                //ViewGroup.LayoutParams.WRAP_CONTENT
                 view.setLayoutParams(new TableRow.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        (int) getResources().getDimension(R.dimen._50dp),
                         1));
                 rowCurrent.addView(view);
             }

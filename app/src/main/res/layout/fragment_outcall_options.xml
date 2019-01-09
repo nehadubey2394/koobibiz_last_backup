@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:focusable="false"
     android:scrollbars="none"
-    tools:context=".modules.profile.fragment.OutcallOptionsFragmentCreation">
+    tools:context=".modules.profile_setup.fragment.OutcallOptionsFragmentCreation">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -266,7 +266,7 @@
                    app:civ_border_width="1dp"
                    android:layout_centerInParent="true"
                    app:civ_border_color="@color/colorPrimary"
-                   android:src="#30f83272" />
+                   android:src="#831BD3C9" />
 
            </RelativeLayout>
 

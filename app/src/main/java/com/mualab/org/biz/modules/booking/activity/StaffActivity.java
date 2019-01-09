@@ -34,14 +34,15 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
         Session session = Mualab.getInstance().getSessionManager();
         final User user = session.getUser();
 
-        Intent intent = getIntent();
-        Bundle args = intent.getBundleExtra("BUNDLE");
-        List<Staff> tmpList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
-
         Staff item1 = new Staff();
         item1.staffName = "My Booking";
         item1.staffImage = user.profileImage;
         staffList.add(item1);
+
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        List<Staff> tmpList = (ArrayList<Staff>) args.getSerializable("ARRAYLIST");
+
         if (tmpList != null) {
             staffList.addAll(tmpList);
         }
@@ -61,7 +62,7 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
         rycvStaff.setLayoutManager(linearLayoutManager);
         rycvStaff.setAdapter(staffListAdapter);
 
-        AppCompatButton btnNewAppointment = findViewById(R.id.btnNewAppointment);
+        AppCompatButton btnAllStaff = findViewById(R.id.btnAllStaff);
 
 
         if (staffList.size()==0){
@@ -69,7 +70,7 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
             tvoData.setVisibility(View.VISIBLE);
         }
 
-        btnNewAppointment.setOnClickListener(new View.OnClickListener() {
+        btnAllStaff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -94,6 +95,13 @@ public class StaffActivity extends AppCompatActivity implements StaffSelectionLi
     public void onStaffSelect(int position, String staffId) {
         String staffName = staffList.get(position).staffName;
         if (staffId==null){
+            Session session = Mualab.getInstance().getSessionManager();
+            User user = session.getUser();
+
+           /* staffId = "0";
+            staffName = "My Booking";*/
+            // staffId = user.id;
+            // staffName = "My Booking";
             staffId = "0";
             staffName = "My Booking";
         }

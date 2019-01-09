@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/topLayout1"
-        android:background="@color/screen_bg_color"
+        android:background="@color/white"
         android:layout_above="@+id/bottomMenuLayout"/>
 
     <android.support.design.widget.CoordinatorLayout

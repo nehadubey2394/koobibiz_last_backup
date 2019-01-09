@@ -53,7 +53,7 @@ public class PreRegistrationSession {
             BusinessProfile businessProfile = gson.fromJson(string, BusinessProfile.class);
             businessProfile.address = getAddress();
             return businessProfile;
-           // return businessProfile;
+            // return businessProfile;
         }
         else return new BusinessProfile();
     }
@@ -146,10 +146,26 @@ public class PreRegistrationSession {
     }
 
 
-    /* Get business profile models*/
+    /* Get business profile_setup models*/
 
     public int getStepIndex(){
         return mypref.getInt("stepIndex", 0);
+    }
+
+    public String getBusinessName(){
+        return mypref.getString("businessName","");
+    }
+
+    public String getBusinessEmail(){
+        return mypref.getString("businessEmail","");
+    }
+
+    public String getBusinessContact(){
+        return mypref.getString("businessContactNo","");
+    }
+
+    public String getBusinessCountryCode(){
+        return mypref.getString("businessCountryCode","");
     }
 
     public int getBankStatus(){
@@ -174,7 +190,7 @@ public class PreRegistrationSession {
 
     public BusinessDay getBusinessHours(){
         Gson gson = new Gson();
-        String string = mypref.getString("businessDay", "");
+        String string = mypref.getString("businessHours", "");
         if (!string.isEmpty()){
             return gson.fromJson(string, BusinessDay.class);
         }else return null;
@@ -188,7 +204,28 @@ public class PreRegistrationSession {
         return mypref.getString("outcallPreprationTime", "HH:MM");
     }
 
-    /* update business profile*/
+    /* update business profile_setup*/
+
+    public void updateBusinessName(String businessName){
+        editor.putString("businessName", businessName);
+        editor.apply();
+    }
+
+    public void updateBusinessEmail(String businessEmail){
+        editor.putString("businessEmail", businessEmail);
+        editor.apply();
+    }
+
+    public void updateBusinessContact(String businessContactNo){
+        editor.putString("businessContactNo", businessContactNo);
+        editor.apply();
+    }
+
+    public void updateBusinessCountryCode(String businessCountryCode){
+        editor.putString("businessCountryCode", businessCountryCode);
+        editor.apply();
+    }
+
 
     public void updateRegStep(int stepIndex){
         editor.putInt("stepIndex", stepIndex);
@@ -202,6 +239,7 @@ public class PreRegistrationSession {
 
     public void updateServiceType(int serviceType){
         editor.putInt("serviceType", serviceType);
+        editor.commit();
         editor.apply();
     }
 
@@ -235,7 +273,7 @@ public class PreRegistrationSession {
         editor.apply();
     }
 
-    /* clear business profile*/
+    /* clear business profile_setup*/
     public void clearSession() {
         editor.clear();
         editor.apply();

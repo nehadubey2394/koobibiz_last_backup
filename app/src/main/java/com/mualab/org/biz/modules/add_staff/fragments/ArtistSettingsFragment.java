@@ -16,7 +16,7 @@ import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.modules.add_staff.activity.AddStaffActivity;
-import com.mualab.org.biz.modules.company_management.activity.CompaniesListActivity;
+import com.mualab.org.biz.modules.old_company_management.activity.CompaniesListActivity;
 import com.mualab.org.biz.modules.my_profile.activity.ProfileActivity;
 import com.mualab.org.biz.session.Session;
 

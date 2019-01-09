@@ -17,6 +17,7 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.booking.Company;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.ArtistServices;
@@ -117,15 +118,16 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
                     String status = js.getString("status");
                     String message = js.getString("message");
 
-                    if (status.equalsIgnoreCase("success")) {
-                        companyList.clear();
-                        rvAllCompany.setVisibility(View.VISIBLE);
-                        tvNoDataFound.setVisibility(View.GONE);
+                    rvAllCompany.setVisibility(View.VISIBLE);
+                    tvNoDataFound.setVisibility(View.GONE);
+                    companyList.clear();
+                    Company item1 = new Company();
+                    item1.profileImage = user.profileImage;
+                    item1.businessName = "My Booking";
+                    companyList.add(item1);
+                    companyAdapter.notifyDataSetChanged();
 
-                        Company item1 = new Company();
-                        item1.profileImage = user.profileImage;
-                        item1.businessName = "My Booking";
-                        companyList.add(item1);
+                    if (status.equalsIgnoreCase("success")) {
 
                         JSONArray jsonArray = js.getJSONArray("businessList");
                         if (jsonArray!=null && jsonArray.length()!=0) {
@@ -166,13 +168,14 @@ public class CompanyListActivity extends AppCompatActivity implements StaffSelec
                                 companyList.add(item);
                             }
                             companyAdapter.notifyDataSetChanged();
-                        }else {
+                        }/*else {
                             rvAllCompany.setVisibility(View.GONE);
                             tvNoDataFound.setVisibility(View.VISIBLE);
-                        }
+                        }*/
                     }else {
-                        rvAllCompany.setVisibility(View.GONE);
-                        tvNoDataFound.setVisibility(View.VISIBLE);
+                        MyToast.getInstance(CompanyListActivity.this).showDasuAlert(message);
+                        //  rvAllCompany.setVisibility(View.GONE);
+                        // tvNoDataFound.setVisibility(View.VISIBLE);
                     }
                     //  showToast(message);
                 } catch (Exception e) {

@@ -7,6 +7,7 @@ public class AddedStaffServices implements Serializable {
     public String completionTime;
     public String inCallPrice;
     public String outCallPrice;
+    public String bookingType;
     public String status,__v,crd,upd,title;
     public String deleteStatus;
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class SelectedServices implements Serializable{
     public String _id,artistId,businessId,serviceId,subserviceId,artistServiceId,
-            inCallPrice,outCallPrice,completionTime,title;
+            inCallPrice,outCallPrice,completionTime,title,serviceName,subServiceName;
     public boolean isHold;
 
 }

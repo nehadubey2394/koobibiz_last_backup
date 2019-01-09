@@ -9,12 +9,12 @@
 
     <include
         android:id="@+id/headerLy"
-        layout="@layout/header_layout_for_staff"
+        layout="@layout/header_layout_for_allscreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rycvStaff"
@@ -29,7 +29,7 @@
          />
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btnNewAppointment"
+        android:id="@+id/btnAllStaff"
         style="@style/My_Button_Small.Invert"
         android:layout_width="220dp"
         android:layout_height="30dp"

@@ -3,6 +3,7 @@ package com.mualab.org.biz.session;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Base64;
 
 import com.google.gson.Gson;
@@ -139,6 +140,7 @@ public class Session {
     public void logout() {
         editor.clear();
         editor.apply();
+        new ClearTask().execute("");
        /* try {
             FirebaseInstanceId.getInstance().deleteInstanceId();
         } catch (IOException e) {
@@ -148,7 +150,34 @@ public class Session {
         Intent showLogin = new Intent(_context, LoginActivity.class);
         showLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         showLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try {
+            Mualab.getInstance().getDB().clearAllTables();
+        }catch (Exception e){
+
+        }
+
         _context.startActivity(showLogin);
+    }
+
+
+    private class ClearTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            Mualab.getInstance().getDB().clearAllTables();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) { }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+        }
     }
 
     public boolean isLoggedIn() {

@@ -1,183 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:paddingBottom="30dp"
     android:gravity="center">
 
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/ivLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        tools:ignore="UseCompoundDrawables">
+        android:src="@drawable/app_logo"
+        android:layout_marginTop="@dimen/_22sdp"
+        android:layout_centerHorizontal="true"
+        tools:ignore="ContentDescription" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/app_logo_500x333"
-            tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:layout_below="@+id/ivLogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        tools:ignore="UseCompoundDrawables">
 
         <TextView
             android:id="@+id/tvHeader"
             style="@style/TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="22dp"
             android:lineSpacingExtra="5dp"
             android:gravity="center"
-            android:textSize="18sp"
-            android:text="@string/welcome_to"/>
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:visibility="visible"
+            android:text="@string/enter_your_email_address_and_mobile_number"/>
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:padding="6dp">
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_email"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/tvStyle"
-            app:errorTextAppearance="@style/txtinputError_appearance">
-
-            <EditText
-                android:id="@+id/ed_email"
-                style="@style/My_Edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/email_id"
-                android:inputType="textEmailAddress"
-                android:maxLines="1" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <RelativeLayout
-            android:id="@+id/ly_phone"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:animateLayoutChanges="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:padding="6dp">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_phone"
+                android:id="@+id/input_layout_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/tvStyle"
-                android:paddingLeft="60dp"
-                app:errorTextAppearance="@style/txtinputError_appearance"
-                android:paddingStart="60dp"
-                tools:ignore="RtlSymmetry">
+                app:errorTextAppearance="@style/txtinputError_appearance">
 
                 <EditText
-                    android:id="@+id/edPhoneNumber"
+                    android:id="@+id/ed_email"
                     style="@style/My_Edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/phone_number"
-                    android:inputType="phone"
-                    android:maxLength="16"
-                    android:maxLines="1"
-                    android:background="@null"/>
+                    android:hint="@string/prompt_email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1" />
+
             </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/llView"
-                android:layout_width="52dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14.5dp"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal">
+            <RelativeLayout
+                android:id="@+id/ly_phone"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvCountryCode"
-                    android:layout_width="50dp"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_phone"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextView"
-                    android:layout_gravity="top|center_horizontal"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:text="+ 91" />
+                    android:theme="@style/tvStyle"
+                    android:paddingLeft="60dp"
+                    app:errorTextAppearance="@style/txtinputError_appearance"
+                    android:paddingStart="60dp"
+                    tools:ignore="RtlSymmetry">
+
+                    <EditText
+                        android:id="@+id/edPhoneNumber"
+                        style="@style/My_Edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/phone_number"
+                        android:inputType="phone"
+                        android:maxLength="16"
+                        android:maxLines="1"
+                        android:background="@null"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/llView"
+                    android:layout_width="52dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14.5dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/tvCountryCode"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        style="@style/TextView"
+                        android:layout_gravity="top|center_horizontal"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:text="+ 91" />
+
+                    <View
+                        android:layout_width="0.5dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@color/white" />
+
+                </LinearLayout>
 
                 <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@+id/llView"
+                    android:layout_marginTop="6dp"
                     android:background="@color/white" />
 
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/llBusinessAddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvAddressHint"
+                    style="@style/TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/business_address"
+                    android:paddingLeft="5dp"
+                    android:textSize="12sp"
+                    android:visibility="invisible"
+                    android:maxLines="3" />
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    style="@style/TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/address_activity"
+                    android:background="@drawable/underline_white"
+                    android:ellipsize="end"
+                    android:maxLines="3" />
+
+                <!--  <TextView
+                      android:id="@+id/tvAddressError"
+                      style="@style/TextView"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/address_activity"
+                      />-->
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/llView"
-                android:layout_marginTop="6dp"
-                android:background="@color/white" />
 
-        </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/llBusinessAddr"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvAddressHint"
-                style="@style/TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/business_address"
-                android:paddingLeft="5dp"
-                android:textSize="12sp"
-                android:visibility="invisible"
-                android:maxLines="3" />
-
-            <TextView
-                android:id="@+id/tvAddress"
-                style="@style/TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/address_activity"
-                android:background="@drawable/underline_white"
-                android:ellipsize="end"
-                android:maxLines="3" />
-
-          <!--  <TextView
-                android:id="@+id/tvAddressError"
-                style="@style/TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/address_activity"
-                />-->
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btnContinue1"
-            style="@style/My_Button"
-            android:layout_width="match_parent"
-            android:layout_height="35dip"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/button_effect"
-            android:text="@string/continue_txt"
-            android:textAllCaps="false"
-            android:textSize="18sp" />
 
     </LinearLayout>
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnContinue1"
+        style="@style/My_Button"
+        android:layout_width="match_parent"
+        android:layout_height="35dip"
+        android:background="@drawable/button_effect"
+        android:text="@string/next"
+        android:textAllCaps="false"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:textSize="18sp" />
 
-</LinearLayout>
+</RelativeLayout>

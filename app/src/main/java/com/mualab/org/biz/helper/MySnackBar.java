@@ -34,7 +34,7 @@ public class MySnackBar {
         //Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction("Action", null);
         Snackbar snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
         View sbView = snack.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
+        sbView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary));
         TextView tv = sbView.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snack.show();

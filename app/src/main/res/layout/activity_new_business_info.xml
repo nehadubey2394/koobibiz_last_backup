@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    tools:context=".modules.profile_setup.activity.NewBusinessInfoActivity">
+
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/actionbar_fill_business_profile"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentTop="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/headerLayout"
+        android:layout_above="@+id/btnContinue"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/llProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_margin="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="25% Completed"/>
+
+                <include
+                    layout="@layout/layout_new_profile_setup_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/set_up_your_business"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    android:paddingLeft="@dimen/margin_left"
+                    android:paddingRight="@dimen/margin_right"
+                    android:paddingEnd="@dimen/margin_right"
+                    android:paddingStart="@dimen/margin_left"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/llProgress"
+                android:background="@color/gray_line"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="5dp"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rlBookingType"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/select_booking_type"
+                        android:textColor="@color/gray" />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:rotation="180"
+                        android:background="@drawable/back_icon"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/gray_line" />
+
+
+                <EditText
+                    android:id="@+id/etBusinessName"
+                    android:fontFamily="@font/roboto_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:ems="17"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColorHint="@color/gray"
+                    android:hint="@string/enter_your_business_name"
+                    android:imeOptions="actionDone"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/gray" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/gray_line" />
+
+                <EditText
+                    android:id="@+id/etBusinessEmail"
+                    android:fontFamily="@font/roboto_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:singleLine="true"
+                    android:ems="17"
+                    android:maxLines="1"
+                    android:text=""
+                    android:layout_marginTop="6dp"
+                    android:textColorHint="@color/gray"
+                    android:hint="Enter Business Email"
+                    android:imeOptions="actionNext"
+                    android:textColor="@color/gray" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/gray_line" />
+
+                <EditText
+                    android:id="@+id/etBusinessContact"
+                    android:fontFamily="@font/roboto_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:maxWidth="240dp"
+                    android:textSize="14sp"
+                    android:layout_marginTop="6dp"
+                    android:background="@null"
+                    android:ems="17"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text=""
+                    android:inputType="number"
+                    android:hint="@string/enter_business_contact_number"
+                    android:imeOptions="actionDone"
+                    android:textColorHint="@color/gray"
+                    android:textColor="@color/gray" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/gray_line" />
+
+                <RelativeLayout
+                    android:id="@+id/rlAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvAddressType"
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:textSize="14sp"
+                        android:textColorHint="@color/gray"
+                        android:textColor="@color/gray"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Enter Business Address"
+                        />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:rotation="180"
+                        android:background="@drawable/back_icon"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/gray_line" />
+
+                <RelativeLayout
+                    android:id="@+id/rlAreaOfCoverage"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="6dp"
+                    android:visibility="gone"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:textColorHint="@color/gray"
+                        android:textColor="@color/gray"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/radius_of_area_coverage"
+                        />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:rotation="180"
+                        android:background="@drawable/back_icon"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/radiusLineView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:visibility="gone"
+                    android:background="@color/gray_line" />
+
+
+                <RelativeLayout
+                    android:id="@+id/rlBusinessHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:textColorHint="@color/gray"
+                        android:textColor="@color/gray"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Business Operation Hours"
+                        />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:rotation="180"
+                        android:background="@drawable/back_icon"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/gray_line" />
+
+                <RelativeLayout
+                    android:id="@+id/rlBreak"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:textColorHint="@color/gray"
+                        android:textColor="@color/gray"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Break Between Appointments"
+                        />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:rotation="180"
+                        android:background="@drawable/back_icon"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/gray_line" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        style="@style/My_Button.Invert"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/continue_txt"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        />
+
+</RelativeLayout>

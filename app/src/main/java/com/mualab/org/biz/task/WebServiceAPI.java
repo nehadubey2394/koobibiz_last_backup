@@ -121,7 +121,7 @@ public class WebServiceAPI {
         mListener = listener;
     }
 
-    /* Gatting artist profile from server */
+    /* Gatting artist profile_setup from server */
     public void LoginTask(final Map<String, String> params) {
         final String loginUrl = API.BASE_URL + "userLogin";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, loginUrl,
@@ -161,7 +161,7 @@ public class WebServiceAPI {
         Mualab.getInstance().addToRequestQueue(stringRequest, TAG);
     }
 
-    /* Gatting artist profile from server */
+    /* Gatting artist profile_setup from server */
     public void signUpTask(final Map<String, String> params, final Bitmap bitmap) {
         final String signUpUrl = API.BASE_URL + "artistRegistration";
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, signUpUrl, new Response.Listener<NetworkResponse>() {
@@ -362,9 +362,9 @@ public class WebServiceAPI {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Progress.hide(mContext);
-                        if (isSelfErrorHandle)
+                       /* if (isSelfErrorHandle)
                             handleError(error);
-                        else
+                        else*/
                             mListener.ErrorListener(error);
                     }
                 }) {

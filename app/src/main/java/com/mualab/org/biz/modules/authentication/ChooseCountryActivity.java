@@ -2,9 +2,9 @@ package com.mualab.org.biz.modules.authentication;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.model.Country;
 import com.mualab.org.biz.util.JsonUtils;
+import com.mualab.org.biz.util.KeyboardUtil;
 import com.mualab.org.biz.util.decorator.SimpleDividerItemDecoration;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class ChooseCountryActivity extends AppCompatActivity {
 
     private List<Country> countryList;
     private CountryAdapter adapter;
+    private  SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class ChooseCountryActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_view_menu_item, menu);
         MenuItem searchViewItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) searchViewItem.getActionView();
+        searchView = (SearchView) searchViewItem.getActionView();
         //final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchViewItem);
         //int searchImgId = getResources().getIdentifier("android:id/search_button", null, null);
        /* ImageView v = searchView.findViewById(searchImgId);
@@ -178,9 +180,12 @@ public class ChooseCountryActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                KeyboardUtil.hideKeyboard(searchView, ChooseCountryActivity.this);
                 Country country = tmpList.get(getAdapterPosition());
                 setResultCountry(country);
             }
         }
     }
+
+
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:paddingLeft="5dp"
+    android:orientation="vertical"
+    android:paddingRight="5dp">
+
+    <TextView
+        android:id="@+id/tvCategoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="41dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/text_color"
+        android:maxWidth="240dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_medium"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_line"
+        android:layout_marginTop="2dp"/>
+
+
+</LinearLayout>

@@ -39,6 +39,36 @@
             android:gravity="center">
 
             <ImageButton
+                android:id="@+id/ibtnNotification"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/inactive_notification_ico" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/ibtnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/inactive_add_ico" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageButton
                 android:id="@+id/ibtnChart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -54,38 +84,11 @@
             android:gravity="center">
 
             <ImageButton
-                android:id="@+id/ibtnAdd"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/inactive_add_ico" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageButton
-                android:id="@+id/ibtnLogo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/inactive_logo_ico" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageButton
                 android:id="@+id/ibtnUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/inactive_user_ico" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/inactive_user_ico" />
 
         </LinearLayout>
 

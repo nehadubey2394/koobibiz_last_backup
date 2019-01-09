@@ -19,6 +19,7 @@
         android:layout_gravity="center_horizontal">
 
         <LinearLayout
+            android:id="@+id/llFollowers"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -33,9 +34,10 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_gravity="center"
-                android:textColor="@color/text_color"
+                android:textColor="@color/black"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center"
+                android:text="NA"
                 android:textSize="16sp" />
 
             <TextView
@@ -44,7 +46,7 @@
                 android:maxLines="1"
                 android:text="@string/text_follower"
                 android:layout_gravity="center"
-                android:textColor="@color/text_color"
+                android:textColor="@color/black"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="1dp"
                 android:gravity="center"
@@ -61,6 +63,7 @@
             />
 
         <LinearLayout
+            android:id="@+id/llFollowing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -74,9 +77,10 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_gravity="center"
-                android:textColor="@color/text_color"
+                android:textColor="@color/black"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center"
+                android:text="NA"
                 android:textSize="16sp" />
 
             <TextView
@@ -85,7 +89,7 @@
                 android:maxLines="1"
                 android:text="@string/text_following"
                 android:layout_gravity="center"
-                android:textColor="@color/text_color"
+                android:textColor="@color/black"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="1dp"
                 android:gravity="center"
@@ -101,6 +105,7 @@
             />
 
         <LinearLayout
+            android:id="@+id/llPost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -113,9 +118,10 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_gravity="center"
-                android:textColor="@color/text_color"
+                android:textColor="@color/black"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center"
+                android:text="NA"
                 android:textSize="16sp" />
 
             <TextView
@@ -124,7 +130,7 @@
                 android:maxLines="1"
                 android:text="@string/text_post"
                 android:layout_gravity="center"
-                android:textColor="@color/text_color"
+                android:textColor="@color/black"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="1dp"
                 android:gravity="center"

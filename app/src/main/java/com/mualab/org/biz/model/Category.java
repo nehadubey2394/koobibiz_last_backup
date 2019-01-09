@@ -50,6 +50,7 @@ public class Category {
     @Ignore
     public List<SubCategory> subCategories = new ArrayList<>();
 
+    @Ignore
     public Category(){
 
     }

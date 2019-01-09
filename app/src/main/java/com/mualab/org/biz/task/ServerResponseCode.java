@@ -48,7 +48,7 @@ public class ServerResponseCode {
                 valueofmessage = "Bad Gateway";
                 break;
             case 503:
-                valueofmessage = "ServiceDao Unavailable";
+                valueofmessage = "ServicesDao Unavailable";
                 break;
             case 504:
                 valueofmessage = "Gateway Timeout";

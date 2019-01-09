@@ -25,7 +25,8 @@ public interface CategoryDao {
     @Query("SELECT * FROM categorys")
     List<Service> getAll();
 
-    @Query("SELECT * FROM categorys WHERE name LIKE :name LIMIT 1")
+    @Query("SELECT * FROM categor" +
+            "ys WHERE subServiceName LIKE :name LIMIT 1")
     Service findByName(String name);
 
     @Insert(onConflict = REPLACE)

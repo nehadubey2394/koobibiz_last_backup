@@ -222,5 +222,13 @@
         <attr name="defaultSelectedItem" format="string" />
 
     </declare-styleable>
+    <declare-styleable name="AspectRatioImageView">
+        <attr format="enum" name="ari_aspect">
+            <enum name="width" value="0"/>
+            <enum name="height" value="1"/>
+            <enum name="auto" value="2"/>
+        </attr>
+        <attr format="float" name="ari_ratio"/>
+    </declare-styleable>
 
 </resources>

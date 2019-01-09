@@ -19,11 +19,17 @@ public class Constant {
     public static final int ACTIVITY_COMMENT = 107;
     public static final int OTP_VERIFICATION = 108;
     public static final int ADD_STORY = 465;
+    public static final int REQUEST_NEW_SERVICE = 109;
+    public static final int REQUEST_NEW_CATEGORY = 111;
+    public static final int REQUEST_NEW_BUSINESS_TYPE = 112;
+    public static final int EDIT_SERVICE = 110;
 
     public static final int POST_FEED_DATA = 1039;
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1001;
     public static final int CAMERA_REQUEST = 234;
     public static final int REQUEST_CODE_PICK = 235;
     public static final int SELECT_FILE = 1;
+    public static final int TEXT_STATE = 0, IMAGE_STATE = 1, VIDEO_STATE = 2, FEED_STATE = 3;
+
 
 }

@@ -22,10 +22,11 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="140dp"
                 android:layout_gravity="center"
-                android:src="@drawable/app_logo_500x333"
+                android:src="@drawable/app_logo"
+                android:layout_marginTop="2dp"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -34,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="@string/verify_phone_no"
                 android:textSize="16sp" />
@@ -53,7 +54,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="4.6">
