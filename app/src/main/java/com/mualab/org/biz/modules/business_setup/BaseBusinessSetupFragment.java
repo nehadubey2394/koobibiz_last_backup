@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -36,15 +37,18 @@ import com.mualab.org.biz.model.company_management.ComapnySelectedServices;
 import com.mualab.org.biz.model.company_management.CompanyDetail;
 import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.modules.business_setup.OtherBusinessWorkingHours.OperationHoursActivity;
-import com.mualab.org.biz.modules.business_setup.Services.CompanyServicesActivity;
+import com.mualab.org.biz.modules.business_setup.add_edit_service.MyServicesActivity;
 import com.mualab.org.biz.modules.business_setup.business_info.BusinessInfoActivity;
+import com.mualab.org.biz.modules.business_setup.business_info.EditMyBusinessInfoActivity;
 import com.mualab.org.biz.modules.business_setup.certificate.AllCertificatesActivity;
+import com.mualab.org.biz.modules.business_setup.company_services.CompanyServicesActivity;
 import com.mualab.org.biz.modules.business_setup.invitation.InvitationActivity;
 import com.mualab.org.biz.modules.business_setup.my_staff.MyStaffActivity;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.AddNewStaffActivity;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.adapter.CompanyListSppinnerAdapter;
+import com.mualab.org.biz.modules.business_setup.payment_setup.PaymentSetupActivity;
+import com.mualab.org.biz.modules.business_setup.voucher_code.VoucherCodeActivity;
 import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
-import com.mualab.org.biz.modules.profile_setup.activity.WorkingHoursActivity;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -78,8 +82,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
     private RatingBar rating;
     private CircleImageView iv_Profile;
     private ImageView ivActive,ivDropDown;
-    private LinearLayout vPanel1;
-    private LinearLayout vPanel2;
+    private LinearLayout vPanel1,vPanel2;
     private LinearLayout llRow3,llRow2,llTabs;
     private RelativeLayout llLineView;
     private View viewBiz,viewStaff,line2;
@@ -87,7 +90,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
     private CompanyListSppinnerAdapter arrayAdapter;
     private int currentSelectedBusiness;
     private  Session session;
-    private User user;
+    private Spinner spBizName;
 
     public BaseBusinessSetupFragment() {
         // Required empty public constructor
@@ -110,7 +113,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_base_business_setup, container, false);
 
@@ -129,7 +132,6 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
     private void initView(){
         session = Mualab.getInstance().getSessionManager();
-        user = session.getUser();
         ((MainActivity) mContext).setTitle(getString(R.string.title_buisness_admin));
     }
 
@@ -155,7 +157,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         viewStaff =  rootView.findViewById(R.id.viewStaff);
         line2 =  rootView.findViewById(R.id.line2);
 
-        final Spinner spBizName = ((MainActivity) mContext).findViewById(R.id.spBizName);
+        spBizName = ((MainActivity) mContext).findViewById(R.id.spBizName);
         ivDropDown= ((MainActivity) mContext).findViewById(R.id.ivDropDown);
         tvHeaderTitle= ((MainActivity) mContext).findViewById(R.id.tvHeaderTitle);
 
@@ -233,18 +235,19 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        Session session = Mualab.getInstance().getSessionManager();
-        User user = session.getUser();
+        PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
 
         switch (view.getId()){
             case R.id.llBusinessInfo:
 
-                Intent intent2 = new Intent(mContext, BusinessInfoActivity.class);
                 if (currentSelectedBusiness==0) {
-                    MyToast.getInstance(mContext).showDasuAlert("Under development");
+                    Intent intent = new Intent(mContext, EditMyBusinessInfoActivity.class);
+                    //   intent.putExtra("businessId", companyList.get(currentSelectedBusiness).businessId);
+                    startActivity(intent);
                     //  intent2.putExtra("businessId",String.valueOf(user.id));
                 }else {
                     if (companyList.size()!=0) {
+                        Intent intent2 = new Intent(mContext, BusinessInfoActivity.class);
                         intent2.putExtra("businessId", companyList.get(currentSelectedBusiness).businessId);
                         startActivity(intent2);
                     }
@@ -252,23 +255,46 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                 break;
 
             case R.id.llServices:
-                Intent intent3 = new Intent(mContext, CompanyServicesActivity.class);
                 if (currentSelectedBusiness==0) {
-                    MyToast.getInstance(mContext).showDasuAlert("Under development");
+                    if (pSession.getServiceType()!=0 && pSession.getAddress()!=null){
+                        if (pSession.getBusinessProfile().dayForStaffs.size()!=0){
+                            Intent intent = new Intent(mContext, MyServicesActivity.class);
+                            startActivity(intent);
+                        }else
+                            MyToast.getInstance(mContext).showDasuAlert("Please add operation hours before adding services");
+
+
+                    }else
+                        MyToast.getInstance(mContext).showDasuAlert("Please update business info before adding services");
+
+
                 }else {
                     if (companyList.size()!=0) {
+                        Intent intent3 = new Intent(mContext, CompanyServicesActivity.class);
                         intent3.putExtra("businessId", companyList.get(currentSelectedBusiness).businessId);
                         intent3.putExtra("staffId", companyList.get(currentSelectedBusiness)._id);
                         startActivity(intent3);
                     }
                 }
+
                 break;
 
             case R.id.llWorkingHours:
+
                 if (currentSelectedBusiness==0) {
-                    Intent intent = new Intent(mContext, WorkingHoursActivity.class);
-                    intent.putExtra("fromTag", "BaseBusinessSetupFragment");
-                    startActivity(intent);
+                    if (pSession.getServiceType()!=0 && pSession.getAddress()!=null){
+                        // MyToast.getInstance(mContext).showDasuAlert("Under development");
+                        Intent intent = new Intent(mContext, OperationHoursActivity.class);
+                        Bundle args = new Bundle();
+                        args.putSerializable("workingHours", (Serializable) pSession.getBusinessProfile().businessDays);
+                        intent.putExtra("BUNDLE",args);
+                        startActivity(intent);
+                      /*  Intent intent = new Intent(mContext, WorkingHoursActivity.class);
+                        intent.putExtra("fromTag", "BaseBusinessSetupFragment");
+                        startActivity(intent);*/
+
+                    }else
+                        MyToast.getInstance(mContext).showDasuAlert("Please update business info before adding services");
 
                 }else {
                     if (companyList.size()!=0) {
@@ -280,6 +306,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                     }
 
                 }
+
                 break;
 
             case R.id.llMyStaff:
@@ -290,11 +317,20 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                 break;
 
             case R.id.llInvitation:
-                startActivity(new Intent(mContext,InvitationActivity.class));
+                Intent intent = new Intent(mContext,InvitationActivity.class);
+                startActivityForResult(intent,15);
                 break;
 
             case R.id.llCertificates:
                 startActivity(new Intent(mContext,AllCertificatesActivity.class));
+                break;
+
+            case R.id.llPaymentSeup:
+                startActivity(new Intent(mContext,PaymentSetupActivity.class));
+                break;
+
+            case R.id.llVoucherCode:
+                startActivity(new Intent(mContext,VoucherCodeActivity.class));
                 break;
 
             case R.id.tvBusiness:
@@ -422,7 +458,6 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
                     if (status.equalsIgnoreCase("success")) {
                         companyList.clear();
-                        ivDropDown.setVisibility(View.VISIBLE);
 
                         CompanyDetail item1 = new CompanyDetail();
                         item1.businessName = getString(R.string.title_buisness_admin);
@@ -478,27 +513,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                                             if(tmpDay.dayId == dayId){
                                                 tmpDay.isOpen = true;
                                                 day.isExpand = true;
-                                              /*  if (dayId==0) {
-                                                    day.dayName = getString(R.string.monday);
-                                                }
-                                                else if (dayId==1) {
-                                                    day.dayName = getString(R.string.tuesday);
-                                                }
-                                                else if (dayId==2) {
-                                                    day.dayName = getString(R.string.wednesday);
-                                                }
-                                                else if (dayId==3) {
-                                                    day.dayName = getString(R.string.thursday);
-                                                }
-                                                else if (dayId==4) {
-                                                    day.dayName = getString(R.string.frieday);
-                                                }
-                                                else    if (dayId==5) {
-                                                    day.dayName = getString(R.string.saturday);
-                                                }
-                                                else if (dayId==6) {
-                                                    day.dayName = getString(R.string.sunday);
-                                                }*/
+
                                                 tmpDay.addTimeSlot(slot);
                                                 daySet.add(tmpDay);
                                                 // item.businessDays.add(tmpDay);
@@ -537,8 +552,13 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                                     companyList.add(item);
                             }
 
-                            if (companyList.size()==0)
+                            if (companyList.size()==1 ||  companyList.size()==0) {
                                 ivDropDown.setVisibility(View.GONE);
+                                spBizName.setVisibility(View.GONE);
+                            }else {
+                                ivDropDown.setVisibility(View.VISIBLE);
+                                spBizName.setVisibility(View.VISIBLE);
+                            }
 
                             arrayAdapter.notifyDataSetChanged();
                         }else {
@@ -774,5 +794,11 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                 .execute("getbusinessProfile");
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 15) {
+            apiForCompanyDetail();
+        }
+    }
 }

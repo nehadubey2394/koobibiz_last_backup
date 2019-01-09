@@ -5,16 +5,42 @@
     android:layout_marginTop="10dp"
     android:background="@color/white">
 
-
-    <ImageView
-        android:id="@+id/ivCertificate"
+    <RelativeLayout
+        android:id="@+id/rlCertificateImg"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:scaleType="centerInside"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="2dp"
-        android:src="@drawable/gallery_placeholder"
-        />
+        >
+
+        <ImageView
+            android:id="@+id/ivCertificate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_gallery_placeholder"
+            />
+
+        <ProgressBar
+            android:id="@+id/pbLoder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/ivActive"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:clickable="false"
+            android:src="@drawable/ico_varified"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvExpertize"
@@ -27,7 +53,7 @@
         android:textSize="16sp"
         android:fontFamily="@font/roboto_regular"
         android:textColor="@color/text_color"
-        android:layout_toRightOf="@+id/ivCertificate"
+        android:layout_toRightOf="@+id/rlCertificateImg"
         />
 
     <TextView
@@ -44,7 +70,7 @@
         android:layout_below="@+id/tvExpertize"
         android:layout_above="@+id/llEdit"
         android:fontFamily="@font/roboto_regular"
-        android:layout_toRightOf="@+id/ivCertificate"
+        android:layout_toRightOf="@+id/rlCertificateImg"
         />
 
     <LinearLayout
@@ -54,7 +80,7 @@
         android:layout_alignParentRight="true"
         android:orientation="horizontal"
         android:layout_marginRight="10dp"
-        android:layout_alignBottom="@+id/ivCertificate">
+        android:layout_alignBottom="@+id/rlCertificateImg">
 
         <ImageView
             android:id="@+id/ivEditCertificate"

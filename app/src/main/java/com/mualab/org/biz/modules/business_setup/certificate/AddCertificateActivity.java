@@ -4,16 +4,12 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,17 +18,14 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.image.cropper.CropImage;
-import com.image.cropper.CropImageView;
 import com.image.picker.ImagePicker;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
-import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.Certificate;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.modules.business_setup.certificate.adapter.CertificatesListAdapter;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -40,13 +33,10 @@ import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AddCertificateActivity extends AppCompatActivity implements View.OnClickListener {
@@ -78,7 +68,7 @@ public class AddCertificateActivity extends AppCompatActivity implements View.On
 
         if (certificate!=null){
             Picasso.with(AddCertificateActivity.this).load(certificate.certificateImage).
-                    placeholder(R.drawable.gallery_placeholder).fit().into(ivCertificate);
+                    placeholder(R.drawable.ic_gallery_placeholder).fit().into(ivCertificate);
 
             etCertificateTitle.setText(certificate.title);
             etDescr.setText(certificate.description);
@@ -89,7 +79,6 @@ public class AddCertificateActivity extends AppCompatActivity implements View.On
         btnContinue.setOnClickListener(this);
 
     }
-
 
     private  void uploadCertificateIntoServer(final String title,final  String description){
 
@@ -157,7 +146,6 @@ public class AddCertificateActivity extends AppCompatActivity implements View.On
                 .setProgress(true));
         task.postImage("certificateImage", bitmap);
     }
-
 
     private  void apiForEditCertificate(final String title,final  String description){
 
@@ -249,8 +237,8 @@ public class AddCertificateActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.btnContinue:
-                String title = etCertificateTitle.getText().toString();
-                String descr = etDescr.getText().toString();
+                String title = etCertificateTitle.getText().toString().trim();
+                String descr = etDescr.getText().toString().trim();
 
                 if (!title.isEmpty()) {
                     if (!descr.isEmpty()) {
@@ -294,22 +282,22 @@ public class AddCertificateActivity extends AppCompatActivity implements View.On
         if (resultCode == RESULT_OK) {
 
             if (requestCode == 234) {
-                Uri imageUri = ImagePicker.getImageURIFromResult(this, requestCode, resultCode, data);
+             /*   Uri imageUri = ImagePicker.getImageURIFromResult(this, requestCode, resultCode, data);
 
-                if (imageUri != null) {
+                 if (imageUri != null) {
                     CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE).setAspectRatio(450, 350).start(this);
                 } else {
                     MyToast.getInstance(AddCertificateActivity.this).showDasuAlert(getString(R.string.msg_some_thing_went_wrong));
 
                 }
-
-             /*   bitmap = ImagePicker.getImageFromResult(AddCertificateActivity.this, requestCode, resultCode, data);
+*/
+                bitmap = ImagePicker.getImageFromResult(AddCertificateActivity.this, requestCode, resultCode, data);
                 //Uri imageUri = ImagePicker.getImageURIFromResult(mContext, requestCode, resultCode, data);
-                if (bitmap == null) {
+                if (bitmap != null) {
                     ivCertificate.setImageBitmap(bitmap);
+                }else
                     MyToast.getInstance(AddCertificateActivity.this).showDasuAlert(getString(R.string.msg_some_thing_went_wrong));
 
-                }*/
             }else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 try {

@@ -50,6 +50,9 @@ public class AddServiceFieldsActivity extends AppCompatActivity implements View.
         tvBookingType = findViewById(R.id.tvBookingType);
         tvCompletionTime = findViewById(R.id.tvCompletionTime);
 
+        etInCallPrice.setText("$", TextView.BufferType.EDITABLE);
+        etOutCallPrice.setText("$", TextView.BufferType.EDITABLE);
+
         LinearLayout llInCallPrice = findViewById(R.id.llInCallPrice);
         LinearLayout llOutCallPrice = findViewById(R.id.llOutCallPrice);
         LinearLayout llServiceDesc = findViewById(R.id.llServiceDesc);
@@ -62,7 +65,7 @@ public class AddServiceFieldsActivity extends AppCompatActivity implements View.
         TextView tvHeaderText = findViewById(R.id.tvHeaderText);
         ImageView iv_back = findViewById(R.id.iv_back);
 
-        if (commingFrom.equals("AddStaffServiceDetailActivity"))
+        if (commingFrom!=null && commingFrom.equals("AddStaffServiceDetailActivity"))
             tvHeaderText.setText(getString(R.string.text_services));
         else
             tvHeaderText.setText(getString(R.string.add_services));
@@ -91,7 +94,7 @@ public class AddServiceFieldsActivity extends AppCompatActivity implements View.
 
 
         }*/
-      /*  if (bookingType!=null && !bookingType.equals("")){
+        if (bookingType!=null && !bookingType.equals("")){
             switch (bookingType) {
                 case "Incall":
                     arrayList.remove("Incall");
@@ -106,7 +109,7 @@ public class AddServiceFieldsActivity extends AppCompatActivity implements View.
                     arrayList.add(0,"Both");
                     break;
             }
-        }*/
+        }
 
         final Spinner spBookingType = findViewById(R.id.spBookingType);
         ArrayAdapter arrayAdapter = new ArrayAdapter(AddServiceFieldsActivity.this

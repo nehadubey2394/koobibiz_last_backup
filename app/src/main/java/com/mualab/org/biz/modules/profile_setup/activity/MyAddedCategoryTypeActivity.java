@@ -483,7 +483,7 @@ public class MyAddedCategoryTypeActivity extends AppCompatActivity implements Vi
 
                         if (adapter != null && viewPager!=null) {
 
-                            listener.onChangeByTag("Services");
+                            listener.onChangeByTag("company_services");
 
                             AddedServicesFragment fragment = (AddedServicesFragment)
                                     adapter.getRegisteredFragment(viewPager.getCurrentItem());

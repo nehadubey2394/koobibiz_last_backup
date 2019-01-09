@@ -31,8 +31,8 @@ import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.SubCategory;
 import com.mualab.org.biz.model.TimeSlot;
-import com.mualab.org.biz.modules.BaseActivity;
 import com.mualab.org.biz.modules.MainActivity;
+import com.mualab.org.biz.modules.base.BaseActivity;
 import com.mualab.org.biz.modules.profile_setup.fragment.BusinessHoursFragmentCreation;
 import com.mualab.org.biz.modules.profile_setup.fragment.FragmentAddStaff;
 import com.mualab.org.biz.modules.profile_setup.fragment.FragmentListner;
@@ -211,7 +211,7 @@ public class BusinessProfileActivity extends BaseActivity implements FragmentLis
         views.add(new MyViews("Add Business Type", AddNewBusinessTypeFragment.newInstance()));
         views.add(new MyViews("Service Category", AddedCategoryFragment.newInstance()));
         views.add(new MyViews("Add New Service Category", AddNewCategoryFragment.newInstance()));
-        views.add(new MyViews("Services", AddedServicesFragment.newInstance()));
+        views.add(new MyViews("company_services", AddedServicesFragment.newInstance()));
 
         //  views.add(new MyViews("Business Type2", AddNewBusinessTypeActivity.newInstance()));
         //views.add(new MyViews("Categories", CategoriesFragmentCreation.newInstance()));

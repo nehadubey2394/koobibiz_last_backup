@@ -217,4 +217,10 @@ public class InvitationActivity extends AppCompatActivity {
         task.execute(this.getClass().getName());
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+    }
 }

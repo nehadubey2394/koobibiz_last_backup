@@ -208,6 +208,7 @@ public class MyBusinessTypeActivity extends AppCompatActivity implements View.On
                     if (bizTypeId!=null && !bizTypeId.equals("") && !bizTypeId.isEmpty()){
                         Intent intent = new Intent(MyBusinessTypeActivity.this,MyAddedCategoryTypeActivity.class);
                         intent.putExtra("bizTypeId",bizTypeId);
+                        intent.putExtra("commingFrom","MyBusinessTypeActivity");
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
@@ -227,6 +228,7 @@ public class MyBusinessTypeActivity extends AppCompatActivity implements View.On
                     if (bizTypeId!=null && !bizTypeId.equals("") && !bizTypeId.isEmpty()){
                         Intent intent = new Intent(MyBusinessTypeActivity.this,AddNewCategoryActivity.class);
                         intent.putExtra("bizTypeId",bizTypeId);
+                        intent.putExtra("commingFrom","MyBusinessTypeActivity");
                         startActivity(intent);
                         // finish();
                         // startActivityForResult(intent, Constant.REQUEST_NEW_CATEGORY);

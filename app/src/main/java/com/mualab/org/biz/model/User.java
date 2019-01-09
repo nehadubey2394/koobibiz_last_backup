@@ -20,6 +20,9 @@ public class User implements Serializable{
     public String lastName;
     public String userName;
     public String businessName;
+    public String businessEmail;
+    public String businessContactNo;
+
     public String gender;
     public String dob;
     public String profileImage;

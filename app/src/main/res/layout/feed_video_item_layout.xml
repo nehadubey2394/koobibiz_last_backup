@@ -24,7 +24,7 @@
             android:foregroundGravity="center"
             android:scaleType="centerCrop"
             android:foreground="@drawable/play_bg_icon"
-            android:src="@drawable/gallery_placeholder" />
+            android:src="@drawable/ic_gallery_placeholder" />
 
         <View
             android:id="@+id/vBgLike"

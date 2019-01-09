@@ -409,8 +409,8 @@ public class AddStaffServicesActivity extends AppCompatActivity implements View.
 
                         i++;
                     }
-                    // Collection<Services> values = localServiceMap.values();
-                    //ArrayList<Services> listOfValues = new ArrayList<>(values);
+                    // Collection<company_services> values = localServiceMap.values();
+                    //ArrayList<company_services> listOfValues = new ArrayList<>(values);
 
 
                     Gson gson = new GsonBuilder().disableHtmlEscaping().create();

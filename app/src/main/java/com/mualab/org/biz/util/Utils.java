@@ -2,9 +2,6 @@ package com.mualab.org.biz.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-
-import com.amitshekhar.DebugDB;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,9 +15,9 @@ public class Utils {
 
     public static void showDebugDBAddressLogToast() {
         try {
-            String value = DebugDB.getAddressLog();
+           // String value = DebugDB.getAddressLog();
 
-            Log.d("database url", " " + value);
+           // Log.d("database url", " " + value);
 
         } catch (Exception ignore) {
 

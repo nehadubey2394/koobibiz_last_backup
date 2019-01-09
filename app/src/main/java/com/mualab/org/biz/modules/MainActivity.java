@@ -6,17 +6,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -25,20 +26,21 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.dialogs.Progress;
-import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
-import com.mualab.org.biz.modules.booking.fragments.AddFragment;
-import com.mualab.org.biz.modules.booking.fragments.BookingsFragment;
-import com.mualab.org.biz.modules.booking.listner.OnRefreshListener;
-import com.mualab.org.biz.modules.business_setup.BaseBusinessSetupFragment;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
+import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MySnackBar;
 import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.TimeSlot;
+import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
+import com.mualab.org.biz.modules.base.BaseActivity;
+import com.mualab.org.biz.modules.booking.fragments.AddFragment;
+import com.mualab.org.biz.modules.booking.listner.OnRefreshListener;
+import com.mualab.org.biz.modules.business_setup.BaseBusinessSetupFragment;
+import com.mualab.org.biz.modules.new_booking.fragment.BookingsFragment;
 import com.mualab.org.biz.modules.profile_setup.activity.NewBusinessSetUpActivity;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
@@ -51,6 +53,7 @@ import com.mualab.org.biz.util.network.NetworkChangeReceiver;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +66,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     private TextView tvHeaderTitle;
     private int clickedId = 0;
     private CardView topLayout1;
+    private Spinner spBizName;
     //private TextView tv_msg;
     private String lat="",lng="";
     // private ProgressBar progress_bar;
@@ -118,7 +122,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         ivDropDown = findViewById(R.id.ivDropDown);
         // tv_msg = findViewById(R.id.tv_msg);
         ibtnBookings.setImageResource(R.drawable.active_calender_ico);
-
+        spBizName = findViewById(R.id.spBizName);
+        spBizName.setVisibility(View.GONE);
         ibtnBookings.setOnClickListener(this);
         ibtnChart.setOnClickListener(this);
         ibtnAdd.setOnClickListener(this);
@@ -132,7 +137,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             getBusinessProfile();
         }
         else
-            replaceFragment(BookingsFragment.newInstance(""), false);
+            replaceFragment(BookingsFragment.newInstance(), false);
 
     }
 
@@ -234,7 +239,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                         PreRegistrationSession bpSession = Mualab.getInstance().getBusinessProfileSession();
                         bpSession.updateRegStep(6);
                         //getDeviceLocation();
-                        replaceFragment(BookingsFragment.newInstance(""), false);
+                        replaceFragment(BookingsFragment.newInstance(), false);
                     }
 
 
@@ -322,6 +327,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 onBackPressed();
                 break;
             case R.id.ibtnBookings:
+                spBizName.setVisibility(View.GONE);
                 if (clickedId!=1){
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
@@ -331,6 +337,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 break;
 
             case R.id.ibtnChart:
+                spBizName.setVisibility(View.GONE);
                 if (clickedId!=2){
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
@@ -341,6 +348,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 break;
 
             case R.id.ibtnAdd:
+                spBizName.setVisibility(View.GONE);
                 if (clickedId!=3){
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
@@ -351,6 +359,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 break;
 
             case R.id.ibtnNotification:
+                spBizName.setVisibility(View.GONE);
                 if (clickedId!=4){
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
@@ -423,7 +432,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             // tv_msg.setText(R.string.gps_permission_alert);
             locationDetector.showLocationSettingDailod(MainActivity.this);
         }
-        replaceFragment(BookingsFragment.newInstance(""), false);
+        replaceFragment(BookingsFragment.newInstance(), false);
 
     }
 
@@ -440,7 +449,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
                 } else {
                     //Toast.makeText(mContext, "Permission Denied", Toast.LENGTH_LONG).show();
-                    replaceFragment(BookingsFragment.newInstance(""), false);
+                    replaceFragment(BookingsFragment.newInstance(), false);
                 }
             }
 
@@ -479,6 +488,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     @Override
     public void onRequestChanged(boolean isShow) {
         BookingsFragment frag = ((BookingsFragment) getSupportFragmentManager().findFragmentByTag("com.mualab.org.biz.modules.booking.fragments.BookingFragment2"));
-        frag.refreshData(true);
+        //  frag.refreshData(true);
     }
 }

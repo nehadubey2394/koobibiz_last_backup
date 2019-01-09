@@ -15,6 +15,8 @@ import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.business_setup.OtherBusinessWorkingHours.adapter.CompanyOperationHoursAdapter;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class OperationHoursActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,7 +46,25 @@ public class OperationHoursActivity extends AppCompatActivity implements View.On
         tvHeaderText.setVisibility(View.VISIBLE);
         tvHeaderText.setText("Operation Hours");
 
-        if (businessDays!=null && businessDays.size()==0)
+        assert businessDays != null;
+        Collections.sort(businessDays, new Comparator<BusinessDay>() {
+
+            @Override
+            public int compare(BusinessDay a1, BusinessDay a2) {
+                Long long1 = (long) a1.dayId;
+                Long long2 = (long) a2.dayId;
+                return long1.compareTo(long2);
+              /*  if (a1.dayId == 0 || a2.dayId == 0)
+                    return -1;
+                else {
+                    Long long1 = (long) a1.dayId;
+                    Long long2 = (long) a2.dayId;
+                    return long1.compareTo(long2);
+                }*/
+            }
+        });
+
+        if (businessDays.size() == 0)
             tvNoDataFound.setVisibility(View.VISIBLE);
         else
             tvNoDataFound.setVisibility(View.GONE);

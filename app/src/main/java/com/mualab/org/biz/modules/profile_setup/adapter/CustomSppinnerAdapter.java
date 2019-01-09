@@ -47,6 +47,7 @@ public class CustomSppinnerAdapter extends BaseAdapter {
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            assert inflater != null;
             row = inflater.inflate(R.layout.custom_spinner_items, parent, false);
 
             holder = new ViewHolder();

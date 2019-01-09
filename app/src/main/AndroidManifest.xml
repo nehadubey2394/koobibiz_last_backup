@@ -81,7 +81,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".modules.BaseActivity" />
         <activity
             android:name=".modules.booking.activity.StaffActivity"
             android:screenOrientation="portrait"
@@ -335,19 +334,73 @@
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".modules.business_setup.Services.CompanyServicesActivity"
+            android:name=".modules.business_setup.company_services.CompanyServicesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".modules.business_setup.certificate.AllCertificatesActivity"
+        <activity
+            android:name=".modules.business_setup.certificate.AllCertificatesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
-            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.certificate.AddCertificateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.add_edit_service.MyServicesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack" />
+        <activity
+            android:name=".modules.business_setup.add_edit_service.AddMoreServiceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack" />
+        <activity
+            android:name=".modules.business_setup.add_edit_service.business_type.AllBusinessTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack" />
+        <activity
+            android:name=".modules.business_setup.add_edit_service.EditServicesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.add_edit_service.business_type.NewAddCategoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.add_edit_service.business_type.NewAddedCategoryTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.business_info.EditMyBusinessInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.certificate.ZoomCertificateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack" />
+        <activity android:name=".modules.business_setup.payment_setup.PaymentSetupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".modules.business_setup.voucher_code.VoucherCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".modules.business_setup.voucher_code.AddVoucherCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
 
-        <activity android:name=".modules.business_setup.certificate.AddCertificateActivity"
+        <activity android:name=".modules.base.BaseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
-            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
     </application>
 
 </manifest>

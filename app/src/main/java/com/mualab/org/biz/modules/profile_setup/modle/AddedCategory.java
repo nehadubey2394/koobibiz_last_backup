@@ -61,16 +61,16 @@ public class AddedCategory implements Serializable {
         //this.description = description;
     }
 
-/*    public void addService(Services services){
+/*    public void addService(company_services services){
         if(servicesList==null)
             servicesList = new ArrayList<>();
         services.subserviceName = this.subServiceName;
         servicesList.add(services);
     }
 
-    public Services getService(int subCategoryId){
+    public company_services getService(int subCategoryId){
         if(servicesList!=null){
-            for (Services services : servicesList){
+            for (company_services services : servicesList){
                 if(services.id==subCategoryId){
                     return services;
                 }
@@ -79,7 +79,7 @@ public class AddedCategory implements Serializable {
         return null;
     }
 
-    public boolean deleteSubCategory(Services subCategory){
+    public boolean deleteSubCategory(company_services subCategory){
         return servicesList.remove(subCategory);
     }*/
 

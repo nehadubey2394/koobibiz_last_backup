@@ -267,7 +267,7 @@ public class AddedCategoryFragment extends ProfileCreationBaseFragment implement
                 if (!categoryId.equals("")){
                     if (adapter != null && viewPager!=null) {
 
-                        listener.onChangeByTag("Services");
+                        listener.onChangeByTag("company_services");
 
                         categoryId = "";
 
@@ -312,7 +312,7 @@ public class AddedCategoryFragment extends ProfileCreationBaseFragment implement
 
                    /* if (adapter != null && viewPager!=null) {
 
-                        listener.onChangeByTag("Services");
+                        listener.onChangeByTag("company_services");
 
                         AddedServicesFragment fragment = (AddedServicesFragment)
                                 adapter.getRegisteredFragment(viewPager.getCurrentItem());
@@ -354,7 +354,7 @@ public class AddedCategoryFragment extends ProfileCreationBaseFragment implement
 
                     if (adapter != null && viewPager!=null) {
 
-                        listener.onChangeByTag("Services");
+                        listener.onChangeByTag("company_services");
 
                         AddedServicesFragment fragment = (AddedServicesFragment)
                                 adapter.getRegisteredFragment(viewPager.getCurrentItem());

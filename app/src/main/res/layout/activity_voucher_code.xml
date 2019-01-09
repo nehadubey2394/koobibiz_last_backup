@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".modules.business_setup.voucher_code.VoucherCodeActivity">
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="2dp"
+        android:id="@+id/header"
+        android:layout_alignParentTop="true"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp">
+
+            <ImageView
+                android:id="@+id/ivHeaderBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
+                android:layout_marginLeft="2dp"
+                android:src="@drawable/back_icon"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:id="@+id/tvHeaderTitle"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:maxWidth="@dimen/_220sdp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/title_bookings"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/text_color"
+                android:layout_centerInParent="true"/>
+
+
+            <ImageView
+                android:id="@+id/ivAddVoucher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/inactive_add_ico"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="visible"
+                android:layout_alignParentEnd="true" />
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvVouchers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_below="@+id/header"
+        />
+
+    <TextView
+        android:id="@+id/tvNoRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/no_data_available"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/roboto_medium"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        />
+
+</RelativeLayout>

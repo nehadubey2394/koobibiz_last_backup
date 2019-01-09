@@ -128,6 +128,7 @@
     <string name="error_session_expired">Alert message</string>
     <string name="error_session_expired_msg">Your session is expired please login again</string>
     <string name="under_development">Under Development…</string>
+    <string name="pound">£</string>
 
 
     <!--Picker text-->
@@ -365,6 +366,7 @@
     <string name="enter_business_contact_number">Enter Business Contact Number</string>
     <string name="business_info">Business Info</string>
     <string name="payment_setup">Payment Setup</string>
+    <string name="payment_set_up">Payment Set up</string>
     <string name="my_staff">My Staff</string>
     <string name="add_staff">Add Staff</string>
     <string name="holiday_planner">Holiday Planner</string>
@@ -378,4 +380,15 @@
     <string name="business_location_address">Business Location Address</string>
     <string name="service_break">Service Break</string>
     <string name="operation_hours">Operation Hours</string>
+    <string name="save_add_more"><![CDATA[Save & Add More]]></string>
+    <string name="enter_code">Enter Code</string>
+    <string name="discount_type">Discount Type</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="voucher_validity">Voucher Validity</string>
+    <string name="date">Date</string>
+    <string name="from_date">From date</string>
+    <string name="to_date">To Date</string>
+
+    <string name="reschedule">Reschedule</string>
+    <string name="pendingBookings">Pending Bookings</string>
 </resources>

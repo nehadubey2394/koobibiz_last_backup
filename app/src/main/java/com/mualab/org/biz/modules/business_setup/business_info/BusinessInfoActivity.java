@@ -2,8 +2,8 @@ package com.mualab.org.biz.modules.business_setup.business_info;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,7 +20,6 @@ import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
 import com.mualab.org.biz.modules.profile_setup.activity.BreakTimeActivity;
-import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
@@ -91,8 +90,7 @@ public class BusinessInfoActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void apiForGetProfile() {
-        Session session = Mualab.getInstance().getSessionManager();
-        User user = session.getUser();
+        User user = Mualab.getInstance().getSessionManager().getUser();
 
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(BusinessInfoActivity.this, new NoConnectionDialog.Listner() {

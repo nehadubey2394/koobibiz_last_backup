@@ -156,6 +156,18 @@ public class PreRegistrationSession {
         return mypref.getString("businessName","");
     }
 
+    public String getBusinessEmail(){
+        return mypref.getString("businessEmail","");
+    }
+
+    public String getBusinessContact(){
+        return mypref.getString("businessContactNo","");
+    }
+
+    public String getBusinessCountryCode(){
+        return mypref.getString("businessCountryCode","");
+    }
+
     public int getBankStatus(){
         return mypref.getInt("bankStatus", 0);
     }
@@ -196,6 +208,21 @@ public class PreRegistrationSession {
 
     public void updateBusinessName(String businessName){
         editor.putString("businessName", businessName);
+        editor.apply();
+    }
+
+    public void updateBusinessEmail(String businessEmail){
+        editor.putString("businessEmail", businessEmail);
+        editor.apply();
+    }
+
+    public void updateBusinessContact(String businessContactNo){
+        editor.putString("businessContactNo", businessContactNo);
+        editor.apply();
+    }
+
+    public void updateBusinessCountryCode(String businessCountryCode){
+        editor.putString("businessCountryCode", businessCountryCode);
         editor.apply();
     }
 

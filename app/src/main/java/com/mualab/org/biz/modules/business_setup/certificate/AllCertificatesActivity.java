@@ -3,12 +3,15 @@ package com.mualab.org.biz.modules.business_setup.certificate;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +21,6 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
-import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.Certificate;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.business_setup.certificate.adapter.CertificatesListAdapter;
@@ -27,6 +29,7 @@ import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,6 +44,7 @@ public class AllCertificatesActivity extends AppCompatActivity {
     private CertificatesListAdapter certificatesListAdapter;
     private RecyclerView rvCertificates;
     private List<Certificate> certificates;
+    private AppCompatButton btnAddCertificate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +65,18 @@ public class AllCertificatesActivity extends AppCompatActivity {
                 new CertificatesListAdapter.onActionListner() {
                     @Override
                     public void onClick(int position, Certificate companyDetail) {
-
+                        Certificate certificate = certificates.get(position);
+                        Intent intent = new Intent(AllCertificatesActivity.this,ZoomCertificateActivity.class);
+                        intent.putExtra("certificateImage",certificate.certificateImage);
+                        startActivity(intent);
+                        //  showLargeImage(certificate);
                     }
 
                     @Override
                     public void onEdit(int position, Certificate certificate) {
                         Intent intent = new Intent(AllCertificatesActivity.this,AddCertificateActivity.class);
                         intent.putExtra("certificate",certificate);
-                        startActivity(intent);
+                        startActivityForResult(intent,52);
                     }
 
                     @Override
@@ -88,7 +96,8 @@ public class AllCertificatesActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btnAddCertificate).setOnClickListener(new View.OnClickListener() {
+        btnAddCertificate = findViewById(R.id.btnAddCertificate);
+        btnAddCertificate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AllCertificatesActivity.this,AddCertificateActivity.class);
@@ -98,7 +107,6 @@ public class AllCertificatesActivity extends AppCompatActivity {
 
         apiForGetCertificates();
     }
-
 
     private void showAlertDailog(final String certificateId, final int position){
         final android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(AllCertificatesActivity.this, R.style.MyDialogTheme);
@@ -121,22 +129,44 @@ public class AllCertificatesActivity extends AppCompatActivity {
 
     }
 
+    private void showLargeImage(Certificate certificate){
+        View dialogView = View.inflate(AllCertificatesActivity.this, R.layout.dialog_large_image_view, null);
+        final Dialog dialog = new Dialog(AllCertificatesActivity.this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.InOutAnimation;
+        dialog.setContentView(dialogView);
+
+        ImageView ivCertificate = dialogView.findViewById(R.id.ivCertificate);
+        ImageView btnBack = dialogView.findViewById(R.id.btnBack);
+        Picasso.with(AllCertificatesActivity.this).load(certificate.certificateImage).
+                priority(Picasso.Priority.HIGH).noPlaceholder().into(ivCertificate);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
 
-            if (requestCode == 51) {
+            apiForGetCertificates();
+           /* if (requestCode == 51) {
                 Certificate certificate = (Certificate) data.getSerializableExtra("certificates");
                 certificates.add(certificate);
                 certificatesListAdapter.notifyDataSetChanged();
             }else {
                 apiForGetCertificates();
-            }
+            }*/
         }
     }
-
 
     private void apiForGetCertificates(){
         Session session = Mualab.getInstance().getSessionManager();
@@ -185,6 +215,12 @@ public class AllCertificatesActivity extends AppCompatActivity {
                                 rvCertificates.setVisibility(View.GONE);
                                 tvNoDataFound.setVisibility(View.VISIBLE);
                             }
+
+                            if (certificates.size()==0)
+                                btnAddCertificate.setText("Add");
+                            else
+                                btnAddCertificate.setText("Add More");
+
                         } catch (Exception e) {
                             Progress.hide(AllCertificatesActivity.this);
                             e.printStackTrace();
@@ -243,7 +279,11 @@ public class AllCertificatesActivity extends AppCompatActivity {
                             if (status.equalsIgnoreCase("success")) {
                                 certificates.remove(position);
                                 certificatesListAdapter.notifyItemRemoved(position);
-                            }else {
+                            }
+
+                            if (certificates.size()==0)
+                            {
+                                btnAddCertificate.setText("Add");
                                 rvCertificates.setVisibility(View.GONE);
                                 tvNoDataFound.setVisibility(View.VISIBLE);
                             }

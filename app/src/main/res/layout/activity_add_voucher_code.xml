@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".modules.business_setup.voucher_code.VoucherCodeActivity">
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_layout_for_allscreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_addAccount"
+        android:layout_below="@+id/header"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/voucher_code"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edt_voucher_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"
+            android:background="@null"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/enter_code"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:maxLength="7"
+            android:textAllCaps="true"
+            android:inputType="textCapCharacters"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"
+            android:background="@color/gray_line" />
+
+        <Spinner
+            android:id="@+id/spDiscountType"
+            android:overlapAnchor="false"
+            android:background="@null"
+            android:popupBackground="@color/white"
+            android:textColor="@color/text_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="22dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="6dp"
+            android:prompt="@string/discount_type"
+            />
+
+        <!--     <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="15dp"
+                 android:layout_marginLeft="6dp"
+                 android:layout_marginRight="6dp"
+                 android:gravity="center_vertical">
+
+                 <Spinner
+                     android:id="@+id/spDiscountType"
+                     android:overlapAnchor="false"
+                     android:background="@null"
+                     android:popupBackground="@color/white"
+                     android:textColor="@color/text_color"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:minHeight="22dp"
+                     android:layout_centerVertical="true"
+                     android:prompt="@string/discount_type"
+                     />
+
+                     <TextView
+                         android:id="@+id/tvDiscountType"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerVertical="true"
+                         android:fontFamily="@font/roboto_regular"
+                         android:text="@string/discount_type"
+                         android:textColor="@color/black"
+                         android:textSize="14sp" />
+
+                     <ImageView
+                         android:id="@+id/ivDropDown"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerVertical="true"
+                         android:padding="2dp"
+                         android:clickable="false"
+                         android:tint="@color/gray"
+                         android:layout_alignParentRight="true"
+                         android:src="@drawable/black_down_arrow_ico"
+                         />
+
+             </RelativeLayout>-->
+
+        <EditText
+            android:id="@+id/edt_discount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="6dp"
+            android:background="@null"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/enter_amount"
+            android:maxLines="1"
+            android:maxLength="3"
+            android:inputType="number"
+            android:singleLine="true"
+            android:visibility="gone"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"
+            android:background="@color/gray_line" />
+
+        <RelativeLayout
+            android:id="@+id/rlValidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvVailidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/voucher_validity"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/ivValidityAerow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="2dp"
+                android:clickable="false"
+                android:tint="@color/gray"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/black_down_arrow_ico"
+                />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/llValidityDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="6dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/date"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tvFromdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/from_date"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:padding="2dp"
+                    android:textColor="@color/gray"
+                    android:drawableRight="@drawable/ic_sp_down_arrow"/>
+
+                <Space
+                    android:layout_width="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvTodate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/to_date"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:padding="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/gray"
+                    android:drawableRight="@drawable/ic_sp_down_arrow"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="6dp"
+            android:background="@color/gray_line" />
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        style="@style/My_Button.Invert"
+        android:text="@string/save_add_more"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/margin_left26"
+        android:layout_marginRight="@dimen/margin_right26"
+        android:visibility="visible"
+        />
+
+
+
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.mualab.org.biz.modules.business_setup.Services;
+package com.mualab.org.biz.modules.business_setup.company_services;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -17,8 +17,7 @@ import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.modules.business_setup.Services.adapter.CompanyServicesAdapter;
-import com.mualab.org.biz.modules.business_setup.new_add_staff.AddStaffServiceDetailActivity;
+import com.mualab.org.biz.modules.business_setup.company_services.adapter.CompanyServicesAdapter;
 import com.mualab.org.biz.modules.profile_setup.activity.ServiceDetailActivity;
 import com.mualab.org.biz.modules.profile_setup.db_modle.Services;
 import com.mualab.org.biz.modules.profile_setup.modle.AddedCategory;

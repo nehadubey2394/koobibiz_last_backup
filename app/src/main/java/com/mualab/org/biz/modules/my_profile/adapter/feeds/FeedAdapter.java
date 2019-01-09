@@ -256,10 +256,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if(!TextUtils.isEmpty(feeds.videoThumbnail)){
                     Picasso.with(videoHolder.ivFeedCenter.getContext())
                             .load(feeds.videoThumbnail)
-                            .placeholder(R.drawable.gallery_placeholder)
+                            .placeholder(R.drawable.ic_gallery_placeholder)
                             .into(videoHolder.ivFeedCenter);
                 }else  Picasso.with(videoHolder.ivFeedCenter.getContext())
-                        .load(R.drawable.gallery_placeholder)
+                        .load(R.drawable.ic_gallery_placeholder)
                         .into(videoHolder.ivFeedCenter);
 
                 break;

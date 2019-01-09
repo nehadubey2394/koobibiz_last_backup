@@ -401,6 +401,9 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
                     public void onResponse(String response, String apiName) {
                         Log.d("res:", response);
                         bpSession.updateBusinessName(etBusinessName.getText().toString().trim());
+                        bpSession.updateBusinessEmail(etBusinessEmail.getText().toString().trim());
+                        bpSession.updateBusinessContact(etBusinessContact.getText().toString().trim());
+
                         //  bpSession.updateRegStep(3);
                         Intent intent = new Intent(NewBusinessInfoActivity.this,MyBusinessTypeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

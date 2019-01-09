@@ -16,6 +16,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -64,8 +69,9 @@ dependencies {
     annotationProccessor 'android.arch.persistence.room:compiler:1.0.0'*/
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
+    //debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3'
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
+    implementation 'com.jsibbold:zoomage:1.2.0'
 }
 apply plugin: 'com.google.gms.google-services'

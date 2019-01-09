@@ -211,13 +211,13 @@ public class StaffWorkingHoursActivity extends AppCompatActivity implements View
                     slotList.add(slot);
                 }
             }
-            for(TimeSlot slot:tmp.slots){
+          /*  for(TimeSlot slot:tmp.slots){
                 slot.startTime = slot.edtStartTime;
                 slot.endTime = slot.edtEndTime;
                 //slot.dayId = tmp.dayId-1;
                 slot.status = 1;
                 slotList2.add(slot);
-            }
+            }*/
         }
 
         // dynamic serialization on product

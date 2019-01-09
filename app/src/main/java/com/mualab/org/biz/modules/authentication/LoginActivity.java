@@ -33,8 +33,8 @@ import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MySnackBar;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.modules.BaseActivity;
 import com.mualab.org.biz.modules.NewBaseActivity;
+import com.mualab.org.biz.modules.base.BaseActivity;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.session.SharedPreferanceUtils;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -71,7 +71,6 @@ public class LoginActivity extends BaseActivity {
         //ed_password.addTextChangedListener(new MyTextWatcher(ed_password));
     }
 
-    @Override
     protected void setStatusBar() {
         StatusBarUtil.setTranslucent(this, 0);
     }

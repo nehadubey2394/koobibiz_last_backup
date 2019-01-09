@@ -96,7 +96,12 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                     day.slots.clear();
                 }
 */
-                day.isOpen = !isChecked;
+               /* if(isChecked){
+                    day.isOpen = true;
+                }else {
+                    day.isOpen = false;
+                    //day.slots.clear();
+                }*/
                 notifyItemChanged(pos);
             }
         });
@@ -152,7 +157,13 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                             MyToast.getInstance(mContext).showDasuAlert("Max time slot reached!");
                         }else {
                             day.isExpand = true;
-                            day.addTimeSlot(new TimeSlot(day.dayId,position));
+                            //day.addTimeSlot(new TimeSlot(day.dayId,position));
+                            if (day.tempSlots.size()>1) {
+                                TimeSlot timeSlot = day.tempSlots.get(1);
+                                day.addTimeSlot(timeSlot);
+                            }else {
+                                day.addTimeSlot(new TimeSlot(day.dayId,position));
+                            }
                             notifyItemChanged(position);
                         }
                     }
@@ -304,6 +315,7 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
             // Populate the data into the template view using the data object
             //  tv_from.setText(String.format("From: %s", timeSlot.startTime));
             //   tv_to.setText(String.format("To: %s", timeSlot.endTime));
+
             tv_from.setText(timeSlot.startTime);
             tv_to.setText(timeSlot.endTime);
             //   viewDivider.setVisibility(timeSlots.size()==1?View.GONE:View.VISIBLE);
@@ -313,6 +325,7 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
                 public void onClick(View v) {
                     if(timeSlots.size()>position){
                         timeSlots.remove(position);
+                        timeSlot.isCancle = true;
                         AdapterTimeSlot.this.notifyDataSetChanged();
                         businessDaysList.get(timeSlot.bizdayPosition).isExpand = false;
                         WorkingHoursAdapter.this.notifyItemChanged(timeSlot.bizdayPosition);

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true">
+
+    <include
+        android:id="@+id/headerLayout"
+        layout="@layout/header_layout_for_allscreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentTop="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listViewServices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_below="@+id/headerLayout"
+        android:layout_above="@+id/llBottomButtons"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/llBottomButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/bottomLine"
+            android:background="@color/gray_line"
+            >
+        </View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:id="@+id/llAddCategory"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:tint="@color/black"
+                    android:src="@drawable/plush_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/add_business_type"
+                    android:textColor="@color/text_color"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:padding="2dp"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray_line"/>
+
+            <LinearLayout
+                android:id="@+id/llAddService"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:tint="@color/black"
+                    android:src="@drawable/plush_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/add_services"
+                    android:textColor="@color/text_color"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:padding="2dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            style="@style/My_Button.Invert"
+            android:layout_marginLeft="@dimen/margin_left26"
+            android:layout_marginRight="@dimen/margin_right26"
+            android:layout_marginBottom="15dp"
+            android:text="@string/save_continue"
+            android:visibility="visible"
+            />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvNoRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/no_data_available"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/roboto_medium"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        />
+
+
+</RelativeLayout>

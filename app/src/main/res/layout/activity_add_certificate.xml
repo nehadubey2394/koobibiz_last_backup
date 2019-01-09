@@ -17,7 +17,7 @@
     <RelativeLayout
         android:id="@+id/rl_imageView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp"
+        android:layout_height="@dimen/_220sdp"
         android:layout_below="@+id/header"
         android:padding="10dp"
         >
@@ -25,10 +25,10 @@
         <ImageView
             android:id="@+id/ivCertificate"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_200sdp"
-            android:scaleType="fitXY"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:background="@drawable/gallery_placeholder"
+            android:scaleType="fitXY"
+            android:background="@drawable/ic_gallery_placeholder"
             />
 
         <ImageView
@@ -64,6 +64,9 @@
         android:layout_height="40dp"
         android:hint="Enter Title"
         android:paddingLeft="8dp"
+        android:maxLength="50"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
         android:background="@drawable/bg_gray_rect"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -90,13 +93,15 @@
         android:id="@+id/etDescr"
         android:layout_below="@+id/tvCertificateDescr"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:hint="Enter Description ..."
         android:paddingLeft="8dp"
         android:gravity="start"
         android:background="@drawable/bg_gray_rect"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:minHeight="60dp"
+        android:maxLength="200"
         android:layout_marginTop="2dp"
         android:textColor="@color/text_color"
         android:textColorHint="@color/gray"

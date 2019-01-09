@@ -53,7 +53,7 @@ public class AddNewCategoryActivity extends AppCompatActivity implements View.On
     private long mLastClickTime = 0;
     private RecyclerView listViewServices;
     private LinearLayout llNotRecord;
-    private String searchText = "",bizTypeId = "";
+    private String searchText = "",bizTypeId = "",commingFrom;
     private SearchView searchview;
     private User user;
 
@@ -62,6 +62,7 @@ public class AddNewCategoryActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_category);
         bizTypeId = getIntent().getStringExtra("bizTypeId");
+        commingFrom = getIntent().getStringExtra("commingFrom");
         bpSession = Mualab.getInstance().getBusinessProfileSession();
         if(allCategoryList==null) allCategoryList = new ArrayList<>();
         init();

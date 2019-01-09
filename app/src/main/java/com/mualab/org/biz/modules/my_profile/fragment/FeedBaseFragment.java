@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.modules.my_profile.model.Feeds;
-import com.mualab.org.biz.modules.Base.BaseFragment;
+import com.mualab.org.biz.modules.base.BaseFragment;
 import com.squareup.picasso.Picasso;
 
 
@@ -43,17 +43,17 @@ public class FeedBaseFragment extends BaseFragment {
         view.findViewById(R.id.tvUnfollow).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyToast.getInstance(mContext).showSmallCustomToast(getString(R.string.under_development));
+                MyToast.getInstance(getBaseActivity()).showSmallCustomToast(getString(R.string.under_development));
             }
         });
 
-        Picasso.with(mContext).load(feeds.feed.get(index)).priority(Picasso.Priority.HIGH).noPlaceholder().into(postImage);
+        Picasso.with(getBaseActivity()).load(feeds.feed.get(index)).priority(Picasso.Priority.HIGH).noPlaceholder().into(postImage);
 
         if(TextUtils.isEmpty(feeds.profileImage))
-            Picasso.with(mContext).load(R.drawable.defoult_user_img).noPlaceholder().into(profileImage);
-        else Picasso.with(mContext).load(feeds.profileImage).noPlaceholder().into(profileImage);
+            Picasso.with(getBaseActivity()).load(R.drawable.defoult_user_img).noPlaceholder().into(profileImage);
+        else Picasso.with(getBaseActivity()).load(feeds.profileImage).noPlaceholder().into(profileImage);
 
-        builder = new Dialog(mContext);
+        builder = new Dialog(getBaseActivity());
         builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //noinspection ConstantConditions
         builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.CountDownTimer;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -41,13 +40,13 @@ import com.mualab.org.biz.util.KeyboardUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static com.mualab.org.biz.application.Mualab.IS_DEBUG_MODE;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -702,9 +701,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 if(!isResendOTP)
                     nextScreen();
 
-            }else if (otp.equals("already exist")) {
-                showToast("This number already registered");
-            } else if (status.equalsIgnoreCase("fail")) {
+            }else if (status.equalsIgnoreCase("fail")) {
                 showToast(message);
             }else {
                 showToast(message);

@@ -349,7 +349,7 @@ public class AddNewServiceActivity extends AppCompatActivity implements
                                     break;
                             }
 
-                                  /*  List<Services> businessTypeList = new ArrayList<>();
+                                  /*  List<company_services> businessTypeList = new ArrayList<>();
                                     businessTypeList.add(services);
 
                                     insertServices(businessTypeList);*/

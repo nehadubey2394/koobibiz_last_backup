@@ -59,9 +59,9 @@ public class CertificatesListAdapter extends RecyclerView.Adapter<CertificatesLi
         }
 
         if (!certificate.certificateImage.equals("")){
-            Picasso.with(context).load(certificate.certificateImage).placeholder(R.drawable.gallery_placeholder).fit().into(holder.ivCertificate);
+            Picasso.with(context).load(certificate.certificateImage).placeholder(R.drawable.ic_gallery_placeholder).fit().into(holder.ivCertificate);
         }else {
-            holder.ivCertificate.setImageDrawable(context.getResources().getDrawable(R.drawable.gallery_placeholder));
+            holder.ivCertificate.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_gallery_placeholder));
         }
 
     }

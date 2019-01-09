@@ -1,4 +1,4 @@
-package com.mualab.org.biz.modules.business_setup.Services.adapter;
+package com.mualab.org.biz.modules.business_setup.company_services.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

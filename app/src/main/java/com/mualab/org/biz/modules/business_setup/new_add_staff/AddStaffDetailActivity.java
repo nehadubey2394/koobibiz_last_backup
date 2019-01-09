@@ -65,7 +65,6 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
     private RelativeLayout rlJobTitle,rlServices,rlMediaAccess,rlWorkingHours;
     private Spinner spJobTitle,spMediaAccess;
     private EditText etHoliday;
-    private Boolean isSlotExist = false;
 
     public void setHeaderVisibility(int visibility){
     }
@@ -145,7 +144,7 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 BusinessDay newTime = new BusinessDay();
                 newTime.dayName = companyTime.dayName;
                 newTime.dayId = companyTime.dayId;
-                isSlotExist = false;
+                Boolean isSlotExist = false;
 
                 for (BusinessDayForStaff day : staffDetail.staffHoursList){
 
@@ -359,8 +358,18 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                     args.putSerializable("edtTimeSlotList",(Serializable)edtTimeSlotList);
                     intent2.putExtra("BUNDLE",args);
                     startActivityForResult(intent2,11);
-                }else
-                    startActivityForResult(intent2,11);
+                }else {
+                    edtTimeSlotList.clear();
+                    for(BusinessDay tmp : getBusinessdays()) {
+                        if (tmp.isOpen) {
+                            edtTimeSlotList.add(tmp);
+                        }
+                    }
+                    Bundle args = new Bundle();
+                    args.putSerializable("edtTimeSlotList",(Serializable)edtTimeSlotList);
+                    intent2.putExtra("BUNDLE",args);
+                    startActivityForResult(intent2, 11);
+                }
 
                 break;
 
@@ -374,6 +383,12 @@ public class AddStaffDetailActivity extends AppCompatActivity implements View.On
                 break;
 
         }
+    }
+
+    private List<BusinessDay> getBusinessdays(){
+        PreRegistrationSession bpSession  = Mualab.getInstance().getBusinessProfileSession();
+        BusinessProfile businessProfile =  bpSession.getBusinessProfile();
+        return businessProfile.businessDays;
     }
 
     private void apiForAddStaff(final String jobTltle, final String mediaAccess,final String holiday){

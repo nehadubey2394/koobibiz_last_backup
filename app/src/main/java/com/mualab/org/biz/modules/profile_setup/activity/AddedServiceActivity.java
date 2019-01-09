@@ -28,7 +28,6 @@ import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.profile_setup.adapter.AddedServicesAdapter;
 import com.mualab.org.biz.modules.profile_setup.db_modle.Services;
-import com.mualab.org.biz.modules.profile_setup.fragment.NewBusinessCategoryFragments.AddedServicesFragment;
 import com.mualab.org.biz.modules.profile_setup.modle.AddedCategory;
 import com.mualab.org.biz.modules.profile_setup.modle.FinalServiceForUpdateServer;
 import com.mualab.org.biz.modules.profile_setup.modle.MyBusinessType;
@@ -539,7 +538,7 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
                 .setProgress(true)
                 .setBody(body, HttpTask.ContentType.APPLICATION_JSON));
 
-        task.execute(AddedServicesFragment.class.getName());
+        task.execute(AddedServiceActivity.class.getName());
     }
 
     @Override

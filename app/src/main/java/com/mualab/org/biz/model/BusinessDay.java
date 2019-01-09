@@ -13,7 +13,7 @@ public class BusinessDay implements Serializable {
     public int dayId;
     public String dayName;
     public boolean isOpen;
-    public boolean isExpand;
+    public boolean isExpand = false;
 
     public ArrayList<TimeSlot> slots = new ArrayList<>();
     public ArrayList<TimeSlot> tempSlots = new ArrayList<>();
