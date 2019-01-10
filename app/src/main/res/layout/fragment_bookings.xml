@@ -59,54 +59,69 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center">
+                        android:layout_marginBottom="10dp">
 
-                        <Spinner
-                            android:id="@+id/spBkDate"
+                        <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_alignParentStart="true"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginStart="15dp"
-                            android:background="@color/transparent"
-                            android:dropDownWidth="match_parent"
-                            android:minWidth="100dp"
-                            android:overlapAnchor="false"
-                            android:spinnerMode="dropdown"
-                            tools:targetApi="lollipop" />
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical">
 
-                        <Spinner
-                            android:id="@+id/spBkType"
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="match_parent"
+                                android:layout_toEndOf="@id/spBkDate"
+                                android:padding="2dp"
+                                app:srcCompat="@drawable/ic_sp_down_arrow"
+                                tools:ignore="ContentDescription" />
+
+                            <Spinner
+                                android:id="@+id/spBkDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginStart="15dp"
+                                android:background="@color/transparent"
+                                android:dropDownWidth="150dp"
+                                android:minWidth="100dp"
+                                android:overlapAnchor="false"
+                                android:spinnerMode="dropdown"
+                                tools:targetApi="lollipop" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rlBkType"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginStart="5dp"
-                            android:background="@color/transparent"
-                            android:dropDownWidth="match_parent"
-                            android:gravity="end"
-                            android:minWidth="100dp"
-                            android:overlapAnchor="false"
-                            android:spinnerMode="dropdown"
-                            tools:targetApi="lollipop" />
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:visibility="gone">
 
-                        <Spinner
-                            android:id="@+id/spBkStaff"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_toEndOf="@+id/spBkType"
-                            android:background="@color/transparent"
-                            android:dropDownWidth="match_parent"
-                            android:gravity="end"
-                            android:minWidth="90dp"
-                            android:overlapAnchor="false"
-                            android:spinnerMode="dropdown"
-                            android:visibility="gone"
-                            tools:targetApi="lollipop" />
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="5dp"
+                                android:layout_toEndOf="@id/spBkType"
+                                android:padding="2dp"
+                                app:srcCompat="@drawable/ic_sp_down_arrow"
+                                tools:ignore="ContentDescription" />
+
+                            <Spinner
+                                android:id="@+id/spBkType"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginStart="5dp"
+                                android:background="@color/transparent"
+                                android:dropDownWidth="100dp"
+                                android:gravity="end"
+                                android:overlapAnchor="false"
+                                android:spinnerMode="dropdown"
+                                tools:targetApi="lollipop" />
+                        </RelativeLayout>
+
 
                     </RelativeLayout>
 

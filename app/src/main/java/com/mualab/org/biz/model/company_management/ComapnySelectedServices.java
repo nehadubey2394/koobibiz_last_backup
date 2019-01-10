@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class ComapnySelectedServices implements Serializable{
     public String _id,status,artistId,businessId,serviceId,subserviceId,artistServiceId,
-            inCallPrice,outCallPrice,completionTime,title,staffId,deleteStatus,__v;
+            inCallPrice, outCallPrice, completionTime, title, staffId, deleteStatus, __v, bookingType = "";
 
 
     /*"_id":1,
@@ -22,5 +22,6 @@ public class ComapnySelectedServices implements Serializable{
 "artistServiceId":64,
 "businessId":1,
 "__v":0,
-"title":"Red color"*/
+"title":"Red color"
+"bookingType":"Both" or "Incall" or "Outcall"*/
 }

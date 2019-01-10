@@ -44,7 +44,6 @@ public class MyArrayAdapter extends android.widget.ArrayAdapter {
             view = inflater.inflate(R.layout.spinner, viewGroup, false);
         }
 
-        view.findViewById(R.id.img).setVisibility(View.VISIBLE);
         TextView tvSpinnerName = view.findViewById(R.id.tvName);
 
         tvSpinnerName.setText(data);

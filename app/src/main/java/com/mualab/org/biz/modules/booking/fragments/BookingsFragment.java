@@ -130,7 +130,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_booking, container, false);
         initView(rootView);
@@ -323,11 +323,7 @@ public class BookingsFragment extends Fragment implements View.OnClickListener, 
                 }
                 selectedDate = day.getYear() + "-" + sMonth + "-" + sDay;
 
-                if (!selectedDate.equals(getCurrentDate())) {
-                    isCurrentDate = false;
-                } else {
-                    isCurrentDate = true;
-                }
+                isCurrentDate = selectedDate.equals(getCurrentDate());
 
                 if (viewCalendar.isSelectedDay(day)) {
                     Calendar todayCal = Calendar.getInstance();

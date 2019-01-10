@@ -31,6 +31,7 @@ import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MySnackBar;
+import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     private Session session;
     private  long mLastClickTime = 0;
     private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnNotification,ibtnUser;
-    private ImageView ivHeaderBack;
+    private ImageView ivHeaderBack, imgNotif, imgListMenu;
     private ImageView ivDropDown;
     private TextView tvHeaderTitle;
     private int clickedId = 0;
@@ -70,6 +71,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     //private TextView tv_msg;
     private String lat="",lng="";
     // private ProgressBar progress_bar;
+    private boolean doubleBackToExitPressedOnce;
+    private Runnable runnable;
 
     public void setBackButtonVisibility(int visibility){
         if(ivHeaderBack!=null)
@@ -120,25 +123,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         ivHeaderBack = findViewById(R.id.ivHeaderBack);
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         ivDropDown = findViewById(R.id.ivDropDown);
+        imgNotif = findViewById(R.id.imgNotif);
+        imgListMenu = findViewById(R.id.imgListMenu);
         // tv_msg = findViewById(R.id.tv_msg);
         ibtnBookings.setImageResource(R.drawable.active_calender_ico);
         spBizName = findViewById(R.id.spBizName);
-        spBizName.setVisibility(View.GONE);
-        ibtnBookings.setOnClickListener(this);
-        ibtnChart.setOnClickListener(this);
-        ibtnAdd.setOnClickListener(this);
-        ibtnNotification.setOnClickListener(this);
-        ibtnUser.setOnClickListener(this);
-        ivHeaderBack.setOnClickListener(this);
+
+        setOnClickListener(ibtnBookings, ibtnChart, ibtnAdd, ibtnNotification, ibtnUser, ivHeaderBack, imgNotif, imgListMenu);
 
         int index = Mualab.getInstance().getBusinessProfileSession().getStepIndex();
 
         if(index==5 || !session.isBusinessProfileComplete()) {
             getBusinessProfile();
-        }
-        else
-            replaceFragment(BookingsFragment.newInstance(), false);
+        } else ibtnBookings.callOnClick();
 
+    }
+
+    private void setOnClickListener(View... views) {
+        for (View view : views) {
+            view.setOnClickListener(this);
+        }
     }
 
     private void getBusinessProfile(){
@@ -326,44 +330,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             case R.id.ivHeaderBack:
                 onBackPressed();
                 break;
+
             case R.id.ibtnBookings:
                 spBizName.setVisibility(View.GONE);
                 if (clickedId!=1){
+                    clickedId = 1;
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
-                    clickedId = 1;
-                    ibtnBookings.setImageResource(R.drawable.active_calender_ico);                     replaceFragment(new BookingsFragment(), false);
+                    ibtnBookings.setImageResource(R.drawable.active_calender_ico);
+                    replaceFragment(BookingsFragment.newInstance(), false);
                 }
                 break;
 
             case R.id.ibtnChart:
-                spBizName.setVisibility(View.GONE);
                 if (clickedId!=2){
+                    clickedId = 2;
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
-                    clickedId = 2;
                     ibtnChart.setImageResource(R.drawable.active_chart_ico);
                     replaceFragment(new AddFragment(), false);
                 }
                 break;
 
             case R.id.ibtnAdd:
-                spBizName.setVisibility(View.GONE);
                 if (clickedId!=3){
+                    clickedId = 3;
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
-                    clickedId = 3;
                     ibtnAdd.setImageResource(R.drawable.active_add_ico);
                     replaceFragment(new AddFragment(), false);
                 }
                 break;
 
             case R.id.ibtnNotification:
-                spBizName.setVisibility(View.GONE);
                 if (clickedId!=4){
+                    clickedId = 4;
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
-                    clickedId = 4;
                     ibtnNotification.setImageResource(R.drawable.active_notification_ico);
                     replaceFragment(new AddFragment(), false);
                 }
@@ -372,23 +375,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             case R.id.ibtnUser:
                 if (clickedId!=5){
                     // ivDropDown.setVisibility(View.VISIBLE);
-                    setInactiveTab();
                     clickedId = 5;
+                    setInactiveTab();
                     ibtnUser.setImageResource(R.drawable.active_user_ico);
                     replaceFragment(new BaseBusinessSetupFragment(), false);
                 }
+                break;
+
+            case R.id.imgNotif:
+                MyToast.getInstance(this).showSmallMessage(getString(R.string.under_development));
+                //startActivity(new Intent(this, PendingBookingActivity.class));
+                break;
+
+            case R.id.imgListMenu:
+                MyToast.getInstance(this).showSmallMessage(getString(R.string.under_development));
                 break;
         }
     }
 
     private void setInactiveTab(){
+        spBizName.setVisibility(clickedId == 5 ? View.VISIBLE : View.GONE);
         Mualab.getInstance().cancelAllPendingRequests();
+        imgNotif.setVisibility(clickedId == 1 ? View.VISIBLE : View.GONE);
+        imgListMenu.setVisibility(clickedId == 1 ? View.VISIBLE : View.GONE);
         ibtnBookings.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_calender_ico));
         ibtnChart.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_chart_ico));
         ibtnAdd.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_add_ico));
         ibtnNotification.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_notification_ico));
         ibtnUser.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_user_ico));
-
     }
 
     private void getDeviceLocation() {
@@ -455,9 +469,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
         }
     }
-
-    private boolean doubleBackToExitPressedOnce;
-    private Runnable runnable;
 
     @Override
     public void onBackPressed() {

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/topLayout1"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="0dp"
     app:cardElevation="2dp"
-    android:id="@+id/topLayout1"
     >
     <RelativeLayout
         android:id="@+id/rlHeader1"
@@ -20,65 +21,79 @@
             android:id="@+id/ivHeaderBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:padding="5dp"
-            android:layout_marginLeft="2dp"
-            android:src="@drawable/back_icon"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginStart="2dp"
+            android:padding="5dp"
+            android:src="@drawable/back_icon"
+            tools:ignore="ContentDescription" />
 
         <Spinner
             android:id="@+id/spBizName"
-            android:overlapAnchor="false"
-            android:background="@null"
-            android:popupBackground="@color/white"
-            android:textColor="@color/text_color"
             android:layout_width="@dimen/_230sdp"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:background="@null"
+            android:overlapAnchor="false"
+            android:popupBackground="@color/white"
             android:prompt="@string/business_type"
-            />
+            android:textColor="@color/text_color"
+            tools:targetApi="lollipop" />
 
 
         <TextView
             android:id="@+id/tvHeaderTitle"
             android:layout_width="wrap_content"
-            android:gravity="center"
             android:layout_height="wrap_content"
-            android:maxWidth="@dimen/_220sdp"
+            android:layout_centerInParent="true"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/title_bookings"
-            android:textSize="18sp"
             android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:maxWidth="@dimen/_220sdp"
+            android:text="@string/title_bookings"
             android:textColor="@color/text_color"
-            android:layout_centerInParent="true"/>
+            android:textSize="18sp" />
 
 
         <ImageView
             android:id="@+id/ivDropDown"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:padding="2dp"
-            android:visibility="gone"
-            android:clickable="false"
-            android:layout_toRightOf="@+id/tvHeaderTitle"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/drop_down_ico"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="20dp"
-             />
+            android:layout_toEndOf="@+id/tvHeaderTitle"
+            android:clickable="false"
+            android:padding="2dp"
+            android:src="@drawable/drop_down_ico"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
 
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/white_back_ico"
-            android:layout_alignParentRight="true"
+            android:id="@+id/imgNotif"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_toStartOf="@+id/imgListMenu"
+            android:padding="3dp"
             android:visibility="gone"
-            android:layout_alignParentEnd="true" />
+            app:srcCompat="@drawable/ic_notification"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imgListMenu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:padding="5dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_menu"
+            tools:ignore="ContentDescription" />
 
 
     </RelativeLayout>

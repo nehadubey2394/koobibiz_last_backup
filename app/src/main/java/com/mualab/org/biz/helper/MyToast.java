@@ -16,8 +16,9 @@ import com.mualab.org.biz.R;
 
 public class MyToast {
 
-    private Context context;
     private static MyToast instance;
+    private static Toast toast;
+    private Context context;
 
     /**
      * @param context
@@ -80,7 +81,8 @@ public class MyToast {
         View layout = inflater.inflate(R.layout.layout_custom_toast, null);
         TextView msgTv = layout.findViewById(R.id.tv_msg);
         msgTv.setText(message);
-        Toast toast = new Toast(context);
+        if (toast != null) toast.cancel();
+        toast = new Toast(context);
         toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
@@ -99,7 +101,8 @@ public class MyToast {
         TextView msgTv = layout.findViewById(R.id.tv_msg);
         tv_title.setText(title);
         msgTv.setText(message);
-        Toast toast = new Toast(context);
+        if (toast != null) toast.cancel();
+        toast = new Toast(context);
         toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);

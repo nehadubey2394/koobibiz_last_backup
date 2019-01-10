@@ -13,7 +13,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.helper.MyToast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -171,7 +170,7 @@ public class MyFlexibleCalendar extends MyUICalendar {
                 // set the selected item
                 if (isSelectedDay(day)) {
                     if (!isFirstimeLoad){
-                        Calendar todayCal = Calendar.getInstance();
+                        /*Calendar todayCal = Calendar.getInstance();
                         int cYear  = todayCal.get(Calendar.YEAR);
                         int cMonth  = todayCal.get(Calendar.MONTH)+1;
                         int cDay  = todayCal.get(Calendar.DAY_OF_MONTH);
@@ -190,7 +189,11 @@ public class MyFlexibleCalendar extends MyUICalendar {
                             }
                         }else {
                             MyToast.getInstance(mContext).showDasuAlert("You can't select previous date");
-                        }
+                        }*/
+
+                        mTxtTitle.setText(dateFormat.format(mAdapter.getCalendar().getTime()));
+                        txtDay.setBackground(getSelectedItemBackgroundDrawable());
+                        txtDay.setTextColor(getSelectedItemTextColor());
                     }
                 }
             }

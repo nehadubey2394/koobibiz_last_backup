@@ -401,6 +401,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
+
+        <activity
+            android:name=".modules.new_booking.activity.PendingBookingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>
