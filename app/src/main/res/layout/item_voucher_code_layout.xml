@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/ivEdit"
             android:src="@drawable/edit_ico"
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:background="@color/gray"
             android:padding="12dp"
             android:visibility="visible"
@@ -29,7 +29,7 @@
         <ImageView
             android:id="@+id/ivRemove"
             android:src="@drawable/delete_ico"
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:background="@color/red"
             android:padding="12dp"
             android:layout_height="match_parent" />

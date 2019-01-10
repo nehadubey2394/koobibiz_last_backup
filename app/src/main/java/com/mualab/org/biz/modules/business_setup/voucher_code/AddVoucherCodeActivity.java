@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,14 +26,18 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.InputFilterMinMax;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.VoucherCode;
 import com.mualab.org.biz.modules.business_setup.voucher_code.adapter.CustomSpAdapter;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
+import com.mualab.org.biz.util.CalanderUtils;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
+import com.mualab.org.biz.util.KeyboardUtil;
+import com.mualab.org.biz.util.Utils;
 
 import org.json.JSONObject;
 
@@ -77,7 +80,6 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
         // tvDiscountType = findViewById(R.id.tvDiscountType);
         edt_discount = findViewById(R.id.edt_discount);
         edt_voucher_code = findViewById(R.id.edt_voucher_code);
-        edt_voucher_code.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
         ivValidityAerow = findViewById(R.id.ivValidityAerow);
         llValidityDate = findViewById(R.id.llValidityDate);
@@ -93,8 +95,12 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
         if (voucherCode!=null){
             edt_discount.setText(voucherCode.amount);
             edt_voucher_code.setText(voucherCode.voucherCode);
-            tvFromdate.setText(voucherCode.startDate);
-            tvTodate.setText(voucherCode.endDate);
+            edt_voucher_code.setEnabled(false);
+            fromDate = voucherCode.startDate;
+            toDate = voucherCode.endDate;
+            tvFromdate.setText(Utils.getDateToShowFormate(voucherCode.startDate));
+            tvTodate.setText(Utils.getDateToShowFormate(voucherCode.endDate));
+
             switch (voucherCode.discountType) {
                 case "1":
                     arrayList.add("Amount(£)");
@@ -114,6 +120,7 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
             arrayList.add("Discount Type");
             arrayList.add("Percentage(%)");
             arrayList.add("Amount(£)");
+            edt_voucher_code.setEnabled(true);
         }
 
         final Spinner spDiscountType = findViewById(R.id.spDiscountType);
@@ -134,9 +141,9 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
                     edt_discount.setText("");
 
                 if (sDiscountType.equals("Percentage(%)"))
-                    edt_discount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+                    edt_discount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3),new InputFilterMinMax(1, 100),new InputFilter.AllCaps()});
                 else
-                    edt_discount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
+                    edt_discount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7),new InputFilterMinMax(1, 100),new InputFilter.AllCaps()});
 
                 if (sDiscountType.equals("Discount Type"))
                     edt_discount.setVisibility(View.GONE);
@@ -161,7 +168,6 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
         ivHeaderBack.setOnClickListener(this);
         btnSave.setOnClickListener(this);
 
-        edt_discount.setFilters(new InputFilter[]{new InputFilterMinMax(1, 100)});
 
         edt_discount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -214,14 +220,20 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.ivHeaderBack:
+                KeyboardUtil.hideKeyboard(edt_discount, AddVoucherCodeActivity.this);
+                KeyboardUtil.hideKeyboard(edt_voucher_code, AddVoucherCodeActivity.this);
                 finish();
                 break;
 
             case R.id.tvFromdate:
                 datePicker("from");
+                KeyboardUtil.hideKeyboard(edt_discount, AddVoucherCodeActivity.this);
+                KeyboardUtil.hideKeyboard(edt_voucher_code, AddVoucherCodeActivity.this);
                 break;
 
             case R.id.tvTodate:
+                KeyboardUtil.hideKeyboard(edt_discount, AddVoucherCodeActivity.this);
+                KeyboardUtil.hideKeyboard(edt_voucher_code, AddVoucherCodeActivity.this);
                 if (fromDate!=null && !fromDate.isEmpty())
                     datePicker("to");
                 else
@@ -229,6 +241,8 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.rlValidity:
+                KeyboardUtil.hideKeyboard(edt_discount, AddVoucherCodeActivity.this);
+                KeyboardUtil.hideKeyboard(edt_voucher_code, AddVoucherCodeActivity.this);
                 if (isExpand){
                     isExpand = false;
                     ivValidityAerow.setRotation(360);
@@ -242,6 +256,9 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.btnSave:
+                KeyboardUtil.hideKeyboard(edt_discount, AddVoucherCodeActivity.this);
+                KeyboardUtil.hideKeyboard(edt_voucher_code, AddVoucherCodeActivity.this);
+
                 if (checkNotempty(edt_voucher_code.getText().toString().trim())){
 
                     if (checkNotempty(edt_discount.getText().toString().trim())){
@@ -267,6 +284,14 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        KeyboardUtil.hideKeyboard(edt_discount, AddVoucherCodeActivity.this);
+        KeyboardUtil.hideKeyboard(edt_voucher_code, AddVoucherCodeActivity.this);
+        super.onBackPressed();
+        finish();
+    }
+
     private void datePicker(final String tag){
         // Get Current Date
         if (tag.equals("from")) {
@@ -277,36 +302,48 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
         }
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        Date date = new Date(year, monthOfYear, dayOfMonth-1);
+                (view, year, monthOfYear, dayOfMonth) -> {
 
-                        if (tag.equals("from")) {
-                            fromDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                            tvFromdate.setText(fromDate);
-                            tvTodate.setText("");
-                            mYear = year;
-                            mMonth = monthOfYear+1;
-                            mDay = dayOfMonth;
-
+                    if (tag.equals("from")) {
+                        if (monthOfYear<10) {
+                            fromDate = year + "-" + "0" +(monthOfYear + 1) + "-" + dayOfMonth;
+                            tvFromdate.setText(dayOfMonth + "/" + "0" +(monthOfYear + 1) + "/" + year);
+                        }else {
+                            fromDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            tvFromdate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                         }
-                        else {
-                            toDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                            tvTodate.setText(toDate);
-                        }
+                        // tvFromdate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
 
+                        tvTodate.setText("");
+                        mYear = year;
+                        mMonth = monthOfYear+1;
+                        mDay = dayOfMonth;
 
                     }
+                    else {
+                        if (monthOfYear<10) {
+                            toDate = year + "-" + "0" +(monthOfYear + 1) + "-" + dayOfMonth;
+                            tvTodate.setText(dayOfMonth + "/" + "0" + (monthOfYear + 1) + "/" + year);
+
+                        } else {
+                            toDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            tvTodate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        }
+                    }
+
+
                 }, mYear, mMonth, mDay);
         if (tag.equals("from")) {
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         }else {
-            Calendar cal = GregorianCalendar.getInstance();
-            cal.setTimeInMillis(0);
-            cal.set(mYear, mMonth, mDay, 11, 12, 13);
+            String sDate = CalanderUtils.formatDate(fromDate, Constants.SERVER_TIMESTAMP_FORMAT,Constants.SERVER_TIMESTAMP_FORMAT);
+            Date cDate = CalanderUtils.getDateFormat(sDate, Constants.SERVER_TIMESTAMP_FORMAT);
+            assert cDate != null;
+            datePickerDialog.getDatePicker().setMinDate(cDate.getTime());
+          /*  Calendar cal = GregorianCalendar.getInstance();
+            cal.set(mYear, mMonth-1, mDay);
             Date chosenDate = cal.getTime();
-            datePickerDialog.getDatePicker().setMinDate(chosenDate.getTime());
+            datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());*/
         }
         datePickerDialog.show();
     }
@@ -330,19 +367,23 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
 
         //  pbLoder.setVisibility(View.VISIBLE);
         Map<String,String> body = new HashMap<>();
-        body.put("voucherCode", edt_voucher_code.getText().toString().trim());
         if (sDiscountType.equals("Percentage(%)"))
             body.put("discountType", "2");// (1:Fix;2:percentage)
         else
             body.put("discountType", "1");
 
         body.put("amount", edt_discount.getText().toString().trim());
-        body.put("startDate", tvFromdate.getText().toString().trim());
-        body.put("endDate", tvTodate.getText().toString().trim());
-        if (voucherCode!=null)
-            body.put("id ", voucherCode._id);
-        else
-            body.put("id ", "");
+        body.put("startDate", fromDate);
+        body.put("endDate", toDate);
+        body.put("voucherCode", edt_voucher_code.getText().toString().trim());
+        if (voucherCode!=null) {
+            body.put("id", voucherCode._id);
+            //  body.put("voucherCode", "");
+        }
+        else {
+            //  body.put("voucherCode", edt_voucher_code.getText().toString().trim());
+            body.put("id", "");
+        }
 
 
         HttpTask task = new HttpTask(new HttpTask.Builder(AddVoucherCodeActivity.this,

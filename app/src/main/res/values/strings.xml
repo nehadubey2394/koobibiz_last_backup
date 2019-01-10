@@ -189,8 +189,8 @@
     <string name="type_subcategory_name">Type Subcategory name</string>
     <string name="hh_mm">HH:MM</string>
     <string name="next_service">Next Service</string>
-    <string name="txt_visitor_msg"><b>If you're site vistor</b>\nIf you immediate assistance, please send as an email instead. We apologize for any inconvenience.</string>
-    <string name="txt_owner_msg"><b>If you're site owner</b>\nThe</string>
+    <string name="txt_visitor_msg"><b>If you\'re site vistor</b>\nIf you immediate assistance, please send as an email instead. We apologize for any inconvenience.</string>
+    <string name="txt_owner_msg"><b>If you\'re site owner</b>\nThe</string>
 
     <string name="select_incall_preparation_time">Please select incall buffer time.</string>
     <string name="select_outcall_preparation_time">Please select outcall buffer time.</string>

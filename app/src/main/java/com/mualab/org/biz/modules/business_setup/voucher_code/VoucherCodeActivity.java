@@ -213,7 +213,13 @@ public class VoucherCodeActivity extends AppCompatActivity {
                         MyToast.getInstance(VoucherCodeActivity.this).showDasuAlert(message);
                     }
                     //    pbLoder.setVisibility(View.GONE);
-
+                    if (voucherCodeList.size()==0) {
+                        tvNoRecord.setVisibility(View.VISIBLE);
+                        rvVouchers.setVisibility(View.GONE);
+                    }else {
+                        tvNoRecord.setVisibility(View.GONE);
+                        rvVouchers.setVisibility(View.VISIBLE);
+                    }
 
                 }catch (Exception e) {
                     Progress.hide(VoucherCodeActivity.this);

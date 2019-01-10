@@ -38,7 +38,7 @@ public class Utils {
         return date;
     }
 
-    public static String changeDateFormate2(String sDate){
+    public static String getDateToShowFormate(String sDate){
         SimpleDateFormat inputDf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat outputtDf = new SimpleDateFormat("dd/MM/yyyy");
         Date formatedDate = null;
