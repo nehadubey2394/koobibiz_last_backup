@@ -59,29 +59,17 @@ public class DatePicker extends LinearLayout {
     private static final String DATE_FORMAT = "MMMM/dd/yyyy";
 
     private static final boolean DEFAULT_ENABLED_STATE = true;
-
-    private LinearLayout mPickerContainer;
-
-    private NumberPicker mDaySpinner;
-
-    private NumberPicker mMonthSpinner;
-
-    private NumberPicker mYearSpinner;
-
-    private EditText mDaySpinnerInput;
-
-    private EditText mMonthSpinnerInput;
-
-    private EditText mYearSpinnerInput;
-
-    private Context mContext;
-
-    private OnDateChangedListener mOnDateChangedListener;
-
-    private String[] mShortMonths;
-
     private final java.text.DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
-
+    private LinearLayout mPickerContainer;
+    private NumberPicker mDaySpinner;
+    private NumberPicker mMonthSpinner;
+    private NumberPicker mYearSpinner;
+    private EditText mDaySpinnerInput;
+    private EditText mMonthSpinnerInput;
+    private EditText mYearSpinnerInput;
+    private Context mContext;
+    private OnDateChangedListener mOnDateChangedListener;
+    private String[] mShortMonths;
     private int mNumberOfMonths;
 
     private Calendar mTempDate;
@@ -298,16 +286,16 @@ public class DatePicker extends LinearLayout {
     }
 
     @Override
+    public boolean isEnabled() {
+        return mIsEnabled;
+    }
+
+    @Override
     public void setEnabled(boolean enabled) {
         mDaySpinner.setEnabled(enabled);
         mMonthSpinner.setEnabled(enabled);
         mYearSpinner.setEnabled(enabled);
         mIsEnabled = enabled;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return mIsEnabled;
     }
 
     @Override
@@ -444,7 +432,7 @@ public class DatePicker extends LinearLayout {
     }
 
     private void updateSpinners() {
-        // set the spinner ranges respecting the min and max dates
+        // set the left_spinner ranges respecting the min and max dates
         mDaySpinner.setVisibility(mIsDayShown ? View.VISIBLE : View.GONE);
         if (mCurrentDate.equals(mMinDate)) {
             mDaySpinner.setMinValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
@@ -473,18 +461,18 @@ public class DatePicker extends LinearLayout {
         }
 
         // make sure the month names are a zero based array
-        // with the months in the month spinner
+        // with the months in the month left_spinner
         String[] displayedValues = Arrays.copyOfRange(mShortMonths,
                                                       mMonthSpinner.getMinValue(),
                                                       mMonthSpinner.getMaxValue() + 1);
         mMonthSpinner.setDisplayedValues(displayedValues);
 
-        // year spinner range does not change based on the current date
+        // year left_spinner range does not change based on the current date
         mYearSpinner.setMinValue(mMinDate.get(Calendar.YEAR));
         mYearSpinner.setMaxValue(mMaxDate.get(Calendar.YEAR));
         mYearSpinner.setWrapSelectorWheel(false);
 
-        // set the spinner values
+        // set the left_spinner values
         mYearSpinner.setValue(mCurrentDate.get(Calendar.YEAR));
         mMonthSpinner.setValue(mCurrentDate.get(Calendar.MONTH));
         mDaySpinner.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
@@ -509,11 +497,11 @@ public class DatePicker extends LinearLayout {
     }
 
     /**
-     * Sets the IME options for a spinner based on its ordering.
+     * Sets the IME options for a left_spinner based on its ordering.
      *
-     * @param spinner      The spinner.
-     * @param spinnerCount The total spinner count.
-     * @param spinnerIndex The index of the given spinner.
+     * @param spinner      The left_spinner.
+     * @param spinnerCount The total left_spinner count.
+     * @param spinnerIndex The index of the given left_spinner.
      */
     private void setImeOptions(NumberPicker spinner, int spinnerCount, int spinnerIndex) {
         final int imeOptions;
@@ -569,6 +557,17 @@ public class DatePicker extends LinearLayout {
         updateSpinners();
     }
 
+    private void changeDividerColor(NumberPicker picker, int color) {
+        try {
+            Field mField = NumberPicker.class.getDeclaredField("mSelectionDivider");
+            mField.setAccessible(true);
+            ColorDrawable colorDrawable = new ColorDrawable(color);
+            mField.set(picker, colorDrawable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private static class SavedState extends BaseSavedState {
 
         @SuppressWarnings("unused") public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
@@ -621,18 +620,6 @@ public class DatePicker extends LinearLayout {
             dest.writeLong(minDate);
             dest.writeLong(maxDate);
             dest.writeByte(isDaySpinnerShown ? (byte) 1 : (byte) 0);
-        }
-    }
-
-
-    private void changeDividerColor(NumberPicker picker, int color) {
-        try {
-            Field mField = NumberPicker.class.getDeclaredField("mSelectionDivider");
-            mField.setAccessible(true);
-            ColorDrawable colorDrawable = new ColorDrawable(color);
-            mField.set(picker, colorDrawable);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

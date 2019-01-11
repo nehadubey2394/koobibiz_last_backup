@@ -28,6 +28,12 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
     private static final int STATE_DEFAULT = -1;
     private static final int STATE_REFRESH = 11;
     private static final int STATE_LOADMORE = 12;
+    private static final float DRAG_RATE = 0.5f;
+    private static final int INVALID_POINTER = -1;
+    private final NestedScrollingParentHelper mNestedScrollingParentHelper;
+    private final NestedScrollingChildHelper mNestedScrollingChildHelper;
+    private final int[] mParentScrollConsumed = new int[2];
+    private final int[] mParentOffsetInWindow = new int[2];
     public View header;
     public View footer;
     @Nullable
@@ -35,33 +41,32 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
     @Nullable
     public FooterListener mFooterListener;
     public int bottomScroll;
+    public int ANIMATION_DURATION = 300;
+    public boolean isLoading = false;
+    public boolean isRefreshing = false;
     private View mTarget; // the target of the gesture
     private OnRefreshListener listener;
     private RefreshStatus refreshStatus = RefreshStatus.DEFAULT;
-    private static final float DRAG_RATE = 0.5f;
-    private static final int INVALID_POINTER = -1;
-    public int ANIMATION_DURATION = 300;
     private boolean isRefreshSuccess = false;
     private boolean isLoadSuccess = false;
-    public boolean isLoading = false;
-    public boolean isRefreshing = false;
     private boolean isAutoRefresh = false;
     private boolean isAutoLoad = false;
     private int currentStatus = STATE_DEFAULT;
     private boolean loadEnable = true;
     private boolean refreshEnable = true;
-
-    private final NestedScrollingParentHelper mNestedScrollingParentHelper;
-    private final NestedScrollingChildHelper mNestedScrollingChildHelper;
     private OnChildScrollUpCallback mChildScrollUpCallback;
-
-    private final int[] mParentScrollConsumed = new int[2];
-    private final int[] mParentOffsetInWindow = new int[2];
     private int mTotalUnconsumed;
     private int mTotalUnconsumedLoadMore;
     private boolean mNestedScrollInProgress;
     private int footHeight;
     private int headerHeight;
+    Runnable loadAction = new Runnable() {
+        @Override
+        public void run() {
+            scrollToDefaultStatus(RefreshStatus.LOAD_COMPLETE);
+            isLoading = false;
+        }
+    };
     private boolean mIsBeingDragged;
     private float mTouchSlop;
     private int mActivePointerId;
@@ -73,6 +78,7 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
         this(context, null);
     }
 
+
     public RjRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         mNestedScrollingParentHelper = new NestedScrollingParentHelper(this);
@@ -82,6 +88,8 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
         ensureTarget();
     }
 
+
+    // NestedScrollingChild
 
     @Override
     public void onNestedScrollAccepted(View child, View target, int axes) {
@@ -93,9 +101,6 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
         mNestedScrollInProgress = true;
     }
 
-
-    // NestedScrollingChild
-
     @Override
     public void setEnabled(boolean enabled) {
         setNestedScrollingEnabled(enabled);
@@ -103,13 +108,13 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
     }
 
     @Override
-    public void setNestedScrollingEnabled(boolean enabled) {
-        mNestedScrollingChildHelper.setNestedScrollingEnabled(enabled);
+    public boolean isNestedScrollingEnabled() {
+        return mNestedScrollingChildHelper.isNestedScrollingEnabled();
     }
 
     @Override
-    public boolean isNestedScrollingEnabled() {
-        return mNestedScrollingChildHelper.isNestedScrollingEnabled();
+    public void setNestedScrollingEnabled(boolean enabled) {
+        mNestedScrollingChildHelper.setNestedScrollingEnabled(enabled);
     }
 
     @Override
@@ -146,7 +151,6 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
         return dispatchNestedPreFling(velocityX, velocityY);
     }
 
-
     @Override
     public boolean dispatchNestedFling(float velocityX, float velocityY, boolean consumed) {
         return mNestedScrollingChildHelper.dispatchNestedFling(velocityX, velocityY, consumed);
@@ -156,7 +160,6 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
     public boolean dispatchNestedPreFling(float velocityX, float velocityY) {
         return mNestedScrollingChildHelper.dispatchNestedPreFling(velocityX, velocityY);
     }
-
 
     @Override
     public int getNestedScrollAxes() {
@@ -170,7 +173,7 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
 
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
-        // If we are in the middle of consuming, a scroll, then we want to move the spinner back up
+        // If we are in the middle of consuming, a scroll, then we want to move the left_spinner back up
         // before allowing the list to scroll
         if (refreshEnable && header != null && !isRefreshing && currentStatus == STATE_REFRESH && dy > 0 && mTotalUnconsumed > 0) {
             mTotalUnconsumed -= dy;
@@ -204,7 +207,6 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
         }
     }
 
-
     @Override
     public void onNestedScroll(View target, int dxConsumed, int dyConsumed,
                                int dxUnconsumed, int dyUnconsumed) {
@@ -234,12 +236,11 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
         return dispatchNestedFling(velocityX, velocityY, consumed);
     }
 
-
     @Override
     public void onStopNestedScroll(View target) {
         mNestedScrollingParentHelper.onStopNestedScroll(target);
         mNestedScrollInProgress = false;
-        // Finish the spinner for nested scrolling if we ever consumed any
+        // Finish the left_spinner for nested scrolling if we ever consumed any
         // unconsumed nested scroll
 //        if (mTotalUnconsumed > 0) {
 //            finishSpinner(mTotalUnconsumed);
@@ -516,7 +517,6 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
         return true;
     }
 
-
     @SuppressLint("NewApi")
     private void startDragging(float y) {
         final float yDiff = y - mInitialDownY;
@@ -550,24 +550,6 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
 
     public void setAutoLoadMore(boolean autoLoad) {
         isAutoLoad = autoLoad;
-    }
-
-
-    /**
-     * Classes that wish to override {@link SwipeRefreshLayout#canChildScrollUp()} method
-     * behavior should implement this interface.
-     */
-    @SuppressWarnings("WeakerAccess")
-    public interface OnChildScrollUpCallback {
-        /**
-         * Callback that will be called when {@link SwipeRefreshLayout#canChildScrollUp()} method
-         * is called to allow the implementer to override its behavior.
-         *
-         * @param parent SwipeRefreshLayout that this callback is overriding.
-         * @param child  The child view of Swipe
-         * @return Whether it is possible for the child view of parent layout to scroll up.
-         */
-        boolean canChildScrollUp(RjRefreshLayout parent, @Nullable View child);
     }
 
     /**
@@ -851,14 +833,6 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
         postDelayed(refreshAction, delay);
     }
 
-    Runnable loadAction = new Runnable() {
-        @Override
-        public void run() {
-            scrollToDefaultStatus(RefreshStatus.LOAD_COMPLETE);
-            isLoading = false;
-        }
-    };
-
     public void stopLoadMore(boolean isSuccess) {
         stopLoadMore(isSuccess, 0);
     }
@@ -893,6 +867,23 @@ public class RjRefreshLayout extends ViewGroup implements NestedScrollingParent,
                 listener.onEnd();
             }
         });
+    }
+
+    /**
+     * Classes that wish to override {@link SwipeRefreshLayout#canChildScrollUp()} method
+     * behavior should implement this interface.
+     */
+    @SuppressWarnings("WeakerAccess")
+    public interface OnChildScrollUpCallback {
+        /**
+         * Callback that will be called when {@link SwipeRefreshLayout#canChildScrollUp()} method
+         * is called to allow the implementer to override its behavior.
+         *
+         * @param parent SwipeRefreshLayout that this callback is overriding.
+         * @param child  The child view of Swipe
+         * @return Whether it is possible for the child view of parent layout to scroll up.
+         */
+        boolean canChildScrollUp(RjRefreshLayout parent, @Nullable View child);
     }
 
     interface AnimListener {

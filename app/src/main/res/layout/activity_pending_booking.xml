@@ -13,44 +13,75 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white">
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="1.5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="15dp"
-            android:gravity="center">
+            android:layout_marginTop="15dp">
 
-            <Spinner
-                android:id="@+id/spBkType"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="10dp"
-                android:background="@color/transparent"
-                android:dropDownWidth="match_parent"
-                android:gravity="end"
-                android:minWidth="100dp"
-                android:overlapAnchor="false"
-                android:spinnerMode="dropdown"
-                tools:targetApi="lollipop" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical">
 
-            <Spinner
-                android:id="@+id/spBkStaff"
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="match_parent"
+                    android:layout_toEndOf="@id/spBkType"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/ic_sp_down_arrow"
+                    tools:ignore="ContentDescription" />
+
+                <Spinner
+                    android:id="@+id/spBkType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@color/transparent"
+                    android:dropDownWidth="100dp"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown"
+                    tools:targetApi="lollipop" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlStaff"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="5dp"
-                android:background="@color/transparent"
-                android:dropDownWidth="match_parent"
-                android:gravity="end"
-                android:minWidth="90dp"
-                android:overlapAnchor="false"
-                android:spinnerMode="dropdown"
-                tools:targetApi="lollipop" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_toEndOf="@id/spBkStaff"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/ic_sp_down_arrow"
+                    tools:ignore="ContentDescription" />
+
+                <Spinner
+                    android:id="@+id/spBkStaff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@color/transparent"
+                    android:dropDownWidth="100dp"
+                    android:gravity="end"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown"
+                    tools:targetApi="lollipop" />
+            </RelativeLayout>
+
 
         </RelativeLayout>
 
@@ -60,10 +91,7 @@
         android:id="@+id/rvPendBookings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="4dp"
+        android:layout_margin="5dp"
         android:isScrollContainer="false"
         android:nestedScrollingEnabled="false"
         android:overScrollMode="never"

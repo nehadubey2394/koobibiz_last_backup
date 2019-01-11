@@ -75,7 +75,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class BaseBusinessSetupFragment extends Fragment implements View.OnClickListener {
-    private String mParam1;
     private Context mContext;
     private TextView tvBusinessName,tvServiceType,tvRatingCount,tvBusiness,tvStaff,
             tvHeaderTitle;
@@ -91,26 +90,19 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
     private int currentSelectedBusiness;
     private  Session session;
     private Spinner spBizName;
+    private PreRegistrationSession pSession;
 
     public BaseBusinessSetupFragment() {
         // Required empty public constructor
     }
 
-    public static BaseBusinessSetupFragment newInstance(String param1) {
+    public static BaseBusinessSetupFragment newInstance() {
         BaseBusinessSetupFragment fragment = new BaseBusinessSetupFragment();
         Bundle args = new Bundle();
-        args.putString("param1", param1);
         fragment.setArguments(args);
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString("param1");
-        }
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -133,6 +125,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
     private void initView(){
         session = Mualab.getInstance().getSessionManager();
         ((MainActivity) mContext).setTitle(getString(R.string.title_buisness_admin));
+        pSession = Mualab.getInstance().getBusinessProfileSession();
     }
 
     private void setView(View rootView){
@@ -171,32 +164,36 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         LinearLayout llVoucherCode = rootView.findViewById(R.id.llVoucherCode);
         LinearLayout llPaymentSeup = rootView.findViewById(R.id.llPaymentSeup);
 
-        arrayAdapter = new CompanyListSppinnerAdapter(mContext,
-                companyList);
+        arrayAdapter = new CompanyListSppinnerAdapter(mContext, companyList);
 
         spBizName.setAdapter(arrayAdapter);
-        spBizName.setPrompt("");
         spBizName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                spBizName.setPrompt("");
-                TextView textView =  view.findViewById(R.id.tvSpItem);
-                textView.setText("");
-                tvHeaderTitle.setText(companyList.get(i).businessName);
-                currentSelectedBusiness = i;
+                synchronized (this) {
+                    spBizName.setPrompt("");
+                    TextView textView = view.findViewById(R.id.tvSpItem);
+                    textView.setText("");
+                    tvHeaderTitle.setText(companyList.get(i).businessName);
 
-                if (i==0) {
-                    llRow2.setVisibility(View.VISIBLE);
-                    llRow3.setVisibility(View.VISIBLE);
-                    llTabs.setVisibility(View.VISIBLE);
-                    llLineView.setVisibility(View.VISIBLE);
-                    line2.setVisibility(View.GONE);
-                }else {
-                    llRow2.setVisibility(View.GONE);
-                    llRow3.setVisibility(View.GONE);
-                    llTabs.setVisibility(View.GONE);
-                    llLineView.setVisibility(View.GONE);
-                    line2.setVisibility(View.VISIBLE);
+                    //update status of company for booking
+                    pSession.createCurrentCompanyDetail(companyList.get(i));
+
+                    currentSelectedBusiness = i;
+
+                    if (i == 0) {
+                        llRow2.setVisibility(View.VISIBLE);
+                        llRow3.setVisibility(View.VISIBLE);
+                        llTabs.setVisibility(View.VISIBLE);
+                        llLineView.setVisibility(View.VISIBLE);
+                        line2.setVisibility(View.GONE);
+                    } else {
+                        llRow2.setVisibility(View.GONE);
+                        llRow3.setVisibility(View.GONE);
+                        llTabs.setVisibility(View.GONE);
+                        llLineView.setVisibility(View.GONE);
+                        line2.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -235,7 +232,6 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
 
         switch (view.getId()){
             case R.id.llBusinessInfo:
@@ -304,7 +300,6 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                         intent.putExtra("BUNDLE",args);
                         startActivity(intent);
                     }
-
                 }
 
                 break;
@@ -459,12 +454,13 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                     if (status.equalsIgnoreCase("success")) {
                         companyList.clear();
 
+                        int selectedCompanyPos = 0;
                         CompanyDetail item1 = new CompanyDetail();
                         item1.businessName = getString(R.string.title_buisness_admin);
                         companyList.add(item1);
 
                         JSONArray jsonArray = js.getJSONArray("businessList");
-
+                        String sCurCompId = pSession.getCurrentCompanyDetail()._id;
                         if (jsonArray!=null && jsonArray.length()!=0) {
                             tvStaff.setClickable(false);
 
@@ -482,6 +478,12 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                                 item.address = object.getString("address");
                                 item.userName = object.getString("userName");
                                 item.status  = object.getString("status");
+
+                                //for preselected session company
+                                if (sCurCompId.equals(item._id)) {
+                                    selectedCompanyPos = i;
+                                    ++selectedCompanyPos;
+                                }
 
                                 JSONArray staffHoursArray = object.getJSONArray("staffHours");
 
@@ -541,15 +543,26 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                                 }
 
                                 JSONArray staffServiceArray = object.getJSONArray("staffService");
+                                Boolean isOutcall = false, isIncall = false;
                                 for (int k=0; k<staffServiceArray.length(); k++){
                                     JSONObject object3 = staffServiceArray.getJSONObject(k);
                                     Gson gson = new Gson();
                                     ComapnySelectedServices item3 = gson.fromJson(String.valueOf(object3), ComapnySelectedServices.class);
+
+                                    if (!isOutcall && item3.bookingType.equals("Outcall")) {
+                                        isOutcall = true;
+                                        item.serviceTypeOfCompany = item3.bookingType;
+                                    } else if (!isIncall && item3.bookingType.equals("Incall")) {
+                                        isIncall = true;
+                                        item.serviceTypeOfCompany = item3.bookingType;
+                                    } else {
+                                        item.serviceTypeOfCompany = item3.bookingType;
+                                    }
+
                                     item.staffService.add(item3);
                                 }
 
-                                if (item.status.equals("1"))
-                                    companyList.add(item);
+                                if (item.status.equals("1")) companyList.add(item);
                             }
 
                             if (companyList.size()==1 ||  companyList.size()==0) {
@@ -558,6 +571,7 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                             }else {
                                 ivDropDown.setVisibility(View.VISIBLE);
                                 spBizName.setVisibility(View.VISIBLE);
+                                spBizName.setSelection(selectedCompanyPos);
                             }
 
                             arrayAdapter.notifyDataSetChanged();
@@ -686,7 +700,6 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                     JSONArray jsonArray = jsonObject.getJSONArray("artistRecord");
 
                     if(jsonArray.length()>0){
-                        PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
                         JSONObject obj = jsonArray.getJSONObject(0);
                         BusinessProfile bsp = new BusinessProfile();
 
