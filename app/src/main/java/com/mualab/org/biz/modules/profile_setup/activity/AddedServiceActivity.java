@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -51,15 +50,17 @@ import java.util.Map;
 
 public class AddedServiceActivity extends AppCompatActivity implements View.OnClickListener {
     private ProgressBar pbLoder;
-    private TextView tvNoRecord;
+    private TextView tvNoRecord,tvInCall,tvOutCall;
     private long mLastClickTime = 0;
     private RecyclerView listViewServices;
+    private LinearLayout tabIncall, tabOutcall;
     private View topLine;
     private List<Services> servicesList ;
     private Handler handler = new Handler(Looper.getMainLooper());
     private AddedServicesAdapter servicesListAdapter;
-    private List<Services>tempServicesList;
-    protected User user;
+    private List<Services>mainServicesList,tempList,inCallServiceList,outCallServiceList;
+    private User user;
+    private String serviceType = "Incall";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,14 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
     private void init(){
         if(user==null) user = Mualab.getInstance().getSessionManager().getUser(); // get session object
         servicesList = new ArrayList<>();
-        tempServicesList = new ArrayList<>();
+        mainServicesList = new ArrayList<>();
+        tempList = new ArrayList<>();
+        inCallServiceList = new ArrayList<>();
+        outCallServiceList = new ArrayList<>();
         ImageView iv_back = findViewById(R.id.iv_back);
         ImageView ivKoobiLogo = findViewById(R.id.ivKoobiLogo);
         TextView tvHeaderText = findViewById(R.id.tvHeaderText);
-        tvHeaderText.setText("Service Category");
+        tvHeaderText.setText(getString(R.string.service_cateory));
         ivKoobiLogo.setVisibility(View.GONE);
         tvHeaderText.setVisibility(View.VISIBLE);
         ImageView ivBasicInfo = findViewById(R.id.ivBasicInfo);
@@ -95,21 +99,48 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
         LinearLayout llAddCategory = findViewById(R.id.llAddCategory);
         tvNoRecord = findViewById(R.id.tvNoRecord);
         topLine = findViewById(R.id.topLine);
+        tvInCall = findViewById(R.id.tvInCall);
+        tvOutCall = findViewById(R.id.tvOutCall);
+        tabIncall = findViewById(R.id.tabIncall);
+        tabOutcall = findViewById(R.id.tabOutcall);
 
-        servicesListAdapter = new AddedServicesAdapter(AddedServiceActivity.this, tempServicesList,
+        servicesListAdapter = new AddedServicesAdapter(AddedServiceActivity.this, tempList,
                 new AddedServicesAdapter.onClickListener() {
                     @Override
                     public void onEditClick(int pos) {
                         Intent intent = new Intent(AddedServiceActivity.this,EditServiceActivity.class);
-                        intent.putExtra("serviceItem",tempServicesList.get(pos));
+                        // intent.putExtra("serviceItem",mainServicesList.get(pos));
+
+                        intent.putExtra("serviceItem",tempList.get(pos));
+
+                       /* if (serviceType.equals("Incall"))
+                            intent.putExtra("serviceItem",inCallServiceList.get(pos));
+                        else
+                            intent.putExtra("serviceItem",outCallServiceList.get(pos));
+*/
                         startActivityForResult(intent, Constant.EDIT_SERVICE);
                     }
 
                     @Override
                     public void onDelClick(int pos) {
-                        deleteService(tempServicesList.get(pos));
-                        tempServicesList.remove(pos);
-                        servicesListAdapter.notifyItemRemoved(pos);
+
+                        Services tempService = tempList.get(pos);
+                        if (tempService.bookingType.equals("Both")) {
+                            if (serviceType.equals("Incall")) {
+                                tempService.bookingType = "Outcall";
+                            }else {
+                                tempService.bookingType = "Incall";
+                            }
+
+                            updateServices(tempService);
+
+                        }else {
+                            deleteService(tempList.get(pos),pos);
+                        }
+
+                       /* deleteService(mainServicesList.get(pos));
+                        mainServicesList.remove(pos);
+                        servicesListAdapter.notifyItemRemoved(pos);*/
                     }
                 });
 
@@ -124,6 +155,8 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
         llAddCategory.setOnClickListener(this);
         llAddService.setOnClickListener(this);
         iv_back.setOnClickListener(this);
+        tabIncall.setOnClickListener(this);
+        tabOutcall.setOnClickListener(this);
 
         TextView tvSkip = findViewById(R.id.tvSkip);
         tvSkip.setOnClickListener(new View.OnClickListener() {
@@ -141,89 +174,9 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
         getAllServiceData();
     }
 
-    private void deleteService(final Services services) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Mualab.get().getDB().businessTypeDao().deleteAll(services.bizypeList);
-                // Mualab.get().getDB().categoryDao().deleteAll(services.categoryList);
-                Mualab.get().getDB().serviceDao().delete(services);
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (tempServicesList.size()!=0)
-                            tvNoRecord.setVisibility(View.GONE);
-                        else
-                            tvNoRecord.setVisibility(View.VISIBLE);
-                    }
-                });
-
-            }
-        }).start();
-    }
-
-    private void apiForskip(){
-
-        if (!ConnectionDetector.isConnected()) {
-            new NoConnectionDialog(AddedServiceActivity.this, new NoConnectionDialog.Listner() {
-                @Override
-                public void onNetworkChange(Dialog dialog, boolean isConnected) {
-                    if(isConnected){
-                        dialog.dismiss();
-                        apiForskip();
-                    }
-                }
-            }).show();
-        }
-
-        Map<String,String> params = new HashMap<>();
-        params.put("artistId", String.valueOf(user.id));
-
-        /*params.put("dob", dateOfBirth);
-
-        params.put("postalCode", postalCode);
-        params.put("ssnLast", ssnNumber);*/
-
-        new HttpTask(new HttpTask.Builder(AddedServiceActivity.this, "skipPage", new HttpResponceListner.Listener() {
-            @Override
-            public void onResponse(String response, String apiName) {
-                try {
-                    JSONObject js = new JSONObject(response);
-                    String status = js.getString("status");
-                    String message = js.getString("message");
-
-                    if (status.equalsIgnoreCase("success")) {
-                        PreRegistrationSession preSession = new PreRegistrationSession(AddedServiceActivity.this);
-                        preSession.updateRegStep(3);
-                        //   Mualab.getInstance().getSessionManager().setBusinessProfileComplete(true);
-                        Intent intent = new Intent(AddedServiceActivity.this, AddBankAccountActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        //  finish();
-                    }else MyToast.getInstance(AddedServiceActivity.this).showDasuAlert(message);
-
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void ErrorListener(VolleyError error) {
-                // listener.onNext();
-            }})
-                //.setParam(params)
-                .setAuthToken(user.authToken)
-                .setBody(params, HttpTask.ContentType.APPLICATION_JSON)
-                .setMethod(Request.Method.POST)
-                .setProgress(true))
-                .execute("skipPage");
-    }
-
     @Override
     public void onClick(View view) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 800) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
@@ -233,8 +186,8 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
         switch (view.getId()){
             case R.id.btnNext:
                 List<FinalServiceForUpdateServer>finalServiceForUpdateServers = new ArrayList<>();
-                for (int i=0; i<tempServicesList.size();i++){
-                    Services services = tempServicesList.get(i);
+                for (int i=0; i<mainServicesList.size();i++){
+                    Services services = mainServicesList.get(i);
                     FinalServiceForUpdateServer forUpdateServer = new FinalServiceForUpdateServer();
                     forUpdateServer.serviceId = String.valueOf(services.serviceId);
                     forUpdateServer.subserviceId = String.valueOf(services.subserviceId);
@@ -264,6 +217,31 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.tabIncall:
+                tempList.clear();
+                tvInCall.setTextColor(getResources().getColor(R.color.white));
+                tvOutCall.setTextColor(getResources().getColor(R.color.text_color));
+                tabIncall.setBackgroundResource(R.drawable.bg_tab_selected);
+                tabOutcall.setBackgroundResource(R.drawable.bg_tab_unselected);
+                tempList.clear();
+                serviceType = "Incall";
+                tempList.addAll(inCallServiceList);
+                servicesListAdapter.notifyDataSetChanged();
+                noDataFound();
+
+                break;
+            case R.id.tabOutcall:
+                tvOutCall.setTextColor(getResources().getColor(R.color.white));
+                tvInCall.setTextColor(getResources().getColor(R.color.text_color));
+                tabOutcall.setBackgroundResource(R.drawable.bg_second_tab_selected);
+                tabIncall.setBackgroundResource(R.drawable.bg_second_tab_unselected);
+                tempList.clear();
+                serviceType = "Outcall";
+                tempList.addAll(outCallServiceList);
+                servicesListAdapter.notifyDataSetChanged();
+                noDataFound();
+
+                break;
             case R.id.llAddService:
                 Intent intent = new Intent(AddedServiceActivity.this,AddNewServiceActivity.class);
                 intent.putExtra("bizTypeId", bizTypeId);
@@ -271,49 +249,6 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
                 startActivityForResult(intent, Constant.REQUEST_NEW_SERVICE);
                 break;
         }
-    }
-
-    private void getAllServiceData(){
-        pbLoder.setVisibility(View.VISIBLE);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                tempServicesList.clear();
-
-                //   bizypeList = Mualab.get().getDB().businessTypeDao().getAll();
-                // categoryList =  Mualab.get().getDB().categoryDao().getAll();
-                servicesList =  Mualab.get().getDB().serviceDao().getAll();
-
-                if (servicesList.size()!=0){
-                    tempServicesList.addAll(servicesList);
-                }
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (tempServicesList.size()!=0) {
-                            listViewServices.setVisibility(View.VISIBLE);
-                            tvNoRecord.setVisibility(View.GONE);
-                        }
-                        else {
-                            listViewServices.setVisibility(View.GONE);
-                            tvNoRecord.setVisibility(View.VISIBLE);
-                        }
-
-                        pbLoder.setVisibility(View.GONE);
-
-                        shortList();
-
-                        if (tempServicesList.size()==0)
-                            apiForGetService();
-
-                    }
-                });
-
-            }
-        }).start();
-
-
     }
 
     private void apiForGetService(){
@@ -386,11 +321,10 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
 
                                                     services.inCallPrice = Double.parseDouble(jsonObject3.getString("inCallPrice"));
                                                     services.outCallPrice = Double.parseDouble(jsonObject3.getString("outCallPrice"));
-                                                    tempServicesList.add(services);
+                                                    mainServicesList.add(services);
                                                 }
                                             }
                                         }
-                                        // servicesList.add(services);
                                     }
                                 }else {
                                     tvNoRecord.setVisibility(View.VISIBLE);
@@ -403,6 +337,8 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
                                 listViewServices.setVisibility(View.GONE);
                                 topLine.setVisibility(View.GONE);
                             }
+
+                            insertServices(mainServicesList);
                             shortList();
 
                         } catch (Exception e) {
@@ -433,7 +369,7 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void shortList() {
-        Collections.sort(tempServicesList, new Comparator<Services>() {
+        Collections.sort(mainServicesList, new Comparator<Services>() {
 
             @Override
             public int compare(Services a1, Services a2) {
@@ -447,9 +383,51 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
                 }
             }
         });
+
+        for (Services services : mainServicesList){
+            switch (services.bookingType) {
+                case "Both":
+                    try {
+                        Services clonedEmp = (Services) services.clone();
+                        clonedEmp.tempBookingType = "Incall";
+                        inCallServiceList.add(clonedEmp);
+                        services.tempBookingType = "Outcall";
+                        outCallServiceList.add(services);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+                case "Incall":
+                    services.tempBookingType = "Incall";
+                    inCallServiceList.add(services);
+                    break;
+                case "Outcall":
+                    services.tempBookingType = "Outcall";
+                    outCallServiceList.add(services);
+                    break;
+            }
+        }
+        if (serviceType.equals("Incall"))
+            tempList.addAll(inCallServiceList);
+        else
+            tempList.addAll(outCallServiceList);
+
         servicesListAdapter.notifyDataSetChanged();
 
-        if (tempServicesList.size()!=0) {
+        noDataFound();
+     /*   if (mainServicesList.size()!=0) {
+            listViewServices.setVisibility(View.VISIBLE);
+            tvNoRecord.setVisibility(View.GONE);
+        }
+        else {
+            listViewServices.setVisibility(View.GONE);
+            tvNoRecord.setVisibility(View.VISIBLE);
+        }*/
+    }
+
+    private void  noDataFound(){
+        if (tempList.size()!=0) {
             listViewServices.setVisibility(View.VISIBLE);
             tvNoRecord.setVisibility(View.GONE);
         }
@@ -457,9 +435,6 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
             listViewServices.setVisibility(View.GONE);
             tvNoRecord.setVisibility(View.VISIBLE);
         }
-
-        //if (tempServicesList.size()==0)
-        // apiForGetService();
     }
 
     /*update service data local db_modle to server db_modle*/
@@ -554,6 +529,127 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
                     break;
             }
         }
+
+    }
+
+    public void updateServices(final Services services) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Mualab.get().getDB().businessTypeDao().insertAll(tempBizypeList);
+                //  Mualab.get().getDB().categoryDao().insertAll(tempCategoryList);
+                Mualab.get().getDB().serviceDao().update(services);
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyToast.getInstance(AddedServiceActivity.this).showDasuAlert("Service updated successfully");
+                        getAllServiceData();
+                    }
+                });
+
+            }
+        }).start();
+
+    }
+
+    private void deleteService(final Services services,final  int pos) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Mualab.get().getDB().businessTypeDao().deleteAll(services.bizypeList);
+                // Mualab.get().getDB().categoryDao().deleteAll(services.categoryList);
+                Mualab.get().getDB().serviceDao().delete(services);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        tempList.remove(pos);
+                        servicesListAdapter.notifyItemRemoved(pos);
+
+                        for (int i=0;i<mainServicesList.size();i++){
+                            if (mainServicesList.get(i).serviceId==services.serviceId) {
+                                mainServicesList.remove(i);
+                                break;
+                            }
+                        }
+                        if (serviceType.equals("Incall")) {
+                            for (int i = 0; i < inCallServiceList.size(); i++) {
+                                if (inCallServiceList.get(i).serviceId == services.serviceId) {
+                                    inCallServiceList.remove(i);
+                                    break;
+                                }
+                            }
+                        }else {
+                            for (int i = 0; i < outCallServiceList.size(); i++) {
+                                if (outCallServiceList.get(i).serviceId == services.serviceId) {
+                                    outCallServiceList.remove(i);
+                                    break;
+                                }
+                            }
+                        }
+                       /* if (mainServicesList.size()!=0)
+                            tvNoRecord.setVisibility(View.GONE);
+                        else
+                            tvNoRecord.setVisibility(View.VISIBLE);*/
+                        noDataFound();
+                    }
+                });
+
+            }
+        }).start();
+    }
+
+    public void insertServices(final List<Services> services) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //Mualab.get().getDB().businessTypeDao().insertAll(tempBizypeList);
+                // Mualab.get().getDB().categoryDao().insertAll(tempCategoryList);
+                Mualab.get().getDB().serviceDao().insertAll(services);
+
+            }
+        }).start();
+    }
+
+    private void getAllServiceData(){
+        pbLoder.setVisibility(View.VISIBLE);
+        new Thread(() -> {
+            mainServicesList.clear();
+            servicesList.clear();
+            inCallServiceList.clear();
+            outCallServiceList.clear();
+            tempList.clear();
+
+            //   bizypeList = Mualab.get().getDB().businessTypeDao().getAll();
+            // categoryList =  Mualab.get().getDB().categoryDao().getAll();
+            servicesList =  Mualab.get().getDB().serviceDao().getAll();
+
+            if (servicesList.size()!=0){
+                mainServicesList.addAll(servicesList);
+            }
+
+            handler.post(() -> {
+                if (mainServicesList.size()!=0) {
+                    listViewServices.setVisibility(View.VISIBLE);
+                    tvNoRecord.setVisibility(View.GONE);
+                }
+                else {
+                    listViewServices.setVisibility(View.GONE);
+                    tvNoRecord.setVisibility(View.VISIBLE);
+                }
+
+                pbLoder.setVisibility(View.GONE);
+
+                shortList();
+
+                if (mainServicesList.size()==0)
+                    apiForGetService();
+
+            });
+
+        }).start();
+
 
     }
 

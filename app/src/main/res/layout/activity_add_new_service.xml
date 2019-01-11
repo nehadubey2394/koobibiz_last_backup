@@ -56,6 +56,7 @@
                 android:paddingLeft="@dimen/margin_left"
                 android:paddingEnd="@dimen/margin_right"
                 android:paddingRight="@dimen/margin_right"
+                android:visibility="gone"
                 android:text="@string/it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable"
                 android:textColor="@color/gray"
                 android:textSize="14sp" />

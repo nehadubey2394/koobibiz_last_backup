@@ -13,6 +13,72 @@
         android:visibility="visible"
         android:layout_alignParentTop="true" />
 
+    <LinearLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:weightSum="2"
+        android:clickable="true"
+        android:layout_below="@+id/headerLayout"
+        android:background="@drawable/bg_tab_layout"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:id="@+id/tabIncall"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/bg_tab_selected"
+            android:clickable="true"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tvInCall"
+                android:paddingLeft="5dp"
+                android:gravity="center"
+                android:text="@string/incall"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tabOutcall"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/bg_tab_unselected"
+            >
+
+            <TextView
+                android:id="@+id/tvOutCall"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                android:cursorVisible="true"
+                android:paddingLeft="5dp"
+                android:gravity="center"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="16sp"
+                android:text="@string/outcall"
+                android:textColor="@color/text_color"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listViewServices"
         android:layout_width="match_parent"
@@ -21,7 +87,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_below="@+id/headerLayout"
+        android:layout_below="@+id/tabLayout"
         android:layout_above="@+id/llBottomButtons"
         />
 

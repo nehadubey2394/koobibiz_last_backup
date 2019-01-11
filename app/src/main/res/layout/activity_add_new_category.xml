@@ -42,6 +42,7 @@
             android:paddingEnd="@dimen/margin_right"
             android:paddingStart="@dimen/margin_left"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:fontFamily="@font/roboto_regular"
             android:text="@string/it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable"
             android:gravity="center"/>

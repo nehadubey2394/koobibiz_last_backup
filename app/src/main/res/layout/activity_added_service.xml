@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:layout_marginTop="17dp"
+                    android:layout_marginTop="16dp"
                     android:fontFamily="@font/roboto_medium"
                     android:text="Your Services"/>
 
@@ -67,6 +67,7 @@
                     android:paddingRight="@dimen/margin_right"
                     android:paddingEnd="@dimen/margin_right"
                     android:paddingStart="@dimen/margin_left"
+                    android:visibility="gone"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/it_is_a_long_established_fact_that_a_reader_will_bedistracted_by_the_readable"
@@ -76,10 +77,76 @@
                     android:id="@+id/topLine"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
                     android:background="@color/gray_line"
                     >
                 </View>
+
+                <LinearLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:weightSum="2"
+                    android:clickable="true"
+                    android:background="@drawable/bg_tab_layout"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:id="@+id/tabIncall"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@drawable/bg_tab_selected"
+                        android:clickable="true"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/tvInCall"
+                            android:paddingLeft="5dp"
+                            android:gravity="center"
+                            android:text="@string/incall"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textSize="16sp"
+                            android:textColor="@color/white"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tabOutcall"
+                        android:layout_width="0dp" android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:background="@drawable/bg_tab_unselected"
+                        >
+
+                        <TextView
+                            android:id="@+id/tvOutCall"
+                            android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:cursorVisible="true"
+                            android:paddingLeft="5dp"
+                            android:gravity="center"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textSize="16sp"
+                            android:text="@string/outcall"
+                            android:textColor="@color/text_color"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/listViewServices"
@@ -139,7 +206,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/add_category"
+                    android:text="@string/add_business_type"
                     android:textColor="@color/text_color"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center"

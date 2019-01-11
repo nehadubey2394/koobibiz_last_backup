@@ -2,6 +2,7 @@ package com.mualab.org.biz.modules.profile_setup.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,8 +44,9 @@ public class AddedServicesAdapter extends RecyclerView.Adapter<AddedServicesAdap
 
 
     // specify the row layout file and click for each row
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_services_layout, parent, false);
         return new ViewHolder(view);
     }
@@ -75,7 +77,12 @@ public class AddedServicesAdapter extends RecyclerView.Adapter<AddedServicesAdap
         // holder.tvServiceTime.setText(item.completionTime);
         holder.tvServiceTitle.setText(item.serviceName);
 
-        if (item.bookingType.equals("Outcall"))
+        /*if (item.bookingType.equals("Outcall"))
+            holder.tvPrice.setText("£"+item.outCallPrice);
+        else
+            holder.tvPrice.setText("£"+item.inCallPrice); */
+
+        if (item.tempBookingType.equals("Outcall"))
             holder.tvPrice.setText("£"+item.outCallPrice);
         else
             holder.tvPrice.setText("£"+item.inCallPrice);
@@ -95,6 +102,7 @@ public class AddedServicesAdapter extends RecyclerView.Adapter<AddedServicesAdap
                 if (item.subserviceId!=servicesList.get(tempPos).subserviceId) {
                     holder.tvCategoryTitle.setText(item.subserviceName);
                     holder.llCategory.setVisibility(View.VISIBLE);
+                    holder.viewLine.setVisibility(View.VISIBLE);
                 }else {
                     holder.llCategory.setVisibility(View.GONE);
                     holder.viewLine.setVisibility(View.GONE);
@@ -106,6 +114,7 @@ public class AddedServicesAdapter extends RecyclerView.Adapter<AddedServicesAdap
                 if (item.subserviceId!=servicesList.get(tempPos).subserviceId) {
                     holder.tvCategoryTitle.setText(item.subserviceName);
                     holder.llCategory.setVisibility(View.VISIBLE);
+                    holder.viewLine.setVisibility(View.VISIBLE);
                 }else {
                     holder.llCategory.setVisibility(View.GONE);
                     holder.viewLine.setVisibility(View.GONE);

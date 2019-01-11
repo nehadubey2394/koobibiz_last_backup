@@ -181,9 +181,8 @@ public class AddBankAccountActivity extends AppCompatActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
-                    }
-
-                    showToast(message);
+                    }else
+                        showToast(message);
 
                 }catch (Exception e){
                     e.printStackTrace();

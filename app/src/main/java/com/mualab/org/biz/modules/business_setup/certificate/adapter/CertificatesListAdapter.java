@@ -2,6 +2,7 @@ package com.mualab.org.biz.modules.business_setup.certificate.adapter;
 
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ public class CertificatesListAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context context;
     private List<Certificate> certificates;
     private onActionListner actionListner;
-
+    private long mLastClickTime = 0;
 
     public CertificatesListAdapter(Context context, List<Certificate> certificates,
                                    onActionListner actionListner) {
@@ -110,6 +111,11 @@ public class CertificatesListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         @Override
         public void onClick(View view) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 600) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             switch (view.getId()){
                 case R.id.ivEditCertificate:
                     Certificate certificate1 = certificates.get(getAdapterPosition());

@@ -85,7 +85,7 @@ public class CustomSpAdapter extends BaseAdapter {
         View row = convertView;
         ViewHolder holder;
 
-        if (position==0) {
+        if (stringList.get(position).equals("Discount Type")) {
             row = new View(context);
             row.setTag("Extra");
             return row;

@@ -2,6 +2,8 @@ package com.mualab.org.biz.modules.business_setup.voucher_code.adapter;
 
 
 import android.content.Context;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ public class VoucherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context context;
     private List<VoucherCode> voucherCodeList;
     private onActionListner actionListner;
+    private long mLastClickTime = 0;
 
 
     public VoucherListAdapter(Context context, List<VoucherCode> voucherCodeList,
@@ -41,14 +44,15 @@ public class VoucherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return voucherCodeList.size();
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_voucher_code_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int position) {
 
         final ViewHolder holder = ((ViewHolder) viewHolder);
         final VoucherCode item = voucherCodeList.get(position);
@@ -57,7 +61,7 @@ public class VoucherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (item.discountType.equals("1"))
             holder.tvDiscount.setText("Discount - £"+item.amount);
         else
-            holder.tvDiscount.setText("Discount - %"+item.amount);
+            holder.tvDiscount.setText("Discount - "+item.amount+"%");
 
         holder.tvExpiryDate.setText("Expiry Date - "+item.endDate);
     }
@@ -86,6 +90,11 @@ public class VoucherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View view) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 600) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             switch (view.getId()){
                 case R.id.ivShare:
 

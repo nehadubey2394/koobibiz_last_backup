@@ -1,32 +1,22 @@
 package com.mualab.org.biz.modules.profile_setup.activity;
 
-import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
-import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
 import com.mualab.org.biz.session.PreRegistrationSession;
-import com.mualab.org.biz.task.HttpResponceListner;
-import com.mualab.org.biz.task.HttpTask;
-import com.mualab.org.biz.util.ConnectionDetector;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import views.pickerview.MyTimePickerDialog;
 import views.pickerview.timepicker.TimePicker;
@@ -212,8 +202,9 @@ public class BreakTimeActivity extends AppCompatActivity implements View.OnClick
                 if (validateInputValue()) {
                     bpSession.updateIncallPreprationTime(incallPreprationTime);
                     bpSession.updateOutcallPreprationTime(outcallPreprationTime);
+                    Intent intent2 = new Intent();
+                    setResult(RESULT_OK, intent2);
                     finish();
-
                 }
 
                 break;
