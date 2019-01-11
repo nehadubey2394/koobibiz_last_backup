@@ -44,13 +44,16 @@ import java.util.List;
 import java.util.Map;
 
 public class MyServicesActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView tvNoRecord;
+    private TextView tvNoRecord,tvInCall,tvOutCall;
     private long mLastClickTime = 0;
     private RecyclerView rvServices;
     private View topLine;
     private AddedServicesAdapter servicesListAdapter;
-    private List<Services>servicesList;
+    private List<Services>mainServicesList,tempList,inCallServiceList,outCallServiceList;
     protected User user;
+    private LinearLayout tabIncall, tabOutcall;
+    private String serviceType = "Incall";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,10 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
         TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvHeaderTitle.setText(getString(R.string.text_services));
 
-        servicesList = new ArrayList<>();
+        mainServicesList = new ArrayList<>();
+        tempList = new ArrayList<>();
+        inCallServiceList = new ArrayList<>();
+        outCallServiceList = new ArrayList<>();
 
         AppCompatButton btnNext = findViewById(R.id.btnNext);
         LinearLayout llAddService = findViewById(R.id.llAddService);
@@ -74,22 +80,40 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
         tvNoRecord = findViewById(R.id.tvNoRecord);
         topLine = findViewById(R.id.topLine);
 
-        servicesListAdapter = new AddedServicesAdapter(MyServicesActivity.this, servicesList,
+        tvInCall = findViewById(R.id.tvInCall);
+        tvOutCall = findViewById(R.id.tvOutCall);
+        tabIncall = findViewById(R.id.tabIncall);
+        tabOutcall = findViewById(R.id.tabOutcall);
+
+        servicesListAdapter = new AddedServicesAdapter(MyServicesActivity.this, tempList,
                 new AddedServicesAdapter.onClickListener() {
                     @Override
                     public void onEditClick(int pos) {
                         Bundle args = new Bundle();
                         Intent intent = new Intent(MyServicesActivity.this,EditServicesActivity.class);
-                        args.putSerializable("servicesList",(Serializable)servicesList);
-                        args.putSerializable("serviceItem",servicesList.get(pos));
+                        args.putSerializable("servicesList",(Serializable)tempList);
+                        args.putSerializable("serviceItem",tempList.get(pos));
                         intent.putExtra("bundle",args);
                         startActivityForResult(intent, Constant.EDIT_SERVICE);
                     }
 
                     @Override
                     public void onDelClick(int pos) {
+
+                        Services tempService = tempList.get(pos);
+                        if (tempService.bookingType.equals("Both")) {
+                            if (serviceType.equals("Incall")) {
+                                tempService.inCallPrice = 0.0;
+                            }else {
+                                tempService.outCallPrice = 0.0;
+                            }
+                            apiEditService(tempService);
+
+                        }else {
+                            apiDeleteService(tempService,pos);
+                        }
                         // deleteService(servicesList.get(pos));
-                        apiDeleteService(servicesList.get(pos),pos);
+                        //apiDeleteService(tempService,pos);
 
                     }
                 });
@@ -105,15 +129,16 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
         llAddCategory.setOnClickListener(this);
         llAddService.setOnClickListener(this);
         ivHeaderBack.setOnClickListener(this);
+        tabIncall.setOnClickListener(this);
+        tabOutcall.setOnClickListener(this);
 
-
-        if (servicesList.size()==0)
+        if (mainServicesList.size()==0)
             apiForGetService();
     }
 
     @Override
     public void onClick(View view) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 800) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 600) {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
@@ -139,11 +164,47 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
                 Intent intent = new Intent(MyServicesActivity.this,AddMoreServiceActivity.class);
                 // intent.putExtra("bizTypeId", bizTypeId);
                 //intent.putExtra("categoryId", categoryId);
-                args.putSerializable("servicesList",(Serializable)servicesList);
+                args.putSerializable("servicesList",(Serializable)mainServicesList);
                 intent.putExtra("bundle",args);
                 intent.putExtra("commingFrom","MyServicesActivity");
                 startActivityForResult(intent, Constant.REQUEST_NEW_SERVICE);
                 break;
+            case R.id.tabIncall:
+                tempList.clear();
+                tvInCall.setTextColor(getResources().getColor(R.color.white));
+                tvOutCall.setTextColor(getResources().getColor(R.color.text_color));
+                tabIncall.setBackgroundResource(R.drawable.bg_tab_selected);
+                tabOutcall.setBackgroundResource(R.drawable.bg_tab_unselected);
+                tempList.clear();
+                serviceType = "Incall";
+                tempList.addAll(inCallServiceList);
+                servicesListAdapter.notifyDataSetChanged();
+                noDataFound();
+
+                break;
+            case R.id.tabOutcall:
+                tvOutCall.setTextColor(getResources().getColor(R.color.white));
+                tvInCall.setTextColor(getResources().getColor(R.color.text_color));
+                tabOutcall.setBackgroundResource(R.drawable.bg_second_tab_selected);
+                tabIncall.setBackgroundResource(R.drawable.bg_second_tab_unselected);
+                tempList.clear();
+                serviceType = "Outcall";
+                tempList.addAll(outCallServiceList);
+                servicesListAdapter.notifyDataSetChanged();
+                noDataFound();
+
+                break;
+        }
+    }
+
+    private void  noDataFound(){
+        if (tempList.size()!=0) {
+            rvServices.setVisibility(View.VISIBLE);
+            tvNoRecord.setVisibility(View.GONE);
+        }
+        else {
+            rvServices.setVisibility(View.GONE);
+            tvNoRecord.setVisibility(View.VISIBLE);
         }
     }
 
@@ -176,7 +237,10 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
 
                     if (status.equalsIgnoreCase("success")) {
 
-                        servicesList.clear();
+                        mainServicesList.clear();
+                        inCallServiceList.clear();
+                        outCallServiceList.clear();
+                        tempList.clear();
 
                         tvNoRecord.setVisibility(View.GONE);
                         rvServices.setVisibility(View.VISIBLE);
@@ -216,11 +280,11 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
                                             services.description = jsonObject3.getString("description");
                                             services.inCallPrice = Double.parseDouble(jsonObject3.getString("inCallPrice"));
                                             services.outCallPrice = Double.parseDouble(jsonObject3.getString("outCallPrice"));
-                                            servicesList.add(services);
+                                            mainServicesList.add(services);
                                         }
                                     }
                                 }
-                                // servicesList.add(services);
+                                // mainServicesList.add(services);
                             }
                         }else {
                             tvNoRecord.setVisibility(View.VISIBLE);
@@ -288,8 +352,31 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
                     String message = js.getString("message");
 
                     if (status.equalsIgnoreCase("success")) {
-                        servicesList.remove(pos);
+
+                        tempList.remove(pos);
                         servicesListAdapter.notifyItemRemoved(pos);
+
+                        for (int i=0;i<mainServicesList.size();i++){
+                            if (mainServicesList.get(i).serviceId==services.serviceId) {
+                                mainServicesList.remove(i);
+                                break;
+                            }
+                        }
+                        if (serviceType.equals("Incall")) {
+                            for (int i = 0; i < inCallServiceList.size(); i++) {
+                                if (inCallServiceList.get(i).serviceId == services.serviceId) {
+                                    inCallServiceList.remove(i);
+                                    break;
+                                }
+                            }
+                        }else {
+                            for (int i = 0; i < outCallServiceList.size(); i++) {
+                                if (outCallServiceList.get(i).serviceId == services.serviceId) {
+                                    outCallServiceList.remove(i);
+                                    break;
+                                }
+                            }
+                        }
                         MyToast.getInstance(MyServicesActivity.this).showDasuAlert(message);
                     }else {
                         MyToast.getInstance(MyServicesActivity.this).showDasuAlert(message);
@@ -325,8 +412,82 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
         task.execute(MyServicesActivity.class.getName());
     }
 
+    private void apiEditService(final Services services) {
+        User user = Mualab.getInstance().getSessionManager().getUser();
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(MyServicesActivity.this, new NoConnectionDialog.Listner() {
+                @Override
+                public void onNetworkChange(Dialog dialog, boolean isConnected) {
+                    if (isConnected) {
+                        dialog.dismiss();
+                        apiEditService(services);
+                    }
+                }
+            }).show();
+        }
+
+        //  pbLoder.setVisibility(View.VISIBLE);
+        Map<String,String> body = new HashMap<>();
+        body.put("serviceId", String.valueOf(services.serviceId));
+        body.put("subserviceId", String.valueOf(services.subserviceId));
+        body.put("title", services.serviceName);
+        body.put("description", services.description);
+        body.put("inCallPrice", String.valueOf(services.inCallPrice));
+        body.put("outCallPrice", String.valueOf(services.outCallPrice));
+        body.put("completionTime", services.completionTime);
+        body.put("id", String.valueOf(services.id));
+
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(MyServicesActivity.this,
+                "addService", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    Progress.hide(MyServicesActivity.this);
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+
+                    if (status.equalsIgnoreCase("success")) {
+                        MyToast.getInstance(MyServicesActivity.this).showDasuAlert("Service deleted successfully");
+                        apiForGetService();
+                    }else {
+                        MyToast.getInstance(MyServicesActivity.this).showDasuAlert(message);
+                    }
+                    //    pbLoder.setVisibility(View.GONE);
+
+
+                }catch (Exception e) {
+                    Progress.hide(MyServicesActivity.this);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                try {
+                    Progress.hide(MyServicesActivity.this);
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")) {
+                        Mualab.getInstance().getSessionManager().logout();
+                    }else
+                        MyToast.getInstance(MyServicesActivity.this).showDasuAlert(helper.error_Messages(error));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        })
+                .setAuthToken(user.authToken)
+                .setProgress(true)
+                .setParam(body));
+
+        task.execute(AddMoreServiceActivity.class.getName());
+    }
+
     private void shortList() {
-        Collections.sort(servicesList, new Comparator<Services>() {
+        Collections.sort(mainServicesList, new Comparator<Services>() {
 
             @Override
             public int compare(Services a1, Services a2) {
@@ -340,19 +501,39 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         });
+
+        for (Services services : mainServicesList){
+            switch (services.bookingType) {
+                case "Both":
+                    try {
+                        Services clonedEmp = (Services) services.clone();
+                        clonedEmp.tempBookingType = "Incall";
+                        inCallServiceList.add(clonedEmp);
+                        services.tempBookingType = "Outcall";
+                        outCallServiceList.add(services);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+                case "Incall":
+                    services.tempBookingType = "Incall";
+                    inCallServiceList.add(services);
+                    break;
+                case "Outcall":
+                    services.tempBookingType = "Outcall";
+                    outCallServiceList.add(services);
+                    break;
+            }
+        }
+        if (serviceType.equals("Incall"))
+            tempList.addAll(inCallServiceList);
+        else
+            tempList.addAll(outCallServiceList);
+
         servicesListAdapter.notifyDataSetChanged();
 
-        if (servicesList.size()!=0) {
-            rvServices.setVisibility(View.VISIBLE);
-            tvNoRecord.setVisibility(View.GONE);
-        }
-        else {
-            rvServices.setVisibility(View.GONE);
-            tvNoRecord.setVisibility(View.VISIBLE);
-        }
-
-        //if (servicesList.size()==0)
-        // apiForGetService();
+        noDataFound();
     }
 
     @Override

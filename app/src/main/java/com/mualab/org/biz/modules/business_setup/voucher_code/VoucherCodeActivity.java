@@ -1,6 +1,7 @@
 package com.mualab.org.biz.modules.business_setup.voucher_code;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -74,7 +75,7 @@ public class VoucherCodeActivity extends AppCompatActivity {
 
                     @Override
                     public void onDelete(int position, VoucherCode voucherCode) {
-                        apiDeleteVocher(voucherCode,position);
+                        showAlertDailog(position,voucherCode);
                     }
                 });
 
@@ -249,6 +250,27 @@ public class VoucherCodeActivity extends AppCompatActivity {
         task.execute(VoucherCodeActivity.class.getName());
     }
 
+    private void showAlertDailog(final int position, final VoucherCode voucherCode){
+        final android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(VoucherCodeActivity.this, R.style.MyDialogTheme);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Alert!");
+        alertDialog.setMessage("Are you sure want to remove this voucher?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                dialog.cancel();
+                apiDeleteVocher(voucherCode,position);
+
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

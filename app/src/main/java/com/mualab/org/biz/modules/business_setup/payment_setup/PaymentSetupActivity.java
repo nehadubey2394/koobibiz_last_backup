@@ -25,7 +25,6 @@ import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -129,9 +128,8 @@ public class PaymentSetupActivity extends AppCompatActivity implements View.OnCl
 
                     if (status.equalsIgnoreCase("success")) {
                         finish();
-                    }
-
-                    showToast(message);
+                    }else
+                        showToast(message);
 
                 }catch (Exception e){
                     e.printStackTrace();

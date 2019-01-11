@@ -6,23 +6,8 @@
     android:fitsSystemWindows="true"
     android:background="@color/white">
 
-    <com.jsibbold.zoomage.ZoomageView
-        android:id="@+id/ivCertificate"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_gallery_placeholder"
-        android:layout_centerInParent="true"
-        app:zoomage_restrictBounds="true"
-        app:zoomage_animateOnReset="true"
-        app:zoomage_autoResetMode="UNDER"
-        app:zoomage_autoCenter="true"
-        app:zoomage_zoomable="true"
-        app:zoomage_translatable="true"
-        app:zoomage_minScale="0.6"
-        app:zoomage_maxScale="8"
-        />
-
     <RelativeLayout
+        android:id="@+id/llHeader"
         android:layout_width="match_parent"
         android:layout_height="60dp">
 
@@ -48,6 +33,23 @@
             android:text="Certificate"/>
 
     </RelativeLayout>
+
+    <com.jsibbold.zoomage.ZoomageView
+        android:id="@+id/ivCertificate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/ic_gallery_placeholder"
+        android:layout_centerInParent="true"
+        app:zoomage_restrictBounds="true"
+        app:zoomage_animateOnReset="true"
+        app:zoomage_autoResetMode="UNDER"
+        android:layout_below="@+id/llHeader"
+        app:zoomage_autoCenter="true"
+        app:zoomage_zoomable="true"
+        app:zoomage_translatable="true"
+        app:zoomage_minScale="0.6"
+        app:zoomage_maxScale="8"
+        />
 
 
 </RelativeLayout>

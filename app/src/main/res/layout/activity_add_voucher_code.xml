@@ -50,6 +50,7 @@
             android:maxLength="7"
             android:textAllCaps="true"
             android:inputType="textCapCharacters"
+            android:digits="0,1,2,3,4,5,6,7,8,9,ABCDEFGHIJKLMNOPQRSTUVWXYZ,#,@"
             android:textColor="@color/gray"
             android:textSize="14sp" />
 
@@ -131,7 +132,7 @@
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/enter_amount"
             android:maxLines="1"
-            android:maxLength="3"
+            android:maxLength="7"
             android:inputType="number"
             android:singleLine="true"
             android:visibility="gone"

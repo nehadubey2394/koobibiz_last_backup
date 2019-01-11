@@ -40,7 +40,7 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
     private String bookingType="";
     private Address bizAddress;
     private RelativeLayout rlAddress,rlAreaOfCoverage;
-    private TextView tvAddressType;
+    private TextView tvAddressType,tvBookingType,tvAddress,tvBreakTime,tvRadius;
     private View radiusLineView;
     private User user;
     private PreRegistrationSession bpSession;
@@ -80,6 +80,9 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
         etBusinessEmail = findViewById(R.id.etBusinessEmail);
         etBusinessContact = findViewById(R.id.etBusinessContact);
         tvAddressType = findViewById(R.id.tvAddressType);
+        tvBookingType = findViewById(R.id.tvBookingType);
+        tvAddress = findViewById(R.id.tvAddress);
+        tvBreakTime = findViewById(R.id.tvBreakTime);
 
         etBusinessEmail.setText(user.email);
         etBusinessContact.setText(user.contactNo);
@@ -175,7 +178,7 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
                     Intent intent5 = new Intent(NewBusinessInfoActivity.this,
                             BreakTimeActivity.class);
                     intent5.putExtra("comingFrom","NewBusinessInfoActivity");
-                    startActivity(intent5);
+                    startActivityForResult(intent5,105);
                 }else {
                     MyToast.getInstance(NewBusinessInfoActivity.this).showDasuAlert("Please select booking type");
                 }
@@ -184,7 +187,7 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
 
             case R.id.btnContinue:
                 if (serviceType!=0){
-                    BusinessProfile businessProfile =  bpSession.getBusinessProfile();
+
                     if (checkNotempty(etBusinessName,"Please enter business name")){
                         if (validateEmail()){
                             if (validatePhone()){
@@ -226,23 +229,27 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
             switch (requestCode){
                 case 101:
                     bookingType =  data.getStringExtra("bookingType");
+                    tvBookingType.setVisibility(View.VISIBLE);
                     switch (bookingType) {
                         case "1":
                             rlAddress.setVisibility(View.VISIBLE);
                             rlAreaOfCoverage.setVisibility(View.GONE);
                             radiusLineView.setVisibility(View.GONE);
                             tvAddressType.setText("Enter Business Address");
+                            tvBookingType.setText("Incall");
                             break;
                         case "2":
                             rlAddress.setVisibility(View.VISIBLE);
                             rlAreaOfCoverage.setVisibility(View.VISIBLE);
                             radiusLineView.setVisibility(View.VISIBLE);
                             tvAddressType.setText("Return Location Address");
+                            tvBookingType.setText("Outcall");
                             break;
                         case "3":
                             rlAddress.setVisibility(View.VISIBLE);
                             rlAreaOfCoverage.setVisibility(View.VISIBLE);
                             radiusLineView.setVisibility(View.VISIBLE);
+                            tvBookingType.setText("Incall/Outcall");
                             tvAddressType.setText("Enter Business Address / Return Location");
                             break;
                     }
@@ -250,14 +257,33 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
 
                 case 102:
                     bizAddress = (Address) data.getSerializableExtra("address");
+                    tvAddress.setVisibility(View.VISIBLE);
+                    tvAddress.setText(bizAddress.placeName+" "+bizAddress.stAddress1);
                     break;
 
                 case 103:
-
+                    tvRadius.setVisibility(View.VISIBLE);
+                    tvRadius.setText(String.valueOf(bpSession.getRadius())+" Miles");
                     break;
 
                 case 104:
                     isHoursUpdate = (boolean) data.getSerializableExtra("isHoursUpdate");
+                    break;
+                case 105:
+                    tvBreakTime.setVisibility(View.VISIBLE);
+                    switch (bookingType) {
+                        case "3":
+                            tvBreakTime.setText("Incall : " + bpSession.getInCallPreprationTime()
+                                    + " | "
+                                    + "Outcall : " + bpSession.getOutCallPreprationTime());
+                            break;
+                        case "2":
+                            tvBreakTime.setText("Outcall : " + bpSession.getOutCallPreprationTime());
+                            break;
+                        default:
+                            tvBreakTime.setText("Incall : " + bpSession.getInCallPreprationTime());
+                            break;
+                    }
                     break;
 
             }
@@ -345,7 +371,6 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
     }
 
     private void updateDatatoServer(){
-        BusinessProfile businessProfile =  bpSession.getBusinessProfile();
 
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(NewBusinessInfoActivity.this, new NoConnectionDialog.Listner() {

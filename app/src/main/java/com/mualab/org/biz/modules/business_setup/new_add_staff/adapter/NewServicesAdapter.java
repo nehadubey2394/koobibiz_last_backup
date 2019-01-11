@@ -97,6 +97,7 @@ public class NewServicesAdapter extends RecyclerView.Adapter<NewServicesAdapter.
                     if (item.subserviceId!=servicesList.get(tempPos).subserviceId) {
                         holder.tvCategoryTitle.setText(item.subserviceName);
                         holder.llCategory.setVisibility(View.VISIBLE);
+                        holder.viewLine.setVisibility(View.VISIBLE);
                     }else {
                         holder.llCategory.setVisibility(View.GONE);
                         holder.viewLine.setVisibility(View.GONE);
@@ -108,6 +109,7 @@ public class NewServicesAdapter extends RecyclerView.Adapter<NewServicesAdapter.
                     if (item.subserviceId!=servicesList.get(tempPos).subserviceId) {
                         holder.tvCategoryTitle.setText(item.subserviceName);
                         holder.llCategory.setVisibility(View.VISIBLE);
+                        holder.viewLine.setVisibility(View.VISIBLE);
                     }else {
                         holder.llCategory.setVisibility(View.GONE);
                         holder.viewLine.setVisibility(View.GONE);

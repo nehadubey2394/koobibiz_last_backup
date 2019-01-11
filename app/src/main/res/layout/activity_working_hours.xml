@@ -48,6 +48,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
+            android:visibility="gone"
             android:fontFamily="@font/roboto_regular"
             android:text="@string/lorem_ipsum_is_simply_dummy_text_of_the_printing_and_typesetting_industry"
             android:gravity="center"/>

@@ -32,7 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BusinessInfoActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView tvBookingType,tvEmail,tvCountryCode,tvContactNo,tvBizAddress,tvRadius;
+    private TextView tvBookingType,tvEmail,tvCountryCode,tvContactNo,tvBizAddress,
+            tvRadius,tvInCallBreakTime,tvOutCallBreakTime;
     private EditText etBusinessName;
     private String businessId;
     private UserProfileData profileData;
@@ -63,6 +64,8 @@ public class BusinessInfoActivity extends AppCompatActivity implements View.OnCl
         tvContactNo = findViewById(R.id.tvContactNo);
         tvBizAddress = findViewById(R.id.tvBizAddress);
         tvRadius = findViewById(R.id.tvRadius);
+        tvInCallBreakTime = findViewById(R.id.tvInCallBreakTime);
+        tvOutCallBreakTime = findViewById(R.id.tvOutCallBreakTime);
         rlRadius = findViewById(R.id.rlRadius);
         radiusLine = findViewById(R.id.radiusLine);
 
@@ -181,17 +184,35 @@ public class BusinessInfoActivity extends AppCompatActivity implements View.OnCl
                 radiusLine.setVisibility(View.VISIBLE);
             }
 
+
+
             switch (profileData.serviceType) {
                 case "1":
                     tvBookingType.setText("Incall");
+                    splitTime(tvOutCallBreakTime,profileData.inCallpreprationTime);
                     break;
                 case "2":
                     tvBookingType.setText("Outcall");
+                    splitTime(tvOutCallBreakTime,profileData.outCallpreprationTime);
                     break;
                 case "3":
                     tvBookingType.setText("Incall/Outcall");
+                    splitTime(tvOutCallBreakTime,profileData.inCallpreprationTime);
+                    splitTime(tvOutCallBreakTime,profileData.outCallpreprationTime);
                     break;
             }
+        }
+    }
+
+    private void splitTime(TextView textView,String time){
+        textView.setVisibility(View.VISIBLE);
+        if (time.contains(":")){
+            String[] separated = time.split(":");
+            String hours = separated[0];
+            String min = separated[1];
+
+            textView.setText(hours+" hours"+min+" min");
+
         }
     }
 }

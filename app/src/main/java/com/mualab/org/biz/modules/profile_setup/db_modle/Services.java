@@ -27,7 +27,7 @@ import java.util.List;
                 childColumns = "subserviceId",
                 onDelete = ForeignKey.CASCADE))*/
 
-public class Services implements Serializable{
+public class Services implements Serializable,Cloneable{
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -103,6 +103,9 @@ public class Services implements Serializable{
     @Ignore
     public String isInCallEdited,isOutCallEdited;
 
+    @Ignore
+    public String tempBookingType = "";
+
 
     @Ignore
     @SerializedName("businessType")
@@ -122,5 +125,10 @@ public class Services implements Serializable{
         this.id = id;
         this.subserviceName = subCategoryName;
         this.description = description;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

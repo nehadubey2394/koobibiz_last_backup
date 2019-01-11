@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
@@ -56,8 +57,8 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
     private LinearLayout llValidityDate;
     private TextView tvFromdate,tvTodate;
     private String fromDate="",toDate="",sDiscountType;
-    private  int mYear,mMonth,mDay;
     private VoucherCode voucherCode;
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +144,7 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
                 if (sDiscountType.equals("Percentage(%)"))
                     edt_discount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3),new InputFilterMinMax(1, 100),new InputFilter.AllCaps()});
                 else
-                    edt_discount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7),new InputFilterMinMax(1, 100),new InputFilter.AllCaps()});
+                    edt_discount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7),new InputFilter.AllCaps()});
 
                 if (sDiscountType.equals("Discount Type"))
                     edt_discount.setVisibility(View.GONE);
@@ -177,12 +178,7 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-              /*  if (charSequence.length()!=0 && sDiscountType.equals("Percentage(%)")) {
-                    Integer val = Integer.parseInt(charSequence + "");
-                    if (val > 100) {
-                        MyToast.getInstance(AddVoucherCodeActivity.this).showDasuAlert("Percentage value must be less than 100");
-                    }
-                }*/
+
             }
 
             @Override
@@ -190,7 +186,7 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
                 try {
                     if (sDiscountType.equals("Percentage(%)")) {
                         if (Integer.parseInt(editable.toString()) > 100) {
-                            editable.replace(2, editable.length(), "");
+                            // editable.replace(2, editable.length(), "");
                             MyToast.getInstance(AddVoucherCodeActivity.this).showDasuAlert("Percentage value must be less than 100");
                         }
                     }
@@ -218,6 +214,11 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 600) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         switch (view.getId()){
             case R.id.ivHeaderBack:
                 KeyboardUtil.hideKeyboard(edt_discount, AddVoucherCodeActivity.this);
@@ -294,12 +295,12 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
 
     private void datePicker(final String tag){
         // Get Current Date
-        if (tag.equals("from")) {
-            final Calendar c = GregorianCalendar.getInstance();
-            mYear = c.get(GregorianCalendar.YEAR);
-            mMonth = c.get(GregorianCalendar.MONTH);
-            mDay = c.get(GregorianCalendar.DAY_OF_MONTH);
-        }
+        // if (tag.equals("from")) {
+        final Calendar c = GregorianCalendar.getInstance();
+        int  mYear = c.get(GregorianCalendar.YEAR);
+        int  mMonth = c.get(GregorianCalendar.MONTH);
+        int  mDay = c.get(GregorianCalendar.DAY_OF_MONTH);
+        //}
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
                 (view, year, monthOfYear, dayOfMonth) -> {
@@ -315,9 +316,6 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
                         // tvFromdate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
 
                         tvTodate.setText("");
-                        mYear = year;
-                        mMonth = monthOfYear+1;
-                        mDay = dayOfMonth;
 
                     }
                     else {
@@ -340,10 +338,6 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
             Date cDate = CalanderUtils.getDateFormat(sDate, Constants.SERVER_TIMESTAMP_FORMAT);
             assert cDate != null;
             datePickerDialog.getDatePicker().setMinDate(cDate.getTime());
-          /*  Calendar cal = GregorianCalendar.getInstance();
-            cal.set(mYear, mMonth-1, mDay);
-            Date chosenDate = cal.getTime();
-            datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());*/
         }
         datePickerDialog.show();
     }

@@ -397,7 +397,6 @@ public class AddNewServiceActivity extends AppCompatActivity implements
 
             }
         }).start();
-
     }
 
     @Override

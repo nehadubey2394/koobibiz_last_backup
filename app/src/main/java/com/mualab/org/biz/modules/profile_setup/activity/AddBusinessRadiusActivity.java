@@ -164,7 +164,7 @@ public class AddBusinessRadiusActivity extends AppCompatActivity implements
 
                     bpSession.updateAddress(bizAddress);
                     Intent intent2 = new Intent();
-                    intent2.putExtra("address", bizAddress);
+                    //  intent2.putExtra("redius", bizAddress);
                     setResult(RESULT_OK, intent2);
                     finish();
                     // updateDtataIntoServer();

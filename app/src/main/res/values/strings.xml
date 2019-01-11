@@ -391,4 +391,8 @@
 
     <string name="reschedule">Reschedule</string>
     <string name="pendingBookings">Pending Bookings</string>
+    <string name="service_cateory">Service Category</string>
+    <string name="break_between_appointments">Break Between Appointments</string>
+    <string name="business_operation_hours">Business Operation Hours</string>
+
 </resources>
