@@ -16,11 +16,8 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.Constants;
-import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Bookings;
-import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.modules.base.BaseFragment;
-import com.mualab.org.biz.modules.base.ClickListener;
 import com.mualab.org.biz.modules.new_booking.adapter.BookingsAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.MyArrayAdapter;
 import com.mualab.org.biz.session.PreRegistrationSession;
@@ -39,7 +36,6 @@ import views.calender.data.CalendarAdapter;
 import views.calender.data.Day;
 import views.calender.widget.widget.MyFlexibleCalendar;
 
-
 public class BookingsFragment extends BaseFragment implements View.OnClickListener {
 
     private long mLastClickTime = 0;
@@ -47,10 +43,12 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
 
     private TextView tv_msg;
     private int dayId;
-    private boolean isCurrentDate = true;
     private SimpleDateFormat dateSdf, timeSdf;
     private ProgressBar progress_bar;
     private Spinner spBkDate;
+    private MyArrayAdapter bkDateAdapter;
+
+    private List<String> bkTempList, bkPrevDate, bkTodayDate, bkAfterdate;
 
     public static BookingsFragment newInstance() {
 
@@ -71,11 +69,6 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initView(View view) {
-        if (getContext() instanceof MainActivity) {
-            ((MainActivity) getContext()).setTitle(getString(R.string.title_bookings));
-            ((MainActivity) getContext()).setBackButtonVisibility(8);
-        }
-
         dateSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         timeSdf = new SimpleDateFormat("hh:mm a", Locale.US);
         // init calendar
@@ -100,21 +93,8 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
         RecyclerView rvBookings = view.findViewById(R.id.rvBookings);
 
         List<String> list = new ArrayList<>();
-        BookingsAdapter bookingsAdapter = new BookingsAdapter(list, new ClickListener() {
-            @Override
-            public void onItemClick(int pos) {
+        BookingsAdapter bookingsAdapter = new BookingsAdapter(list, pos -> {
 
-            }
-
-            @Override
-            public void onEditClick(int pos) {
-
-            }
-
-            @Override
-            public void onDeleteClick(int pos) {
-
-            }
         });
         rvBookings.setAdapter(bookingsAdapter);
     }
@@ -123,20 +103,35 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
         spBkDate = view.findViewById(R.id.spBkDate);
 
         PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
-        User user = Mualab.getInstance().getSessionManager().getUser();
+        //User user = Mualab.getInstance().getSessionManager().getUser();
 
-        List<String> bkDate = new ArrayList<>();
-        bkDate.add("All Booking");
-        bkDate.add("Todays Booking");
-        bkDate.add("Cancelled Booking");
+        bkTempList = new ArrayList<>();
+        bkPrevDate = new ArrayList<>();
+        bkPrevDate.add("All Booking");
+        bkPrevDate.add("Cancelled Booking");
+        bkPrevDate.add("Complete Booking");
 
-        MyArrayAdapter bkDateAdapter, bkTypeAdapter, bkStaffAdapter;
-        bkDateAdapter = new MyArrayAdapter(getBaseActivity(), bkDate);
+        bkTodayDate = new ArrayList<>();
+        bkTodayDate.add("All Booking");
+        bkTodayDate.add("Todays Booking");
+        bkTodayDate.add("Cancelled Booking");
+        bkTodayDate.add("Complete Booking");
+
+        bkAfterdate = new ArrayList<>();
+        bkAfterdate.add("All Booking");
+        bkAfterdate.add("Cancelled Booking");
+        bkAfterdate.add("Confirm Booking");
+
+        bkTempList.addAll(bkTodayDate);
+        MyArrayAdapter bkTypeAdapter, bkStaffAdapter;
+        bkDateAdapter = new MyArrayAdapter(getBaseActivity(), bkTempList);
         spBkDate.setAdapter(bkDateAdapter);
         spBkDate.setSelection(1);  //default set Todays booking
 
         //1:  Incall , 2: Outcall , 3: Both
-        if (pSession.getServiceType() == 3) {
+        String selectedCompType = pSession.getCurrentCompanyDetail().serviceTypeOfCompany;
+        if (selectedCompType.equals("Both") || pSession.getServiceType() == 3 && selectedCompType.isEmpty()) {
+            view.findViewById(R.id.rlBkType).setVisibility(View.VISIBLE);
             Spinner spBkType = view.findViewById(R.id.spBkType);
 
             List<String> bkType = new ArrayList<>();
@@ -148,7 +143,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
             spBkType.setAdapter(bkTypeAdapter);
         }
 
-        if (!user.businessType.equals("independent")) {
+      /*  if (!user.businessType.equals("independent")) {
             Spinner spBkStaff = view.findViewById(R.id.spBkStaff);
             //spBkStaff.setVisibility(View.VISIBLE);
 
@@ -159,7 +154,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
 
             bkStaffAdapter = new MyArrayAdapter(getBaseActivity(), bkStaff);
             spBkStaff.setAdapter(bkStaffAdapter);
-        }
+        }*/
     }
 
     @Override
@@ -201,11 +196,28 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                 }
                 selectedDate = day.getYear() + "-" + sMonth + "-" + sDay;
 
+                Date selectedDateTemp = CalanderUtils.getDateFormat(selectedDate, Constants.SERVER_TIMESTAMP_FORMAT);
+                Date today = CalanderUtils.getDateFormat(CalanderUtils.formatDate(CalanderUtils.getCurrentDate(), Constants.SERVER_TIMESTAMP_FORMAT, Constants.SERVER_TIMESTAMP_FORMAT), Constants.SERVER_TIMESTAMP_FORMAT);
 
-                isCurrentDate = selectedDate.equals(CalanderUtils.formatDate(CalanderUtils.getCurrentDate(), Constants.SERVER_TIMESTAMP_FORMAT, Constants.SERVER_TIMESTAMP_FORMAT));
 
-                if (isCurrentDate) spBkDate.setSelection(1);
-                else spBkDate.setSelection(0);
+                assert selectedDateTemp != null;
+                if (selectedDateTemp.before(today)) {
+                    bkTempList.clear();
+                    bkTempList.addAll(bkPrevDate);
+                    bkDateAdapter.notifyDataSetChanged();
+                    spBkDate.setSelection(0);
+                } else if (selectedDateTemp.after(today)) {
+                    bkTempList.clear();
+                    bkTempList.addAll(bkAfterdate);
+                    bkDateAdapter.notifyDataSetChanged();
+                    spBkDate.setSelection(0);
+                } else {
+                    bkTempList.clear();
+                    bkTempList.addAll(bkTodayDate);
+                    bkDateAdapter.notifyDataSetChanged();
+                    spBkDate.setSelection(1);
+                }
+
 
                 if (viewCalendar.isSelectedDay(day)) {
                     Calendar todayCal = Calendar.getInstance();
@@ -218,10 +230,12 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
 
                     if (year >= cYear && month >= cMonth) {
                         if (year == cYear && month == cMonth && dayOfMonth < cDay) {
-                            AppLogger.i("", "can't select previous date");
+                            AppLogger.i("Date Test", "can't select previous date");
                         } else {
                             apiForGetFreeSlots();
                         }
+                    } else {
+                        AppLogger.i("Date Test", "can't select previous date");
                     }
                 }
             }

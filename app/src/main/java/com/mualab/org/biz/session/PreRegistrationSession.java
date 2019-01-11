@@ -2,12 +2,14 @@ package com.mualab.org.biz.session;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
 import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
 import com.mualab.org.biz.model.SubCategory;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
+import com.mualab.org.biz.model.company_management.CompanyDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,22 @@ public class PreRegistrationSession {
         else return new BusinessProfile();
     }
 
+    public void createCurrentCompanyDetail(CompanyDetail companyDetail) {
+        Gson gson = new Gson();
+        String json = gson.toJson(companyDetail); // myObject - instance of MyObject
+        editor.putString("companyDetail", json);
+        editor.apply();
+    }
+
+    public CompanyDetail getCurrentCompanyDetail() {
+        Gson gson = new Gson();
+        String string = mypref.getString("companyDetail", "");
+        if (!string.isEmpty()) {
+            return gson.fromJson(string, CompanyDetail.class);
+            // return businessProfile;
+        } else return new CompanyDetail();
+    }
+
 /*    public List<BusinessDay> getBusinessHours() {
         businessProfile = getBusinessProfile();
         if(businessProfile!=null && businessProfile.businessDays!=null){
@@ -65,20 +83,6 @@ public class PreRegistrationSession {
         }
         else return null;
     }*/
-
-    public void setBusinessHours(List<BusinessDay> businessHour) {
-        Gson gson = new Gson();
-        String json = gson.toJson(businessHour); // myObject - instance of MyObject
-        editor.putString("businessHours", json);
-        editor.apply();
-    }
-
-    public void setEditedStaffHours(List<BusinessDay> businessHour) {
-        Gson gson = new Gson();
-        String json = gson.toJson(businessHour); // myObject - instance of MyObject
-        editor.putString("edtStafBusinessHours", json);
-        editor.apply();
-    }
 
     public BusinessDay getEditedStaffHours(){
         Gson gson = new Gson();
@@ -88,10 +92,10 @@ public class PreRegistrationSession {
         }else return null;
     }
 
-    public void setStaffBusinessHours(StaffDetail staffDetail) {
+    public void setEditedStaffHours(List<BusinessDay> businessHour) {
         Gson gson = new Gson();
-        String json = gson.toJson(staffDetail); // myObject - instance of MyObject
-        editor.putString("staffBusinessHours", json);
+        String json = gson.toJson(businessHour); // myObject - instance of MyObject
+        editor.putString("edtStafBusinessHours", json);
         editor.apply();
     }
 
@@ -103,15 +107,12 @@ public class PreRegistrationSession {
         }else return null;
     }
 
-   /* public void setBusinessHours(List<BusinessDay> businessHour) {
-        BusinessProfile businessProfile = getBusinessProfile();
-        businessProfile = businessProfile!=null?businessProfile : new BusinessProfile();
-        if(businessProfile.businessDays!=null){
-            businessProfile.businessDays.clear();
-            businessProfile.businessDays.addAll(businessHour);
-        }else businessProfile.businessDays = businessHour;
-        createBusinessProfile(businessProfile);
-    }*/
+    public void setStaffBusinessHours(StaffDetail staffDetail) {
+        Gson gson = new Gson();
+        String json = gson.toJson(staffDetail); // myObject - instance of MyObject
+        editor.putString("staffBusinessHours", json);
+        editor.apply();
+    }
 
     public void addCategory(List<SubCategory> categories) {
         BusinessProfile businessProfile = getBusinessProfile();
@@ -122,6 +123,16 @@ public class PreRegistrationSession {
         }else businessProfile.subCategories = categories;
         createBusinessProfile(businessProfile);
     }
+
+   /* public void setBusinessHours(List<BusinessDay> businessHour) {
+        BusinessProfile businessProfile = getBusinessProfile();
+        businessProfile = businessProfile!=null?businessProfile : new BusinessProfile();
+        if(businessProfile.businessDays!=null){
+            businessProfile.businessDays.clear();
+            businessProfile.businessDays.addAll(businessHour);
+        }else businessProfile.businessDays = businessHour;
+        createBusinessProfile(businessProfile);
+    }*/
 
     public void addCategory(SubCategory subCategory) {
         BusinessProfile businessProfile = getBusinessProfile();
@@ -145,12 +156,12 @@ public class PreRegistrationSession {
         createBusinessProfile(businessProfile);
     }
 
-
-    /* Get business profile_setup models*/
-
     public int getStepIndex(){
         return mypref.getInt("stepIndex", 0);
     }
+
+
+    /* Get business profile_setup models*/
 
     public String getBusinessName(){
         return mypref.getString("businessName","");
@@ -194,6 +205,13 @@ public class PreRegistrationSession {
         if (!string.isEmpty()){
             return gson.fromJson(string, BusinessDay.class);
         }else return null;
+    }
+
+    public void setBusinessHours(List<BusinessDay> businessHour) {
+        Gson gson = new Gson();
+        String json = gson.toJson(businessHour); // myObject - instance of MyObject
+        editor.putString("businessHours", json);
+        editor.apply();
     }
 
     public String getInCallPreprationTime(){

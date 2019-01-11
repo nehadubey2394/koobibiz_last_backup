@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
-import com.mualab.org.biz.modules.base.ItemClickListener;
 
 import java.util.List;
 
@@ -20,18 +19,18 @@ import java.util.List;
  * Time: 4:03 PM
  */
 
-public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEWTYPE_ITEM = 1;
     private final int VIEWTYPE_LOADER = 2;
     private List<String> list;
     private boolean showLoader;
-    private ItemClickListener clickListener;
+    private ClickListener clickListener;
 
     private int lastPos = -1;
     private boolean isClick = false;
 
-    public BookingsAdapter(List<String> list, ItemClickListener clickListener) {
+    public PendBookingsAdapter(List<String> list, ClickListener clickListener) {
         this.list = list;
         this.clickListener = clickListener;
     }
@@ -61,7 +60,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         View view;
         switch (viewType) {
             case VIEWTYPE_ITEM:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bookings, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pending_booking, parent, false);
                 return new ViewHolder(view);
 
             case VIEWTYPE_LOADER:
@@ -83,9 +82,17 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         //return list.size();
-        return 4;
+        return 6;
     }
 
+
+    public interface ClickListener {
+        void onAcceptClick(int pos);
+
+        void onRejectClick(int pos);
+
+        void onRescheduleClick(int pos);
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -103,7 +110,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (!isClick) {
                         isClick = true;
                         if (getAdapterPosition() != -1 && clickListener != null)
-                            clickListener.onItemClick(getAdapterPosition());
+                            clickListener.onAcceptClick(getAdapterPosition());
                     }
 
                     new Handler().postDelayed(() -> isClick = false, 3000);
