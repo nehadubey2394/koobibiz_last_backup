@@ -333,7 +333,8 @@
             <RelativeLayout
                 android:id="@+id/rlserviceBreak"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="wrap_content"
+                android:minHeight="52dp"
                 android:layout_marginTop="5dp"
                 >
                 <LinearLayout
