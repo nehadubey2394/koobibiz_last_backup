@@ -243,7 +243,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                         PreRegistrationSession bpSession = Mualab.getInstance().getBusinessProfileSession();
                         bpSession.updateRegStep(6);
                         //getDeviceLocation();
-                        replaceFragment(BookingsFragment.newInstance(), false);
+                        //replaceFragment(BookingsFragment.newInstance(), false);
+                        ibtnBookings.callOnClick();
                     }
 
 
@@ -338,6 +339,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     ivDropDown.setVisibility(View.GONE);
                     setInactiveTab();
                     ibtnBookings.setImageResource(R.drawable.active_calender_ico);
+                    setTitle(getString(R.string.title_bookings));
+                    setBackButtonVisibility(8);
                     replaceFragment(BookingsFragment.newInstance(), false);
                 }
                 break;
@@ -446,7 +449,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             // tv_msg.setText(R.string.gps_permission_alert);
             locationDetector.showLocationSettingDailod(MainActivity.this);
         }
-        replaceFragment(BookingsFragment.newInstance(), false);
+        ibtnBookings.callOnClick();
+        //replaceFragment(BookingsFragment.newInstance(), false);
 
     }
 
@@ -463,7 +467,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
                 } else {
                     //Toast.makeText(mContext, "Permission Denied", Toast.LENGTH_LONG).show();
-                    replaceFragment(BookingsFragment.newInstance(), false);
+                    //replaceFragment(BookingsFragment.newInstance(), false);
+                    ibtnBookings.callOnClick();
                 }
             }
 

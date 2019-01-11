@@ -17,7 +17,6 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.model.booking.Bookings;
-import com.mualab.org.biz.modules.MainActivity;
 import com.mualab.org.biz.modules.base.BaseFragment;
 import com.mualab.org.biz.modules.new_booking.adapter.BookingsAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.MyArrayAdapter;
@@ -36,7 +35,6 @@ import java.util.Locale;
 import views.calender.data.CalendarAdapter;
 import views.calender.data.Day;
 import views.calender.widget.widget.MyFlexibleCalendar;
-
 
 public class BookingsFragment extends BaseFragment implements View.OnClickListener {
 
@@ -71,13 +69,6 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initView(View view) {
-        /*Toolbar init start here*/
-        if (getContext() instanceof MainActivity) {
-            ((MainActivity) getContext()).setTitle(getString(R.string.title_bookings));
-            ((MainActivity) getContext()).setBackButtonVisibility(8);
-        }
-        /*Toolbar init end here*/
-
         dateSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         timeSdf = new SimpleDateFormat("hh:mm a", Locale.US);
         // init calendar
