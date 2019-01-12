@@ -13,7 +13,7 @@ public class CompanyDetail implements Serializable{
     public List<BusinessDayForStaff> staffHoursList = new ArrayList<>();
     public List<ComapnySelectedServices> staffService = new ArrayList<>();
     public List<BusinessDay>businessDays = new ArrayList<>();
-    public List<String>businessType = new ArrayList<>();
+    public List<String> businessType = new ArrayList<>();
 
     /*{"_id":2,
 "job":"Moderate",
