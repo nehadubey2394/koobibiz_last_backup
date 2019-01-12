@@ -40,7 +40,7 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
     private String bookingType="";
     private Address bizAddress;
     private RelativeLayout rlAddress,rlAreaOfCoverage;
-    private TextView tvAddressType,tvBookingType,tvAddress,tvBreakTime,tvRadius;
+    private TextView tvAddressType,tvBookingType,tvAddress,tvRadius,tvInCallBreakTime,tvOutCallBreakTime;
     private View radiusLineView;
     private User user;
     private PreRegistrationSession bpSession;
@@ -82,7 +82,9 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
         tvAddressType = findViewById(R.id.tvAddressType);
         tvBookingType = findViewById(R.id.tvBookingType);
         tvAddress = findViewById(R.id.tvAddress);
-        tvBreakTime = findViewById(R.id.tvBreakTime);
+        tvRadius = findViewById(R.id.tvRadius);
+        tvInCallBreakTime = findViewById(R.id.tvInCallBreakTime);
+        tvOutCallBreakTime = findViewById(R.id.tvOutCallBreakTime);
 
         etBusinessEmail.setText(user.email);
         etBusinessContact.setText(user.contactNo);
@@ -94,26 +96,41 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
         int serviceType = bpSession.getServiceType();
         if (serviceType==1){
             bookingType = "1";
+            tvBookingType.setText("Incall");
+            tvBookingType.setVisibility(View.VISIBLE);
             rlAddress.setVisibility(View.VISIBLE);
             rlAreaOfCoverage.setVisibility(View.GONE);
             radiusLineView.setVisibility(View.GONE);
             tvAddressType.setText("Enter Business Address");
+            splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
+
         }else if (serviceType==2){
             bookingType = "2";
+            tvBookingType.setText("Outcall");
             rlAddress.setVisibility(View.VISIBLE);
+            tvBookingType.setVisibility(View.VISIBLE);
             rlAreaOfCoverage.setVisibility(View.VISIBLE);
             radiusLineView.setVisibility(View.VISIBLE);
             tvAddressType.setText("Return Location Address");
+            splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
+
         }else if (serviceType==3){
             bookingType = "3";
+            tvBookingType.setText("Incall/Outcall");
             rlAddress.setVisibility(View.VISIBLE);
+            tvBookingType.setVisibility(View.VISIBLE);
             rlAreaOfCoverage.setVisibility(View.VISIBLE);
             radiusLineView.setVisibility(View.VISIBLE);
             tvAddressType.setText("Enter Business Address / Return Location");
+            splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
+            splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
+
         }
 
         if (!bpSession.getAddress().latitude.equals("") && !bpSession.getAddress().latitude.equals(""))
             bizAddress = bpSession.getAddress();
+
+        updateView();
 
         iv_back.setOnClickListener(this);
         rlBookingType.setOnClickListener(this);
@@ -269,8 +286,23 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
                 case 104:
                     isHoursUpdate = (boolean) data.getSerializableExtra("isHoursUpdate");
                     break;
+
                 case 105:
-                    tvBreakTime.setVisibility(View.VISIBLE);
+                    switch (bookingType) {
+                        case "1":
+                            splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
+                            break;
+                        case "2":
+                            splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
+                            break;
+                        case "3":
+                            splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
+                            splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
+                            break;
+                    }
+
+                    break;
+              /*      tvBreakTime.setVisibility(View.VISIBLE);
                     switch (bookingType) {
                         case "3":
                             tvBreakTime.setText("Incall : " + bpSession.getInCallPreprationTime()
@@ -284,9 +316,65 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
                             tvBreakTime.setText("Incall : " + bpSession.getInCallPreprationTime());
                             break;
                     }
-                    break;
+                    break;*/
 
             }
+        }
+    }
+
+    private void splitTime(TextView textView,String time,String type){
+
+        textView.setVisibility(View.VISIBLE);
+
+        if (time.contains(":")){
+            String[] separated = time.split(":");
+            String hours = separated[0]+" hr ";
+            String min = separated[1]+" min";
+
+            if (hours.equals("00 hr "))
+                textView.setText(type+" : "+min);
+            else if (!hours.equals("00 hr ") && min.equals("00 min"))
+                textView.setText(type+" : "+hours);
+            else
+                textView.setText(type+" : "+hours+min);
+
+        }
+
+    }
+
+    private void  updateView(){
+        etBusinessEmail.setText(user.email);
+        etBusinessContact.setText(user.contactNo);
+        etBusinessName.setText(bpSession.getBusinessName());
+        //tvRadius.setText(bpSession.getRadius());
+
+
+        if (!bpSession.getBusinessName().isEmpty())
+            etBusinessName.setText(bpSession.getBusinessName());
+        else  if (!user.businessName.isEmpty())
+            etBusinessName.setText(user.businessName);
+
+        if (!bpSession.getBusinessEmail().isEmpty())
+            etBusinessEmail.setText(bpSession.getBusinessEmail());
+        else  if (!user.businessEmail.isEmpty())
+            etBusinessEmail.setText(user.businessEmail);
+
+        if (!bpSession.getBusinessContact().isEmpty())
+            etBusinessContact.setText(bpSession.getBusinessContact());
+        else  if (!user.businessContactNo.isEmpty())
+            etBusinessContact.setText(user.businessContactNo);
+
+        if (!bpSession.getAddress().latitude.equals("") && !bpSession.getAddress().latitude.equals(""))
+            bizAddress = bpSession.getAddress();
+
+        if (bizAddress!=null ) {
+            tvAddress.setText(bizAddress.placeName+" "+bizAddress.stAddress1);
+            tvAddress.setVisibility(View.VISIBLE);
+        }
+
+        if (bpSession.getRadius()!=0) {
+            tvRadius.setText(bpSession.getRadius() + " Miles");
+            tvRadius.setVisibility(View.VISIBLE);
         }
     }
 

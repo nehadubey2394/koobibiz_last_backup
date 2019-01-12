@@ -25,6 +25,7 @@ import com.mualab.org.biz.modules.profile_setup.adapter.AddedServicesAdapter;
 import com.mualab.org.biz.modules.profile_setup.db_modle.Services;
 import com.mualab.org.biz.modules.profile_setup.modle.AddedCategory;
 import com.mualab.org.biz.modules.profile_setup.modle.MyBusinessType;
+import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -51,9 +52,9 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
     private AddedServicesAdapter servicesListAdapter;
     private List<Services>mainServicesList,tempList,inCallServiceList,outCallServiceList;
     protected User user;
-    private LinearLayout tabIncall, tabOutcall;
+    private LinearLayout tabIncall, tabOutcall,tabLayout;
     private String serviceType = "Incall";
-
+    private PreRegistrationSession bpSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
 
     private void init(){
         if(user==null) user = Mualab.getInstance().getSessionManager().getUser(); // get session object
-
+        bpSession  = Mualab.getInstance().getBusinessProfileSession();
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         tvHeaderTitle.setText(getString(R.string.text_services));
@@ -84,6 +85,7 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
         tvOutCall = findViewById(R.id.tvOutCall);
         tabIncall = findViewById(R.id.tabIncall);
         tabOutcall = findViewById(R.id.tabOutcall);
+        tabLayout = findViewById(R.id.tabLayout);
 
         servicesListAdapter = new AddedServicesAdapter(MyServicesActivity.this, tempList,
                 new AddedServicesAdapter.onClickListener() {
@@ -378,6 +380,9 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
                             }
                         }
                         MyToast.getInstance(MyServicesActivity.this).showDasuAlert(message);
+
+                        noDataFound();
+
                     }else {
                         MyToast.getInstance(MyServicesActivity.this).showDasuAlert(message);
                     }
@@ -457,7 +462,6 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
                     }
                     //    pbLoder.setVisibility(View.GONE);
 
-
                 }catch (Exception e) {
                     Progress.hide(MyServicesActivity.this);
                     e.printStackTrace();
@@ -526,10 +530,31 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
                     break;
             }
         }
+
         if (serviceType.equals("Incall"))
             tempList.addAll(inCallServiceList);
         else
             tempList.addAll(outCallServiceList);
+
+       /* int bookingType = bpSession.getServiceType();
+
+        switch (bookingType) {
+            case 1:
+                tabLayout.setVisibility(View.GONE);
+                break;
+            case 2:
+                tabLayout.setVisibility(View.GONE);
+                break;
+            case 3:
+                tabLayout.setVisibility(View.VISIBLE);
+                break;
+        }
+*/
+       /*     if (inCallServiceList.size()!=0 && outCallServiceList.size()!=0)
+            tabLayout.setVisibility(View.VISIBLE);
+        else
+            tabLayout.setVisibility(View.GONE);*/
+
 
         servicesListAdapter.notifyDataSetChanged();
 

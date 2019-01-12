@@ -362,22 +362,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         android:visibility="gone"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="@string/service_break"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/gray" />
 
                     <TextView
                         android:id="@+id/tvOutCallBreakTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         android:visibility="gone"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="@string/service_break"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/gray" />
 
 
                 </LinearLayout>
