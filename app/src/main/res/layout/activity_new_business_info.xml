@@ -267,8 +267,9 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:textSize="13sp"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:ellipsize="end"
+                            android:ems="13"
                             android:textColorHint="@color/gray"
                             android:textColor="@color/gray"
                             android:fontFamily="@font/roboto_regular"
@@ -428,19 +429,27 @@
                             android:text="@string/break_between_appointments"
                             />
                         <TextView
-                            android:id="@+id/tvBreakTime"
-                            style="@style/TextView"
+                            android:id="@+id/tvInCallBreakTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:maxWidth="240dp"
                             android:textSize="13sp"
                             android:visibility="gone"
-                            android:textColorHint="@color/gray"
-                            android:textColor="@color/gray"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="@string/break_between_appointments"
-                            />
+                            android:text="@string/service_break"
+                            android:textColor="@color/gray" />
+
+                        <TextView
+                            android:id="@+id/tvOutCallBreakTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:textSize="13sp"
+                            android:visibility="gone"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="@string/service_break"
+                            android:textColor="@color/gray" />
+
                     </LinearLayout>
 
                     <ImageView

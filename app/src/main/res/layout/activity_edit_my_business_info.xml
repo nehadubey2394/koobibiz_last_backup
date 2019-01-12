@@ -337,19 +337,48 @@
             <RelativeLayout
                 android:id="@+id/rlserviceBreak"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="wrap_content"
+                android:minHeight="52dp"
                 android:layout_marginTop="5dp"
                 >
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:textSize="15sp"
-                    android:layout_centerVertical="true"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="@string/service_break"
-                    android:textColor="@color/text_color" />
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/service_break"
+                        android:textColor="@color/text_color" />
+
+                    <TextView
+                        android:id="@+id/tvInCallBreakTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/tvOutCallBreakTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@color/gray" />
+
+
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="22dp"

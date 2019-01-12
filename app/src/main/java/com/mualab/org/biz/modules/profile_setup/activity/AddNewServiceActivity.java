@@ -387,11 +387,11 @@ public class AddNewServiceActivity extends AppCompatActivity implements
                     @Override
                     public void run() {
                         MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Service added successfully");
-                        /*Intent intent = getIntent();
+                        Intent intent = getIntent();
                         setResult(RESULT_OK, intent);
-                        finish();*/
-                        startActivity(new Intent(AddNewServiceActivity.this,AddedServiceActivity.class));
                         finish();
+                        //startActivity(new Intent(AddNewServiceActivity.this,AddedServiceActivity.class));
+                        //finish();
                     }
                 });
 

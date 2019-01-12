@@ -53,7 +53,7 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
     private TextView tvNoRecord,tvInCall,tvOutCall;
     private long mLastClickTime = 0;
     private RecyclerView listViewServices;
-    private LinearLayout tabIncall, tabOutcall;
+    private LinearLayout tabIncall, tabOutcall,tabLayout;
     private View topLine;
     private List<Services> servicesList ;
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -103,6 +103,7 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
         tvOutCall = findViewById(R.id.tvOutCall);
         tabIncall = findViewById(R.id.tabIncall);
         tabOutcall = findViewById(R.id.tabOutcall);
+        tabLayout = findViewById(R.id.tabLayout);
 
         servicesListAdapter = new AddedServicesAdapter(AddedServiceActivity.this, tempList,
                 new AddedServicesAdapter.onClickListener() {
@@ -408,21 +409,35 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
                     break;
             }
         }
+
         if (serviceType.equals("Incall"))
             tempList.addAll(inCallServiceList);
         else
             tempList.addAll(outCallServiceList);
 
+       /* if (inCallServiceList.size()!=0 && outCallServiceList.size()!=0)
+            tabLayout.setVisibility(View.VISIBLE);
+        else
+            tabLayout.setVisibility(View.GONE);
+*/
         servicesListAdapter.notifyDataSetChanged();
 
         noDataFound();
-     /*   if (mainServicesList.size()!=0) {
-            listViewServices.setVisibility(View.VISIBLE);
-            tvNoRecord.setVisibility(View.GONE);
-        }
-        else {
-            listViewServices.setVisibility(View.GONE);
-            tvNoRecord.setVisibility(View.VISIBLE);
+       /* int bookingType = bpSession.getServiceType();
+
+        switch (bookingType) {
+            case 1:
+                tabLayout.setVisibility(View.GONE);
+                tempList.addAll(inCallServiceList);
+                break;
+            case 2:
+                tabLayout.setVisibility(View.GONE);
+                tempList.addAll(outCallServiceList);
+                break;
+            case 3:
+                tabLayout.setVisibility(View.VISIBLE);
+                tempList.addAll(inCallServiceList);
+                break;
         }*/
     }
 

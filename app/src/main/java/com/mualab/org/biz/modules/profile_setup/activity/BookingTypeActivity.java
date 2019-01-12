@@ -125,8 +125,13 @@ public class BookingTypeActivity extends AppCompatActivity implements View.OnCli
             case R.id.btnContinue:
                 if (!bookingType.equals("")) {
                     bpSession.updateServiceType(Integer.parseInt(bookingType));
-                    bpSession.updateIncallPreprationTime("HH:MM");
-                    bpSession.updateOutcallPreprationTime("HH:MM");
+
+                    if (bookingType.equals("1"))
+                        bpSession.updateOutcallPreprationTime("HH:MM");
+                    else if (bookingType.equals("2"))
+                        bpSession.updateIncallPreprationTime("HH:MM");
+
+                   // bpSession.updateOutcallPreprationTime("HH:MM");
 
                     Intent intent = new Intent();
                     intent.putExtra("bookingType", bookingType);

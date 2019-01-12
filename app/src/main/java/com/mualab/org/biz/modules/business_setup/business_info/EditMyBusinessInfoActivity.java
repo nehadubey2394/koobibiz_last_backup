@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EditMyBusinessInfoActivity extends AppCompatActivity implements View.OnClickListener{
-    private TextView tvBookingType,tvCountryCode,tvAddressType,tvRadius;
+    private TextView tvBookingType,tvCountryCode,tvAddressType,tvRadius,tvInCallBreakTime,tvOutCallBreakTime;
     private EditText etBusinessName,etBusinessEmail,etBusinessContact;
     private RelativeLayout rlAreaOfCoverage,rlAddress;
     private View radiusLineView;
@@ -90,6 +90,9 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
         tvCountryCode = findViewById(R.id.tvCountryCode);
         tvAddressType = findViewById(R.id.tvBizAddress);
         tvRadius = findViewById(R.id.tvRadius);
+
+        tvInCallBreakTime = findViewById(R.id.tvInCallBreakTime);
+        tvOutCallBreakTime = findViewById(R.id.tvOutCallBreakTime);
 
         etBusinessName = findViewById(R.id.etBusinessName);
         etBusinessEmail = findViewById(R.id.etBusinessEmail);
@@ -136,11 +139,10 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
         else  if (!user.country.isEmpty())
             tvCountryCode.setText(user.countryCode);
 
-
-
         int serviceType = bpSession.getServiceType();
         if (serviceType==1){
             bookingType = "1";
+            splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
             tvBookingType.setText("Incall");
             rlAddress.setVisibility(View.VISIBLE);
             rlAreaOfCoverage.setVisibility(View.GONE);
@@ -148,12 +150,15 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
             tvAddressType.setText("Enter Business Address");
         }else if (serviceType==2){
             tvBookingType.setText("Outcall");
+            splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
             bookingType = "2";
             rlAddress.setVisibility(View.VISIBLE);
             rlAreaOfCoverage.setVisibility(View.VISIBLE);
             radiusLineView.setVisibility(View.VISIBLE);
             tvAddressType.setText("Return Location Address");
         }else if (serviceType==3){
+            splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
+            splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
             tvBookingType.setText("Incall/Outcall");
             bookingType = "3";
             rlAddress.setVisibility(View.VISIBLE);
@@ -173,6 +178,24 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
 
         if (bpSession.getRadius()!=0)
             tvRadius.setText(bpSession.getRadius()+" Miles");
+    }
+
+    private void splitTime(TextView textView,String time,String type){
+        textView.setVisibility(View.VISIBLE);
+        if (time.contains(":")){
+            String[] separated = time.split(":");
+            String hours = separated[0]+" hr ";
+            String min = separated[1]+" min";
+
+            if (hours.equals("00 hr "))
+                textView.setText(type+" : "+min);
+            else if (!hours.equals("00 hr ") && min.equals("00 min"))
+                textView.setText(type+" : "+hours);
+            else
+                textView.setText(type+" : "+hours+min);
+
+        }
+
     }
 
     @Override
@@ -228,7 +251,7 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
                     Intent intent5 = new Intent(EditMyBusinessInfoActivity.this,
                             BreakTimeActivity.class);
                     intent5.putExtra("comingFrom","NewBusinessInfoActivity");
-                    startActivity(intent5);
+                    startActivityForResult(intent5,105);
                 }else {
                     MyToast.getInstance(EditMyBusinessInfoActivity.this).showDasuAlert("Please select booking type");
                 }
@@ -237,7 +260,7 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
 
             case R.id.btnContinue:
                 if (serviceType!=0){
-                    BusinessProfile businessProfile =  bpSession.getBusinessProfile();
+
                     if (checkNotempty(etBusinessName,"Please enter business name")){
                         if (validateEmail()){
                             if (validatePhone()){
@@ -280,6 +303,8 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
             switch (requestCode){
                 case 101:
                     bookingType =  data.getStringExtra("bookingType");
+                    tvInCallBreakTime.setVisibility(View.GONE);
+                    tvOutCallBreakTime.setVisibility(View.GONE);
                     switch (bookingType) {
                         case "1":
                             tvBookingType.setText("Incall");
@@ -323,12 +348,28 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
                     tvRadius.setText(bpSession.getRadius()+" Miles");
                     break;
 
-                case 1003: {
+                case 105:
+                    switch (bookingType) {
+                        case "1":
+                            splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
+                            break;
+                        case "2":
+                            splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
+                            break;
+                        case "3":
+                            splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
+                            splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
+                            break;
+
+                    }
+
+                    break;
+
+                case 1003:
                     Country country = (Country) data.getSerializableExtra("country");
                     tvCountryCode.setText(String.format("+%s", country.phone_code));
                     countryCode = "+"+country.phone_code;
                     break;
-                }
 
             }
         }
