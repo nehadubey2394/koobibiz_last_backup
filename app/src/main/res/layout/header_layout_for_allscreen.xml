@@ -77,22 +77,24 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="10dp"
-            android:layout_toStartOf="@+id/imgListMenu"
+            android:layout_toStartOf="@+id/imgMenu"
+            android:background="?attr/actionBarItemBackground"
             android:padding="3dp"
             android:visibility="gone"
             app:srcCompat="@drawable/ic_notification"
             tools:ignore="ContentDescription" />
 
         <ImageView
-            android:id="@+id/imgListMenu"
+            android:id="@+id/imgMenu"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="8dp"
+            android:background="?attr/actionBarItemBackground"
             android:padding="5dp"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_menu"
+            app:srcCompat="@drawable/ic_filter"
             tools:ignore="ContentDescription" />
 
 

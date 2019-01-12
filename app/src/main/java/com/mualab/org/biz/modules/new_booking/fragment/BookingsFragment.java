@@ -103,7 +103,6 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
         spBkDate = view.findViewById(R.id.spBkDate);
 
         PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
-        //User user = Mualab.getInstance().getSessionManager().getUser();
 
         bkTempList = new ArrayList<>();
         bkPrevDate = new ArrayList<>();
@@ -142,19 +141,6 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
             bkTypeAdapter = new MyArrayAdapter(getBaseActivity(), bkType);
             spBkType.setAdapter(bkTypeAdapter);
         }
-
-      /*  if (!user.businessType.equals("independent")) {
-            Spinner spBkStaff = view.findViewById(R.id.spBkStaff);
-            //spBkStaff.setVisibility(View.VISIBLE);
-
-            List<String> bkStaff = new ArrayList<>();
-            bkStaff.add("All Staff");
-            bkStaff.add("Staff 1");
-            bkStaff.add("Staff 2");
-
-            bkStaffAdapter = new MyArrayAdapter(getBaseActivity(), bkStaff);
-            spBkStaff.setAdapter(bkStaffAdapter);
-        }*/
     }
 
     @Override
