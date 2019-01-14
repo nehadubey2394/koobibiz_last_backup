@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.base.BaseActivity;
 import com.mualab.org.biz.modules.new_booking.adapter.MyArrayAdapter;
@@ -79,17 +80,17 @@ public class PendingBookingActivity extends BaseActivity implements View.OnClick
         PendBookingsAdapter bookingsAdapter = new PendBookingsAdapter(list, new PendBookingsAdapter.ClickListener() {
             @Override
             public void onAcceptClick(int pos) {
-
+                MyToast.getInstance(getBaseContext()).showSmallMessage(getString(R.string.under_development));
             }
 
             @Override
             public void onRejectClick(int pos) {
-
+                MyToast.getInstance(getBaseContext()).showSmallMessage(getString(R.string.under_development));
             }
 
             @Override
             public void onRescheduleClick(int pos) {
-
+                MyToast.getInstance(getBaseContext()).showSmallMessage(getString(R.string.under_development));
             }
         });
         rvPendBookings.setAdapter(bookingsAdapter);

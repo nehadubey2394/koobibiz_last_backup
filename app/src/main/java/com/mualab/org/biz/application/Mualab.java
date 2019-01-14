@@ -8,9 +8,11 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.androidnetworking.AndroidNetworking;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.mualab.org.biz.BuildConfig;
+import com.mualab.org.biz.data.AppDataManager;
 import com.mualab.org.biz.modules.profile_setup.new_db.NewAppDatabase;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
@@ -24,25 +26,22 @@ import java.util.Map;
 
 public class Mualab extends Application {
 
-    public static boolean IS_DEBUG_MODE = BuildConfig.DEBUG;
     public static final String TAG = Mualab.class.getSimpleName();
     public static final String authToken = "authToken";
-
-    private static Mualab mInstance;
+    private static final String DATABASE_NAME = "NewMualabDb";
+    private static final String PREFERENCES = "Room.preferences";
+    private static final String KEY_FORCE_UPDATE = "force_update";
+    public static boolean IS_DEBUG_MODE = BuildConfig.DEBUG;
     public static double currentLat,currentLng;
     public static Map<String, String> feedBasicInfo = new HashMap<>();
-
+    private static Mualab mInstance;
+    private static AppDataManager appDataManager;
     private  DatabaseReference ref;
     private  Session session;
     private PreRegistrationSession bpSession;
     private RequestQueue mRequestQueue;
-
-    private static final String DATABASE_NAME = "NewMualabDb";
-    private static final String PREFERENCES = "Room.preferences";
-    private static final String KEY_FORCE_UPDATE = "force_update";
   //  private AppDatabase database;
     private NewAppDatabase newAppDatabase;
-
 
     public static Mualab getInstance() {
         return mInstance;
@@ -52,12 +51,23 @@ public class Mualab extends Application {
         return mInstance;
     }
 
+    /*
+        public AppDatabase getDB(){
+            return database;
+        }
+    */
+    public static AppDataManager getDataManager() {
+        return appDataManager;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
         mInstance.getSessionManager();
         FirebaseApp.initializeApp(this);
+        appDataManager = AppDataManager.getInstance(this);
+        AndroidNetworking.initialize(this);
 
         // create database
        /* database = Room.databaseBuilder(getApplicationContext(),
@@ -72,12 +82,6 @@ public class Mualab extends Application {
 
         // ref = FirebaseDatabase.getInstance().getReference();
     }
-
-/*
-    public AppDatabase getDB(){
-        return database;
-    }
-*/
 
     public NewAppDatabase getDB(){
         return newAppDatabase;

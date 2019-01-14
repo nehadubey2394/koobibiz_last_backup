@@ -16,6 +16,8 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.data.AppDataManager;
 
 
 /**
@@ -41,9 +43,9 @@ public abstract class BaseDialog extends DialogFragment implements View.OnFocusC
         this.isBottom = true;
     }
 
-  /*  protected AppDataManager getDataManager() {
+    protected AppDataManager getDataManager() {
         return Mualab.getDataManager();
-    }*/
+    }
 
     @NonNull
     @Override

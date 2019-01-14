@@ -1,14 +1,15 @@
 package com.mualab.org.biz.modules.new_booking.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -16,8 +17,9 @@ import android.widget.TextView;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.Constants;
-import com.mualab.org.biz.model.booking.Bookings;
+import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.modules.base.BaseFragment;
+import com.mualab.org.biz.modules.new_booking.activity.BookingDetailActivity;
 import com.mualab.org.biz.modules.new_booking.adapter.BookingsAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.MyArrayAdapter;
 import com.mualab.org.biz.session.PreRegistrationSession;
@@ -38,13 +40,13 @@ import views.calender.widget.widget.MyFlexibleCalendar;
 
 public class BookingsFragment extends BaseFragment implements View.OnClickListener {
 
-    private long mLastClickTime = 0;
     private String sMonth = "", sDay, selectedDate;
 
     private TextView tv_msg;
     private int dayId;
     private SimpleDateFormat dateSdf, timeSdf;
     private ProgressBar progress_bar;
+    private MyFlexibleCalendar viewCalendar;
     private Spinner spBkDate;
     private MyArrayAdapter bkDateAdapter;
 
@@ -71,17 +73,15 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
     private void initView(View view) {
         dateSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         timeSdf = new SimpleDateFormat("hh:mm a", Locale.US);
-        // init calendar
-        MyFlexibleCalendar viewCalendar = view.findViewById(R.id.calendar);
-        Calendar cal = Calendar.getInstance();
-        CalendarAdapter adapter = new CalendarAdapter(getContext(), cal);
-        viewCalendar.setAdapter(adapter);
+
         progress_bar = view.findViewById(R.id.progress_bar);
-
-        setCalenderClickListner(viewCalendar);
-
-        selectedDate = CalanderUtils.formatDate(CalanderUtils.getCurrentDate(), Constants.SERVER_TIMESTAMP_FORMAT, Constants.SERVER_TIMESTAMP_FORMAT);
-        dayId = cal.get(GregorianCalendar.DAY_OF_WEEK) - 2;
+        view.findViewById(R.id.btnAdd).setOnClickListener(this);
+        Button btnToday = view.findViewById(R.id.btnToday);
+        btnToday.setOnClickListener(this);
+        // init calendar
+        viewCalendar = view.findViewById(R.id.calendar);
+        btnToday.callOnClick();
+        btnToday.callOnClick();
 
         tv_msg = view.findViewById(R.id.tv_msg);
 
@@ -94,7 +94,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
 
         List<String> list = new ArrayList<>();
         BookingsAdapter bookingsAdapter = new BookingsAdapter(list, pos -> {
-
+            startActivity(new Intent(getBaseActivity(), BookingDetailActivity.class));
         });
         rvBookings.setAdapter(bookingsAdapter);
     }
@@ -218,7 +218,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                         if (year == cYear && month == cMonth && dayOfMonth < cDay) {
                             AppLogger.i("Date Test", "can't select previous date");
                         } else {
-                            apiForGetFreeSlots();
+                            //apiForGetFreeSlots();
                         }
                     } else {
                         AppLogger.i("Date Test", "can't select previous date");
@@ -258,18 +258,24 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return;
+
+        switch (view.getId()) {
+            case R.id.btnToday:
+                viewCalendar.isFirstimeLoad = true;
+                Calendar cal = Calendar.getInstance();
+                CalendarAdapter adapter = new CalendarAdapter(getBaseActivity(), cal);
+                viewCalendar.setAdapter(adapter);
+                //viewCalendar.expand(500);
+                setCalenderClickListner(viewCalendar);
+                selectedDate = CalanderUtils.formatDate(CalanderUtils.getCurrentDate(), Constants.SERVER_TIMESTAMP_FORMAT, Constants.SERVER_TIMESTAMP_FORMAT);
+                dayId = cal.get(GregorianCalendar.DAY_OF_WEEK) - 2;
+                //apiForGetFreeSlots();
+                break;
+
+            case R.id.btnAdd:
+                MyToast.getInstance(getBaseActivity()).showSmallMessage(getString(R.string.under_development));
+                break;
         }
-        mLastClickTime = SystemClock.elapsedRealtime();
     }
 
-
-    private void apiForGetFreeSlots() {
-        //Todo handle this
-    }
-
-    private void apiForBookingAction(final String type, final Bookings bookings, final String serviceId, final String subServiceId, final String artistServiceId) {
-        //Todo handle this
-    }
 }

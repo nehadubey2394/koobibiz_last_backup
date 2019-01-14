@@ -11,6 +11,8 @@
         <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
         <item name="android:windowBackground">@drawable/gradent_splash_bg</item>
 
+        <item name="android:splitMotionEvents">false</item>
+        <item name="android:windowEnableSplitTouch">false</item>
     </style>
 
     <style name="Numberpicker">
@@ -44,6 +46,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary2</item>
         <item name="android:windowBackground">@drawable/bg_splash</item>
+
+        <item name="android:splitMotionEvents">false</item>
+        <item name="android:windowEnableSplitTouch">false</item>
     </style>
 
     <style name="StatusBarBlack" parent="Theme.AppCompat.Light.NoActionBar">

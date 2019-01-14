@@ -23,6 +23,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.data.AppDataManager;
 import com.mualab.org.biz.util.NetworkUtils;
 
 import java.util.List;
@@ -52,9 +54,9 @@ public class BaseActivity extends AppCompatActivity {
         return activity;
     }
 
-   /* protected AppDataManager getDataManager() {
+    protected AppDataManager getDataManager() {
         return Mualab.getDataManager();
-    }*/
+    }
 
     public void addFragment(Fragment fragment, boolean addToBackStack) {
         String backStackName = fragment.getClass().getName();

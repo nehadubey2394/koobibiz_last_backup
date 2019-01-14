@@ -12,47 +12,47 @@
         layout="@layout/header_layout_for_allscreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:visibility="visible" />
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rycvStaff"
-        android:layout_below="@+id/headerLy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:scrollbars="none"
-        android:layout_margin="5dp"
         android:layout_above="@+id/btnNewAppointment"
+        android:layout_below="@+id/headerLy"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:scrollbars="none"
          />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btnAllStaff"
-        style="@style/My_Button_Small.Invert"
+        style="@style/My_Button_Primary"
         android:layout_width="220dp"
         android:layout_height="30dp"
-        android:text="@string/all_staff"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/all_staff"
         android:textSize="14sp"
-        android:layout_alignParentBottom="true"
         />
 
     <TextView
+        android:id="@+id/tvoData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvoData"
-        android:textColor="@color/text_color"
+        android:layout_centerInParent="true"
         android:fontFamily="@font/roboto_regular"
-        android:text="@string/no_staff_available"
-        android:visibility="gone"
         android:gravity="center"
+        android:text="@string/no_staff_available"
+        android:textColor="@color/text_color"
         android:textSize="14sp"
-        android:layout_centerInParent="true"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

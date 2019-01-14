@@ -1,15 +1,15 @@
 package com.mualab.org.biz.modules.new_booking.adapter;
 
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
+import com.mualab.org.biz.modules.base.ItemClickListener;
 
 import java.util.List;
 
@@ -20,14 +20,17 @@ import java.util.List;
  * Time: 4:03 PM
  */
 
-public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ServiceAppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEWTYPE_LOADER = 2;
     private List<String> list;
     private boolean showLoader;
-    private ClickListener clickListener;
+    private ItemClickListener clickListener;
 
-    public PendBookingsAdapter(List<String> list, ClickListener clickListener) {
+    private int lastPos = -1;
+    private boolean isClick = false;
+
+    public ServiceAppointmentAdapter(List<String> list, ItemClickListener clickListener) {
         this.list = list;
         this.clickListener = clickListener;
     }
@@ -56,14 +59,15 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
+            default:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service_appointment, parent, false);
+                return new ViewHolder(view);
+
             case VIEWTYPE_LOADER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_view, parent, false);
                 return new LoadingViewHolder(view);
-
-            default:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pending_booking, parent, false);
-                return new ViewHolder(view);
         }
+
     }
 
     @Override
@@ -78,52 +82,31 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemCount() {
         //return list.size();
-        return 6;
+        return 3;
     }
 
-
-    public interface ClickListener {
-        void onAcceptClick(int pos);
-
-        void onRejectClick(int pos);
-
-        void onRescheduleClick(int pos);
-    }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tvStaffName, tvUserName, tvService, tvServiceDate, tvDate, tvTime;
-        private Button btnAccept, btnReject, btnReSchedule;
 
         ViewHolder(@NonNull View view) {
             super(view);
 
-            btnAccept = view.findViewById(R.id.btnAccept);
-            btnReject = view.findViewById(R.id.btnReject);
-            btnReSchedule = view.findViewById(R.id.btnReSchedule);
-
-            btnAccept.setOnClickListener(this);
-            btnReject.setOnClickListener(this);
-            btnReSchedule.setOnClickListener(this);
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(@NonNull final View view) {
             switch (view.getId()) {
 
-                case R.id.btnAccept:
-                    if (getAdapterPosition() != -1 && clickListener != null)
-                        clickListener.onAcceptClick(getAdapterPosition());
-                    break;
+                default:
+                    if (!isClick) {
+                        isClick = true;
+                        if (getAdapterPosition() != -1 && clickListener != null)
+                            clickListener.onItemClick(getAdapterPosition());
+                    }
 
-                case R.id.btnReject:
-                    if (getAdapterPosition() != -1 && clickListener != null)
-                        clickListener.onRejectClick(getAdapterPosition());
-                    break;
-
-                case R.id.btnReSchedule:
-                    if (getAdapterPosition() != -1 && clickListener != null)
-                        clickListener.onRescheduleClick(getAdapterPosition());
+                    new Handler().postDelayed(() -> isClick = false, 3000);
                     break;
             }
         }

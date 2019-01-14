@@ -90,9 +90,10 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
-        ViewHolder(@NonNull View v) {
-            super(v);
+        ViewHolder(@NonNull View view) {
+            super(view);
 
+            view.setOnClickListener(this);
         }
 
         @Override

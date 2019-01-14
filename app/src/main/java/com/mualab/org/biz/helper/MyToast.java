@@ -20,17 +20,12 @@ public class MyToast {
     private static Toast toast;
     private Context context;
 
-    /**
-     * @param context
-     */
+
     private MyToast(Context context) {
         this.context = context;
     }
 
-    /**
-     * @param context
-     * @return
-     */
+
     public synchronized static MyToast getInstance(Context context) {
         if (instance == null) {
             instance = new MyToast(context);
@@ -38,36 +33,29 @@ public class MyToast {
         return instance;
     }
 
-    /**
-     * @param message
-     */
     public void showLongMessage(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        if (toast != null) toast.cancel();
+        toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 
-    /**
-     * @param message
-     */
     public void showSmallMessage(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        if (toast != null) toast.cancel();
+        toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
-    /**
-     * The Toast displayed via this method will display it for short period of time
-     *
-     * @param message
-     */
     public void showLongCustomToast(String message) {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         View layout = inflater.inflate(R.layout.layout_custom_toast, null);
         TextView msgTv = layout.findViewById(R.id.tv_msg);
         msgTv.setText(message);
-        Toast toast = new Toast(context);
+        if (toast != null) toast.cancel();
+        toast = new Toast(context);
         toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.BOTTOM, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
-
     }
 
     /**
@@ -94,7 +82,6 @@ public class MyToast {
     }
 
     public void showDasuAlert(String title, String message) {
-
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         View layout = inflater.inflate(R.layout.custome_alert_layout, null);
         TextView tv_title = layout.findViewById(R.id.tv_title);

@@ -43,7 +43,6 @@ import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MySnackBar;
-import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
@@ -54,6 +53,7 @@ import com.mualab.org.biz.modules.base.BaseActivity;
 import com.mualab.org.biz.modules.booking.fragments.AddFragment;
 import com.mualab.org.biz.modules.booking.listner.OnRefreshListener;
 import com.mualab.org.biz.modules.business_setup.BaseBusinessSetupFragment;
+import com.mualab.org.biz.modules.new_booking.activity.PendingBookingActivity;
 import com.mualab.org.biz.modules.new_booking.adapter.FilterMenuAdapter;
 import com.mualab.org.biz.modules.new_booking.fragment.BookingsFragment;
 import com.mualab.org.biz.modules.new_booking.model.StaffFilter;
@@ -77,7 +77,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements View.OnClickListener,OnRefreshListener {
     private Session session;
     private User user;
-    private  long mLastClickTime = 0;
+    private long mLastClickTime = 0;
     private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnNotification,ibtnUser;
     private ImageView ivHeaderBack, imgNotif, imgMenu;
     private ImageView ivDropDown;
@@ -121,13 +121,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         });
 
         NetworkChangeReceiver networkChangeReceiver = new NetworkChangeReceiver();
-        networkChangeReceiver.setListner(new NetworkChangeReceiver.Listner() {
-            @Override
-            public void onNetworkChange(boolean isConnected) {
-                if(isConnected){
-                    network.dismiss();
-                }else network.show();
-            }
+        networkChangeReceiver.setListner(isConnected -> {
+            if (isConnected) {
+                network.dismiss();
+            } else network.show();
         });
 
     }
@@ -408,11 +405,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 break;
 
             case R.id.imgNotif:
-                MyToast.getInstance(this).showSmallMessage(getString(R.string.under_development));
-                //startActivity(new Intent(this, PendingBookingActivity.class));
+                startActivity(new Intent(this, PendingBookingActivity.class));
                 break;
 
             case R.id.imgMenu:
+                //user type business then open popupFilter
                 if (!user.businessType.equals("independent")) {
                     int[] point = new int[2];
 
@@ -429,8 +426,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
                     popupFilter(p);
                 } else {
-                    //imgNotif or //use call on click
-                    MyToast.getInstance(this).showSmallMessage(getString(R.string.under_development));
+                    //img menu treat like notification button
+                    imgNotif.callOnClick();
                 }
                 break;
         }
@@ -649,7 +646,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         arrayList.add(staffFilter);
 
         staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 7";
+        staffFilter.username = "Staff 78910114568545";
         staffFilter.isSelected = false;
         arrayList.add(staffFilter);
 
