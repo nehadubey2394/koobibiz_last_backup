@@ -27,7 +27,6 @@ import java.util.Map;
 public class Mualab extends Application {
 
     public static final String TAG = Mualab.class.getSimpleName();
-    public static final String authToken = "authToken";
     private static final String DATABASE_NAME = "NewMualabDb";
     private static final String PREFERENCES = "Room.preferences";
     private static final String KEY_FORCE_UPDATE = "force_update";

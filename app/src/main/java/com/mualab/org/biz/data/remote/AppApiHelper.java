@@ -1,5 +1,11 @@
 package com.mualab.org.biz.data.remote;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.Priority;
+
+import java.util.HashMap;
+
 /**
  * Created by hemant
  * Date: 10/4/18.
@@ -18,4 +24,13 @@ public final class AppApiHelper implements ApiHelper {
         return instance;
     }
 
+    @Override
+    public ANRequest doGetArtistBookingHistory(HashMap<String, String> header, HashMap<String, String> params) {
+        return AndroidNetworking.post(Webservices.BOOKING_HISTORY)
+                .addHeaders(header)
+                .addBodyParameter(params)
+                .setTag(TAG)
+                .setPriority(Priority.HIGH)
+                .build();
+    }
 }

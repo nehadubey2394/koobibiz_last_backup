@@ -15,6 +15,12 @@
         <item name="android:windowEnableSplitTouch">false</item>
     </style>
 
+    <style name="ProgressHomeTheme" parent="AppTheme">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
     <style name="Numberpicker">
         <item name="colorControlNormal">@android:color/transparent</item>
         <item name="android:textColorPrimary">@android:color/black</item>

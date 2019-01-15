@@ -357,13 +357,10 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         User user = session.getUser();
 
         if (!ConnectionDetector.isConnected()) {
-            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
-                @Override
-                public void onNetworkChange(Dialog dialog, boolean isConnected) {
-                    if(isConnected){
-                        dialog.dismiss();
-                        apiForGetProfile();
-                    }
+            new NoConnectionDialog(mContext, (dialog, isConnected) -> {
+                if (isConnected) {
+                    dialog.dismiss();
+                    apiForGetProfile();
                 }
             }).show();
         }

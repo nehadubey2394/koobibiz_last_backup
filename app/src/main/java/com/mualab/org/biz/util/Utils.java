@@ -1,7 +1,13 @@
 package com.mualab.org.biz.util;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+
+import com.mualab.org.biz.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,10 +30,23 @@ public class Utils {
         }
     }
 
+    public static Dialog showLoadingDialog(Context context) {
+        Dialog dialog = new Dialog(context, R.style.ProgressHomeTheme);
+        dialog.show();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        dialog.setContentView(R.layout.dialog_progress);
+
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
+    }
+
     public static String changeDateFormate(String sDate){
         SimpleDateFormat inputDf = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat outputtDf = new SimpleDateFormat("yyyy-MM-dd");
-        Date formatedDate = null;
+        Date formatedDate;
         String date = "";
         try {
             formatedDate = inputDf.parse(sDate);

@@ -3,6 +3,7 @@ package com.mualab.org.biz.modules.base;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,18 +15,28 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.Task;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.data.AppDataManager;
+import com.mualab.org.biz.helper.Constants;
+import com.mualab.org.biz.util.AppLogger;
 import com.mualab.org.biz.util.NetworkUtils;
+import com.mualab.org.biz.util.Utils;
 
 import java.util.List;
 import java.util.Locale;
@@ -119,7 +130,6 @@ public class BaseActivity extends AppCompatActivity {
      * location getting task start here
      * when location not available this method on gps when user click ok
      */
-/*
     protected void onGpsAutomatic() {
         int permissionLocation = ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -176,7 +186,7 @@ public class BaseActivity extends AppCompatActivity {
                                 // and check the result in onActivityResult().
                                 resolvable.startResolutionForResult(
                                         activity,
-                                        Constant.REQUEST_CHECK_SETTINGS_GPS);
+                                        Constants.REQUEST_CHECK_SETTINGS_GPS);
                             } catch (IntentSender.SendIntentException e) {
                                 // Ignore the error.
                             } catch (ClassCastException e) {
@@ -192,12 +202,11 @@ public class BaseActivity extends AppCompatActivity {
             });
         }
     }
-*/
 
     /**
      * this method get location when available and store in static variable
      */
-  /*  public void updateLocation() {
+    public void updateLocation() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -221,11 +230,11 @@ public class BaseActivity extends AppCompatActivity {
         Mualab.currentLng = location.getLongitude();
         AppLogger.e("Location", String.valueOf(Mualab.currentLat));
 
-        *//*if (address.isEmpty()) {
+        /*if (address.isEmpty()) {
             address = getAddressFromLatLng(Agrinvest.LATITUDE, Agrinvest.LONGITUDE);
             AppLogger.e("Location ", address);
-        }*//*
-    }*/
+        }*/
+    }
 
     protected String getAddressFromLatLng(Double latitude, Double longitude) {
         String result;
@@ -277,7 +286,7 @@ public class BaseActivity extends AppCompatActivity {
         }
         // true then show loading
         if (isLoading) {
-          //  mProgressBar = Utils.showLoadingDialog(this);
+            mProgressBar = Utils.showLoadingDialog(this);
         }
     }
 

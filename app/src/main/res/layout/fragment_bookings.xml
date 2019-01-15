@@ -12,16 +12,18 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnAdd"
         android:layout_alignParentTop="true"
         android:overScrollMode="never">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
+                android:id="@+id/cvCalender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/white">
@@ -140,10 +142,26 @@
 
             </android.support.v7.widget.CardView>
 
+            <TextView
+                android:id="@+id/tvNoRecord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cvCalender"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="@string/no_data_available"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:visibility="gone" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvBookings"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cvCalender"
                 android:layout_marginBottom="4dp"
                 android:layout_marginEnd="6dp"
                 android:layout_marginStart="6dp"
@@ -155,21 +173,22 @@
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 tools:targetApi="lollipop" />
 
-            <Button
-                android:id="@+id/btnAdd"
-                style="@style/My_Button_Pink"
-                android:layout_width="120dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="@string/add"
-                android:textSize="14sp" />
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/btnAdd"
+        style="@style/My_Button_Pink"
+        android:layout_width="120dp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/add"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"

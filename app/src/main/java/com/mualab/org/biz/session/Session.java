@@ -7,11 +7,11 @@ import android.os.AsyncTask;
 import android.util.Base64;
 
 import com.google.gson.Gson;
-import com.mualab.org.biz.model.add_staff.StaffDetail;
-import com.mualab.org.biz.modules.authentication.LoginActivity;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.model.add_staff.StaffDetail;
+import com.mualab.org.biz.modules.authentication.LoginActivity;
 
 import java.io.UnsupportedEncodingException;
 
@@ -73,17 +73,6 @@ public class Session {
         editor.apply();
     }
 
-    public void setPassword(String pwd) {
-        try {
-            byte[] data = pwd.getBytes("UTF-8");
-            String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-            editor.putString("pwd", base64);
-            editor.apply();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String getPassword(){
         // Receiving side
         try {
@@ -95,13 +84,23 @@ public class Session {
         return null;
     }
 
+    public void setPassword(String pwd) {
+        try {
+            byte[] data = pwd.getBytes("UTF-8");
+            String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+            editor.putString("pwd", base64);
+            editor.apply();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 
     public User getUser() {
         Gson gson = new Gson();
         String string = mypref.getString("user", "");
         if (!string.isEmpty())
             return gson.fromJson(string, User.class);
-        else return null;
+        else return new User();
     }
 
     public StaffDetail getStaffInfo() {
@@ -160,6 +159,18 @@ public class Session {
         _context.startActivity(showLogin);
     }
 
+    public boolean isLoggedIn() {
+        return mypref.getBoolean(IS_LOGGEDIN, false);
+    }
+
+    public boolean isBusinessProfileComplete() {
+        return mypref.getBoolean(IS_BisinessProfileComplete, false);
+    }
+
+    public void setBusinessProfileComplete(boolean isComplete) {
+        editor.putBoolean(IS_BisinessProfileComplete, isComplete);
+        editor.apply();
+    }
 
     private class ClearTask extends AsyncTask<String, Void, String> {
         @Override
@@ -178,20 +189,6 @@ public class Session {
         protected void onProgressUpdate(Void... values) {
 
         }
-    }
-
-    public boolean isLoggedIn() {
-        return mypref.getBoolean(IS_LOGGEDIN, false);
-    }
-
-
-    public void setBusinessProfileComplete(boolean isComplete) {
-        editor.putBoolean(IS_BisinessProfileComplete, isComplete);
-        editor.apply();
-    }
-
-    public boolean isBusinessProfileComplete() {
-        return mypref.getBoolean(IS_BisinessProfileComplete, false);
     }
 
 }

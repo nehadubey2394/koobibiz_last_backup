@@ -11,8 +11,10 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.modules.base.BaseActivity;
-import com.mualab.org.biz.modules.new_booking.adapter.MyArrayAdapter;
+import com.mualab.org.biz.modules.new_booking.adapter.CallTypeArrayAdapter;
+import com.mualab.org.biz.modules.new_booking.adapter.MyBookingArrayAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.PendBookingsAdapter;
+import com.mualab.org.biz.modules.new_booking.model.BookingFilterModel;
 import com.mualab.org.biz.session.PreRegistrationSession;
 
 import java.util.ArrayList;
@@ -43,18 +45,29 @@ public class PendingBookingActivity extends BaseActivity implements View.OnClick
         PreRegistrationSession pSession = Mualab.getInstance().getBusinessProfileSession();
         User user = Mualab.getInstance().getSessionManager().getUser();
 
-        MyArrayAdapter bkTypeAdapter, bkStaffAdapter;
+        MyBookingArrayAdapter bkStaffAdapter;
 
         //1:  Incall , 2: Outcall , 3: Both
         if (pSession.getServiceType() == 3) {
             Spinner spBkType = findViewById(R.id.spBkType);
 
-            List<String> bkType = new ArrayList<>();
-            bkType.add("All Type");
-            bkType.add("Incall");
-            bkType.add("Outcall");
+            List<BookingFilterModel> bkTypeList = new ArrayList<>();
+            BookingFilterModel filterModel = new BookingFilterModel();
+            filterModel.displayName = "All Type";
+            filterModel.name = "";
+            bkTypeList.add(filterModel);
 
-            bkTypeAdapter = new MyArrayAdapter(getActivity(), bkType);
+            filterModel = new BookingFilterModel();
+            filterModel.displayName = "Incall";
+            filterModel.name = "1";
+            bkTypeList.add(filterModel);
+
+            filterModel = new BookingFilterModel();
+            filterModel.displayName = "Outcall";
+            filterModel.name = "2";
+            bkTypeList.add(filterModel);
+
+            CallTypeArrayAdapter bkTypeAdapter = new CallTypeArrayAdapter(getActivity(), bkTypeList);
             spBkType.setAdapter(bkTypeAdapter);
         }
 
@@ -63,12 +76,23 @@ public class PendingBookingActivity extends BaseActivity implements View.OnClick
             Spinner spBkStaff = findViewById(R.id.spBkStaff);
             //spBkStaff.setVisibility(View.VISIBLE);
 
-            List<String> bkStaff = new ArrayList<>();
-            bkStaff.add("All Staff");
-            bkStaff.add("Staff 1");
-            bkStaff.add("Staff 2");
+            List<BookingFilterModel> bkStaff = new ArrayList<>();
+            BookingFilterModel filterModel = new BookingFilterModel();
+            filterModel.displayName = "All Staff";
+            filterModel.name = "";
+            bkStaff.add(filterModel);
 
-            bkStaffAdapter = new MyArrayAdapter(getActivity(), bkStaff);
+            filterModel = new BookingFilterModel();
+            filterModel.displayName = "Staff 1";
+            filterModel.name = "";
+            bkStaff.add(filterModel);
+
+            filterModel = new BookingFilterModel();
+            filterModel.displayName = "Staff 2";
+            filterModel.name = "";
+            bkStaff.add(filterModel);
+
+            bkStaffAdapter = new MyBookingArrayAdapter(getActivity(), bkStaff);
             spBkStaff.setAdapter(bkStaffAdapter);
         }
     }

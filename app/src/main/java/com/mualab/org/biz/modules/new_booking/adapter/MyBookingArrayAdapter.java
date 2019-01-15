@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.modules.new_booking.model.BookingFilterModel;
 
 import java.util.List;
 
@@ -18,12 +19,13 @@ import java.util.List;
  * Time: 4:03 PM
  */
 
-public class MyArrayAdapter extends android.widget.ArrayAdapter {
+public class MyBookingArrayAdapter extends android.widget.ArrayAdapter {
 
+    public int selectedPos = 1;
     private Activity activity;
-    private List<String> list;
+    private List<BookingFilterModel> list;
 
-    public MyArrayAdapter(@NonNull Activity activity, List<String> list) {
+    public MyBookingArrayAdapter(@NonNull Activity activity, List<BookingFilterModel> list) {
         super(activity, R.layout.spinner);
         this.activity = activity;
         this.list = list;
@@ -37,7 +39,7 @@ public class MyArrayAdapter extends android.widget.ArrayAdapter {
     @NonNull
     @Override
     public View getView(int position, @Nullable View view, @NonNull ViewGroup viewGroup) {
-        String data = list.get(position);
+        BookingFilterModel bean = list.get(position);
 
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(activity);
@@ -46,7 +48,7 @@ public class MyArrayAdapter extends android.widget.ArrayAdapter {
 
         TextView tvSpinnerName = view.findViewById(R.id.tvName);
 
-        tvSpinnerName.setText(data);
+        tvSpinnerName.setText(bean.displayName);
 
         return view;
     }
@@ -55,16 +57,22 @@ public class MyArrayAdapter extends android.widget.ArrayAdapter {
     @Override
     public View getDropDownView(int position, @Nullable View view, @NonNull ViewGroup viewGroup) {
 
-        String data = list.get(position);
+        if (selectedPos == position) {
+            view = new View(activity);
+            view.setTag("Extra");
+            return view;
+        }
 
-        if (view == null) {
+        BookingFilterModel bean = list.get(position);
+
+        if (view == null || view.getTag().equals("Extra")) {
             LayoutInflater inflater = LayoutInflater.from(activity);
             view = inflater.inflate(R.layout.spinner, viewGroup, false);
             view.setTag("");
         }
 
         TextView tvSpinnerName = view.findViewById(R.id.tvName);
-        tvSpinnerName.setText(data);
+        tvSpinnerName.setText(bean.displayName);
 
         tvSpinnerName.setPadding(10, 0, 0, 0);
 

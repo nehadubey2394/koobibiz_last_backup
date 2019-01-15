@@ -1,14 +1,12 @@
 package com.mualab.org.biz.modules;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,7 +34,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
@@ -65,6 +62,7 @@ import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
+import com.mualab.org.biz.util.PermissionUtils;
 import com.mualab.org.biz.util.network.NetworkChangeReceiver;
 
 import org.json.JSONArray;
@@ -79,7 +77,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     private User user;
     private long mLastClickTime = 0;
     private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnNotification,ibtnUser;
-    private ImageView ivHeaderBack, imgNotif, imgMenu;
+    private ImageView ivHeaderBack, imgNotif, imgRight;
     private ImageView ivDropDown;
     private TextView tvHeaderTitle;
     private int clickedId = 0;
@@ -108,15 +106,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         setContentView(R.layout.activity_main);
         session = new Session(this);
         user = session.getUser();
+
         // progress_bar = findViewById(R.id.progress_bar);
         initView();
 
-        final NoConnectionDialog network =  new NoConnectionDialog(MainActivity.this, new NoConnectionDialog.Listner() {
-            @Override
-            public void onNetworkChange(Dialog dialog, boolean isConnected) {
-                if(isConnected){
-                    dialog.dismiss();
-                }
+        final NoConnectionDialog network = new NoConnectionDialog(MainActivity.this, (dialog, isConnected) -> {
+            if (isConnected) {
+                dialog.dismiss();
             }
         });
 
@@ -127,6 +123,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             } else network.show();
         });
 
+        initLocation();
+    }
+
+    private void initLocation() {
+        new Thread(() -> {
+            final boolean isPermissionAllow = PermissionUtils.checkLocationPermission(getActivity());
+
+            runOnUiThread(() -> {
+                if (isPermissionAllow && Mualab.currentLat != 0.0) {
+                    updateLocation();
+                }
+            });
+        }).start();
     }
 
     private void initView() {
@@ -140,12 +149,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         ivDropDown = findViewById(R.id.ivDropDown);
         imgNotif = findViewById(R.id.imgNotif);
-        imgMenu = findViewById(R.id.imgMenu);
+        imgRight = findViewById(R.id.imgRight);
         // tv_msg = findViewById(R.id.tv_msg);
         ibtnBookings.setImageResource(R.drawable.active_calender_ico);
         spBizName = findViewById(R.id.spBizName);
 
-        setOnClickListener(ibtnBookings, ibtnChart, ibtnAdd, ibtnNotification, ibtnUser, ivHeaderBack, imgNotif, imgMenu);
+        setOnClickListener(ibtnBookings, ibtnChart, ibtnAdd, ibtnNotification, ibtnUser, ivHeaderBack, imgNotif, imgRight);
 
         int index = Mualab.getInstance().getBusinessProfileSession().getStepIndex();
 
@@ -408,14 +417,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 startActivity(new Intent(this, PendingBookingActivity.class));
                 break;
 
-            case R.id.imgMenu:
+            case R.id.imgRight:
                 //user type business then open popupFilter
                 if (!user.businessType.equals("independent")) {
                     int[] point = new int[2];
 
                     // Get the x, y location and store it in the location[] array
                     // location[0] = x, location[1] = y.
-                    imgMenu.getLocationOnScreen(point);
+                    imgRight.getLocationOnScreen(point);
 
                     //Initialize the Point with x, and y positions
                     Display display = getWindowManager().getDefaultDisplay();
@@ -426,8 +435,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
                     popupFilter(p);
                 } else {
-                    //img menu treat like notification button
-                    imgNotif.callOnClick();
+                    startActivity(new Intent(this, PendingBookingActivity.class));
                 }
                 break;
         }
@@ -440,17 +448,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         if (clickedId == 1) {
             if (!user.businessType.equals("independent")) {
                 imgNotif.setImageDrawable(getResources().getDrawable(R.drawable.ic_notification));
-                imgMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
+                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
                 imgNotif.setVisibility(View.VISIBLE);
-                imgMenu.setVisibility(View.VISIBLE);
+                imgRight.setVisibility(View.VISIBLE);
             } else {
                 imgNotif.setVisibility(View.GONE);
-                imgMenu.setVisibility(View.VISIBLE);
-                imgMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_notification));
+                imgRight.setVisibility(View.VISIBLE);
+                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_notification));
             }
         } else {
             imgNotif.setVisibility(View.GONE);
-            imgMenu.setVisibility(View.GONE);
+            imgRight.setVisibility(View.GONE);
         }
 
         ibtnBookings.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_calender_ico));
@@ -473,20 +481,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 if (locationDetector.isLocationEnabled(MainActivity.this) &&
                         locationDetector.checkLocationPermission(MainActivity.this)) {
 
-                    mFusedLocationClient.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                double latitude = location.getLatitude();
-                                double longitude = location.getLongitude();
-                                Mualab.currentLng = latitude;
-                                Mualab.currentLng = longitude;
+                    mFusedLocationClient.getLastLocation().addOnSuccessListener(MainActivity.this, location -> {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+                            Mualab.currentLng = latitude;
+                            Mualab.currentLng = longitude;
 
-                                if (lng.equals("") && lat.equals("")){
-                                    lat = String.valueOf(latitude);
-                                    lng = String.valueOf(longitude);
-                                }
+                            if (lng.equals("") && lat.equals("")) {
+                                lat = String.valueOf(latitude);
+                                lng = String.valueOf(longitude);
                             }
                         }
                     });
@@ -510,7 +515,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
+           /* case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -522,7 +527,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     //replaceFragment(BookingsFragment.newInstance(), false);
                     ibtnBookings.callOnClick();
                 }
-            }
+            }*/
 
         }
     }
@@ -540,12 +545,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             doubleBackToExitPressedOnce = true;
             //Toast.makeText(this, "Click again to exit", Toast.LENGTH_SHORT).show();
             MySnackBar.showSnackbar(this, findViewById(R.id.lyCoordinatorLayout), "Click again to exit");
-            handler.postDelayed(runnable = new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
+            handler.postDelayed(runnable = () -> doubleBackToExitPressedOnce = false, 2000);
 
         } else {
             handler.removeCallbacks(runnable);
@@ -559,6 +559,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         //  frag.refreshData(true);
     }
 
+    //Todo create base popup class
     private void popupFilter(Point p) {
 
         try {
@@ -593,14 +594,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 OFFSET_Y = 48;
             }
 
-
             popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
             RecyclerView rvStaff = layout.findViewById(R.id.rvStaff);
             Button btnAllStaff = layout.findViewById(R.id.btnAllStaff);
 
             btnAllStaff.setOnClickListener(v -> {
                 popupWindow.dismiss();
-                imgMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
+                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
                 arrayList.clear();
                 arrayList.addAll(getTempStaffList());
                 popupWindowOptionClicks("All Staff");
@@ -666,7 +666,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     }
                 }).show();
             } else {
-                imgMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_apply_filter));
+                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_apply_filter));
                 popupWindowOptionClicks(data);
             }
         });
