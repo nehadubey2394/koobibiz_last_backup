@@ -190,6 +190,18 @@ public class CalanderUtils {
         }
     }
 
+    public static String dateFormatToShow(String date, @NonNull String pFormat, @NonNull String dFormat) {
+        try {
+            SimpleDateFormat parseFormat = new SimpleDateFormat(pFormat, Locale.getDefault());
+            SimpleDateFormat displayFormat = new SimpleDateFormat(dFormat, Locale.getDefault());
+            Date dTime = parseFormat.parse(date);
+            return displayFormat.format(dTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     public static Date getDateFormat(String date, @NonNull String format) {
         try {
             SimpleDateFormat parseFormat = new SimpleDateFormat(format, Locale.getDefault());

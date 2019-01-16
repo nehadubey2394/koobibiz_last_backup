@@ -119,9 +119,10 @@
                             android:gravity="center_vertical"
                             android:maxWidth="240dp"
                             android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/text_color"
                             android:text="@string/select_booking_type"
-                            android:textColor="@color/gray" />
+                             />
 
                         <TextView
                             android:id="@+id/tvBookingType"
@@ -161,7 +162,6 @@
 
                 <EditText
                     android:id="@+id/etBusinessName"
-                    android:fontFamily="@font/roboto_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:gravity="center_vertical"
@@ -176,7 +176,8 @@
                     android:hint="@string/enter_your_business_name"
                     android:imeOptions="actionDone"
                     android:layout_marginTop="6dp"
-                    android:textColor="@color/gray" />
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/text_color" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
@@ -185,7 +186,6 @@
 
                 <EditText
                     android:id="@+id/etBusinessEmail"
-                    android:fontFamily="@font/roboto_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:gravity="center_vertical"
@@ -198,9 +198,10 @@
                     android:text=""
                     android:layout_marginTop="6dp"
                     android:textColorHint="@color/gray"
-                    android:hint="Enter Business Email"
+                    android:hint="@string/enter_business_email"
                     android:imeOptions="actionNext"
-                    android:textColor="@color/gray" />
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/text_color" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
@@ -209,7 +210,6 @@
 
                 <EditText
                     android:id="@+id/etBusinessContact"
-                    android:fontFamily="@font/roboto_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:gravity="center_vertical"
@@ -225,7 +225,8 @@
                     android:hint="@string/enter_business_contact_number"
                     android:imeOptions="actionDone"
                     android:textColorHint="@color/gray"
-                    android:textColor="@color/gray" />
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/text_color" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
@@ -254,9 +255,9 @@
                             android:gravity="center_vertical"
                             android:textSize="14sp"
                             android:textColorHint="@color/gray"
-                            android:textColor="@color/gray"
-                            android:fontFamily="@font/roboto_medium"
-                            android:text="Enter Business Address"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/text_color"
+                            android:text="@string/enter_business_address"
                             />
 
                         <TextView
@@ -273,7 +274,6 @@
                             android:textColorHint="@color/gray"
                             android:textColor="@color/gray"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Enter Business Address"
                             />
 
                     </LinearLayout>
@@ -317,9 +317,8 @@
                             android:gravity="center_vertical"
                             android:maxWidth="240dp"
                             android:textSize="14sp"
-                            android:textColorHint="@color/gray"
-                            android:textColor="@color/gray"
-                            android:fontFamily="@font/roboto_medium"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/text_color"
                             android:text="@string/radius_of_area_coverage"
                             />
 
@@ -378,8 +377,8 @@
                         android:maxWidth="240dp"
                         android:textSize="14sp"
                         android:textColorHint="@color/gray"
-                        android:textColor="@color/gray"
-                        android:fontFamily="@font/roboto_medium"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@color/text_color"
                         android:text="@string/business_operation_hours"
                         />
 
@@ -423,9 +422,8 @@
                             android:gravity="center_vertical"
                             android:maxWidth="240dp"
                             android:textSize="14sp"
-                            android:textColorHint="@color/gray"
-                            android:textColor="@color/gray"
-                            android:fontFamily="@font/roboto_medium"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/text_color"
                             android:text="@string/break_between_appointments"
                             />
                         <TextView

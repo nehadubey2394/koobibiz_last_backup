@@ -196,7 +196,7 @@ public class BusinessInfoActivity extends AppCompatActivity implements View.OnCl
                     splitTime(tvOutCallBreakTime,profileData.outCallpreprationTime);
                     break;
                 case "3":
-                    tvBookingType.setText("Incall/Outcall");
+                    tvBookingType.setText("Incall / Outcall");
                     splitTime(tvOutCallBreakTime,profileData.inCallpreprationTime);
                     splitTime(tvOutCallBreakTime,profileData.outCallpreprationTime);
                     break;

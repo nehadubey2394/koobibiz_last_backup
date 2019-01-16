@@ -55,7 +55,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import views.pickerview.MyTimePickerDialog;
@@ -454,7 +453,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
     }
 
     public void showPicker(final TextView tvTime, final String title){
-        int hours = 01;
+        int hours = 00;
         //int minute = 00;
         String tmpTime = tvTime.getText().toString();
         if(!tmpTime.equals("HH:MM")){
@@ -468,7 +467,7 @@ public class ArtistLastServicesFragment extends Fragment implements OnServiceSel
             public void onTimeSet(TimePicker view, int hours, int minute) {
                 tvTime.setText(String.format("%s:%s", String.format("%02d", hours), String.format("%02d", minute)));
             }
-        }, title, hours, 00,10);
+        }, title, hours, 10,10);
         mTimePicker.show();
     }
 

@@ -2,8 +2,6 @@ package com.mualab.org.biz.modules.profile_setup.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -228,19 +226,6 @@ public class NewBusinessSetUpActivity extends AppCompatActivity implements DateP
         params.put("dob", userInfo.dob);
         params.put("deviceToken", deviceToken);
         params.put("firebaseToken", deviceToken);
-
-        Bitmap profileImageBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.defoult_user_img);
-
-        /*Bitmap profileImageBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.defoult_user_img);
-        try {
-            URL url = new URL(user.profileImage);
-            profileImageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-        } catch(IOException e) {
-            System.out.println(e);
-        }
-*/
 
 
      /*   params.put("address", "");

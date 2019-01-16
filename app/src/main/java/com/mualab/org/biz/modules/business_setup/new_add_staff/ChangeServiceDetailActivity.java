@@ -396,7 +396,7 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
 
 
     public void showPicker(){
-        int hours = 01;
+        int hours = 00;
 
         /*MyTimePickerDialog mTimePicker = new MyTimePickerDialog(ChangeServiceDetailActivity.this, new MyTimePickerDialog.OnTimeSetListener() {
             @Override
@@ -418,7 +418,7 @@ public class ChangeServiceDetailActivity extends AppCompatActivity implements Vi
                         }
 
                     }
-                }, "", hours, 00,10);
+                }, "", hours, 10,10);
 
         mTimePicker.show();
     }

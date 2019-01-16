@@ -62,21 +62,33 @@ public class AddNewServiceActivity extends AppCompatActivity implements
     private List<Services>tempServicesList,servicesList;
     private ProgressBar pbLoder;
     private Handler handler = new Handler(Looper.getMainLooper());
+    private TextView tvServiceDesc,tvPrice,tvBookingType,tvServiceName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_service);
+        if (getIntent()!=null ){
+            bizTypeId = getIntent().getStringExtra("bizTypeId");
+            categoryId = getIntent().getStringExtra("categoryId");
+        }
         initView();
     }
 
     private void initView(){
+
         tempServicesList = new ArrayList<>();
         servicesList = new ArrayList<>();
         allBusinessTypes = new ArrayList<>();
         addedCategoryList = new ArrayList<>();
         tempBizypeList = new ArrayList<>();
         tempCategoryList = new ArrayList<>();
+
+        if (bizTypeId==null){
+            bizTypeId = "";
+            categoryId = "";
+        }
 
         adapterBizType = new CustomSppinnerAdapter(AddNewServiceActivity.this,
                 allBusinessTypes);
@@ -96,6 +108,10 @@ public class AddNewServiceActivity extends AppCompatActivity implements
         textv1 = findViewById(R.id.textv1);
         textv2 = findViewById(R.id.textv2);
         tvCompletionTime = findViewById(R.id.tvCompletionTime);
+        tvServiceDesc = findViewById(R.id.tvServiceDesc);
+        tvPrice = findViewById(R.id.tvPrice);
+        tvBookingType = findViewById(R.id.tvBookingType);
+        tvServiceName = findViewById(R.id.tvServiceName);
 
         ImageView iv_back = findViewById(R.id.iv_back);
         ImageView ivKoobiLogo = findViewById(R.id.ivKoobiLogo);
@@ -123,15 +139,20 @@ public class AddNewServiceActivity extends AppCompatActivity implements
             rlBookingType.setVisibility(View.VISIBLE);
             lineBookingType.setVisibility(View.VISIBLE);
             sBookingType = "Both";
+            tvBookingType.setVisibility(View.VISIBLE);
+            tvBookingType.setText(sBookingType);
         }else if (serviceType==2) {
             sBookingType = "Outcall";
             rlBookingType.setVisibility(View.GONE);
             lineBookingType.setVisibility(View.GONE);
-        }
-        else {
+            tvBookingType.setVisibility(View.VISIBLE);
+            tvBookingType.setText(sBookingType);
+        } else {
             sBookingType = "Incall";
             rlBookingType.setVisibility(View.GONE);
             lineBookingType.setVisibility(View.GONE);
+            tvBookingType.setVisibility(View.VISIBLE);
+            tvBookingType.setText(sBookingType);
         }
 
         spBizType.setAdapter(adapterBizType);
@@ -288,90 +309,74 @@ public class AddNewServiceActivity extends AppCompatActivity implements
     }
 
     private void vailidateService(){
-        if (tempBizypeList.size()!=0) {
-            if (tempCategoryList.size() != 0) {
-                Services services = new Services();
-                services.businessType = allBusinessTypes;
-                services.serviceId = tempBizypeList.get(0).serviceId;
-                services.bizTypeName = tempBizypeList.get(0).serviceName;
-                services.subserviceName = tempCategoryList.get(0).subServiceName;
-                services.subserviceId = Integer.parseInt(tempCategoryList.get(0).subServiceId);
-                services.bookingType = sBookingType;
-                services.serviceName = sServoiceName;
-                services.description = sServiceDesc;
-                services.completionTime = complieTime;
+        Services services = new Services();
+        services.businessType = allBusinessTypes;
+        services.serviceId = tempBizypeList.get(0).serviceId;
+        services.bizTypeName = tempBizypeList.get(0).serviceName;
+        services.subserviceName = tempCategoryList.get(0).subServiceName;
+        services.subserviceId = Integer.parseInt(tempCategoryList.get(0).subServiceId);
+        services.bookingType = sBookingType;
+        services.serviceName = sServoiceName;
+        services.description = sServiceDesc;
+        services.completionTime = complieTime;
 
-                if (!sInCallPrice.isEmpty())
-                    services.inCallPrice = Double.parseDouble(sInCallPrice);
-                else
-                    services.inCallPrice = 0;
+        if (!sInCallPrice.isEmpty())
+            services.inCallPrice = Double.parseDouble(sInCallPrice);
+        else
+            services.inCallPrice = 0;
 
-                if (!sOutCallPrice.isEmpty())
-                    services.outCallPrice = Double.parseDouble(sOutCallPrice);
-                else
-                    services.outCallPrice = 0;
+        if (!sOutCallPrice.isEmpty())
+            services.outCallPrice = Double.parseDouble(sOutCallPrice);
+        else
+            services.outCallPrice = 0;
 
-                if (!sServoiceName.equals("")){
 
-                    if (!sServiceDesc.equals("")){
+        if (tempBizypeList.size()==0) {
+            MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please select business type");
+        }else if (tempCategoryList.size() == 0){
+            MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please select category");
+        }
+        else if (sServoiceName.equals("")) {
+            MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service name");
+        }else if (sInCallPrice.equals("") && sOutCallPrice.equals("")) {
+            MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service price");
+        }else if (sServiceDesc.equals("")) {
+            MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service description");
+        }else if (complieTime.equals("")) {
+            MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please select compilation time for" +
+                    " service");
+        }else {
+            switch (sBookingType) {
+                case "Incall":
+                    if (!sInCallPrice.isEmpty()) {
+                        List<Services> businessTypeList = new ArrayList<>();
+                        businessTypeList.add(services);
+                        insertServices(businessTypeList);
+                    } else {
+                        MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service price");
+                    }
+                    break;
+                case "Outcall":
+                    if (!sOutCallPrice.isEmpty()) {
+                        List<Services> businessTypeList = new ArrayList<>();
+                        businessTypeList.add(services);
 
-                        if (!complieTime.equals("")){
-
-                            switch (sBookingType) {
-                                case "Incall":
-                                    if (!sInCallPrice.isEmpty()) {
-                                        List<Services> businessTypeList = new ArrayList<>();
-                                        businessTypeList.add(services);
-                                        insertServices(businessTypeList);
-                                    } else {
-                                        MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service price");
-                                    }
-                                    break;
-                                case "Outcall":
-                                    if (!sOutCallPrice.isEmpty()) {
-                                        List<Services> businessTypeList = new ArrayList<>();
-                                        businessTypeList.add(services);
-
-                                        insertServices(businessTypeList);
-                                    } else {
-                                        MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service price");
-                                    }
-
-                                    break;
-                                default:
-                                    if (!sInCallPrice.isEmpty() && !sOutCallPrice.isEmpty()) {
-                                        List<Services> businessTypeList = new ArrayList<>();
-                                        businessTypeList.add(services);
-                                        insertServices(businessTypeList);
-                                    } else {
-                                        MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service price");
-                                    }
-                                    break;
-                            }
-
-                                  /*  List<company_services> businessTypeList = new ArrayList<>();
-                                    businessTypeList.add(services);
-
-                                    insertServices(businessTypeList);*/
-
-                        }else {
-                            MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please select compilation time for" +
-                                    " service");
-                        }
-
-                    }else {
-                        MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service description");
+                        insertServices(businessTypeList);
+                    } else {
+                        MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service price");
                     }
 
-                }else {
-                    MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service name");
-                }
-
-            } else {
-                MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please select category");
+                    break;
+                default:
+                    if (!sInCallPrice.isEmpty() && !sOutCallPrice.isEmpty()) {
+                        List<Services> businessTypeList = new ArrayList<>();
+                        businessTypeList.add(services);
+                        insertServices(businessTypeList);
+                    } else {
+                        MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please enter service price");
+                    }
+                    break;
             }
-        } else {
-            MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert("Please select business type");
         }
     }
 
@@ -406,25 +411,56 @@ public class AddNewServiceActivity extends AppCompatActivity implements
             switch (requestCode){
                 case 10:
                     sServoiceName =  data.getStringExtra("serviceName");
+                    tvServiceName.setVisibility(View.VISIBLE);
+                    tvServiceName.setText(sServoiceName);
                     break;
                 case 20:
-                    if (data.hasExtra("outCallPrice"))
-                        sOutCallPrice =  data.getStringExtra("outCallPrice");
-                    if (data.hasExtra("inCallPrice"))
-                        sInCallPrice =  data.getStringExtra("inCallPrice");
+                    tvPrice.setVisibility(View.VISIBLE);
+                    if (data.hasExtra("outCallPrice")) {
+                        sOutCallPrice = data.getStringExtra("outCallPrice");
+                        tvPrice.setText("Outcall - £"+sOutCallPrice);
+                    }
+                    if (data.hasExtra("inCallPrice")) {
+                        sInCallPrice = data.getStringExtra("inCallPrice");
+                        tvPrice.setText("Incall - £"+sInCallPrice);
+                    }
+
+                    if (sBookingType.equals("Both")){
+                        tvPrice.setText("Incall - £"+sInCallPrice+", Outcall - £"+sOutCallPrice);
+                    }
 
                     break;
                 case 30:
                     sBookingType =  data.getStringExtra("bookingType");
                     sOutCallPrice =  "";
                     sInCallPrice =  "";
+                    tvBookingType.setVisibility(View.VISIBLE);
+                    tvBookingType.setText(sBookingType);
+                    tvPrice.setVisibility(View.GONE);
+
+                 /*   switch (sBookingType) {
+                        case "Incall":
+                            tvPrice.setText("Incall - £" + sInCallPrice);
+                            break;
+                        case "Outcall":
+                            tvPrice.setText("Outcall - £" + sOutCallPrice);
+                            break;
+                        default:
+                            tvPrice.setText("Incall - £" + sInCallPrice + ", Outcall : £" + sOutCallPrice);
+                            break;
+                    }*/
+
                     break;
                 case 40:
                     sServiceDesc =  data.getStringExtra("serviceDesc");
+                    tvServiceDesc.setVisibility(View.VISIBLE);
+                    tvServiceDesc.setText(sServiceDesc);
                     break;
 
                 case 50:
                     complieTime =  data.getStringExtra("complieTime");
+                    tvCompletionTime.setVisibility(View.VISIBLE);
+                    tvCompletionTime.setText(complieTime);
                     break;
             }
         }
@@ -471,6 +507,19 @@ public class AddNewServiceActivity extends AppCompatActivity implements
 
                     }else {
                         MyToast.getInstance(AddNewServiceActivity.this).showDasuAlert(message);
+                    }
+
+                    if (bizTypeId != null && !bizTypeId.isEmpty()){
+                        List<MyBusinessType> tempList = new ArrayList<>(allBusinessTypes);
+
+                        for (int i = 0; i < tempList.size(); i++) {
+                            String id = String.valueOf(tempList.get(i).serviceId);
+                            if (id.equals(bizTypeId)) {
+                                allBusinessTypes.remove(i);
+                                allBusinessTypes.add(0,tempList.get(i));
+                                break;
+                            }
+                        }
                     }
                     adapterBizType.notifyDataSetChanged();
 
@@ -549,6 +598,20 @@ public class AddNewServiceActivity extends AppCompatActivity implements
                             if (addedCategoryList.size()==0) {
                                 tvCategory.setVisibility(View.VISIBLE);
                                 tvCategory.setText(" No category available");
+                            }
+
+
+                            if (categoryId != null && !categoryId.isEmpty()){
+                                List<AddedCategory> tempList = new ArrayList<>(addedCategoryList);
+
+                                for (int i = 0; i < tempList.size(); i++) {
+                                    String id = String.valueOf(tempList.get(i).subServiceId);
+                                    if (id.equals(categoryId)) {
+                                        addedCategoryList.remove(i);
+                                        addedCategoryList.add(0,tempList.get(i));
+                                        break;
+                                    }
+                                }
                             }
 
                             spCategory.setAdapter(adapterCategory);
@@ -654,7 +717,7 @@ public class AddNewServiceActivity extends AppCompatActivity implements
     }
 
     public void showPicker( final String title){
-        int hours = 01;
+        int hours = 00;
         //int minute = 00;
         String tmpTime = tvCompletionTime.getText().toString();
         if(!tmpTime.equals("HH:MM")){
@@ -669,7 +732,7 @@ public class AddNewServiceActivity extends AppCompatActivity implements
                 tvCompletionTime.setVisibility(View.VISIBLE);
                 tvCompletionTime.setText(String.format("%s:%s", String.format("%02d", hours), String.format("%02d", minute)));
             }
-        }, title, hours, 00,10);
+        }, title, hours, 10,10);
 
 
         mTimePicker.show();

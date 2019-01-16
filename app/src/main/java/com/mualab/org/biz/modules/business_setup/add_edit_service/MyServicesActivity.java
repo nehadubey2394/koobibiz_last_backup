@@ -55,11 +55,16 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
     private LinearLayout tabIncall, tabOutcall,tabLayout;
     private String serviceType = "Incall";
     private PreRegistrationSession bpSession;
+    private String bizTypeId = "",categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_services);
+        if (getIntent()!=null){
+            bizTypeId = getIntent().getStringExtra("bizTypeId");
+            categoryId = getIntent().getStringExtra("categoryId");
+        }
         init();
     }
 
@@ -145,8 +150,6 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
-        String bizTypeId = "";
-        String categoryId = "";
         switch (view.getId()){
             case R.id.btnNext:
                 finish();
@@ -164,8 +167,8 @@ public class MyServicesActivity extends AppCompatActivity implements View.OnClic
             case R.id.llAddService:
                 Bundle args = new Bundle();
                 Intent intent = new Intent(MyServicesActivity.this,AddMoreServiceActivity.class);
-                // intent.putExtra("bizTypeId", bizTypeId);
-                //intent.putExtra("categoryId", categoryId);
+                intent.putExtra("bizTypeId", bizTypeId);
+                intent.putExtra("categoryId", categoryId);
                 args.putSerializable("servicesList",(Serializable)mainServicesList);
                 intent.putExtra("bundle",args);
                 intent.putExtra("commingFrom","MyServicesActivity");

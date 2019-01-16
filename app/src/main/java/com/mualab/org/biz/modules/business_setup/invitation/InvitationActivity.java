@@ -16,6 +16,9 @@ import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
+import com.mualab.org.biz.model.BusinessDay;
+import com.mualab.org.biz.model.BusinessProfile;
+import com.mualab.org.biz.model.TimeSlot;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.model.company_management.ComapnySelectedServices;
@@ -31,9 +34,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class InvitationActivity extends AppCompatActivity {
     private RecyclerView rvInvitation;
@@ -73,12 +80,7 @@ public class InvitationActivity extends AppCompatActivity {
 
         tvNoDataFound = findViewById(R.id.tvNoDataFound);
 
-        ivHeaderBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        ivHeaderBack.setOnClickListener(view -> finish());
 
         apiForCompanyInvitation();
     }
@@ -150,7 +152,7 @@ public class InvitationActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                JSONArray staffHoursArray = object.getJSONArray("staffHours");
+                            /*    JSONArray staffHoursArray = object.getJSONArray("staffHours");
                                 if (staffHoursArray!=null && staffHoursArray.length()!=0) {
                                     for (int j=0; j<staffHoursArray.length(); j++){
                                         JSONObject object2 = staffHoursArray.getJSONObject(j);
@@ -160,6 +162,63 @@ public class InvitationActivity extends AppCompatActivity {
                                         item2.startTime = object2.getString("startTime");
                                         item.staffHoursList.add(item2);
                                     }
+                                }*/
+
+                                JSONArray staffHoursArray = object.getJSONArray("staffHours");
+
+                                BusinessProfile bsp = new BusinessProfile();
+
+                                if (staffHoursArray!=null && staffHoursArray.length()!=0) {
+                                    bsp.businessDays = getBusinessDay();
+
+                                    Set<BusinessDay> daySet = new HashSet<>();
+
+                                    for (int j=0; j<staffHoursArray.length(); j++){
+                                        JSONObject object2 = staffHoursArray.getJSONObject(j);
+                                        BusinessDayForStaff item2 = new BusinessDayForStaff();
+
+                                        BusinessDay day = new BusinessDay();
+                                        int dayId = object2.getInt("day");
+                                        TimeSlot slot = new TimeSlot(dayId);
+                                        slot.startTime = object2.getString("startTime");
+                                        slot.minStartTime = object2.getString("startTime");
+                                        slot.endTime = object2.getString("endTime");
+                                        slot.maxEndTime = object2.getString("endTime");
+
+                                        item2.day = Integer.parseInt(object2.getString("day"));
+                                        item2.endTime = object2.getString("endTime");
+                                        item2.startTime = object2.getString("startTime");
+                                        item.staffHoursList.add(item2);
+
+                                        for(BusinessDay tmpDay : bsp.businessDays){
+                                            if(tmpDay.dayId == dayId){
+                                                tmpDay.isOpen = true;
+                                                day.isExpand = true;
+
+                                                tmpDay.addTimeSlot(slot);
+                                                daySet.add(tmpDay);
+                                                // item.businessDays.add(tmpDay);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    item.businessDays.addAll(daySet);
+
+                                    Collections.sort(item.businessDays, new Comparator<BusinessDay>() {
+
+                                        @Override
+                                        public int compare(BusinessDay a1, BusinessDay a2) {
+
+                                            if (a1.dayId == 0 || a2.dayId == 0)
+                                                return -1;
+                                            else {
+                                                Long long1 = (long) a1.dayId;
+                                                Long long2 = (long) a2.dayId;
+                                                return long1.compareTo(long2);
+                                            }
+                                        }
+                                    });
                                 }
 
                                 JSONArray staffServiceArray = object.getJSONArray("staffService");
@@ -215,6 +274,49 @@ public class InvitationActivity extends AppCompatActivity {
         //.setBody(params, "application/x-www-form-urlencoded"));
 
         task.execute(this.getClass().getName());
+    }
+
+    private List<BusinessDay> getBusinessDay(){
+
+        List<BusinessDay>businessDays = new ArrayList<>();
+
+        BusinessDay day1 = new BusinessDay();
+        day1.dayName = getString(R.string.monday);
+        day1.dayId = 0;
+        //day1.addTimeSlot(new TimeSlot(1));
+
+        BusinessDay day2 = new BusinessDay();
+        day2.dayName = getString(R.string.tuesday);
+        day2.dayId = 1;
+
+        BusinessDay day3 = new BusinessDay();
+        day3.dayName = getString(R.string.wednesday);
+        day3.dayId = 2;
+
+        BusinessDay day4 = new BusinessDay();
+        day4.dayName = getString(R.string.thursday);
+        day4.dayId = 3;
+
+        BusinessDay day5 = new BusinessDay();
+        day5.dayName = getString(R.string.frieday);
+        day5.dayId = 4;
+
+        BusinessDay day6 = new BusinessDay();
+        day6.dayName = getString(R.string.saturday);
+        day6.dayId = 5;
+
+        BusinessDay day7 = new BusinessDay();
+        day7.dayName = getString(R.string.sunday);
+        day7.dayId = 6;
+
+        businessDays.add(day1);
+        businessDays.add(day2);
+        businessDays.add(day3);
+        businessDays.add(day4);
+        businessDays.add(day5);
+        businessDays.add(day6);
+        businessDays.add(day7 );
+        return businessDays;
     }
 
     @Override

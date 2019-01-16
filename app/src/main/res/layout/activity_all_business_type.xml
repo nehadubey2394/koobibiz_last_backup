@@ -53,6 +53,7 @@
                     android:paddingLeft="@dimen/margin_left"
                     android:paddingRight="@dimen/margin_right"
                     android:paddingEnd="@dimen/margin_right"
+                    android:visibility="gone"
                     android:paddingStart="@dimen/margin_left"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/roboto_regular"

@@ -116,7 +116,7 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
 
         }else if (serviceType==3){
             bookingType = "3";
-            tvBookingType.setText("Incall/Outcall");
+            tvBookingType.setText("Incall / Outcall");
             rlAddress.setVisibility(View.VISIBLE);
             tvBookingType.setVisibility(View.VISIBLE);
             rlAreaOfCoverage.setVisibility(View.VISIBLE);
@@ -266,7 +266,7 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
                             rlAddress.setVisibility(View.VISIBLE);
                             rlAreaOfCoverage.setVisibility(View.VISIBLE);
                             radiusLineView.setVisibility(View.VISIBLE);
-                            tvBookingType.setText("Incall/Outcall");
+                            tvBookingType.setText("Incall / Outcall");
                             tvAddressType.setText("Enter Business Address / Return Location");
                             break;
                     }
@@ -332,11 +332,11 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
             String min = separated[1]+" min";
 
             if (hours.equals("00 hr "))
-                textView.setText(type+" : "+min);
+                textView.setText(type+" - "+min);
             else if (!hours.equals("00 hr ") && min.equals("00 min"))
-                textView.setText(type+" : "+hours);
+                textView.setText(type+" - "+hours);
             else
-                textView.setText(type+" : "+hours+min);
+                textView.setText(type+" - "+hours+min);
 
         }
 
@@ -367,15 +367,15 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
         if (!bpSession.getAddress().latitude.equals("") && !bpSession.getAddress().latitude.equals(""))
             bizAddress = bpSession.getAddress();
 
-        if (bizAddress!=null ) {
+        if (bizAddress!=null && !bizAddress.placeName.equals("")) {
             tvAddress.setText(bizAddress.placeName+" "+bizAddress.stAddress1);
             tvAddress.setVisibility(View.VISIBLE);
         }
 
-        if (bpSession.getRadius()!=0) {
-            tvRadius.setText(bpSession.getRadius() + " Miles");
-            tvRadius.setVisibility(View.VISIBLE);
-        }
+        //if (bpSession.getRadius()!=0) {
+        tvRadius.setText(bpSession.getRadius() + " Miles");
+        tvRadius.setVisibility(View.VISIBLE);
+        // }
     }
 
     private boolean checkNotempty(EditText editText,String msg) {
@@ -499,7 +499,11 @@ public class NewBusinessInfoActivity extends AppCompatActivity implements View.O
 
         body.put("address", bizAddress.stAddress1);
         body.put("address2", bizAddress.stAddress1);
-        body.put("city", bizAddress.city);
+        if (bizAddress.city!=null)
+            body.put("city", bizAddress.city);
+        else
+            body.put("city", "");
+
         body.put("state", bizAddress.state);
         body.put("country", bizAddress.country);
         body.put("businessPostCode", bizAddress.postalCode);

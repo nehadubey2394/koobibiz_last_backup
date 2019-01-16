@@ -50,8 +50,8 @@
             android:maxLength="7"
             android:textAllCaps="true"
             android:inputType="textCapCharacters"
-            android:digits="0,1,2,3,4,5,6,7,8,9,ABCDEFGHIJKLMNOPQRSTUVWXYZ,#,@"
-            android:textColor="@color/gray"
+            android:digits="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#@"
+            android:textColor="@color/text_color"
             android:textSize="14sp" />
 
         <View
@@ -136,7 +136,7 @@
             android:inputType="number"
             android:singleLine="true"
             android:visibility="gone"
-            android:textColor="@color/gray"
+            android:textColor="@color/text_color"
             android:textSize="14sp" />
 
         <View
@@ -218,7 +218,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:textSize="14sp"
                     android:padding="2dp"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/text_color"
                     android:drawableRight="@drawable/ic_sp_down_arrow"/>
 
                 <Space
@@ -236,7 +236,7 @@
                     android:textSize="14sp"
                     android:padding="2dp"
                     android:layout_marginLeft="10dp"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/text_color"
                     android:drawableRight="@drawable/ic_sp_down_arrow"/>
 
             </LinearLayout>

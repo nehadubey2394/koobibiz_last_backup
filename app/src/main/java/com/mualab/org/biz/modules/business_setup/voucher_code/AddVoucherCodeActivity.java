@@ -1,6 +1,5 @@
 package com.mualab.org.biz.modules.business_setup.voucher_code;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -269,11 +268,11 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
                             if (checkNotempty(tvTodate.getText().toString().trim())){
                                 apiAddVoucher();
                             }else {
-                                MyToast.getInstance(AddVoucherCodeActivity.this).showDasuAlert("Please select start date");
+                                MyToast.getInstance(AddVoucherCodeActivity.this).showDasuAlert("Please select end date");
                             }
 
                         }else {
-                            MyToast.getInstance(AddVoucherCodeActivity.this).showDasuAlert("Please select start date");
+                            MyToast.getInstance(AddVoucherCodeActivity.this).showDasuAlert("Please select voucher validity date");
                         }
                     }else {
                         MyToast.getInstance(AddVoucherCodeActivity.this).showDasuAlert("Please enter discount amount");
@@ -302,7 +301,7 @@ public class AddVoucherCodeActivity extends AppCompatActivity implements View.On
         int  mDay = c.get(GregorianCalendar.DAY_OF_MONTH);
         //}
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,R.style.DatePickerDialogTheme,
                 (view, year, monthOfYear, dayOfMonth) -> {
 
                     if (tag.equals("from")) {

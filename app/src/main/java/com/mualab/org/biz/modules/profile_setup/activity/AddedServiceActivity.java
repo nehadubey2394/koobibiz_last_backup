@@ -61,11 +61,16 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
     private List<Services>mainServicesList,tempList,inCallServiceList,outCallServiceList;
     private User user;
     private String serviceType = "Incall";
+    private String bizTypeId = "",categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_added_service);
+        if (getIntent()!=null){
+            bizTypeId = getIntent().getStringExtra("bizTypeId");
+            categoryId = getIntent().getStringExtra("categoryId");
+        }
         init();
     }
 
@@ -182,8 +187,7 @@ public class AddedServiceActivity extends AppCompatActivity implements View.OnCl
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
-        String bizTypeId = "";
-        String categoryId = "";
+
         switch (view.getId()){
             case R.id.btnNext:
                 List<FinalServiceForUpdateServer>finalServiceForUpdateServers = new ArrayList<>();
