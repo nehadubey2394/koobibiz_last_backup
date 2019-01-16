@@ -1,12 +1,8 @@
 package com.mualab.org.biz.modules;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,18 +11,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,15 +39,12 @@ import com.mualab.org.biz.modules.booking.fragments.AddFragment;
 import com.mualab.org.biz.modules.booking.listner.OnRefreshListener;
 import com.mualab.org.biz.modules.business_setup.BaseBusinessSetupFragment;
 import com.mualab.org.biz.modules.new_booking.activity.PendingBookingActivity;
-import com.mualab.org.biz.modules.new_booking.adapter.FilterMenuAdapter;
 import com.mualab.org.biz.modules.new_booking.fragment.BookingsFragment;
-import com.mualab.org.biz.modules.new_booking.model.StaffFilter;
 import com.mualab.org.biz.modules.profile_setup.activity.NewBusinessSetUpActivity;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
-import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
 import com.mualab.org.biz.util.PermissionUtils;
@@ -88,7 +73,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     // private ProgressBar progress_bar;
     private boolean doubleBackToExitPressedOnce;
     private Runnable runnable;
-    private ArrayList<StaffFilter> arrayList;
 
     public void setBackButtonVisibility(int visibility){
         if(ivHeaderBack!=null)
@@ -366,9 +350,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     ibtnBookings.setImageResource(R.drawable.active_calender_ico);
                     setTitle(getString(R.string.title_bookings));
                     setBackButtonVisibility(8);
-                    if (arrayList == null) arrayList = new ArrayList<>();
-                    arrayList.clear();
-                    arrayList.addAll(getTempStaffList());
                     replaceFragment(BookingsFragment.newInstance(), false);
                 }
                 break;
@@ -415,29 +396,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             case R.id.imgNotif:
                 startActivity(new Intent(this, PendingBookingActivity.class));
-                break;
-
-            case R.id.imgRight:
-                //user type business then open popupFilter
-                /*if (!user.businessType.equals("independent")) {
-
-                } else {
-                    startActivity(new Intent(this, PendingBookingActivity.class));
-                }*/
-                int[] point = new int[2];
-
-                // Get the x, y location and store it in the location[] array
-                // location[0] = x, location[1] = y.
-                imgRight.getLocationOnScreen(point);
-
-                //Initialize the Point with x, and y positions
-                Display display = getWindowManager().getDefaultDisplay();
-                Point p = new Point();
-                display.getSize(p);
-                p.x = point[0];
-                p.y = point[1];
-
-                popupFilter(p);
                 break;
         }
     }
@@ -554,139 +512,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     public void onRequestChanged(boolean isShow) {
         BookingsFragment frag = ((BookingsFragment) getSupportFragmentManager().findFragmentByTag("com.mualab.org.biz.modules.booking.fragments.BookingFragment2"));
         //  frag.refreshData(true);
-    }
-
-    //Todo create base popup class
-    private void popupFilter(Point p) {
-
-        try {
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            assert inflater != null;
-            View layout = inflater.inflate(R.layout.popup_menu_layout, findViewById(R.id.parent));
-            layout.setAnimation(AnimationUtils.loadAnimation(this, R.anim.popupanim));
-
-            final PopupWindow popupWindow = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
-                    true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                popupWindow.setElevation(5);
-            }
-
-            String reqString = Build.MANUFACTURER
-                    + " " + Build.MODEL + " " + Build.VERSION.RELEASE
-                    + " " + Build.VERSION_CODES.class.getFields()[android.os.Build.VERSION.SDK_INT].getName();
-
-
-            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            popupWindow.setOutsideTouchable(true);
-            popupWindow.setFocusable(true);
-
-            int OFFSET_X;
-            int OFFSET_Y;
-
-            if (reqString.equals("motorola Moto G (4) 7.0 M")) {
-                OFFSET_X = 480;
-                OFFSET_Y = 70;
-            } else {
-                OFFSET_X = 480;
-                OFFSET_Y = 48;
-            }
-
-            popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
-            RecyclerView rvStaff = layout.findViewById(R.id.rvStaff);
-            Button btnAllStaff = layout.findViewById(R.id.btnAllStaff);
-
-            btnAllStaff.setOnClickListener(v -> {
-                popupWindow.dismiss();
-                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
-                arrayList.clear();
-                arrayList.addAll(getTempStaffList());
-                popupWindowOptionClicks("All Staff");
-            });
-
-            initPopupRecycler(popupWindow, rvStaff);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private ArrayList<StaffFilter> getTempStaffList() {
-        arrayList = new ArrayList<>();
-        StaffFilter staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 1";
-        staffFilter.isSelected = false;
-        arrayList.add(staffFilter);
-
-        staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 2";
-        staffFilter.isSelected = false;
-        arrayList.add(staffFilter);
-
-        staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 3";
-        staffFilter.isSelected = false;
-        arrayList.add(staffFilter);
-
-        staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 4";
-        staffFilter.isSelected = false;
-        arrayList.add(staffFilter);
-
-        staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 5";
-        staffFilter.isSelected = false;
-        arrayList.add(staffFilter);
-
-        staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 6";
-        staffFilter.isSelected = false;
-        arrayList.add(staffFilter);
-
-        staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 78910114568545";
-        staffFilter.isSelected = false;
-        arrayList.add(staffFilter);
-
-        return arrayList;
-    }
-
-    private void initPopupRecycler(PopupWindow popupWindow, RecyclerView rvStaff) {
-        FilterMenuAdapter filterMenuAdapter = new FilterMenuAdapter(arrayList == null ? getTempStaffList() : arrayList, pos -> {
-            final String data = arrayList.get(pos).username;
-            popupWindow.dismiss();
-
-            if (!ConnectionDetector.isConnected()) {
-                new NoConnectionDialog(getApplicationContext(), (dialog, isConnected) -> {
-                    if (isConnected) {
-                        dialog.dismiss();
-                        popupWindowOptionClicks(data);
-                    }
-                }).show();
-            } else {
-                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_apply_filter));
-                popupWindowOptionClicks(data);
-            }
-        });
-
-        if (arrayList.size() > 4) {
-            updateRecyclerHeight(rvStaff);
-        }
-        rvStaff.setAdapter(filterMenuAdapter);
-    }
-
-    private void updateRecyclerHeight(RecyclerView rvStaff) {
-        ViewGroup.LayoutParams params = rvStaff.getLayoutParams();
-        params.height = 480;
-        rvStaff.setLayoutParams(params);
-    }
-
-    private void popupWindowOptionClicks(String option) {
-
-        switch (option) {
-            case "All Staff":
-
-                break;
-
-        }
     }
 }

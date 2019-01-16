@@ -14,6 +14,7 @@ final class Webservices {
 
     //Booking Module
     static String BOOKING_HISTORY = BASE_URL + "artistBookingHistory";
+    static String BOOKING_DETAIL = BASE_URL + "bookingDetail";
 
     private Webservices() {
         // This class is not publicly instantiable

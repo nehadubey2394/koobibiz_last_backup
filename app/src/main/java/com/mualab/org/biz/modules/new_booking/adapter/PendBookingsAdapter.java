@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
+import com.mualab.org.biz.modules.new_booking.model.BookingHistory;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -23,11 +26,11 @@ import java.util.List;
 public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEWTYPE_LOADER = 2;
-    private List<String> list;
+    private List<BookingHistory.DataBean> list;
     private boolean showLoader;
     private ClickListener clickListener;
 
-    public PendBookingsAdapter(List<String> list, ClickListener clickListener) {
+    public PendBookingsAdapter(List<BookingHistory.DataBean> list, ClickListener clickListener) {
         this.list = list;
         this.clickListener = clickListener;
     }
@@ -45,6 +48,22 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         ViewHolder holder = ((ViewHolder) rvHolder);
 
+        BookingHistory.DataBean mainBean = list.get(position);
+
+        Picasso.with(holder.ivProfilePic.getContext()).load(mainBean.getUserDetail().get(0).getProfileImage()).placeholder(R.drawable.defoult_user_img).into(holder.ivProfilePic);
+
+        holder.tvUserName.setText(mainBean.getUserDetail().get(0).getUserName());
+        holder.tvBDate.setText(mainBean.getCreationDate());
+        holder.tvBTime.setText(mainBean.getCreationTime());
+
+        try {
+            holder.tvStaffName.setText(mainBean.getBookingInfo().get(0).getStaffName());
+            holder.tvService.setText(mainBean.getBookingInfo().get(0).getArtistServiceName());
+            String serviceDate = "" + mainBean.getBookingInfo().get(0).getBookingDate() + " " +
+                    mainBean.getBookingInfo().get(0).getStartTime() + " " + mainBean.getBookingInfo().get(0).getEndTime();
+            holder.tvServiceDate.setText(serviceDate);
+        } catch (Exception ignored) {
+        }
     }
 
     public void showLoading(boolean status) {
@@ -77,8 +96,7 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        //return list.size();
-        return 6;
+        return list.size();
     }
 
 
@@ -92,11 +110,20 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tvStaffName, tvUserName, tvService, tvServiceDate, tvDate, tvTime;
+        private ImageView ivProfilePic;
+        private TextView tvStaffName, tvUserName, tvService, tvServiceDate, tvBDate, tvBTime;
         private Button btnAccept, btnReject, btnReSchedule;
 
         ViewHolder(@NonNull View view) {
             super(view);
+
+            ivProfilePic = view.findViewById(R.id.ivProfilePic);
+            tvStaffName = view.findViewById(R.id.tvStaffName);
+            tvUserName = view.findViewById(R.id.tvUserName);
+            tvService = view.findViewById(R.id.tvService);
+            tvServiceDate = view.findViewById(R.id.tvServiceDate);
+            tvBDate = view.findViewById(R.id.tvBDate);
+            tvBTime = view.findViewById(R.id.tvBTime);
 
             btnAccept = view.findViewById(R.id.btnAccept);
             btnReject = view.findViewById(R.id.btnReject);

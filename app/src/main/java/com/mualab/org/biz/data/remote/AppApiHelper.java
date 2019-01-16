@@ -33,4 +33,14 @@ public final class AppApiHelper implements ApiHelper {
                 .setPriority(Priority.HIGH)
                 .build();
     }
+
+    @Override
+    public ANRequest doGetBookingDetail(HashMap<String, String> header, HashMap<String, String> params) {
+        return AndroidNetworking.post(Webservices.BOOKING_DETAIL)
+                .addHeaders(header)
+                .addBodyParameter(params)
+                .setTag(TAG)
+                .setPriority(Priority.HIGH)
+                .build();
+    }
 }

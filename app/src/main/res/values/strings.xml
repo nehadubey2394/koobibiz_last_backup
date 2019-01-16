@@ -404,5 +404,9 @@
     <string name="service_price">Service price</string>
     <string name="enter_business_email">Enter Business Email</string>
     <string name="enter_business_address">Enter Business Address</string>
+    <string name="onlinePayment">Online Payment</string>
+    <string name="offlinePayment">Offline Payment</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="total_amount">Total Amount</string>
 
 </resources>

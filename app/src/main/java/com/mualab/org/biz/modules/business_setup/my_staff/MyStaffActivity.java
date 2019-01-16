@@ -1,12 +1,11 @@
 package com.mualab.org.biz.modules.business_setup.my_staff;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,7 +28,6 @@ import com.mualab.org.biz.model.add_staff.AddedStaffServices;
 import com.mualab.org.biz.model.add_staff.BusinessDayForStaff;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.booking.Staff;
-import com.mualab.org.biz.modules.add_staff.fragments.ArtistStaffFragment;
 import com.mualab.org.biz.modules.business_setup.my_staff.adapter.MyStaffAdapter;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.AddStaffDetailActivity;
 import com.mualab.org.biz.session.Session;
@@ -231,7 +228,6 @@ public class MyStaffActivity extends AppCompatActivity implements
                             if(isPulltoRefrash){
                                 isPulltoRefrash = false;
                                 mRefreshLayout.stopRefresh(false, 500);
-
                             }
                         }
 

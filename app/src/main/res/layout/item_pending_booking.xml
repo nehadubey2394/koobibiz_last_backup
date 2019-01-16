@@ -93,7 +93,7 @@
             android:padding="2dp">
 
             <TextView
-                android:id="@+id/tvDate"
+                android:id="@+id/tvBDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -106,7 +106,7 @@
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/tvTime"
+                android:id="@+id/tvBTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

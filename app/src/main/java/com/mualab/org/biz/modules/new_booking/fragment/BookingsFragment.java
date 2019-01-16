@@ -1,38 +1,59 @@
 package com.mualab.org.biz.modules.new_booking.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
+import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MyToast;
+import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.model.booking.Staff;
 import com.mualab.org.biz.modules.base.BaseFragment;
 import com.mualab.org.biz.modules.new_booking.activity.BookingDetailActivity;
 import com.mualab.org.biz.modules.new_booking.adapter.BookingsAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.CallTypeArrayAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.MyBookingArrayAdapter;
+import com.mualab.org.biz.modules.new_booking.adapter.StaffFilterAdapter;
 import com.mualab.org.biz.modules.new_booking.model.BookingFilterModel;
 import com.mualab.org.biz.modules.new_booking.model.BookingHistory;
 import com.mualab.org.biz.session.PreRegistrationSession;
+import com.mualab.org.biz.task.HttpResponceListner;
+import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.AppLogger;
 import com.mualab.org.biz.util.CalanderUtils;
 import com.mualab.org.biz.util.ConnectionDetector;
+import com.mualab.org.biz.util.Helper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +63,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import views.calender.data.CalendarAdapter;
 import views.calender.data.Day;
@@ -49,32 +71,45 @@ import views.calender.widget.widget.MyFlexibleCalendar;
 
 public class BookingsFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+    private final static String TAG = BookingsFragment.class.getName();
+    private static String lastStaffId = "";
     private String sMonth = "", sDay, selectedDate;
-
-    private TextView tv_msg, tvNoRecord;
+    private TextView tv_msg, tvNoRecord, tvStaffNoRecord;
+    private ImageView imgRight;
     private int dayId;
     private SimpleDateFormat dateSdf, timeSdf;
-    private ProgressBar progress_bar;
-
+    private ProgressBar progress_bar, popupProgress;
     private PreRegistrationSession pSession;
-
+    private User user;
     private MyFlexibleCalendar viewCalendar;
+    private RecyclerView rvStaff;
     private Spinner spBkDate, spBkType;
     private MyBookingArrayAdapter bkDateAdapter;
     private CallTypeArrayAdapter bkTypeAdapter;
-
+    private List<Staff> artistStaffs;
     private List<BookingFilterModel> bkTempList, bkPrevDate, bkTodayDate, bkAfterdate, bkTypeList;
     private List<BookingHistory.DataBean> bookingHistoryList;
     private BookingsAdapter bookingsAdapter;
+    private StaffFilterAdapter staffFilterAdapter;
     private Boolean isTodayClick = false;
+    private String sCurCompId = "";
 
     public static BookingsFragment newInstance() {
 
         Bundle args = new Bundle();
 
         BookingsFragment fragment = new BookingsFragment();
+        lastStaffId = "";
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        user = Mualab.getInstance().getSessionManager().getUser();
+        pSession = Mualab.getInstance().getBusinessProfileSession();
+        sCurCompId = pSession.getCurrentCompanyDetail()._id;
     }
 
     @Override
@@ -87,6 +122,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initView(View view) {
+        imgRight = getBaseActivity().findViewById(R.id.imgRight);
         dateSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         timeSdf = new SimpleDateFormat("hh:mm a", Locale.US);
 
@@ -95,6 +131,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
         view.findViewById(R.id.btnAdd).setOnClickListener(this);
         Button btnToday = view.findViewById(R.id.btnToday);
         btnToday.setOnClickListener(this);
+        imgRight.setOnClickListener(this);
         // init calendar
         viewCalendar = view.findViewById(R.id.calendar);
         btnToday.callOnClick();
@@ -109,7 +146,11 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
         RecyclerView rvBookings = view.findViewById(R.id.rvBookings);
 
         bookingHistoryList = new ArrayList<>();
-        bookingsAdapter = new BookingsAdapter(bookingHistoryList, pos -> startActivity(new Intent(getBaseActivity(), BookingDetailActivity.class)));
+        bookingsAdapter = new BookingsAdapter(bookingHistoryList, pos -> {
+            Intent intent = new Intent(getBaseActivity(), BookingDetailActivity.class);
+            intent.putExtra(Constants.BOOKING_ID, String.valueOf(bookingHistoryList.get(pos).get_id()));
+            startActivity(intent);
+        });
         rvBookings.setAdapter(bookingsAdapter);
     }
 
@@ -117,8 +158,6 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
         setBookingFilterData();
         spBkDate = view.findViewById(R.id.spBkDate);
         spBkType = view.findViewById(R.id.spBkType);
-
-        pSession = Mualab.getInstance().getBusinessProfileSession();
 
         bkDateAdapter = new MyBookingArrayAdapter(getBaseActivity(), bkTempList);
         spBkDate.setAdapter(bkDateAdapter);
@@ -206,7 +245,8 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
         //doGetArtistBookingHistory(selectedDate, bkTempList.get(spBkDate.getSelectedItemPosition()).name, "", String.valueOf(pSession.getServiceType()));
     }
 
-    private void updateUI() {
+    private void updateUI(String businessType) {
+        imgRight.setVisibility(businessType.equalsIgnoreCase("business") ? View.VISIBLE : View.GONE);
         tvNoRecord.setVisibility(bookingHistoryList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
@@ -262,7 +302,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                     spBkDate.setSelection(1);
                 }
 
-                doGetArtistBookingHistory(selectedDate, bkTempList.get(spBkDate.getSelectedItemPosition()).name, "", String.valueOf(pSession.getServiceType()));
+                doGetArtistBookingHistory(selectedDate, bkTempList.get(spBkDate.getSelectedItemPosition()).name, lastStaffId, String.valueOf(pSession.getServiceType()));
             }
 
             @Override
@@ -310,12 +350,35 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                 dayId = cal.get(GregorianCalendar.DAY_OF_WEEK) - 2;
 
                 if (isTodayClick)
-                    doGetArtistBookingHistory(selectedDate, bkTempList.get(spBkDate.getSelectedItemPosition()).name, "", String.valueOf(pSession.getServiceType()));
+                    doGetArtistBookingHistory(selectedDate, bkTempList.get(spBkDate.getSelectedItemPosition()).name, lastStaffId, String.valueOf(pSession.getServiceType()));
                 else isTodayClick = true;
                 break;
 
             case R.id.btnAdd:
                 MyToast.getInstance(getBaseActivity()).showSmallMessage(getString(R.string.under_development));
+                break;
+
+            case R.id.imgRight:
+                //user type business then open popupFilter
+                /*if (!user.businessType.equals("independent")) {
+
+                } else {
+                    startActivity(new Intent(this, PendingBookingActivity.class));
+                }*/
+                int[] point = new int[2];
+
+                // Get the x, y location and store it in the location[] array
+                // location[0] = x, location[1] = y.
+                imgRight.getLocationOnScreen(point);
+
+                //Initialize the Point with x, and y positions
+                Display display = getBaseActivity().getWindowManager().getDefaultDisplay();
+                Point p = new Point();
+                display.getSize(p);
+                p.x = point[0];
+                p.y = point[1];
+
+                popupFilter(p);
                 break;
         }
     }
@@ -328,7 +391,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                 String bkDateType = bkTempList.get(spBkDate.getSelectedItemPosition()).name;
                 String bkType = bkTypeList == null ? "" : bkTypeList.get(spBkType.getSelectedItemPosition()).name;
 
-                doGetArtistBookingHistory(selectedDate, bkDateType, "", bkType);
+                doGetArtistBookingHistory(selectedDate, bkDateType, lastStaffId, bkType);
                 break;
 
             case R.id.spBkType:
@@ -336,7 +399,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                 bkDateType = bkTempList.get(spBkDate.getSelectedItemPosition()).name;
                 bkType = bkTypeList == null ? "" : bkTypeList.get(spBkType.getSelectedItemPosition()).name;
 
-                doGetArtistBookingHistory(selectedDate, bkDateType, "", bkType);
+                doGetArtistBookingHistory(selectedDate, bkDateType, lastStaffId, bkType);
                 break;
         }
     }
@@ -346,78 +409,8 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    /*private void apiForGetArtistStaff(){
-
-        Session session = Mualab.getInstance().getSessionManager();
-        User user = session.getUser();
-
-        if (!ConnectionDetector.isConnected()) {
-            new NoConnectionDialog(getBaseActivity(), (dialog, isConnected) -> {
-                if(isConnected){
-                    dialog.dismiss();
-                    apiForGetArtistStaff();
-                }
-            }).show();
-        }
-
-        Map<String, String> params = new HashMap<>();
-        params.put("artistId", String.valueOf(user.id));
-        params.put("search", "");
-
-        HttpTask task = new HttpTask(new HttpTask.Builder(getBaseActivity(), "artistStaff", new HttpResponceListner.Listener() {
-            @Override
-            public void onResponse(String response, String apiName) {
-                try {
-                    JSONObject js = new JSONObject(response);
-                    String status = js.getString("status");
-                    String message = js.getString("message");
-
-                    if (status.equalsIgnoreCase("success")) {
-
-                        JSONArray jsonArray = js.getJSONArray("staffList");
-                        if (jsonArray!=null && jsonArray.length()!=0) {
-                            for (int i=0; i<jsonArray.length(); i++){
-                               updateStaffFilterUI();
-                            }
-                        }else {
-                            rvMyStaff.setVisibility(View.GONE);
-                            tvNoDataFound.setVisibility(View.VISIBLE);
-                        }
-                    }else {
-                        rvMyStaff.setVisibility(View.GONE);
-                        tvNoDataFound.setVisibility(View.VISIBLE);
-                    }
-                    //  showToast(message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void ErrorListener(VolleyError error) {
-                try{
-                    Helper helper = new Helper();
-                    if (helper.error_Messages(error).contains("Session")){
-                        Mualab.getInstance().getSessionManager().logout();
-                        // MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }})
-                .setAuthToken(user.authToken)
-                .setProgress(false)
-                .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
-        //.setBody(params, "application/x-www-form-urlencoded"));
-
-        task.execute(TAG);
-    }*/
-
-    private void updateStaffFilterUI() {
-    }
-
     private void doGetArtistBookingHistory(String date, String type, String staffId, String bookingType) {
+
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(getBaseActivity(), (dialog, isConnected) -> {
                 if (isConnected) {
@@ -427,11 +420,12 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
             }).show();
         }
 
-        setLoading(true);
+        setDashboardApiLoader(true);
         HashMap<String, String> header = new HashMap<>();
         header.put("authToken", Mualab.getInstance().getSessionManager().getUser().authToken);
 
         HashMap<String, String> params = new HashMap<>();
+        params.put("artistId", sCurCompId.isEmpty() ? String.valueOf(user.id) : sCurCompId);
         params.put("date", date);
         params.put("latitude", String.valueOf(Mualab.currentLat));
         params.put("longitude", String.valueOf(Mualab.currentLng));
@@ -444,21 +438,234 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onResponse(String response) {
                 AppLogger.e("onResponse", response);
-                setLoading(false);
+                setDashboardApiLoader(false);
                 BookingHistory bookingHistory = getDataManager().getGson().fromJson(response, BookingHistory.class);
-                bookingHistoryList.clear();
-                bookingHistoryList.addAll(bookingHistory.getData());
-                bookingsAdapter.notifyDataSetChanged();
 
-                updateUI();
+                if (bookingHistory.getStatus().equalsIgnoreCase("success")) {
+                    bookingHistoryList.clear();
+                    bookingHistoryList.addAll(bookingHistory.getData());
+                    bookingsAdapter.notifyDataSetChanged();
+                    updateUI(bookingHistory.getBusinessType());
+                } else {
+                    MyToast.getInstance(getActivity()).showSmallMessage(bookingHistory.getMessage());
+                    bookingHistoryList.clear();
+                    bookingsAdapter.notifyDataSetChanged();
+                    updateUI(bookingHistory.getBusinessType());
+                }
             }
 
             @Override
             public void onError(ANError anError) {
-                setLoading(false);
-                updateUI();
-                AppLogger.e("onError", anError.getErrorBody() + " \n" + anError.getErrorDetail() + " \n" + anError.getResponse());
+                setDashboardApiLoader(false);
+                updateUI("");
+                //AppLogger.e("onError", anError.getErrorBody() + " \n" + anError.getErrorDetail() + " \n" + anError.getResponse());
+                Helper helper = new Helper();
+                helper.parseError(anError.getErrorBody());
             }
         });
     }
+
+    private void setDashboardApiLoader(Boolean isLoading) {
+        progress_bar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+    }
+
+    private void setPopupApiLoader(Boolean isLoading) {
+        popupProgress.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+    }
+
+    private void apiForGetArtistStaff() {
+        setPopupApiLoader(true);
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(getBaseActivity(), (dialog, isConnected) -> {
+                if(isConnected){
+                    dialog.dismiss();
+                    apiForGetArtistStaff();
+                }
+            }).show();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("artistId", sCurCompId.isEmpty() ? String.valueOf(user.id) : sCurCompId);
+        params.put("search", "");
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(getBaseActivity(), "artistStaff", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    setPopupApiLoader(false);
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+
+                    if (status.equalsIgnoreCase("success")) {
+                        artistStaffs.clear();
+
+                        JSONArray jsonArray = js.getJSONArray("staffList");
+                        if (jsonArray!=null && jsonArray.length()!=0) {
+                            for (int i=0; i<jsonArray.length(); i++){
+                                // Staff item = new Staff();
+                                Gson gson = new Gson();
+                                JSONObject object = jsonArray.getJSONObject(i);
+                                Staff item = gson.fromJson(String.valueOf(object), Staff.class);
+                                //for preselected
+                                if (!lastStaffId.isEmpty() && item.staffId.equals(lastStaffId)) {
+                                    item.isSelected = true;
+                                }
+                                artistStaffs.add(item);
+                            }
+                            updateStaffFilterUI();
+                        }else {
+                            updateStaffFilterUI();
+                        }
+
+                    }else {
+                        updateStaffFilterUI();
+                    }
+                    //  showToast(message);
+                } catch (Exception e) {
+                    setPopupApiLoader(false);
+                    e.printStackTrace();
+                    updateStaffFilterUI();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                setPopupApiLoader(false);
+                try{
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")){
+                        Mualab.getInstance().getSessionManager().logout();
+                        // MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }})
+                .setAuthToken(user.authToken)
+                .setProgress(false)
+                .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
+        //.setBody(params, "application/x-www-form-urlencoded"));
+
+        task.execute(TAG);
+    }
+
+    private void updateStaffFilterUI() {
+        tvStaffNoRecord.setVisibility(artistStaffs.isEmpty() ? View.VISIBLE : View.GONE);
+        staffFilterAdapter.notifyDataSetChanged();
+    }
+
+    //Todo create base popup class
+    private void popupFilter(Point p) {
+
+        try {
+            LayoutInflater inflater = (LayoutInflater) getBaseActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            assert inflater != null;
+            View layout = inflater.inflate(R.layout.popup_menu_layout, null);
+            layout.setAnimation(AnimationUtils.loadAnimation(getBaseActivity(), R.anim.popupanim));
+
+            final PopupWindow popupWindow = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                popupWindow.setElevation(5);
+            }
+
+            String reqString = Build.MANUFACTURER
+                    + " " + Build.MODEL + " " + Build.VERSION.RELEASE
+                    + " " + Build.VERSION_CODES.class.getFields()[android.os.Build.VERSION.SDK_INT].getName();
+
+
+            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            popupWindow.setOutsideTouchable(true);
+            popupWindow.setFocusable(true);
+
+            int OFFSET_X;
+            int OFFSET_Y;
+
+            if (reqString.equals("motorola Moto G (4) 7.0 M")) {
+                OFFSET_X = 480;
+                OFFSET_Y = 70;
+            } else {
+                OFFSET_X = 480;
+                OFFSET_Y = 48;
+            }
+
+            popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
+            rvStaff = layout.findViewById(R.id.rvStaff);
+            tvStaffNoRecord = layout.findViewById(R.id.tvNoDataFound);
+            popupProgress = layout.findViewById(R.id.popupProgress);
+            Button btnAllStaff = layout.findViewById(R.id.btnAllStaff);
+
+            btnAllStaff.setOnClickListener(v -> {
+                popupWindow.dismiss();
+                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
+                popupWindowOptionClicks("All Staff");
+            });
+
+            initPopupRecycler(popupWindow);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initPopupRecycler(PopupWindow popupWindow) {
+        artistStaffs = new ArrayList<>();
+        staffFilterAdapter = new StaffFilterAdapter(artistStaffs, pos -> {
+            final String data = artistStaffs.get(pos).staffId;
+            popupWindow.dismiss();
+
+            if (!ConnectionDetector.isConnected()) {
+                new NoConnectionDialog(getBaseActivity(), (dialog, isConnected) -> {
+                    if (isConnected) {
+                        dialog.dismiss();
+                        popupWindowOptionClicks(data);
+                    }
+                }).show();
+            } else {
+                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_apply_filter));
+                popupWindowOptionClicks(data);
+            }
+        });
+
+        updateRecyclerHeight();
+        rvStaff.setAdapter(staffFilterAdapter);
+
+        //getStaff
+        apiForGetArtistStaff();
+    }
+
+    private void updateRecyclerHeight() {
+        if (artistStaffs.size() > 4) {
+            ViewGroup.LayoutParams params = rvStaff.getLayoutParams();
+            params.height = 480;
+            rvStaff.setLayoutParams(params);
+        }
+    }
+
+    private void popupWindowOptionClicks(String staffId) {
+
+        switch (staffId) {
+            case "All Staff":
+                lastStaffId = "";
+                String bkDateType = bkTempList.get(spBkDate.getSelectedItemPosition()).name;
+                String bkType = bkTypeList == null ? "" : bkTypeList.get(spBkType.getSelectedItemPosition()).name;
+
+                doGetArtistBookingHistory(selectedDate, bkDateType, lastStaffId, bkType);
+                break;
+
+            default:
+                lastStaffId = staffId;
+                bkDateType = bkTempList.get(spBkDate.getSelectedItemPosition()).name;
+                bkType = bkTypeList == null ? "" : bkTypeList.get(spBkType.getSelectedItemPosition()).name;
+
+                doGetArtistBookingHistory(selectedDate, bkDateType, staffId, bkType);
+                break;
+
+        }
+    }
+
 }
