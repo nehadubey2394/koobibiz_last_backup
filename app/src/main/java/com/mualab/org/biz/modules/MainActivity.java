@@ -419,42 +419,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
             case R.id.imgRight:
                 //user type business then open popupFilter
-                if (!user.businessType.equals("independent")) {
-                    int[] point = new int[2];
+                /*if (!user.businessType.equals("independent")) {
 
-                    // Get the x, y location and store it in the location[] array
-                    // location[0] = x, location[1] = y.
-                    imgRight.getLocationOnScreen(point);
-
-                    //Initialize the Point with x, and y positions
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point p = new Point();
-                    display.getSize(p);
-                    p.x = point[0];
-                    p.y = point[1];
-
-                    popupFilter(p);
                 } else {
                     startActivity(new Intent(this, PendingBookingActivity.class));
-                }
+                }*/
+                int[] point = new int[2];
+
+                // Get the x, y location and store it in the location[] array
+                // location[0] = x, location[1] = y.
+                imgRight.getLocationOnScreen(point);
+
+                //Initialize the Point with x, and y positions
+                Display display = getWindowManager().getDefaultDisplay();
+                Point p = new Point();
+                display.getSize(p);
+                p.x = point[0];
+                p.y = point[1];
+
+                popupFilter(p);
                 break;
         }
     }
 
     private void setInactiveTab(){
-        spBizName.setVisibility(clickedId == 5 ? View.VISIBLE : View.GONE);
+        spBizName.setVisibility(View.GONE);
         Mualab.getInstance().cancelAllPendingRequests();
 
         if (clickedId == 1) {
+            imgNotif.setVisibility(View.VISIBLE);
             if (!user.businessType.equals("independent")) {
-                imgNotif.setImageDrawable(getResources().getDrawable(R.drawable.ic_notification));
-                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
-                imgNotif.setVisibility(View.VISIBLE);
                 imgRight.setVisibility(View.VISIBLE);
             } else {
-                imgNotif.setVisibility(View.GONE);
-                imgRight.setVisibility(View.VISIBLE);
-                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_notification));
+                imgRight.setVisibility(View.GONE);
             }
         } else {
             imgNotif.setVisibility(View.GONE);

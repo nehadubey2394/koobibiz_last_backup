@@ -206,51 +206,6 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
         //doGetArtistBookingHistory(selectedDate, bkTempList.get(spBkDate.getSelectedItemPosition()).name, "", String.valueOf(pSession.getServiceType()));
     }
 
-    private void doGetArtistBookingHistory(String date, String type, String staffId, String bookingType) {
-        if (!ConnectionDetector.isConnected()) {
-            new NoConnectionDialog(getBaseActivity(), (dialog, isConnected) -> {
-                if (isConnected) {
-                    dialog.dismiss();
-                    doGetArtistBookingHistory(date, type, staffId, bookingType);
-                }
-            }).show();
-        }
-
-        setLoading(true);
-        HashMap<String, String> header = new HashMap<>();
-        header.put("authToken", Mualab.getInstance().getSessionManager().getUser().authToken);
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("date", date);
-        params.put("latitude", String.valueOf(Mualab.currentLat));
-        params.put("longitude", String.valueOf(Mualab.currentLng));
-        params.put("type", type);
-        params.put("staffId", staffId);
-        params.put("bookingType", bookingType.equals("3") ? "" : bookingType);
-
-        getDataManager().doGetArtistBookingHistory(header, params).getAsString(new StringRequestListener() {
-
-            @Override
-            public void onResponse(String response) {
-                AppLogger.e("onResponse", response);
-                setLoading(false);
-                BookingHistory bookingHistory = getDataManager().getGson().fromJson(response, BookingHistory.class);
-                bookingHistoryList.clear();
-                bookingHistoryList.addAll(bookingHistory.getData());
-                bookingsAdapter.notifyDataSetChanged();
-
-                updateUI();
-            }
-
-            @Override
-            public void onError(ANError anError) {
-                setLoading(false);
-                updateUI();
-                AppLogger.e("onError", anError.getErrorBody() + " \n" + anError.getErrorDetail() + " \n" + anError.getResponse());
-            }
-        });
-    }
-
     private void updateUI() {
         tvNoRecord.setVisibility(bookingHistoryList.isEmpty() ? View.VISIBLE : View.GONE);
     }
@@ -389,5 +344,121 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    /*private void apiForGetArtistStaff(){
+
+        Session session = Mualab.getInstance().getSessionManager();
+        User user = session.getUser();
+
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(getBaseActivity(), (dialog, isConnected) -> {
+                if(isConnected){
+                    dialog.dismiss();
+                    apiForGetArtistStaff();
+                }
+            }).show();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("artistId", String.valueOf(user.id));
+        params.put("search", "");
+
+        HttpTask task = new HttpTask(new HttpTask.Builder(getBaseActivity(), "artistStaff", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    String status = js.getString("status");
+                    String message = js.getString("message");
+
+                    if (status.equalsIgnoreCase("success")) {
+
+                        JSONArray jsonArray = js.getJSONArray("staffList");
+                        if (jsonArray!=null && jsonArray.length()!=0) {
+                            for (int i=0; i<jsonArray.length(); i++){
+                               updateStaffFilterUI();
+                            }
+                        }else {
+                            rvMyStaff.setVisibility(View.GONE);
+                            tvNoDataFound.setVisibility(View.VISIBLE);
+                        }
+                    }else {
+                        rvMyStaff.setVisibility(View.GONE);
+                        tvNoDataFound.setVisibility(View.VISIBLE);
+                    }
+                    //  showToast(message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+                try{
+                    Helper helper = new Helper();
+                    if (helper.error_Messages(error).contains("Session")){
+                        Mualab.getInstance().getSessionManager().logout();
+                        // MyToast.getInstance(BookingActivity.this).showDasuAlert(helper.error_Messages(error));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }})
+                .setAuthToken(user.authToken)
+                .setProgress(false)
+                .setBody(params, HttpTask.ContentType.APPLICATION_JSON));
+        //.setBody(params, "application/x-www-form-urlencoded"));
+
+        task.execute(TAG);
+    }*/
+
+    private void updateStaffFilterUI() {
+    }
+
+    private void doGetArtistBookingHistory(String date, String type, String staffId, String bookingType) {
+        if (!ConnectionDetector.isConnected()) {
+            new NoConnectionDialog(getBaseActivity(), (dialog, isConnected) -> {
+                if (isConnected) {
+                    dialog.dismiss();
+                    doGetArtistBookingHistory(date, type, staffId, bookingType);
+                }
+            }).show();
+        }
+
+        setLoading(true);
+        HashMap<String, String> header = new HashMap<>();
+        header.put("authToken", Mualab.getInstance().getSessionManager().getUser().authToken);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("date", date);
+        params.put("latitude", String.valueOf(Mualab.currentLat));
+        params.put("longitude", String.valueOf(Mualab.currentLng));
+        params.put("type", type);
+        params.put("staffId", staffId);
+        params.put("bookingType", bookingType.equals("3") ? "" : bookingType);
+
+        getDataManager().doGetArtistBookingHistory(header, params).getAsString(new StringRequestListener() {
+
+            @Override
+            public void onResponse(String response) {
+                AppLogger.e("onResponse", response);
+                setLoading(false);
+                BookingHistory bookingHistory = getDataManager().getGson().fromJson(response, BookingHistory.class);
+                bookingHistoryList.clear();
+                bookingHistoryList.addAll(bookingHistory.getData());
+                bookingsAdapter.notifyDataSetChanged();
+
+                updateUI();
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                setLoading(false);
+                updateUI();
+                AppLogger.e("onError", anError.getErrorBody() + " \n" + anError.getErrorDetail() + " \n" + anError.getResponse());
+            }
+        });
     }
 }
