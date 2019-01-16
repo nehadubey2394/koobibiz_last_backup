@@ -21,7 +21,6 @@ import com.mualab.org.biz.helper.MyToast;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,112 +51,6 @@ public class HttpTask {
     private String TAG;
     private boolean progress;
 
-    public static class ContentType{
-        public static final String FORM_DATA = "multipart/form-data; charset=UTF-8";
-        public static final String APPLICATION_JSON = "application/json; charset=UTF-8";
-        public static final String APPLICATION_TEXT = "application/text; charset=UTF-8";
-        public static final String X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=UTF-8";
-    }
-
-    public static class Builder {
-
-        //private static String BASE_URL = API.BASE_URL;//"http://koobi.co.uk/api/";
-        private String BASE_URL_2;//"http://koobi.co.uk/api/";
-        //Required
-        private String api;
-        private Context context;
-        private HttpResponceListner.Listener listener;
-
-        private int method = Request.Method.POST;
-        private int initialTimeoutMs = 2500;
-        private int maxNumRetries = 1;
-        private float backoffMultiplier = 1f;
-        private boolean retryPolicy;
-        private String bodyContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
-        private Map<String, String> header;
-        private Map<String, String> params;
-        private Map<String, String> body;
-        private String jsonObjectString;
-        private String authToken;
-        private String TAG;
-        private boolean progress;
-
-        public Builder(Context context, String api, HttpResponceListner.Listener listener) {
-            this.api = api;
-            this.context = context;
-            this.listener = listener;
-        }
-
-        //Option
-
-        public Builder setMethod(int method){
-            this.method = method;
-            return this;
-        }
-
-        public Builder setBaseURL(String baseURL){
-            this.BASE_URL_2 = baseURL;
-            return this;
-        }
-
-        public Builder setBodyContentType(String contentType){
-            this.bodyContentType = contentType;
-            return this;
-        }
-
-        public Builder setHeader(Map<String, String> header){
-            this.header = header;
-            return this;
-        }
-
-        public Builder setParam(Map<String, String> params){
-            this.params = params;
-            return this;
-        }
-
-        public Builder addJsonObjectString(String jsonObjectString){
-            this.jsonObjectString = jsonObjectString;
-            return this;
-        }
-
-        public Builder setBody(Map<String, String> body){
-            this.body = body;
-            return this;
-        }
-
-
-        public Builder setBody(Map<String, String> body, String contentType){
-            this.body = body;
-            this.bodyContentType = contentType;
-            return this;
-        }
-
-        public Builder setAuthToken(String authToken){
-            this.authToken = authToken;
-            return this;
-        }
-
-        public Builder setProgress(boolean progress){
-            this.progress = progress;
-            return this;
-        }
-
-        public Builder setRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier){
-            this.initialTimeoutMs = initialTimeoutMs;
-            this.maxNumRetries = maxNumRetries;
-            this.backoffMultiplier = backoffMultiplier;
-            this.retryPolicy = true;
-            return this;
-        }
-
-
-        public HttpTask build(){
-            return new HttpTask(this);
-        }
-
-    }
-
     public HttpTask(Builder builder){
         this.context = builder.context;
 
@@ -178,7 +71,6 @@ public class HttpTask {
         this.authToken = builder.authToken;
         this.progress = builder.progress;
     }
-
 
     public void execute(String TAG){
         StringRequest request = new StringRequest(method, api, new Response.Listener<String>() {
@@ -251,7 +143,6 @@ public class HttpTask {
         Mualab.getInstance().addToRequestQueue(request, TAG);
     }
 
-
     /*post image from multipart data form*/
     public void postImage(final String key, final Bitmap bitmap){
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, api, new Response.Listener<NetworkResponse>() {
@@ -308,7 +199,6 @@ public class HttpTask {
         VolleySingleton.getInstance(context.getApplicationContext()).addToRequestQueue(multipartRequest);
     }
 
-
     private void handleError(VolleyError error){
         if(progress)
             Progress.hide(context);
@@ -328,5 +218,111 @@ public class HttpTask {
             e.printStackTrace();
             MyToast.getInstance(context).showDasuAlert("Server Error", "Looks like we are having some server issue.");
         }
+    }
+
+    public static class ContentType {
+        public static final String FORM_DATA = "multipart/form-data; charset=UTF-8";
+        public static final String APPLICATION_JSON = "application/json; charset=UTF-8";
+        public static final String APPLICATION_TEXT = "application/text; charset=UTF-8";
+        public static final String X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=UTF-8";
+    }
+
+    public static class Builder {
+
+        //private static String BASE_URL = API.BASE_URL;//"http://koobi.co.uk/api/";
+        private String BASE_URL_2;//"http://koobi.co.uk/api/";
+        //Required
+        private String api;
+        private Context context;
+        private HttpResponceListner.Listener listener;
+
+        private int method = Request.Method.POST;
+        private int initialTimeoutMs = 2500;
+        private int maxNumRetries = 1;
+        private float backoffMultiplier = 1f;
+        private boolean retryPolicy;
+        private String bodyContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
+        private Map<String, String> header;
+        private Map<String, String> params;
+        private Map<String, String> body;
+        private String jsonObjectString;
+        private String authToken;
+        private String TAG;
+        private boolean progress;
+
+        public Builder(Context context, String api, HttpResponceListner.Listener listener) {
+            this.api = api;
+            this.context = context;
+            this.listener = listener;
+        }
+
+        //Option
+
+        public Builder setMethod(int method) {
+            this.method = method;
+            return this;
+        }
+
+        public Builder setBaseURL(String baseURL) {
+            this.BASE_URL_2 = baseURL;
+            return this;
+        }
+
+        public Builder setBodyContentType(String contentType) {
+            this.bodyContentType = contentType;
+            return this;
+        }
+
+        public Builder setHeader(Map<String, String> header) {
+            this.header = header;
+            return this;
+        }
+
+        public Builder setParam(Map<String, String> params) {
+            this.params = params;
+            return this;
+        }
+
+        public Builder addJsonObjectString(String jsonObjectString) {
+            this.jsonObjectString = jsonObjectString;
+            return this;
+        }
+
+        public Builder setBody(Map<String, String> body) {
+            this.body = body;
+            return this;
+        }
+
+
+        public Builder setBody(Map<String, String> body, String contentType) {
+            this.body = body;
+            this.bodyContentType = contentType;
+            return this;
+        }
+
+        public Builder setAuthToken(String authToken) {
+            this.authToken = authToken;
+            return this;
+        }
+
+        public Builder setProgress(boolean progress) {
+            this.progress = progress;
+            return this;
+        }
+
+        public Builder setRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier) {
+            this.initialTimeoutMs = initialTimeoutMs;
+            this.maxNumRetries = maxNumRetries;
+            this.backoffMultiplier = backoffMultiplier;
+            this.retryPolicy = true;
+            return this;
+        }
+
+
+        public HttpTask build() {
+            return new HttpTask(this);
+        }
+
     }
 }

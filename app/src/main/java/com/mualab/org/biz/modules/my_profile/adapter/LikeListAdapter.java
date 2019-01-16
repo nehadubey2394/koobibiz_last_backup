@@ -80,7 +80,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.ViewHo
                 holder.btn_follow.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 holder.btn_follow.setText(R.string.text_following);
             } else if (feedLike.followerStatus == 0) {
-                holder.btn_follow.setBackgroundResource(R.drawable.button_effect_invert);
+                holder.btn_follow.setBackgroundResource(R.drawable.button_effect_invert_primary);
                 holder.btn_follow.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 holder.btn_follow.setText(R.string.follow);
             }

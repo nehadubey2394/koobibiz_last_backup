@@ -1,11 +1,12 @@
 package com.mualab.org.biz.modules.new_booking.adapter;
 
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
@@ -21,14 +22,10 @@ import java.util.List;
 
 public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int VIEWTYPE_ITEM = 1;
     private final int VIEWTYPE_LOADER = 2;
     private List<String> list;
     private boolean showLoader;
     private ClickListener clickListener;
-
-    private int lastPos = -1;
-    private boolean isClick = false;
 
     public PendBookingsAdapter(List<String> list, ClickListener clickListener) {
         this.list = list;
@@ -59,20 +56,19 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
-            case VIEWTYPE_ITEM:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pending_booking, parent, false);
-                return new ViewHolder(view);
-
             case VIEWTYPE_LOADER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_view, parent, false);
                 return new LoadingViewHolder(view);
-        }
-        return null;
 
+            default:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pending_booking, parent, false);
+                return new ViewHolder(view);
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
+        int VIEWTYPE_ITEM = 1;
         if (position == list.size() - 1) {
             return showLoader ? VIEWTYPE_LOADER : VIEWTYPE_ITEM;
         }
@@ -96,24 +92,38 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private TextView tvStaffName, tvUserName, tvService, tvServiceDate, tvDate, tvTime;
+        private Button btnAccept, btnReject, btnReSchedule;
 
-        ViewHolder(@NonNull View v) {
-            super(v);
+        ViewHolder(@NonNull View view) {
+            super(view);
 
+            btnAccept = view.findViewById(R.id.btnAccept);
+            btnReject = view.findViewById(R.id.btnReject);
+            btnReSchedule = view.findViewById(R.id.btnReSchedule);
+
+            btnAccept.setOnClickListener(this);
+            btnReject.setOnClickListener(this);
+            btnReSchedule.setOnClickListener(this);
         }
 
         @Override
         public void onClick(@NonNull final View view) {
             switch (view.getId()) {
 
-                default:
-                    if (!isClick) {
-                        isClick = true;
-                        if (getAdapterPosition() != -1 && clickListener != null)
-                            clickListener.onAcceptClick(getAdapterPosition());
-                    }
+                case R.id.btnAccept:
+                    if (getAdapterPosition() != -1 && clickListener != null)
+                        clickListener.onAcceptClick(getAdapterPosition());
+                    break;
 
-                    new Handler().postDelayed(() -> isClick = false, 3000);
+                case R.id.btnReject:
+                    if (getAdapterPosition() != -1 && clickListener != null)
+                        clickListener.onRejectClick(getAdapterPosition());
+                    break;
+
+                case R.id.btnReSchedule:
+                    if (getAdapterPosition() != -1 && clickListener != null)
+                        clickListener.onRescheduleClick(getAdapterPosition());
                     break;
             }
         }

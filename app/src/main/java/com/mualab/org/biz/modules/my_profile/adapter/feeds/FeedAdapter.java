@@ -28,8 +28,8 @@ import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.listner.OnDoubleTapListener;
 import com.mualab.org.biz.model.User;
-import com.mualab.org.biz.modules.my_profile.model.Feeds;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
+import com.mualab.org.biz.modules.my_profile.model.Feeds;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
@@ -51,40 +51,30 @@ import kotlin.jvm.functions.Function2;
 @SuppressWarnings("WeakerAccess")
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    protected boolean showLoader;
     private final int TEXT_TYPE = 0;
     private final int IMAGE_TYPE = 1;
     private final int VIDEO_TYPE = 2;
     private final int VIEW_TYPE_LOADING = 3;
-
+    protected boolean showLoader;
     private Context mContext;
     private List<Feeds> feedItems;
     private Listener listener;
     private boolean loading;
 
-    public void showHideLoading(boolean b) {
-        loading = b;
+    public FeedAdapter(Context mContext, List<Feeds> feedItems, Listener listener) {
+        this.mContext = mContext;
+        this.feedItems = feedItems;
+        this.listener = listener;
     }
 
-
-    public interface Listener{
-        void onCommentBtnClick(Feeds feed, int pos);
-        void onLikeListClick(Feeds feed);
-        void onFeedClick(Feeds feed, int index, View v);
-        void onClickProfileImage(Feeds feed, ImageView v);
+    public void showHideLoading(boolean b) {
+        loading = b;
     }
 
     public void clear(){
         final int size = feedItems.size();
         feedItems.clear();
         notifyItemRangeRemoved(0, size);
-    }
-
-
-    public FeedAdapter(Context mContext, List<Feeds> feedItems, Listener listener) {
-        this.mContext = mContext;
-        this.feedItems = feedItems;
-        this.listener = listener;
     }
 
     @Override
@@ -179,7 +169,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     h.btnFollow.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                     h.btnFollow.setText(R.string.text_following);
                 } else {
-                    h.btnFollow.setBackgroundResource(R.drawable.button_effect_invert);
+                    h.btnFollow.setBackgroundResource(R.drawable.button_effect_invert_primary);
                     h.btnFollow.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                     h.btnFollow.setText(R.string.text_follow);
                 }
@@ -572,17 +562,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
     }
 
-/*    private void goHashTag(CharSequence charSequence) {
-        Intent intent = new Intent(mContext, SearchFeedActivity.class);
-        String tag = charSequence.toString().replace("#","");
-        ExSearchTag e = new ExSearchTag();
-        e.title = tag;
-        e.id = 0;
-        e.type = ExSearchTag.SearchType.HASH_TAG;
-        intent.putExtra("searchKey",e);
-        mContext.startActivity(intent);
-    }*/
-
     private void addBottomDots(LinearLayout ll_dots, int totalSize, int currentPage) {
         TextView[] dots = new TextView[totalSize];
         ll_dots.removeAllViews();
@@ -597,6 +576,54 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             dots[currentPage].setTextColor(Color.parseColor("#212121"));
     }
 
+/*    private void goHashTag(CharSequence charSequence) {
+        Intent intent = new Intent(mContext, SearchFeedActivity.class);
+        String tag = charSequence.toString().replace("#","");
+        ExSearchTag e = new ExSearchTag();
+        e.title = tag;
+        e.id = 0;
+        e.type = ExSearchTag.SearchType.HASH_TAG;
+        intent.putExtra("searchKey",e);
+        mContext.startActivity(intent);
+    }*/
+
+    private void apiForLikes(final Feeds feed) {
+        Mualab.getInstance().getRequestQueue().cancelAll("like" + feed._id);
+
+        User currentUser = Mualab.getInstance().getSessionManager().getUser();
+        Map<String, String> map = new HashMap<>();
+        map.putAll(Mualab.feedBasicInfo);
+        map.put("feedId", "" + feed._id);
+        map.put("likeById", "" + currentUser.id);
+        map.put("userId", "" + feed.userId);
+        map.put("type", "feed");// feed or comment
+
+        new HttpTask(new HttpTask.Builder(mContext, "like", new HttpResponceListner.Listener() {
+            @Override
+            public void onResponse(String response, String apiName) {
+
+            }
+
+            @Override
+            public void ErrorListener(VolleyError error) {
+
+            }
+        }).setAuthToken(currentUser.authToken)
+                .setParam(map)).execute("like" + feed._id);
+
+
+    }
+
+
+    public interface Listener {
+        void onCommentBtnClick(Feeds feed, int pos);
+
+        void onLikeListClick(Feeds feed);
+
+        void onFeedClick(Feeds feed, int index, View v);
+
+        void onClickProfileImage(Feeds feed, ImageView v);
+    }
 
     static class Holder extends RecyclerView.ViewHolder {
         protected CheckBox likeIcon;
@@ -655,7 +682,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             ll_Dot =  itemView.findViewById(R.id.ll_Dot);
             rl_imageView = itemView.findViewById(R.id.rl_imageView);
-            weakRefViewPager = new WeakReference<>((ViewPager) itemView.findViewById(R.id.viewpager));
+            weakRefViewPager = new WeakReference<>(itemView.findViewById(R.id.viewpager));
         }
     }
 
@@ -709,33 +736,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
             return 0;
         }
-    }
-
-    private void apiForLikes(final Feeds feed) {
-        Mualab.getInstance().getRequestQueue().cancelAll("like"+feed._id);
-
-        User currentUser = Mualab.getInstance().getSessionManager().getUser();
-        Map<String, String> map = new HashMap<>();
-        map.putAll(Mualab.feedBasicInfo);
-        map.put("feedId", ""+feed._id);
-        map.put("likeById", ""+currentUser.id);
-        map.put("userId", ""+feed.userId);
-        map.put("type", "feed");// feed or comment
-
-        new HttpTask(new HttpTask.Builder(mContext, "like", new HttpResponceListner.Listener() {
-            @Override
-            public void onResponse(String response, String apiName) {
-
-            }
-
-            @Override
-            public void ErrorListener(VolleyError error) {
-
-            }
-        }).setAuthToken(currentUser.authToken)
-                .setParam(map)).execute("like"+feed._id);
-
-
     }
 
 /*

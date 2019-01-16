@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="46dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingLeft="5dp"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="5dp"
     android:paddingRight="5dp">
 
     <com.daimajia.swipe.SwipeLayout
-        android:layout_width="match_parent"
         android:id="@+id/sample1"
+        android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:footerDividersEnabled="false"
         android:layout_gravity="center_vertical"
+        android:footerDividersEnabled="false"
         app:clickToClose="true">
 
         <LinearLayout
-            android:tag="side"
             android:id="@+id/right_swipe_wrapper"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal"
+            android:tag="side"
             >
             <ImageView
                 android:id="@+id/ivRemove"
-                android:src="@drawable/delete_ico"
                 android:layout_width="50dp"
+                android:layout_height="match_parent"
                 android:background="@color/red"
                 android:padding="12dp"
-                android:layout_height="match_parent" />
+                android:src="@drawable/delete_ico" />
 
         </LinearLayout>
 
@@ -42,36 +42,36 @@
 
             <TextView
                 android:id="@+id/tvBizTypeTitle"
+                style="@style/TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="41dp"
                 android:gravity="center_vertical"
-                android:textColor="@color/text_color"
                 android:maxWidth="240dp"
-                style="@style/TextView"/>
+                android:textColor="@color/text_color" />
 
             <RelativeLayout
                 android:id="@+id/rlApprovalStatus"
                 android:layout_width="120dp"
                 android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@+id/tvBizTypeTitle"
+                android:background="@drawable/bg_orange_strock_circle"
                 android:gravity="center"
                 android:padding="2dp"
                 android:visibility="gone"
-                android:layout_marginLeft="15dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/bg_orange_strock_circle"
                 >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/roboto_regular"
                     android:gravity="center"
-                    android:textSize="12sp"
+                    android:maxLines="1"
                     android:padding="2dp"
                     android:text="@string/pending_approval"
-                    android:fontFamily="@font/roboto_regular"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/colorOrage"
-                    android:maxLines="1"
+                    android:textColor="@color/colorOrange"
+                    android:textSize="12sp"
                     />
 
             </RelativeLayout>
@@ -81,10 +81,10 @@
                 android:layout_width="25dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="6dp"
-                android:visibility="gone"
                 android:layout_centerVertical="true"
-                android:background="@drawable/right_check_ico"/>
+                android:layout_marginRight="6dp"
+                android:background="@drawable/right_check_ico"
+                android:visibility="gone" />
 
 
         </RelativeLayout>
@@ -94,8 +94,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/gray_line"
-        android:layout_marginTop="2dp"/>
+        android:layout_marginTop="2dp"
+        android:background="@color/gray_line" />
 
 
 </LinearLayout>

@@ -12,8 +12,8 @@
         layout="@layout/header_layout_bookingdetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:visibility="visible" />
 
     <RelativeLayout
         android:id="@+id/rlContainer"
@@ -26,23 +26,23 @@
             android:id="@+id/llDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:padding="16dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/gray_broder_white_bg"
             android:orientation="vertical"
-            android:background="@drawable/gray_broder_white_bg">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/tvJobTitle"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:hint="@string/enter_job_title"
-                android:textColorHint="@color/text_color"
-                android:textColor="@color/text_color"
                 android:fontFamily="@font/roboto_regular"
-                android:textSize="14sp"
                 android:gravity="center_vertical"
+                android:hint="@string/enter_job_title"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/text_color"
+                android:textSize="14sp"
                 />
 
             <View
@@ -55,14 +55,14 @@
                 android:id="@+id/tvServices"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:layout_marginTop="6dp"
+                android:drawableRight="@drawable/black_down_arrow_ico"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
                 android:text="@string/text_services"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/text_color"
-                android:fontFamily="@font/roboto_regular"
                 android:textSize="14sp"
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical"
-                android:drawableRight="@drawable/black_down_arrow_ico"
                 />
 
             <View
@@ -75,13 +75,13 @@
                 android:id="@+id/tvSocialMedia"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
                 android:hint="@string/social_media_access"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/text_color"
-                android:fontFamily="@font/roboto_regular"
                 android:textSize="14sp"
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical"
                 />
 
             <View
@@ -94,49 +94,49 @@
                 android:id="@+id/tvHoliday"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
                 android:hint="@string/holiday_allocation"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/text_color"
-                android:fontFamily="@font/roboto_regular"
                 android:textSize="14sp"
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical"
                 />
 
         </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/llSetWh"
-            android:layout_below="@+id/llDetail"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_marginTop="8dp"
+            android:layout_below="@+id/llDetail"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/gray_broder_white_bg"
             android:gravity="center_vertical"
-            android:background="@drawable/gray_broder_white_bg">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/show_working_hours"
-                android:textSize="14sp"
-                android:paddingLeft="10dp"
                 android:layout_alignParentLeft="true"
-                android:textColor="@color/text_color"
                 android:fontFamily="@font/roboto_medium"
+                android:paddingLeft="10dp"
+                android:text="@string/show_working_hours"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"
                 />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnEditWhs"
+                style="@style/My_Button_Primary"
                 android:layout_width="60dp"
                 android:layout_height="26dp"
-                style="@style/My_Button_Small.Invert"
-                android:text="@string/show"
-                android:layout_marginRight="14dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="14dp"
+                android:text="@string/show"
                 />
         </RelativeLayout>
 

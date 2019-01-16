@@ -11,20 +11,20 @@
         layout="@layout/header_layout_for_allscreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:visibility="visible" />
 
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/topLayout"
-        android:layout_above="@+id/btnClear"
         android:id="@+id/rvAllCompany"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
+        android:layout_above="@+id/btnClear"
+        android:layout_below="@+id/topLayout"
         android:layout_marginLeft="10dp"
-        android:overScrollMode="never"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="3dp"
+        android:overScrollMode="never"
         android:padding="2dp"
         />
 
@@ -32,27 +32,27 @@
         android:id="@+id/tvNoDataFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/roboto_regular"
         android:text="@string/no_data_available"
         android:textColor="@color/grey"
         android:textSize="14sp"
-        android:layout_centerInParent="true"
         android:visibility="gone"
-        android:fontFamily="@font/roboto_regular"
         />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btnClear"
-        style="@style/My_Button_Small.Invert"
+        style="@style/My_Button_Primary"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:text="@string/clear"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/clear"
         android:textSize="14sp"
-        android:layout_alignParentBottom="true"
+        android:visibility="gone"
         />
 </RelativeLayout>

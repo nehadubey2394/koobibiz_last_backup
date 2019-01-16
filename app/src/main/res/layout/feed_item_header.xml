@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical">
@@ -9,8 +9,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -18,10 +18,10 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/defoult_user_img"
             android:background="@drawable/gradient_circle_img"
-            app:civ_border_width="1dp"
+            android:src="@drawable/defoult_user_img"
             app:civ_border_color="@color/transparent"
+            app:civ_border_width="1dp"
             />
 
         <LinearLayout
@@ -39,9 +39,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
                 android:maxLines="1"
                 android:text="Dharmraj Acharya"
-                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
@@ -51,11 +51,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|left"
                 android:layout_marginTop="2dp"
-                android:text="indore city"
-                android:fontFamily="@font/roboto_regular"
                 android:ellipsize="end"
-                android:textColor="@color/grey"
+                android:fontFamily="@font/roboto_regular"
                 android:maxLines="1"
+                android:text="indore city"
+                android:textColor="@color/grey"
                 android:textSize="12sp" />
 
             <TextView
@@ -64,26 +64,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|left"
                 android:layout_marginTop="2dp"
-                android:fontFamily="@font/roboto_regular"
                 android:ellipsize="end"
+                android:fontFamily="@font/roboto_regular"
                 android:maxLines="1"
-                android:textColor="@color/text_color"
                 android:text="24/01/2018"
+                android:textColor="@color/text_color"
                 android:textSize="12sp" />
 
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btnFollow"
-            style="@style/My_Button_Small.Invert"
+            style="@style/My_Button_Primary"
             android:layout_width="wrap_content"
-            android:minWidth="60dp"
             android:layout_height="22dp"
-            android:text="@string/text_follow"
-            android:fontFamily="@font/roboto_regular"
-            android:layout_marginRight="2dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="2dp"
+            android:fontFamily="@font/roboto_regular"
+            android:minWidth="60dp"
+            android:text="@string/text_follow"
             android:textSize="10sp"
             />
 
