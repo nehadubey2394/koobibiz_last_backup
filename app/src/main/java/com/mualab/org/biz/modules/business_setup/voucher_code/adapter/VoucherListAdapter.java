@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.model.VoucherCode;
+import com.mualab.org.biz.util.CalanderUtils;
 
 import java.util.List;
 
@@ -63,7 +65,9 @@ public class VoucherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         else
             holder.tvDiscount.setText("Discount - "+item.amount+"%");
 
-        holder.tvExpiryDate.setText("Expiry Date - "+item.endDate);
+        String sDate = CalanderUtils.dateFormatToShow(item.endDate, Constants.SERVER_TIMESTAMP_FORMAT,Constants.TIMESTAMP_FORMAT);
+
+        holder.tvExpiryDate.setText("Expiry Date - "+sDate);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener

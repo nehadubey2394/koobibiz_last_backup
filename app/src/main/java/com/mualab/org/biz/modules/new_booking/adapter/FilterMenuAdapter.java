@@ -37,7 +37,7 @@ public class FilterMenuAdapter extends RecyclerView.Adapter<FilterMenuAdapter.Vi
         holder.tvUserName.setText(bean.username);
 
         if (bean.isSelected)
-            holder.tvUserName.setTextColor(holder.tvUserName.getContext().getResources().getColor(R.color.primary_blue));
+            holder.tvUserName.setTextColor(holder.tvUserName.getContext().getResources().getColor(R.color.colorPrimary));
         else
             holder.tvUserName.setTextColor(holder.tvUserName.getContext().getResources().getColor(R.color.text_color));
     }

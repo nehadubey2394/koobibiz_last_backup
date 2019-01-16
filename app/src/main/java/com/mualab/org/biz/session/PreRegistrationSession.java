@@ -24,7 +24,7 @@ public class PreRegistrationSession {
     private int serviceType;
 
     {
-        radius = 5;
+        radius = 1;
         serviceType = 1;
     }
 

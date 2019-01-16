@@ -23,7 +23,6 @@ import com.mualab.org.biz.session.PreRegistrationSession;
 import java.util.ArrayList;
 
 import views.pickerview.MyTimePickerDialog;
-import views.pickerview.timepicker.TimePicker;
 
 public class AddServiceFieldsActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText etServiceName,etOutCallPrice,etInCallPrice,etServiceDesc;
@@ -363,7 +362,7 @@ public class AddServiceFieldsActivity extends AppCompatActivity implements View.
     }*/
 
     public void showPicker(){
-        int hours = 01;
+        int hours = 00;
 
        /* MyTimePickerDialog mTimePicker = new MyTimePickerDialog(AddServiceFieldsActivity.this, new MyTimePickerDialog.OnTimeSetListener() {
             @Override
@@ -374,17 +373,14 @@ public class AddServiceFieldsActivity extends AppCompatActivity implements View.
         }, getString(R.string.time_for_completion), hours, 00, 10, 3);
         mTimePicker.show();*/
         MyTimePickerDialog mTimePicker = new MyTimePickerDialog(AddServiceFieldsActivity.this,
-                new MyTimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hours, int minute) {
-                        if (hours>3){
-                            MyToast.getInstance(AddServiceFieldsActivity.this).showDasuAlert("Maximum break time limit is 3:00 hours");
-                        }else {
-                            tvCompletionTime.setText(String.format("%s:%s", String.format("%02d", hours), String.format("%02d", minute)));
-                        }
-
+                (view, hours1, minute) -> {
+                    if (hours1 >3){
+                        MyToast.getInstance(AddServiceFieldsActivity.this).showDasuAlert("Maximum break time limit is 3:00 hours");
+                    }else {
+                        tvCompletionTime.setText(String.format("%s:%s", String.format("%02d", hours1), String.format("%02d", minute)));
                     }
-                }, "", hours, 00,10);
+
+                }, "", hours, 10,10);
 
         mTimePicker.show();
     }

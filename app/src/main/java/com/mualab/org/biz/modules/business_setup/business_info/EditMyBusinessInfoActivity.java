@@ -136,7 +136,7 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
 
         if (!bpSession.getBusinessCountryCode().isEmpty())
             tvCountryCode.setText(bpSession.getBusinessCountryCode());
-        else  if (!user.country.isEmpty())
+        else  if (!user.countryCode.isEmpty())
             tvCountryCode.setText(user.countryCode);
 
         int serviceType = bpSession.getServiceType();
@@ -159,7 +159,7 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
         }else if (serviceType==3){
             splitTime(tvInCallBreakTime,bpSession.getInCallPreprationTime(),"Incall");
             splitTime(tvOutCallBreakTime,bpSession.getOutCallPreprationTime(),"Outcall");
-            tvBookingType.setText("Incall/Outcall");
+            tvBookingType.setText("Incall / Outcall");
             bookingType = "3";
             rlAddress.setVisibility(View.VISIBLE);
             rlAreaOfCoverage.setVisibility(View.VISIBLE);
@@ -188,11 +188,11 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
             String min = separated[1]+" min";
 
             if (hours.equals("00 hr "))
-                textView.setText(type+" : "+min);
+                textView.setText(type+" - "+min);
             else if (!hours.equals("00 hr ") && min.equals("00 min"))
-                textView.setText(type+" : "+hours);
+                textView.setText(type+" - "+hours);
             else
-                textView.setText(type+" : "+hours+min);
+                textView.setText(type+" - "+hours+min);
 
         }
 
@@ -321,7 +321,7 @@ public class EditMyBusinessInfoActivity extends AppCompatActivity implements Vie
                             tvAddressType.setText("Return Location Address");
                             break;
                         case "3":
-                            tvBookingType.setText("Both");
+                            tvBookingType.setText("Incall / Outcall");
                             rlAddress.setVisibility(View.VISIBLE);
                             rlAreaOfCoverage.setVisibility(View.VISIBLE);
                             radiusLineView.setVisibility(View.VISIBLE);

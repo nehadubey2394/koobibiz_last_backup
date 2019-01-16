@@ -394,5 +394,7 @@
     <string name="service_cateory">Service Category</string>
     <string name="break_between_appointments">Break Between Appointments</string>
     <string name="business_operation_hours">Business Operation Hours</string>
+    <string name="enter_business_email">Enter Business Email</string>
+    <string name="enter_business_address">Enter Business Address</string>
 
 </resources>

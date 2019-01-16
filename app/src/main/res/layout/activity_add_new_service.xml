@@ -66,6 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 android:background="@color/gray_line">
 
             </View>
@@ -73,7 +74,8 @@
             <RelativeLayout
                 android:id="@+id/rlBusinessType"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:minHeight="45dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
@@ -105,7 +107,7 @@
                         android:maxWidth="240dp"
                         android:textSize="14sp"
                         android:text="@string/business_type"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tvBizType"
@@ -118,7 +120,7 @@
                         android:visibility="gone"
                         android:layout_marginTop="1dp"
                         android:text="@string/business_type"
-                        android:textColor="@color/gray" />
+                        android:textColor="@color/dark_gray" />
 
                 </LinearLayout>
 
@@ -145,7 +147,8 @@
             <RelativeLayout
                 android:id="@+id/rlCategory"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:minHeight="45dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="6dp"
@@ -178,7 +181,7 @@
                         android:maxWidth="240dp"
                         android:textSize="14sp"
                         android:text="@string/category"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tvCategory"
@@ -191,7 +194,7 @@
                         android:visibility="gone"
                         android:layout_marginTop="1dp"
                         android:text="@string/business_type"
-                        android:textColor="@color/gray" />
+                        android:textColor="@color/dark_gray" />
 
                 </LinearLayout>
 
@@ -219,22 +222,45 @@
             <RelativeLayout
                 android:id="@+id/rlServiceName"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:minHeight="45dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="4dp"
                 android:layout_gravity="center_vertical">
 
-                <TextView
-                    style="@style/TextView"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:maxWidth="240dp"
-                    android:textSize="14sp"
-                    android:text="@string/service_name"
-                    android:textColor="@color/text_color" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:text="@string/service_name"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:id="@+id/tvServiceName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="@string/service_name"
+                        android:visibility="gone"
+                        android:textColor="@color/dark_gray" />
+
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="22dp"
@@ -259,22 +285,43 @@
             <RelativeLayout
                 android:id="@+id/rlBookingType"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:minHeight="45dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="4dp"
                 android:layout_gravity="center_vertical">
 
-                <TextView
-                    style="@style/TextView"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:maxWidth="240dp"
-                    android:textSize="14sp"
-                    android:text="@string/booking_type"
-                    android:textColor="@color/text_color" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:text="@string/booking_type"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:id="@+id/tvBookingType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        android:text="@string/booking_type"                        android:textColor="@color/dark_gray" />
+
+                </LinearLayout>
+
 
                 <ImageView
                     android:layout_width="22dp"
@@ -300,22 +347,42 @@
             <RelativeLayout
                 android:id="@+id/rlPrice"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:minHeight="45dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="4dp"
                 android:layout_gravity="center_vertical">
 
-                <TextView
-                    style="@style/TextView"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:maxWidth="240dp"
-                    android:textSize="14sp"
-                    android:text="@string/price"
-                    android:textColor="@color/text_color" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:text="@string/price"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:id="@+id/tvPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textSize="14sp"
+                        android:text="@string/price"
+                        android:visibility="gone"
+                        android:textColor="@color/dark_gray" />
+
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="22dp"
@@ -340,22 +407,44 @@
             <RelativeLayout
                 android:id="@+id/rlServiceDesc"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:minHeight="45dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="4dp"
                 android:layout_gravity="center_vertical">
 
-                <TextView
-                    style="@style/TextView"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:maxWidth="240dp"
-                    android:textSize="14sp"
-                    android:text="@string/service_description"
-                    android:textColor="@color/text_color" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:text="@string/service_description"                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tvServiceDesc"
+                        style="@style/TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:maxWidth="240dp"
+                        android:textSize="14sp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:visibility="gone"
+                        android:textColor="@color/dark_gray" />
+
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="22dp"
@@ -380,7 +469,8 @@
             <RelativeLayout
                 android:id="@+id/rlComplitionTime"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:minHeight="45dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="4dp"
@@ -389,8 +479,9 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_centerVertical="true">
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
 
                     <TextView
                         style="@style/TextView"
@@ -400,7 +491,8 @@
                         android:maxWidth="240dp"
                         android:textSize="14sp"
                         android:text="Time for Completion"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/black" />
+
 
                     <TextView
                         android:id="@+id/tvCompletionTime"
@@ -413,7 +505,7 @@
                         android:visibility="gone"
                         android:text="@string/hh_mm"
                         android:layout_marginTop="1dp"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/dark_gray" />
 
                 </LinearLayout>
 

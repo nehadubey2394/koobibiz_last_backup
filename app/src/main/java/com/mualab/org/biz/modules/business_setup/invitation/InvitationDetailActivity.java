@@ -10,16 +10,18 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.company_management.CompanyDetail;
+import com.mualab.org.biz.modules.business_setup.OtherBusinessWorkingHours.OperationHoursActivity;
+import com.mualab.org.biz.modules.business_setup.company_services.CompanyServicesActivity;
 import com.mualab.org.biz.modules.business_setup.invitation.adapter.BusinessTypeAdapter;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -31,6 +33,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +62,8 @@ public class InvitationDetailActivity extends AppCompatActivity implements View.
         TextView tvBusinessName = findViewById(R.id.tvBusinessName);
         TextView tvAddress = findViewById(R.id.tvAddress);
         TextView tvMessage = findViewById(R.id.tvMessage);
+        RelativeLayout rlServices = findViewById(R.id.rlServices);
+        RelativeLayout rlWorkingHours = findViewById(R.id.rlWorkingHours);
 
         AppCompatButton btnReject = findViewById(R.id.btnReject);
         AppCompatButton btnAccept = findViewById(R.id.btnAccept);
@@ -95,6 +100,8 @@ public class InvitationDetailActivity extends AppCompatActivity implements View.
         ivHeaderBack.setOnClickListener(this);
         btnReject.setOnClickListener(this);
         btnAccept.setOnClickListener(this);
+        rlServices.setOnClickListener(this);
+        rlWorkingHours.setOnClickListener(this);
 
     }
 
@@ -111,6 +118,21 @@ public class InvitationDetailActivity extends AppCompatActivity implements View.
 
             case R.id.ivHeaderBack:
                 finish();
+                break;
+
+            case R.id.rlServices:
+                Intent intent3 = new Intent(InvitationDetailActivity.this, CompanyServicesActivity.class);
+                intent3.putExtra("businessId", companyDetail.businessId);
+                intent3.putExtra("staffId", companyDetail._id);
+                startActivity(intent3);
+                break;
+
+            case R.id.rlWorkingHours:
+                Intent intent = new Intent(InvitationDetailActivity.this, OperationHoursActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("workingHours",(Serializable)companyDetail.businessDays);
+                intent.putExtra("BUNDLE",args);
+                startActivity(intent);
                 break;
         }
     }

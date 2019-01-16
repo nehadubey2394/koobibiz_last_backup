@@ -28,7 +28,6 @@ import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.add_staff.AllArtist;
 import com.mualab.org.biz.model.add_staff.StaffDetail;
 import com.mualab.org.biz.model.booking.Staff;
-import com.mualab.org.biz.modules.business_setup.my_staff.adapter.MyStaffAdapter;
 import com.mualab.org.biz.modules.business_setup.new_add_staff.adapter.AddStaffAdapter;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
@@ -89,17 +88,16 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
         rvMyStaff.setAdapter(staffAdapter);
         staffAdapter.setChangeListener(this);
 
-        if(scrollListener==null) {
+        if (scrollListener == null)
             scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
                 @Override
-                public void onLoadMore(int page, int totalItemsCount,
-                                       RecyclerView view) {
+                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                     staffAdapter.showLoading(true);
                     apiForGetAllStaff(page);
-                    //apiForLoadMoreArtist(page);
                 }
             };
-        }
+
+        rvMyStaff.addOnScrollListener(scrollListener);
 
         final CircleHeaderView header = new CircleHeaderView(AddNewStaffActivity.this);
 
@@ -162,7 +160,8 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
                 searchview.setQueryHint("Search...");
             }
         });
-        apiForGetAllStaff(0);
+        if (artistStaffs.size() == 0)
+            apiForGetAllStaff(0);
     }
 
     private void filter(String newText){
@@ -173,7 +172,7 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
         apiForGetAllStaff(0);
     }
 
-    private void apiForGetAllStaff(final int page){
+    private synchronized void apiForGetAllStaff(final int page){
         if(isPulltoRefrash)
             pbLoder.setVisibility(View.GONE);
         else
@@ -197,6 +196,8 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
         Map<String, String> params = new HashMap<>();
         params.put("artistId", String.valueOf(user.id));
         params.put("search", searchText);
+        params.put("page", "" + page);
+        params.put("limit", "10");
 
         HttpTask task = new HttpTask(new HttpTask.Builder(AddNewStaffActivity.this, "allArtist", new HttpResponceListner.Listener() {
             @Override
@@ -207,12 +208,13 @@ public class AddNewStaffActivity extends AppCompatActivity implements AddStaffAd
                     String status = js.getString("status");
                     String message = js.getString("message");
 
+                    if (page==0) {
+                        artistStaffs.clear();
+                    }
+
+
                     if (status.equalsIgnoreCase("success")) {
                         staffAdapter.showLoading(false);
-
-                        if (page==0) {
-                            artistStaffs.clear();
-                        }
 
                         rvMyStaff.setVisibility(View.VISIBLE);
                         tvNoDataFound.setVisibility(View.GONE);

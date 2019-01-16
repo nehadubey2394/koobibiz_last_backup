@@ -64,7 +64,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -526,18 +525,14 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
 
                                     item.businessDays.addAll(daySet);
 
-                                    Collections.sort(item.businessDays, new Comparator<BusinessDay>() {
+                                    Collections.sort(item.businessDays, (a1, a2) -> {
 
-                                        @Override
-                                        public int compare(BusinessDay a1, BusinessDay a2) {
-
-                                            if (a1.dayId == 0 || a2.dayId == 0)
-                                                return -1;
-                                            else {
-                                                Long long1 = (long) a1.dayId;
-                                                Long long2 = (long) a2.dayId;
-                                                return long1.compareTo(long2);
-                                            }
+                                        if (a1.dayId == 0 || a2.dayId == 0)
+                                            return -1;
+                                        else {
+                                            Long long1 = (long) a1.dayId;
+                                            Long long2 = (long) a2.dayId;
+                                            return long1.compareTo(long2);
                                         }
                                     });
                                 }

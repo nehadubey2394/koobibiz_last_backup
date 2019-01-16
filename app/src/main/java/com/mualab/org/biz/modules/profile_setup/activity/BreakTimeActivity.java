@@ -234,7 +234,7 @@ public class BreakTimeActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void showPicker(final TextView tvHours,final TextView tvMins){
-        int hours = 01;
+        int hours = 00;
         // String tmpTime = tvTime.getText().toString();
        /* if(!tmpTime.equals("HH:MM")){
             try {
@@ -258,7 +258,7 @@ public class BreakTimeActivity extends AppCompatActivity implements View.OnClick
                         }
 
                     }
-                }, "", hours, 00,10);
+                }, "", hours, 10,10);
        /* MyTimePickerDialog mTimePicker = new MyTimePickerDialog(BreakTimeActivity.this, new MyTimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hours, int minute) {
