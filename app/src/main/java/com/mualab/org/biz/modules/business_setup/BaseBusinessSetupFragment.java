@@ -163,8 +163,35 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         LinearLayout llVoucherCode = rootView.findViewById(R.id.llVoucherCode);
         LinearLayout llPaymentSeup = rootView.findViewById(R.id.llPaymentSeup);
 
-        arrayAdapter = new CompanyListSppinnerAdapter(mContext, companyList);
+        tvStaff.setOnClickListener(this);
+        tvBusiness.setOnClickListener(this);
+        llInvitation.setOnClickListener(this);
+        llAddStaff.setOnClickListener(this);
+        llMyStaff.setOnClickListener(this);
+        llServices.setOnClickListener(this);
+        llWorkingHours.setOnClickListener(this);
+        llBusinessInfo.setOnClickListener(this);
+        llCertificates.setOnClickListener(this);
+        llVoucherCode.setOnClickListener(this);
+        llPaymentSeup.setOnClickListener(this);
 
+        apiForGetProfile();
+
+        getBusinessProfile();
+
+        Session session = Mualab.getInstance().getSessionManager();
+        if (session.getUser().businessType.equals("independent")) {
+            initBusinessSpinner();
+
+            llRow3.setVisibility(View.VISIBLE);
+            apiForCompanyDetail();
+        } else
+            llRow3.setVisibility(View.GONE);
+
+    }
+
+    private void initBusinessSpinner() {
+        arrayAdapter = new CompanyListSppinnerAdapter(mContext, companyList);
         spBizName.setAdapter(arrayAdapter);
         spBizName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -202,31 +229,6 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
                 // tvBizType.setVisibility(View.GONE);
             }
         });
-
-
-        tvStaff.setOnClickListener(this);
-        tvBusiness.setOnClickListener(this);
-        llInvitation.setOnClickListener(this);
-        llAddStaff.setOnClickListener(this);
-        llMyStaff.setOnClickListener(this);
-        llServices.setOnClickListener(this);
-        llWorkingHours.setOnClickListener(this);
-        llBusinessInfo.setOnClickListener(this);
-        llCertificates.setOnClickListener(this);
-        llVoucherCode.setOnClickListener(this);
-        llPaymentSeup.setOnClickListener(this);
-
-        apiForGetProfile();
-
-        getBusinessProfile();
-
-        Session session = Mualab.getInstance().getSessionManager();
-        if (session.getUser().businessType.equals("independent")) {
-            llRow3.setVisibility(View.VISIBLE);
-            apiForCompanyDetail();
-        }else
-            llRow3.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -356,13 +358,10 @@ public class BaseBusinessSetupFragment extends Fragment implements View.OnClickL
         User user = session.getUser();
 
         if (!ConnectionDetector.isConnected()) {
-            new NoConnectionDialog(mContext, new NoConnectionDialog.Listner() {
-                @Override
-                public void onNetworkChange(Dialog dialog, boolean isConnected) {
-                    if(isConnected){
-                        dialog.dismiss();
-                        apiForGetProfile();
-                    }
+            new NoConnectionDialog(mContext, (dialog, isConnected) -> {
+                if (isConnected) {
+                    dialog.dismiss();
+                    apiForGetProfile();
                 }
             }).show();
         }

@@ -8,6 +8,9 @@ public class Constants {
 
     public static final String FILE_PROVIDER_AUTHORITY = "com.app.mualab.fileprovider";
     // key for run time permissions
+    public final static int REQUEST_CHECK_SETTINGS_GPS = 96;
+    public static final int REQUEST_MULTIPLE_PERMISSIONS = 97;
+    public static final int REQUEST_MULTIPLE_CAMERA_PERMISSIONS = 98;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public static final int REQUEST_CODE_PICK_CONTACTS = 100;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 101;

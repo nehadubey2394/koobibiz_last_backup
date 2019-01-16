@@ -384,26 +384,33 @@
             android:name=".modules.business_setup.certificate.ZoomCertificateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack" />
-        <activity android:name=".modules.business_setup.payment_setup.PaymentSetupActivity"
+        <activity
+            android:name=".modules.business_setup.payment_setup.PaymentSetupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
-        <activity android:name=".modules.business_setup.voucher_code.VoucherCodeActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.voucher_code.VoucherCodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
-        <activity android:name=".modules.business_setup.voucher_code.AddVoucherCodeActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.business_setup.voucher_code.AddVoucherCodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
-
-        <activity android:name=".modules.base.BaseActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.base.BaseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
-
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".modules.new_booking.activity.PendingBookingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".modules.new_booking.activity.BookingDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />

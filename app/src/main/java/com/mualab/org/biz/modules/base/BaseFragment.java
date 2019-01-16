@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.mualab.org.biz.application.Mualab;
+import com.mualab.org.biz.data.AppDataManager;
+
 public class BaseFragment extends Fragment {
 
     private BaseActivity mActivity;
@@ -27,9 +30,9 @@ public class BaseFragment extends Fragment {
         return mActivity;
     }
 
-    /*protected AppDataManager getDataManager() {
+    protected AppDataManager getDataManager() {
         return Mualab.getDataManager();
-    }*/
+    }
 
     protected void hideKeyboard() {
         if (mActivity != null) {

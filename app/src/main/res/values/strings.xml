@@ -232,6 +232,7 @@
     <string name="no_data_available">No Result Found</string>
     <string name="there_are_no_available_slots_please_select_another_day">There are no available slots. Please select another day.</string>
     <string name="appoinment_info">Appointment Info :</string>
+    <string name="appoinment_info2">Appointment Info</string>
     <string name="appoinment">Appointment</string>
     <string name="today">Today</string>
     <string name="pending">Pending</string>
@@ -250,7 +251,7 @@
     <string name="add">Add</string>
 
     <!--Booking detail-->
-    <string name="text_location">Location</string>
+    <string name="location">Location</string>
     <string name="payment_details">Payment Details</string>
     <string name="booking_status">Booking Status</string>
     <string name="text_services">Services</string>
@@ -394,6 +395,13 @@
     <string name="service_cateory">Service Category</string>
     <string name="break_between_appointments">Break Between Appointments</string>
     <string name="business_operation_hours">Business Operation Hours</string>
+    <string name="customer_info">Customer Info</string>
+    <string name="service">Service</string>
+    <string name="status">Status</string>
+    <string name="payment_info">Payment Info</string>
+    <string name="start">Start</string>
+    <string name="date_amp_time"><![CDATA[Date & Time]]></string>
+    <string name="service_price">Service price</string>
     <string name="enter_business_email">Enter Business Email</string>
     <string name="enter_business_address">Enter Business Address</string>
 

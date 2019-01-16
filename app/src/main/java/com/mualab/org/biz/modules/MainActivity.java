@@ -1,14 +1,12 @@
 package com.mualab.org.biz.modules;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,14 +34,12 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
 import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MySnackBar;
-import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.Address;
 import com.mualab.org.biz.model.BusinessDay;
 import com.mualab.org.biz.model.BusinessProfile;
@@ -54,6 +50,7 @@ import com.mualab.org.biz.modules.base.BaseActivity;
 import com.mualab.org.biz.modules.booking.fragments.AddFragment;
 import com.mualab.org.biz.modules.booking.listner.OnRefreshListener;
 import com.mualab.org.biz.modules.business_setup.BaseBusinessSetupFragment;
+import com.mualab.org.biz.modules.new_booking.activity.PendingBookingActivity;
 import com.mualab.org.biz.modules.new_booking.adapter.FilterMenuAdapter;
 import com.mualab.org.biz.modules.new_booking.fragment.BookingsFragment;
 import com.mualab.org.biz.modules.new_booking.model.StaffFilter;
@@ -65,6 +62,7 @@ import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
+import com.mualab.org.biz.util.PermissionUtils;
 import com.mualab.org.biz.util.network.NetworkChangeReceiver;
 
 import org.json.JSONArray;
@@ -77,9 +75,9 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements View.OnClickListener,OnRefreshListener {
     private Session session;
     private User user;
-    private  long mLastClickTime = 0;
+    private long mLastClickTime = 0;
     private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnNotification,ibtnUser;
-    private ImageView ivHeaderBack, imgNotif, imgMenu;
+    private ImageView ivHeaderBack, imgNotif, imgRight;
     private ImageView ivDropDown;
     private TextView tvHeaderTitle;
     private int clickedId = 0;
@@ -108,28 +106,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         setContentView(R.layout.activity_main);
         session = new Session(this);
         user = session.getUser();
+
         // progress_bar = findViewById(R.id.progress_bar);
         initView();
 
-        final NoConnectionDialog network =  new NoConnectionDialog(MainActivity.this, new NoConnectionDialog.Listner() {
-            @Override
-            public void onNetworkChange(Dialog dialog, boolean isConnected) {
-                if(isConnected){
-                    dialog.dismiss();
-                }
+        final NoConnectionDialog network = new NoConnectionDialog(MainActivity.this, (dialog, isConnected) -> {
+            if (isConnected) {
+                dialog.dismiss();
             }
         });
 
         NetworkChangeReceiver networkChangeReceiver = new NetworkChangeReceiver();
-        networkChangeReceiver.setListner(new NetworkChangeReceiver.Listner() {
-            @Override
-            public void onNetworkChange(boolean isConnected) {
-                if(isConnected){
-                    network.dismiss();
-                }else network.show();
-            }
+        networkChangeReceiver.setListner(isConnected -> {
+            if (isConnected) {
+                network.dismiss();
+            } else network.show();
         });
 
+        initLocation();
+    }
+
+    private void initLocation() {
+        new Thread(() -> {
+            final boolean isPermissionAllow = PermissionUtils.checkLocationPermission(getActivity());
+
+            runOnUiThread(() -> {
+                if (isPermissionAllow && Mualab.currentLat != 0.0) {
+                    updateLocation();
+                }
+            });
+        }).start();
     }
 
     private void initView() {
@@ -143,12 +149,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
         ivDropDown = findViewById(R.id.ivDropDown);
         imgNotif = findViewById(R.id.imgNotif);
-        imgMenu = findViewById(R.id.imgMenu);
+        imgRight = findViewById(R.id.imgRight);
         // tv_msg = findViewById(R.id.tv_msg);
         ibtnBookings.setImageResource(R.drawable.active_calender_ico);
         spBizName = findViewById(R.id.spBizName);
 
-        setOnClickListener(ibtnBookings, ibtnChart, ibtnAdd, ibtnNotification, ibtnUser, ivHeaderBack, imgNotif, imgMenu);
+        setOnClickListener(ibtnBookings, ibtnChart, ibtnAdd, ibtnNotification, ibtnUser, ivHeaderBack, imgNotif, imgRight);
 
         int index = Mualab.getInstance().getBusinessProfileSession().getStepIndex();
 
@@ -408,52 +414,48 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 break;
 
             case R.id.imgNotif:
-                MyToast.getInstance(this).showSmallMessage(getString(R.string.under_development));
-                //startActivity(new Intent(this, PendingBookingActivity.class));
+                startActivity(new Intent(this, PendingBookingActivity.class));
                 break;
 
-            case R.id.imgMenu:
-                if (!user.businessType.equals("independent")) {
-                    int[] point = new int[2];
+            case R.id.imgRight:
+                //user type business then open popupFilter
+                /*if (!user.businessType.equals("independent")) {
 
-                    // Get the x, y location and store it in the location[] array
-                    // location[0] = x, location[1] = y.
-                    imgMenu.getLocationOnScreen(point);
-
-                    //Initialize the Point with x, and y positions
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point p = new Point();
-                    display.getSize(p);
-                    p.x = point[0];
-                    p.y = point[1];
-
-                    popupFilter(p);
                 } else {
-                    //imgNotif or //use call on click
-                    MyToast.getInstance(this).showSmallMessage(getString(R.string.under_development));
-                }
+                    startActivity(new Intent(this, PendingBookingActivity.class));
+                }*/
+                int[] point = new int[2];
+
+                // Get the x, y location and store it in the location[] array
+                // location[0] = x, location[1] = y.
+                imgRight.getLocationOnScreen(point);
+
+                //Initialize the Point with x, and y positions
+                Display display = getWindowManager().getDefaultDisplay();
+                Point p = new Point();
+                display.getSize(p);
+                p.x = point[0];
+                p.y = point[1];
+
+                popupFilter(p);
                 break;
         }
     }
 
     private void setInactiveTab(){
-        spBizName.setVisibility(clickedId == 5 ? View.VISIBLE : View.GONE);
+        spBizName.setVisibility(View.GONE);
         Mualab.getInstance().cancelAllPendingRequests();
 
         if (clickedId == 1) {
+            imgNotif.setVisibility(View.VISIBLE);
             if (!user.businessType.equals("independent")) {
-                imgNotif.setImageDrawable(getResources().getDrawable(R.drawable.ic_notification));
-                imgMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
-                imgNotif.setVisibility(View.VISIBLE);
-                imgMenu.setVisibility(View.VISIBLE);
+                imgRight.setVisibility(View.VISIBLE);
             } else {
-                imgNotif.setVisibility(View.GONE);
-                imgMenu.setVisibility(View.VISIBLE);
-                imgMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_notification));
+                imgRight.setVisibility(View.GONE);
             }
         } else {
             imgNotif.setVisibility(View.GONE);
-            imgMenu.setVisibility(View.GONE);
+            imgRight.setVisibility(View.GONE);
         }
 
         ibtnBookings.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_calender_ico));
@@ -476,20 +478,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 if (locationDetector.isLocationEnabled(MainActivity.this) &&
                         locationDetector.checkLocationPermission(MainActivity.this)) {
 
-                    mFusedLocationClient.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                double latitude = location.getLatitude();
-                                double longitude = location.getLongitude();
-                                Mualab.currentLng = latitude;
-                                Mualab.currentLng = longitude;
+                    mFusedLocationClient.getLastLocation().addOnSuccessListener(MainActivity.this, location -> {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+                            Mualab.currentLng = latitude;
+                            Mualab.currentLng = longitude;
 
-                                if (lng.equals("") && lat.equals("")){
-                                    lat = String.valueOf(latitude);
-                                    lng = String.valueOf(longitude);
-                                }
+                            if (lng.equals("") && lat.equals("")) {
+                                lat = String.valueOf(latitude);
+                                lng = String.valueOf(longitude);
                             }
                         }
                     });
@@ -513,7 +512,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
+           /* case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -525,7 +524,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     //replaceFragment(BookingsFragment.newInstance(), false);
                     ibtnBookings.callOnClick();
                 }
-            }
+            }*/
 
         }
     }
@@ -543,12 +542,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
             doubleBackToExitPressedOnce = true;
             //Toast.makeText(this, "Click again to exit", Toast.LENGTH_SHORT).show();
             MySnackBar.showSnackbar(this, findViewById(R.id.lyCoordinatorLayout), "Click again to exit");
-            handler.postDelayed(runnable = new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
+            handler.postDelayed(runnable = () -> doubleBackToExitPressedOnce = false, 2000);
 
         } else {
             handler.removeCallbacks(runnable);
@@ -562,6 +556,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         //  frag.refreshData(true);
     }
 
+    //Todo create base popup class
     private void popupFilter(Point p) {
 
         try {
@@ -596,14 +591,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                 OFFSET_Y = 48;
             }
 
-
             popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
             RecyclerView rvStaff = layout.findViewById(R.id.rvStaff);
             Button btnAllStaff = layout.findViewById(R.id.btnAllStaff);
 
             btnAllStaff.setOnClickListener(v -> {
                 popupWindow.dismiss();
-                imgMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
+                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter));
                 arrayList.clear();
                 arrayList.addAll(getTempStaffList());
                 popupWindowOptionClicks("All Staff");
@@ -649,7 +643,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         arrayList.add(staffFilter);
 
         staffFilter = new StaffFilter();
-        staffFilter.username = "Staff 7";
+        staffFilter.username = "Staff 78910114568545";
         staffFilter.isSelected = false;
         arrayList.add(staffFilter);
 
@@ -669,7 +663,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     }
                 }).show();
             } else {
-                imgMenu.setImageDrawable(getResources().getDrawable(R.drawable.ic_apply_filter));
+                imgRight.setImageDrawable(getResources().getDrawable(R.drawable.ic_apply_filter));
                 popupWindowOptionClicks(data);
             }
         });

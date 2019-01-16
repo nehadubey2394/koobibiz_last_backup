@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rlService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvServiceTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/btnService"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/service"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvServiceTxt"
+            android:layout_toStartOf="@+id/btnService"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Hair Color"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnService"
+            style="@style/My_Button_Primary"
+            android:layout_width="68dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:text="@string/start"
+            android:textSize="10sp"
+            android:visibility="gone"
+            tools:ignore="SmallSp" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/viewService"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/rlService"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray_line" />
+
+    <TextView
+        android:id="@+id/tvPriceTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewService"
+
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/service_price"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvPriceTxt"
+
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="$100"
+        android:textColor="@color/gray"
+        android:textSize="14sp" />
+
+    <View
+        android:id="@+id/viewPrice"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/tvPrice"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray_line" />
+
+    <TextView
+        android:id="@+id/tvDateTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewPrice"
+
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/date_amp_time"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDateTxt"
+
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="28/11/2018 3:30pm - 4:00pm"
+        android:textColor="@color/gray"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/tvDateTime"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray_line" />
+
+</RelativeLayout>
