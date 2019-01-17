@@ -3,22 +3,21 @@ package com.mualab.org.biz.modules.new_booking.model;
 import java.util.List;
 
 /**
- * Created by mindiii on 15/1/19.
+ * Created by mindiii on 16/1/19.
  */
 
-public final class BookingHistory {
+public final class BookingDetail {
+
 
     /**
      * status : success
      * message : ok
-     * "businessType":"business"
-     * data : [{"_id":2,"bookingDate":"2019-01-16","bookingType":1,"bookingTime":"10:00 AM","bookStatus":"0","location":"MINDIII Systems Pvt. Ltd., 502, 503 & 504 Krishna Tower Above ICICI Bank, Main Rd, Brajeshwari Extension, Pipliyahana, Indore, Madhya Pradesh 452016, India","paymentType":2,"paymentStatus":0,"timeCount":600,"artistId":5,"totalPrice":"68","userDetail":[{"_id":1,"userName":"tester","profileImage":"http://koobi.co.uk:3000/uploads/profile/1547528830567.jpg"}],"bookingInfo":[{"_id":2,"bookingPrice":"34","serviceId":1,"subServiceId":1,"artistServiceId":6,"bookingDate":"2019-01-15","startTime":"05:20 PM","endTime":"06:30 PM","artistServiceName":"mango","staffId":5,"staffName":"deepu","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":5,"companyName":"development","companyImage":"http://koobi.co.uk:3000/uploads/profile/"},{"_id":3,"bookingPrice":"34","serviceId":1,"subServiceId":1,"artistServiceId":5,"bookingDate":"2019-01-16","startTime":"10:00 AM","endTime":"11:10 AM","artistServiceName":"apple","staffId":5,"staffName":"deepu","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":5,"companyName":"development","companyImage":"http://koobi.co.uk:3000/uploads/profile/"}]}]
+     * data : {"_id":4,"discountPrice":"0","bookingDate":"2019-01-17","customerType":"online","bookingTime":"11:00 AM","bookStatus":"0","location":"MINDIII Systems Pvt. Ltd., 502, 503 & 504 Krishna Tower Above ICICI Bank, Main Rd, Brajeshwari Extension, Pipliyahana, Indore, Madhya Pradesh 452016, India","paymentType":2,"paymentStatus":0,"voucher":"","timeCount":660,"artistId":5,"totalPrice":"34","userDetail":[{"_id":6,"userName":"tarun","profileImage":"http://koobi.co.uk:3000/uploads/profile/1547531613269.jpg"}],"artistDetail":[{"_id":5,"userName":"deepu","profileImage":""}],"bookingInfo":[{"_id":4,"bookingPrice":"34","serviceId":1,"subServiceId":1,"artistServiceId":6,"bookingDate":"2019-01-17","startTime":"11:00 AM","endTime":"12:10 PM","artistServiceName":"mango","staffId":5,"staffName":"deepu","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":5,"companyName":"development","companyImage":"http://koobi.co.uk:3000/uploads/profile/"}]}
      */
 
     private String status;
     private String message;
-    private String businessType;
-    private List<DataBean> data;
+    private DataBean data;
 
     public String getStatus() {
         return status;
@@ -36,55 +35,51 @@ public final class BookingHistory {
         this.message = message;
     }
 
-    public String getBusinessType() {
-        return businessType;
-    }
-
-    public void setBusinessType(String businessType) {
-        this.businessType = businessType;
-    }
-
-    public List<DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
     public static class DataBean {
         /**
-         * _id : 2
-         * bookingDate : 2019-01-16
+         * _id : 4
+         * discountPrice : 0
+         * bookingDate : 2019-01-17
+         * customerType : online
+         * bookingTime : 11:00 AM
+         * bookStatus : 0
          * bookingType : 1
-         * bookingTime : 10:00 AM
-         * bookStatus : 0  //0 - pending, 1- accept, 2 - reject or cancel,3 - complete
          * location : MINDIII Systems Pvt. Ltd., 502, 503 & 504 Krishna Tower Above ICICI Bank, Main Rd, Brajeshwari Extension, Pipliyahana, Indore, Madhya Pradesh 452016, India
-         * paymentType : 2 //1 - online, 2 - offline,
-         * paymentStatus : 0 //0- pending, 1- complete
-         * timeCount : 600
+         * paymentType : 2
+         * paymentStatus : 0
+         * voucher :
+         * timeCount : 660
          * artistId : 5
-         * totalPrice : 68
-         * "creationDate":"15/01/2019",
-         * "creationTime":"12:51 pm",
-         * userDetail : [{"_id":1,"userName":"tester","profileImage":"http://koobi.co.uk:3000/uploads/profile/1547528830567.jpg"}]
-         * bookingInfo : [{"_id":2,"bookingPrice":"34","serviceId":1,"subServiceId":1,"artistServiceId":6,"bookingDate":"2019-01-15","startTime":"05:20 PM","endTime":"06:30 PM","artistServiceName":"mango","staffId":5,"staffName":"deepu","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":5,"companyName":"development","companyImage":"http://koobi.co.uk:3000/uploads/profile/"},{"_id":3,"bookingPrice":"34","serviceId":1,"subServiceId":1,"artistServiceId":5,"bookingDate":"2019-01-16","startTime":"10:00 AM","endTime":"11:10 AM","artistServiceName":"apple","staffId":5,"staffName":"deepu","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":5,"companyName":"development","companyImage":"http://koobi.co.uk:3000/uploads/profile/"}]
+         * totalPrice : 34
+         * userDetail : [{"_id":6,"userName":"tarun","profileImage":"http://koobi.co.uk:3000/uploads/profile/1547531613269.jpg"}]
+         * artistDetail : [{"_id":5,"userName":"deepu","profileImage":""}]
+         * bookingInfo : [{"_id":4,"bookingPrice":"34","serviceId":1,"subServiceId":1,"artistServiceId":6,"bookingDate":"2019-01-17","startTime":"11:00 AM","endTime":"12:10 PM","artistServiceName":"mango","staffId":5,"staffName":"deepu","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":5,"companyName":"development","companyImage":"http://koobi.co.uk:3000/uploads/profile/"}]
          */
 
         private int _id;
+        private String discountPrice;
         private String bookingDate;
-        private int bookingType;
+        private String bookingType;
+        private String customerType;
         private String bookingTime;
         private String bookStatus;
         private String location;
         private int paymentType;
         private int paymentStatus;
+        private String voucher;
         private int timeCount;
         private int artistId;
         private String totalPrice;
-        private String creationDate;
-        private String creationTime;
         private List<UserDetailBean> userDetail;
+        private List<ArtistDetailBean> artistDetail;
         private List<BookingInfoBean> bookingInfo;
 
         public int get_id() {
@@ -95,6 +90,14 @@ public final class BookingHistory {
             this._id = _id;
         }
 
+        public String getDiscountPrice() {
+            return discountPrice;
+        }
+
+        public void setDiscountPrice(String discountPrice) {
+            this.discountPrice = discountPrice;
+        }
+
         public String getBookingDate() {
             return bookingDate;
         }
@@ -103,12 +106,20 @@ public final class BookingHistory {
             this.bookingDate = bookingDate;
         }
 
-        public int getBookingType() {
+        public String getBookingType() {
             return bookingType;
         }
 
-        public void setBookingType(int bookingType) {
+        public void setBookingType(String bookingType) {
             this.bookingType = bookingType;
+        }
+
+        public String getCustomerType() {
+            return customerType;
+        }
+
+        public void setCustomerType(String customerType) {
+            this.customerType = customerType;
         }
 
         public String getBookingTime() {
@@ -151,6 +162,14 @@ public final class BookingHistory {
             this.paymentStatus = paymentStatus;
         }
 
+        public String getVoucher() {
+            return voucher;
+        }
+
+        public void setVoucher(String voucher) {
+            this.voucher = voucher;
+        }
+
         public int getTimeCount() {
             return timeCount;
         }
@@ -175,28 +194,20 @@ public final class BookingHistory {
             this.totalPrice = totalPrice;
         }
 
-        public String getCreationDate() {
-            return creationDate;
-        }
-
-        public void setCreationDate(String creationDate) {
-            this.creationDate = creationDate;
-        }
-
-        public String getCreationTime() {
-            return creationTime;
-        }
-
-        public void setCreationTime(String creationTime) {
-            this.creationTime = creationTime;
-        }
-
         public List<UserDetailBean> getUserDetail() {
             return userDetail;
         }
 
         public void setUserDetail(List<UserDetailBean> userDetail) {
             this.userDetail = userDetail;
+        }
+
+        public List<ArtistDetailBean> getArtistDetail() {
+            return artistDetail;
+        }
+
+        public void setArtistDetail(List<ArtistDetailBean> artistDetail) {
+            this.artistDetail = artistDetail;
         }
 
         public List<BookingInfoBean> getBookingInfo() {
@@ -209,9 +220,45 @@ public final class BookingHistory {
 
         public static class UserDetailBean {
             /**
-             * _id : 1
-             * userName : tester
-             * profileImage : http://koobi.co.uk:3000/uploads/profile/1547528830567.jpg
+             * _id : 6
+             * userName : tarun
+             * profileImage : http://koobi.co.uk:3000/uploads/profile/1547531613269.jpg
+             */
+
+            private int _id;
+            private String userName;
+            private String profileImage;
+
+            public int get_id() {
+                return _id;
+            }
+
+            public void set_id(int _id) {
+                this._id = _id;
+            }
+
+            public String getUserName() {
+                return userName;
+            }
+
+            public void setUserName(String userName) {
+                this.userName = userName;
+            }
+
+            public String getProfileImage() {
+                return profileImage;
+            }
+
+            public void setProfileImage(String profileImage) {
+                this.profileImage = profileImage;
+            }
+        }
+
+        public static class ArtistDetailBean {
+            /**
+             * _id : 5
+             * userName : deepu
+             * profileImage :
              */
 
             private int _id;
@@ -245,14 +292,14 @@ public final class BookingHistory {
 
         public static class BookingInfoBean {
             /**
-             * _id : 2
+             * _id : 4
              * bookingPrice : 34
              * serviceId : 1
              * subServiceId : 1
              * artistServiceId : 6
-             * bookingDate : 2019-01-15
-             * startTime : 05:20 PM
-             * endTime : 06:30 PM
+             * bookingDate : 2019-01-17
+             * startTime : 11:00 AM
+             * endTime : 12:10 PM
              * artistServiceName : mango
              * staffId : 5
              * staffName : deepu

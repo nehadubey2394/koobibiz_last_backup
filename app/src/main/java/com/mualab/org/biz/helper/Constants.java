@@ -55,5 +55,6 @@ public class Constants {
 
     public static final String TIMESTAMP_FORMAT = "dd/MM/yyyy";
     public static final String SERVER_TIMESTAMP_FORMAT = "yyyy-MM-dd";
+    public static final String BOOKING_ID = "bookingId";
 
 }

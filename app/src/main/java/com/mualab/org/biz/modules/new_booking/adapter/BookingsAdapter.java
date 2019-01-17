@@ -58,13 +58,17 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Picasso.with(holder.ivProfilePic.getContext()).load(mainBean.getUserDetail().get(0).getProfileImage()).placeholder(R.drawable.defoult_user_img).into(holder.ivProfilePic);
 
         holder.tvUserName.setText(mainBean.getUserDetail().get(0).getUserName());
-        holder.tvName.setText(mainBean.getBookingInfo().get(0).getStaffName());
-        holder.tvService.setText(mainBean.getBookingInfo().get(0).getArtistServiceName());
-        String serviceDate = "" + mainBean.getBookingInfo().get(0).getBookingDate() + " " +
-                mainBean.getBookingInfo().get(0).getStartTime() + " " + mainBean.getBookingInfo().get(0).getEndTime();
-        holder.tvServiceDate.setText(serviceDate);
         holder.tvBDate.setText(mainBean.getCreationDate());
         holder.tvBTime.setText(mainBean.getCreationTime());
+
+        try {
+            holder.tvName.setText(mainBean.getBookingInfo().get(0).getStaffName());
+            holder.tvService.setText(mainBean.getBookingInfo().get(0).getArtistServiceName());
+            String serviceDate = "" + mainBean.getBookingInfo().get(0).getBookingDate() + " " +
+                    mainBean.getBookingInfo().get(0).getStartTime() + " " + mainBean.getBookingInfo().get(0).getEndTime();
+            holder.tvServiceDate.setText(serviceDate);
+        } catch (Exception ignored) {
+        }
     }
 
     public void showLoading(boolean status) {

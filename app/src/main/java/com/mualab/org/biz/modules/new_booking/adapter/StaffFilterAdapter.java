@@ -9,16 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
-import com.mualab.org.biz.modules.new_booking.model.StaffFilter;
+import com.mualab.org.biz.model.booking.Staff;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class FilterMenuAdapter extends RecyclerView.Adapter<FilterMenuAdapter.ViewHolder> {
+public class StaffFilterAdapter extends RecyclerView.Adapter<StaffFilterAdapter.ViewHolder> {
     private static int lastPos = -1;
-    private ArrayList<StaffFilter> arrayList;
+    private List<Staff> arrayList;
     private Listener listener;
 
-    public FilterMenuAdapter(ArrayList<StaffFilter> arrayList, Listener listener) {
+    public StaffFilterAdapter(List<Staff> arrayList, Listener listener) {
         this.arrayList = arrayList;
         this.listener = listener;
     }
@@ -33,11 +34,15 @@ public class FilterMenuAdapter extends RecyclerView.Adapter<FilterMenuAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        StaffFilter bean = arrayList.get(position);
-        holder.tvUserName.setText(bean.username);
+        Staff bean = arrayList.get(position);
+        holder.tvUserName.setText(bean.staffName);
 
-        if (bean.isSelected)
+        Picasso.with(holder.ivProfilePic.getContext()).load(bean.staffImage).placeholder(R.drawable.defoult_user_img).into(holder.ivProfilePic);
+
+        if (bean.isSelected) {
+            lastPos = holder.getAdapterPosition();
             holder.tvUserName.setTextColor(holder.tvUserName.getContext().getResources().getColor(R.color.colorPrimary));
+        }
         else
             holder.tvUserName.setTextColor(holder.tvUserName.getContext().getResources().getColor(R.color.text_color));
     }
@@ -68,7 +73,8 @@ public class FilterMenuAdapter extends RecyclerView.Adapter<FilterMenuAdapter.Vi
         @Override
         public void onClick(View v) {
             if (getAdapterPosition() != -1) {
-                if (lastPos != -1) {
+                int size = arrayList.size();
+                if (lastPos != -1 && lastPos <= size) {
                     arrayList.get(lastPos).isSelected = false;
                     notifyItemChanged(lastPos);
                 }
