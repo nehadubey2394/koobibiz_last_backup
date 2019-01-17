@@ -88,6 +88,8 @@ public class PendingBookingActivity extends BaseActivity implements View.OnClick
             spBkType = findViewById(R.id.spBkType);
 
             bkTypeList = new ArrayList<>();
+            artistStaffList = new ArrayList<>();
+
             BookingFilterModel filterModel = new BookingFilterModel();
             filterModel.displayName = "All Type";
             filterModel.name = "";
@@ -111,7 +113,6 @@ public class PendingBookingActivity extends BaseActivity implements View.OnClick
         if (!user.businessType.equals("independent")) {
             spBkStaff = findViewById(R.id.spBkStaff);
             //spBkStaff.setVisibility(View.VISIBLE);
-            artistStaffList = new ArrayList<>();
             apiForGetArtistStaff();
         }
     }
