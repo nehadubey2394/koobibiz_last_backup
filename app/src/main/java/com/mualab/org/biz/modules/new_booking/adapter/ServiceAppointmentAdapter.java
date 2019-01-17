@@ -6,10 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
 import com.mualab.org.biz.modules.base.ItemClickListener;
+import com.mualab.org.biz.modules.new_booking.model.BookingDetail;
 
 import java.util.List;
 
@@ -23,14 +25,14 @@ import java.util.List;
 public class ServiceAppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEWTYPE_LOADER = 2;
-    private List<String> list;
+    private List<BookingDetail.DataBean.BookingInfoBean> list;
     private boolean showLoader;
     private ItemClickListener clickListener;
 
     private int lastPos = -1;
     private boolean isClick = false;
 
-    public ServiceAppointmentAdapter(List<String> list, ItemClickListener clickListener) {
+    public ServiceAppointmentAdapter(List<BookingDetail.DataBean.BookingInfoBean> list, ItemClickListener clickListener) {
         this.list = list;
         this.clickListener = clickListener;
     }
@@ -48,6 +50,13 @@ public class ServiceAppointmentAdapter extends RecyclerView.Adapter<RecyclerView
         }
         ViewHolder holder = ((ViewHolder) rvHolder);
 
+        BookingDetail.DataBean.BookingInfoBean mainBean = list.get(position);
+
+        holder.tvService.setText(mainBean.getArtistServiceName());
+        holder.tvPrice.setText(String.format("%s", holder.tvPrice.getContext().getString(R.string.pound_symbol).concat(mainBean.getBookingPrice())));
+        String serviceDate = "" + mainBean.getBookingDate() + " " +
+                mainBean.getStartTime() + " " + mainBean.getEndTime();
+        holder.tvDateTime.setText(serviceDate);
     }
 
     public void showLoading(boolean status) {
@@ -81,17 +90,21 @@ public class ServiceAppointmentAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemCount() {
-        //return list.size();
-        return 3;
+        return list.size();
     }
 
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
+        private TextView tvService, tvPrice, tvDateTime;
+
         ViewHolder(@NonNull View view) {
             super(view);
 
+            tvService = view.findViewById(R.id.tvService);
+            tvPrice = view.findViewById(R.id.tvPrice);
+            tvDateTime = view.findViewById(R.id.tvDateTime);
             view.setOnClickListener(this);
         }
 

@@ -10,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
 import com.mualab.org.biz.modules.new_booking.model.BookingHistory;
+import com.mualab.org.biz.util.CalanderUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -59,8 +61,10 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         try {
             holder.tvStaffName.setText(mainBean.getBookingInfo().get(0).getStaffName());
             holder.tvService.setText(mainBean.getBookingInfo().get(0).getArtistServiceName());
-            String serviceDate = "" + mainBean.getBookingInfo().get(0).getBookingDate() + " " +
-                    mainBean.getBookingInfo().get(0).getStartTime() + " " + mainBean.getBookingInfo().get(0).getEndTime();
+            String bDate = mainBean.getBookingInfo().get(0).getBookingDate();
+            String date = bDate.contains("-") ? CalanderUtils.formatDate(bDate, Constants.SERVER_TIMESTAMP_FORMAT, Constants.TIMESTAMP_FORMAT) : bDate;
+            String serviceDate = date + " " +
+                    mainBean.getBookingInfo().get(0).getStartTime().toLowerCase() + " " + mainBean.getBookingInfo().get(0).getEndTime().toLowerCase();
             holder.tvServiceDate.setText(serviceDate);
         } catch (Exception ignored) {
         }
@@ -101,6 +105,8 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
     public interface ClickListener {
+        void onItemClick(int pos);
+
         void onAcceptClick(int pos);
 
         void onRejectClick(int pos);
@@ -132,6 +138,7 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             btnAccept.setOnClickListener(this);
             btnReject.setOnClickListener(this);
             btnReSchedule.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -151,6 +158,11 @@ public class PendBookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 case R.id.btnReSchedule:
                     if (getAdapterPosition() != -1 && clickListener != null)
                         clickListener.onRescheduleClick(getAdapterPosition());
+                    break;
+
+                default:
+                    if (getAdapterPosition() != -1 && clickListener != null)
+                        clickListener.onItemClick(getAdapterPosition());
                     break;
             }
         }

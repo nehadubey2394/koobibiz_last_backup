@@ -1,5 +1,6 @@
 package com.mualab.org.biz.modules.new_booking.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.google.gson.Gson;
 import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.dialogs.NoConnectionDialog;
+import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Staff;
@@ -126,6 +128,13 @@ public class PendingBookingActivity extends BaseActivity implements View.OnClick
 
         pendingBookingHistory = new ArrayList<>();
         pendBookingsAdapter = new PendBookingsAdapter(pendingBookingHistory, new PendBookingsAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int pos) {
+                Intent intent = new Intent(getActivity(), BookingDetailActivity.class);
+                intent.putExtra(Constants.BOOKING_ID, String.valueOf(pendingBookingHistory.get(pos).get_id()));
+                startActivity(intent);
+            }
+
             @Override
             public void onAcceptClick(int pos) {
                 MyToast.getInstance(getActivity()).showSmallMessage(getString(R.string.under_development));

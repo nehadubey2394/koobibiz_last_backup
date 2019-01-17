@@ -408,5 +408,6 @@
     <string name="offlinePayment">Offline Payment</string>
     <string name="payment_method">Payment Method</string>
     <string name="total_amount">Total Amount</string>
+    <string name="view_more">...view more</string>
 
 </resources>

@@ -349,9 +349,12 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                 selectedDate = CalanderUtils.formatDate(CalanderUtils.getCurrentDate(), Constants.SERVER_TIMESTAMP_FORMAT, Constants.SERVER_TIMESTAMP_FORMAT);
                 dayId = cal.get(GregorianCalendar.DAY_OF_WEEK) - 2;
 
-                if (isTodayClick)
-                    doGetArtistBookingHistory(selectedDate, bkTempList.get(spBkDate.getSelectedItemPosition()).name, lastStaffId, String.valueOf(pSession.getServiceType()));
-                else isTodayClick = true;
+                if (isTodayClick) {
+                    bkTempList.clear();
+                    bkTempList.addAll(bkTodayDate);
+                    bkDateAdapter.notifyDataSetChanged();
+                    spBkDate.setSelection(1);
+                } else isTodayClick = true;
                 break;
 
             case R.id.btnAdd:
@@ -444,11 +447,13 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                 if (bookingHistory.getStatus().equalsIgnoreCase("success")) {
                     bookingHistoryList.clear();
                     bookingHistoryList.addAll(bookingHistory.getData());
+                    bookingsAdapter.isAllBooking = type.equalsIgnoreCase("All Booking");
                     bookingsAdapter.notifyDataSetChanged();
                     updateUI(bookingHistory.getBusinessType());
                 } else {
                     MyToast.getInstance(getActivity()).showSmallMessage(bookingHistory.getMessage());
                     bookingHistoryList.clear();
+                    bookingsAdapter.isAllBooking = type.equalsIgnoreCase("All Booking");
                     bookingsAdapter.notifyDataSetChanged();
                     updateUI(bookingHistory.getBusinessType());
                 }

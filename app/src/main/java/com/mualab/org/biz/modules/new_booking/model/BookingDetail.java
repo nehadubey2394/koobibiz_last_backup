@@ -12,7 +12,7 @@ public final class BookingDetail {
     /**
      * status : success
      * message : ok
-     * data : {"_id":4,"discountPrice":"0","bookingDate":"2019-01-17","customerType":"online","bookingTime":"11:00 AM","bookStatus":"0","location":"MINDIII Systems Pvt. Ltd., 502, 503 & 504 Krishna Tower Above ICICI Bank, Main Rd, Brajeshwari Extension, Pipliyahana, Indore, Madhya Pradesh 452016, India","paymentType":2,"paymentStatus":0,"voucher":"","timeCount":660,"artistId":5,"totalPrice":"34","userDetail":[{"_id":6,"userName":"tarun","profileImage":"http://koobi.co.uk:3000/uploads/profile/1547531613269.jpg"}],"artistDetail":[{"_id":5,"userName":"deepu","profileImage":""}],"bookingInfo":[{"_id":4,"bookingPrice":"34","serviceId":1,"subServiceId":1,"artistServiceId":6,"bookingDate":"2019-01-17","startTime":"11:00 AM","endTime":"12:10 PM","artistServiceName":"mango","staffId":5,"staffName":"deepu","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":5,"companyName":"development","companyImage":"http://koobi.co.uk:3000/uploads/profile/"}]}
+     * data : {"_id":26,"discountPrice":"0","bookingDate":"2019-01-18","customerType":"online","bookingType":1,"bookingTime":"10:50 AM","bookStatus":"0","location":"MINDIII Systems Pvt. Ltd. 502, 503 & 504 Krishna Tower Above ICICI Bank, Main Rd, Brajeshwari Extension","paymentType":2,"paymentStatus":0,"voucher":{"discountType":"2","status":"1","_id":"4","startDate":"2019-01-16","endDate":"2019-02-16","voucherCode":"TE41@62","artistId":"5","__v":"0","amount":"12","deleteStatus":"1"},"timeCount":650,"artistId":8,"totalPrice":"20","userDetail":[{"_id":10,"userName":"jamesfb","profileImage":"http://koobi.co.uk:3000/uploads/profile/1547559625230.jpg"}],"artistDetail":[{"_id":8,"userName":"hemant","profileImage":""}],"bookingInfo":[{"_id":30,"bookingPrice":"20","serviceId":1,"subServiceId":1,"artistServiceId":11,"bookingDate":"2019-01-18","startTime":"10:50 AM","endTime":"11:10 AM","artistServiceName":"f1","staffId":8,"staffName":"hemant","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":8,"companyName":"Sharma Saloon","companyImage":"http://koobi.co.uk:3000/uploads/profile/"}]}
      */
 
     private String status;
@@ -45,36 +45,36 @@ public final class BookingDetail {
 
     public static class DataBean {
         /**
-         * _id : 4
+         * _id : 26
          * discountPrice : 0
-         * bookingDate : 2019-01-17
+         * bookingDate : 2019-01-18
          * customerType : online
-         * bookingTime : 11:00 AM
-         * bookStatus : 0
          * bookingType : 1
-         * location : MINDIII Systems Pvt. Ltd., 502, 503 & 504 Krishna Tower Above ICICI Bank, Main Rd, Brajeshwari Extension, Pipliyahana, Indore, Madhya Pradesh 452016, India
+         * bookingTime : 10:50 AM
+         * bookStatus : 0
+         * location : MINDIII Systems Pvt. Ltd. 502, 503 & 504 Krishna Tower Above ICICI Bank, Main Rd, Brajeshwari Extension
          * paymentType : 2
          * paymentStatus : 0
-         * voucher :
-         * timeCount : 660
-         * artistId : 5
-         * totalPrice : 34
-         * userDetail : [{"_id":6,"userName":"tarun","profileImage":"http://koobi.co.uk:3000/uploads/profile/1547531613269.jpg"}]
-         * artistDetail : [{"_id":5,"userName":"deepu","profileImage":""}]
-         * bookingInfo : [{"_id":4,"bookingPrice":"34","serviceId":1,"subServiceId":1,"artistServiceId":6,"bookingDate":"2019-01-17","startTime":"11:00 AM","endTime":"12:10 PM","artistServiceName":"mango","staffId":5,"staffName":"deepu","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":5,"companyName":"development","companyImage":"http://koobi.co.uk:3000/uploads/profile/"}]
+         * voucher : {"discountType":"2","status":"1","_id":"4","startDate":"2019-01-16","endDate":"2019-02-16","voucherCode":"TE41@62","artistId":"5","__v":"0","amount":"12","deleteStatus":"1"}
+         * timeCount : 650
+         * artistId : 8
+         * totalPrice : 20
+         * userDetail : [{"_id":10,"userName":"jamesfb","profileImage":"http://koobi.co.uk:3000/uploads/profile/1547559625230.jpg"}]
+         * artistDetail : [{"_id":8,"userName":"hemant","profileImage":""}]
+         * bookingInfo : [{"_id":30,"bookingPrice":"20","serviceId":1,"subServiceId":1,"artistServiceId":11,"bookingDate":"2019-01-18","startTime":"10:50 AM","endTime":"11:10 AM","artistServiceName":"f1","staffId":8,"staffName":"hemant","staffImage":"http://koobi.co.uk:3000/uploads/profile/","companyId":8,"companyName":"Sharma Saloon","companyImage":"http://koobi.co.uk:3000/uploads/profile/"}]
          */
 
         private int _id;
         private String discountPrice;
         private String bookingDate;
-        private String bookingType;
         private String customerType;
+        private int bookingType;
         private String bookingTime;
         private String bookStatus;
         private String location;
         private int paymentType;
         private int paymentStatus;
-        private String voucher;
+        private VoucherBean voucher;
         private int timeCount;
         private int artistId;
         private String totalPrice;
@@ -106,20 +106,20 @@ public final class BookingDetail {
             this.bookingDate = bookingDate;
         }
 
-        public String getBookingType() {
-            return bookingType;
-        }
-
-        public void setBookingType(String bookingType) {
-            this.bookingType = bookingType;
-        }
-
         public String getCustomerType() {
             return customerType;
         }
 
         public void setCustomerType(String customerType) {
             this.customerType = customerType;
+        }
+
+        public int getBookingType() {
+            return bookingType;
+        }
+
+        public void setBookingType(int bookingType) {
+            this.bookingType = bookingType;
         }
 
         public String getBookingTime() {
@@ -162,11 +162,11 @@ public final class BookingDetail {
             this.paymentStatus = paymentStatus;
         }
 
-        public String getVoucher() {
+        public VoucherBean getVoucher() {
             return voucher;
         }
 
-        public void setVoucher(String voucher) {
+        public void setVoucher(VoucherBean voucher) {
             this.voucher = voucher;
         }
 
@@ -218,11 +218,117 @@ public final class BookingDetail {
             this.bookingInfo = bookingInfo;
         }
 
+        public static class VoucherBean {
+            /**
+             * discountType : 2
+             * status : 1
+             * _id : 4
+             * startDate : 2019-01-16
+             * endDate : 2019-02-16
+             * voucherCode : TE41@62
+             * artistId : 5
+             * __v : 0
+             * amount : 12
+             * deleteStatus : 1
+             */
+
+            private String discountType;
+            private String status;
+            private String _id;
+            private String startDate;
+            private String endDate;
+            private String voucherCode = "";
+            private String artistId;
+            private String __v;
+            private String amount = "";
+            private String deleteStatus;
+
+            public String getDiscountType() {
+                return discountType;
+            }
+
+            public void setDiscountType(String discountType) {
+                this.discountType = discountType;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public String get_id() {
+                return _id;
+            }
+
+            public void set_id(String _id) {
+                this._id = _id;
+            }
+
+            public String getStartDate() {
+                return startDate;
+            }
+
+            public void setStartDate(String startDate) {
+                this.startDate = startDate;
+            }
+
+            public String getEndDate() {
+                return endDate;
+            }
+
+            public void setEndDate(String endDate) {
+                this.endDate = endDate;
+            }
+
+            public String getVoucherCode() {
+                return voucherCode;
+            }
+
+            public void setVoucherCode(String voucherCode) {
+                this.voucherCode = voucherCode;
+            }
+
+            public String getArtistId() {
+                return artistId;
+            }
+
+            public void setArtistId(String artistId) {
+                this.artistId = artistId;
+            }
+
+            public String get__v() {
+                return __v;
+            }
+
+            public void set__v(String __v) {
+                this.__v = __v;
+            }
+
+            public String getAmount() {
+                return amount;
+            }
+
+            public void setAmount(String amount) {
+                this.amount = amount;
+            }
+
+            public String getDeleteStatus() {
+                return deleteStatus;
+            }
+
+            public void setDeleteStatus(String deleteStatus) {
+                this.deleteStatus = deleteStatus;
+            }
+        }
+
         public static class UserDetailBean {
             /**
-             * _id : 6
-             * userName : tarun
-             * profileImage : http://koobi.co.uk:3000/uploads/profile/1547531613269.jpg
+             * _id : 10
+             * userName : jamesfb
+             * profileImage : http://koobi.co.uk:3000/uploads/profile/1547559625230.jpg
              */
 
             private int _id;
@@ -256,8 +362,8 @@ public final class BookingDetail {
 
         public static class ArtistDetailBean {
             /**
-             * _id : 5
-             * userName : deepu
+             * _id : 8
+             * userName : hemant
              * profileImage :
              */
 
@@ -292,20 +398,20 @@ public final class BookingDetail {
 
         public static class BookingInfoBean {
             /**
-             * _id : 4
-             * bookingPrice : 34
+             * _id : 30
+             * bookingPrice : 20
              * serviceId : 1
              * subServiceId : 1
-             * artistServiceId : 6
-             * bookingDate : 2019-01-17
-             * startTime : 11:00 AM
-             * endTime : 12:10 PM
-             * artistServiceName : mango
-             * staffId : 5
-             * staffName : deepu
+             * artistServiceId : 11
+             * bookingDate : 2019-01-18
+             * startTime : 10:50 AM
+             * endTime : 11:10 AM
+             * artistServiceName : f1
+             * staffId : 8
+             * staffName : hemant
              * staffImage : http://koobi.co.uk:3000/uploads/profile/
-             * companyId : 5
-             * companyName : development
+             * companyId : 8
+             * companyName : Sharma Saloon
              * companyImage : http://koobi.co.uk:3000/uploads/profile/
              */
 

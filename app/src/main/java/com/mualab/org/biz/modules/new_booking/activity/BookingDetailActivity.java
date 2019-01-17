@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.androidnetworking.error.ANError;
@@ -23,9 +24,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class BookingDetailActivity extends BaseActivity implements View.OnClickListener {
 
+    private ImageView ivChat, ivCall, ivAcceptNLocation, ivCancel;
+
+    private List<BookingDetail.DataBean.BookingInfoBean> appointmentList;
     private ServiceAppointmentAdapter appointmentAdapter;
     private String bookingId = "";
 
@@ -46,7 +51,8 @@ public class BookingDetailActivity extends BaseActivity implements View.OnClickL
         /*Header update End here*/
 
         RecyclerView rvServices = findViewById(R.id.rvServices);
-        appointmentAdapter = new ServiceAppointmentAdapter(new ArrayList<>(), pos -> {
+        appointmentList = new ArrayList<>();
+        appointmentAdapter = new ServiceAppointmentAdapter(appointmentList, pos -> {
 
         });
         rvServices.setAdapter(appointmentAdapter);
@@ -96,46 +102,81 @@ public class BookingDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     private void updateUI(BookingDetail bookingDetail) {
+        findViewById(R.id.rlMain).setVisibility(View.VISIBLE);
+        ivChat = findViewById(R.id.ivChat);
+        ivCall = findViewById(R.id.ivCall);
+        ivAcceptNLocation = findViewById(R.id.ivAcceptNLocation);
+        ivCancel = findViewById(R.id.ivCancel);
+        setOnClickListener(ivChat, ivCall, ivAcceptNLocation, ivCancel);
         ImageView ivProfilePic = findViewById(R.id.ivProfilePic);
         TextView tvUserName = findViewById(R.id.tvUserName);
         TextView tvStatus = findViewById(R.id.tvStatus);
         TextView tvCallType = findViewById(R.id.tvCallType);
         TextView tvAddress = findViewById(R.id.tvAddress);
         TextView tvVoucherCode = findViewById(R.id.tvVoucherCode);
+        TextView tvVoucherAmt = findViewById(R.id.tvVoucherAmt);
         TextView tvPaymentMode = findViewById(R.id.tvPaymentMode);
         TextView tvAmt = findViewById(R.id.tvAmt);
+        RelativeLayout rlVoucherCode = findViewById(R.id.rlVoucherCode);
 
+        appointmentList.addAll(bookingDetail.getData().getBookingInfo());
+        appointmentAdapter.notifyDataSetChanged();
         Picasso.with(getActivity()).load(bookingDetail.getData().getUserDetail().get(0).getProfileImage()).placeholder(R.drawable.defoult_user_img).into(ivProfilePic);
         tvUserName.setText(bookingDetail.getData().getUserDetail().get(0).getUserName());
-        tvStatus.setText(getBookingStatus(tvStatus, bookingDetail.getData().getBookStatus()));
-        tvCallType.setText(bookingDetail.getData().getBookingType().equals("1") ? getString(R.string.in_call) : getString(R.string.out_call));
+        tvStatus.setText(getBookingStatus(tvStatus, bookingDetail));
+        tvCallType.setText(bookingDetail.getData().getBookingType() == 1 ? getString(R.string.in_call) : getString(R.string.out_call));
         tvAddress.setText(bookingDetail.getData().getLocation());
-        tvVoucherCode.setText(bookingDetail.getData().getVoucher());
+        if (bookingDetail.getData().getVoucher().getVoucherCode().isEmpty()) {
+            rlVoucherCode.setVisibility(View.GONE);
+        } else {
+            rlVoucherCode.setVisibility(View.VISIBLE);
+            //1 = fixed amount & 2 = percent amount
+            if (bookingDetail.getData().getVoucher().getDiscountType().equals("1")) {
+                tvVoucherCode.setText(bookingDetail.getData().getVoucher().getVoucherCode());
+                tvVoucherAmt.setText(bookingDetail.getData().getVoucher().getAmount().concat("%"));
+            } else {
+                tvVoucherCode.setText(bookingDetail.getData().getVoucher().getVoucherCode());
+                tvVoucherAmt.setText(getString(R.string.pound).concat(bookingDetail.getData().getVoucher().getAmount()));
+            }
+
+        }
         tvPaymentMode.setText(bookingDetail.getData().getPaymentType() == 1 ? getString(R.string.onlinePayment) : getString(R.string.offlinePayment));
-        tvAmt.setText(bookingDetail.getData().getTotalPrice());
+        tvAmt.setText(getString(R.string.pound_symbol).concat(bookingDetail.getData().getTotalPrice()));
     }
 
-    private String getBookingStatus(TextView tvStatus, String bookStatus) {
+    private void setOnClickListener(View... views) {
+        for (View view : views) {
+            view.setOnClickListener(this);
+        }
+    }
+
+    private String getBookingStatus(TextView tvStatus, BookingDetail bookingDetail) {
         //0 - pending, 1- accept, 2 - reject or cancel,3 - complete
         String status = "";
-        switch (bookStatus) {
+        switch (bookingDetail.getData().getBookStatus()) {
             case "0":
                 status = "Pending";
-                tvStatus.setTextColor(getResources().getColor(R.color.colorOrange));
+                tvStatus.setTextColor(getResources().getColor(R.color.darkorange));
+                ivAcceptNLocation.setVisibility(View.VISIBLE);
+                ivAcceptNLocation.setBackground(getResources().getDrawable(R.drawable.accept_ico));
                 break;
 
             case "1":
                 status = "Confirmed";
                 tvStatus.setTextColor(getResources().getColor(R.color.text_color_green));
+                ivAcceptNLocation.setVisibility(bookingDetail.getData().getBookingType() == 2 ? View.VISIBLE : View.GONE);
+                ivAcceptNLocation.setBackground(getResources().getDrawable(R.drawable.map_ico));
                 break;
 
             case "2":
                 status = "Cancelled";
+                ivAcceptNLocation.setVisibility(View.GONE);
                 tvStatus.setTextColor(getResources().getColor(R.color.primary_red));
                 break;
 
             case "3":
                 status = "Completed";
+                ivAcceptNLocation.setVisibility(View.GONE);
                 tvStatus.setTextColor(getResources().getColor(R.color.text_color_green));
                 break;
         }
@@ -147,6 +188,22 @@ public class BookingDetailActivity extends BaseActivity implements View.OnClickL
         switch (view.getId()) {
             case R.id.ivHeaderBack:
                 onBackPressed();
+                break;
+
+            case R.id.ivChat:
+                MyToast.getInstance(getActivity()).showSmallMessage(getString(R.string.under_development));
+                break;
+
+            case R.id.ivCall:
+                MyToast.getInstance(getActivity()).showSmallMessage(getString(R.string.under_development));
+                break;
+
+            case R.id.ivAcceptNLocation:
+                MyToast.getInstance(getActivity()).showSmallMessage(getString(R.string.under_development));
+                break;
+
+            case R.id.ivCancel:
+                MyToast.getInstance(getActivity()).showSmallMessage(getString(R.string.under_development));
                 break;
         }
     }
