@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
-import com.mualab.org.biz.R;
 import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.data.AppDataManager;
 
@@ -77,8 +76,8 @@ public abstract class BaseDialog extends DialogFragment implements View.OnFocusC
                         ViewGroup.LayoutParams.WRAP_CONTENT);
             }
         }
-        if (isBottom) dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        else dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        // if (isBottom) dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        // else dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
         dialog.setCanceledOnTouchOutside(false);
 

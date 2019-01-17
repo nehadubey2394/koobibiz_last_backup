@@ -36,12 +36,14 @@ import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.model.User;
 import com.mualab.org.biz.model.booking.Staff;
+import com.mualab.org.biz.model.company_management.CompanyDetail;
 import com.mualab.org.biz.modules.base.BaseFragment;
 import com.mualab.org.biz.modules.new_booking.activity.BookingDetailActivity;
 import com.mualab.org.biz.modules.new_booking.adapter.BookingsAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.CallTypeArrayAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.MyBookingArrayAdapter;
 import com.mualab.org.biz.modules.new_booking.adapter.StaffFilterAdapter;
+import com.mualab.org.biz.modules.new_booking.dialog.CompanyDeleteAlertDialog;
 import com.mualab.org.biz.modules.new_booking.model.BookingFilterModel;
 import com.mualab.org.biz.modules.new_booking.model.BookingHistory;
 import com.mualab.org.biz.session.PreRegistrationSession;
@@ -93,6 +95,7 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
     private StaffFilterAdapter staffFilterAdapter;
     private Boolean isTodayClick = false;
     private String sCurCompId = "";
+    private CompanyDeleteAlertDialog alertDialog;
 
     public static BookingsFragment newInstance() {
 
@@ -451,6 +454,18 @@ public class BookingsFragment extends BaseFragment implements View.OnClickListen
                     bookingsAdapter.notifyDataSetChanged();
                     updateUI(bookingHistory.getBusinessType());
                 } else {
+                    //this case arise when someone delete user selected company
+                    if (bookingHistory.getMessage().equalsIgnoreCase("Company not exist")) {
+                        if (alertDialog != null) alertDialog.dismiss();
+                        alertDialog = new CompanyDeleteAlertDialog();
+                        alertDialog.setOnClickListener(pSession.getCurrentCompanyDetail().businessName, () -> {
+                            pSession.createCurrentCompanyDetail(new CompanyDetail());
+                            getBaseActivity().replaceFragment(BookingsFragment.newInstance(), false);
+                        });
+                        alertDialog.show(getChildFragmentManager());
+                        return;
+                    }
+
                     MyToast.getInstance(getActivity()).showSmallMessage(bookingHistory.getMessage());
                     bookingHistoryList.clear();
                     bookingsAdapter.isAllBooking = type.equalsIgnoreCase("All Booking");

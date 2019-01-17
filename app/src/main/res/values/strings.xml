@@ -412,7 +412,11 @@
     <string name="offlinePayment">Offline Payment</string>
     <string name="payment_method">Payment Method</string>
     <string name="total_amount">Total Amount</string>
-    <string name="view_more">...view more</string>
+    <string name="view_more">…view more</string>
     <string name="about_koobi">About Koobi</string>
+    <string name="ok">OK</string>
+    <string name="alertCompanyDelStartMsg">You are no longer available in</string>
+    <string name="alertCompanyDelLastMsg">being as a staff</string>
+    <string name="infoServiceAdd">Add your business type and services from profile setup for getting booking request</string>
 
 </resources>

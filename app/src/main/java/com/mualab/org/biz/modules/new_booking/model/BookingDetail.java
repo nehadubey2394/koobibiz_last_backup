@@ -332,8 +332,8 @@ public final class BookingDetail {
              */
 
             private int _id;
-            private String userName;
-            private String profileImage;
+            private String userName = "";
+            private String profileImage = "";
 
             public int get_id() {
                 return _id;
@@ -368,8 +368,8 @@ public final class BookingDetail {
              */
 
             private int _id;
-            private String userName;
-            private String profileImage;
+            private String userName = "";
+            private String profileImage = "";
 
             public int get_id() {
                 return _id;

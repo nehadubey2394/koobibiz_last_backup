@@ -30,7 +30,7 @@ public class BookingDetailActivity extends BaseActivity implements View.OnClickL
 
     private ImageView ivChat, ivCall, ivAcceptNLocation, ivCancel;
 
-    private List<BookingDetail.DataBean.BookingInfoBean> appointmentList;
+    private List<BookingDetail.DataBean> appointmentList;
     private ServiceAppointmentAdapter appointmentAdapter;
     private String bookingId = "";
 
@@ -119,7 +119,7 @@ public class BookingDetailActivity extends BaseActivity implements View.OnClickL
         TextView tvAmt = findViewById(R.id.tvAmt);
         RelativeLayout rlVoucherCode = findViewById(R.id.rlVoucherCode);
 
-        appointmentList.addAll(bookingDetail.getData().getBookingInfo());
+        appointmentList.add(bookingDetail.getData());
         appointmentAdapter.notifyDataSetChanged();
         Picasso.with(getActivity()).load(bookingDetail.getData().getUserDetail().get(0).getProfileImage()).placeholder(R.drawable.defoult_user_img).into(ivProfilePic);
         tvUserName.setText(bookingDetail.getData().getUserDetail().get(0).getUserName());
@@ -158,14 +158,16 @@ public class BookingDetailActivity extends BaseActivity implements View.OnClickL
                 status = "Pending";
                 tvStatus.setTextColor(getResources().getColor(R.color.darkorange));
                 ivAcceptNLocation.setVisibility(View.VISIBLE);
-                ivAcceptNLocation.setBackground(getResources().getDrawable(R.drawable.accept_ico));
+                ivAcceptNLocation.setBackground(getResources().getDrawable(R.drawable.circle_green_img));
+                ivAcceptNLocation.setImageDrawable(getResources().getDrawable(R.drawable.ic_right));
                 break;
 
             case "1":
                 status = "Confirmed";
                 tvStatus.setTextColor(getResources().getColor(R.color.text_color_green));
                 ivAcceptNLocation.setVisibility(bookingDetail.getData().getBookingType() == 2 ? View.VISIBLE : View.GONE);
-                ivAcceptNLocation.setBackground(getResources().getDrawable(R.drawable.map_ico));
+                ivAcceptNLocation.setBackground(getResources().getDrawable(R.drawable.circle_cola_img));
+                ivAcceptNLocation.setImageDrawable(getResources().getDrawable(R.drawable.ic_location_placeholder2));
                 break;
 
             case "2":

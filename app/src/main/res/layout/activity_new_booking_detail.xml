@@ -21,7 +21,7 @@
             android:id="@+id/rlMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/tvCustInfo"
@@ -46,8 +46,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/ivProfilePic"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/gradient_circle_img_with_stroke"
                     android:src="@drawable/defoult_user_img"
                     app:civ_border_color="@color/transparent"
@@ -139,11 +139,12 @@
 
                 <ImageView
                     android:id="@+id/imgLoc"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:background="@drawable/bg_white_circle_gray_strock"
-                    android:padding="5dp"
-                    app:srcCompat="@drawable/ic_edit_location"
+                    android:padding="10dp"
+                    android:tint="@color/grey"
+                    app:srcCompat="@drawable/ic_location_placeholder"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -203,11 +204,13 @@
 
                 <ImageView
                     android:id="@+id/imgVoucher"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:background="@drawable/bg_white_circle_gray_strock"
-                    android:padding="5dp"
-                    app:srcCompat="@drawable/ic_edit_location"
+                    android:padding="10dp"
+                    android:rotation="300"
+                    android:tint="@color/grey"
+                    app:srcCompat="@drawable/ic_voucher"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -267,11 +270,11 @@
 
                 <ImageView
                     android:id="@+id/imgPay"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:background="@drawable/bg_white_circle_gray_strock"
-                    android:padding="5dp"
-                    app:srcCompat="@drawable/ic_edit_location"
+                    android:padding="10dp"
+                    app:srcCompat="@drawable/ic_credit_card"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -320,11 +323,11 @@
 
                 <ImageView
                     android:id="@+id/imgAmt"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:background="@drawable/bg_white_circle_gray_strock"
-                    android:padding="5dp"
-                    app:srcCompat="@drawable/ic_edit_location"
+                    android:padding="10dp"
+                    app:srcCompat="@drawable/ic_euro_amt"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -365,45 +368,49 @@
 
                 <ImageView
                     android:id="@+id/ivChat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
-                    android:background="@drawable/chat_ico"
-                    android:padding="5dp"
+                    android:background="@drawable/circle_dark_greeen_img"
+                    android:padding="14dp"
+                    app:srcCompat="@drawable/ic_chat"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:id="@+id/ivCall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_toEndOf="@+id/ivChat"
-                    android:background="@drawable/phone_ico"
-                    android:padding="5dp"
+                    android:background="@drawable/circle_dark_greeen_img"
+                    android:padding="14dp"
+                    app:srcCompat="@drawable/ic_phone_call"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:id="@+id/ivAcceptNLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_toStartOf="@+id/ivCancel"
-                    android:background="@drawable/accept_ico"
-                    android:padding="5dp"
+                    android:background="@drawable/circle_green_img"
+                    android:padding="13dp"
                     android:visibility="gone"
+                    app:srcCompat="@drawable/ic_right"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:id="@+id/ivCancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="5dp"
-                    android:background="@drawable/close_ico"
-                    android:padding="5dp"
+                    android:background="@drawable/circle_red_img"
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_cancel_white"
                     tools:ignore="ContentDescription" />
             </RelativeLayout>
 

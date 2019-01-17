@@ -1,15 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white">
 
+    <LinearLayout
+        android:id="@+id/llArtistInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivArtistProfilePic"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/gradient_circle_img_with_stroke"
+            android:src="@drawable/defoult_user_img"
+            app:civ_border_color="@color/transparent"
+            app:civ_border_width="1.5dp" />
+
+        <TextView
+            android:id="@+id/tvArtistName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/text_color"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/viewArtist"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/llArtistInfo"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray_line" />
+
+    <LinearLayout
+        android:id="@+id/llStaffInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewArtist"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivStaffProfilePic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/gradient_circle_img_with_stroke"
+            android:src="@drawable/defoult_user_img"
+            app:civ_border_color="@color/transparent"
+            app:civ_border_width="1.5dp" />
+
+        <TextView
+            android:id="@+id/tvStaffName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/text_color"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/viewStaff"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/llStaffInfo"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray_line" />
+
     <RelativeLayout
         android:id="@+id/rlService"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/viewStaff"
         android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:gravity="center_vertical">
 
         <TextView
@@ -65,7 +149,7 @@
 
         android:layout_marginTop="5dp"
         android:fontFamily="@font/roboto_medium"
-        android:text="@string/service_price"
+        android:text="@string/price"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
