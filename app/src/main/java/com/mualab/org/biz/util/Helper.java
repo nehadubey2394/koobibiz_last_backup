@@ -6,6 +6,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.mualab.org.biz.application.Mualab;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
  */
 
 public class Helper {
+
     public String error_Messages(VolleyError error) {
         NetworkResponse networkResponse = error.networkResponse;
         String errorMessage = "Something went wrong.";
@@ -43,8 +45,7 @@ public class Helper {
                 } else if (networkResponse.statusCode == 404) {
                     errorMessage = "Resource not found";
                     return errorMessage;
-                }
-                else if (networkResponse.statusCode == 401) {
+                } else if (networkResponse.statusCode == 401) {
                     //errorMessage = message + " Check your inputs";
                     errorMessage =  "Your Session is expired,please login again.";
                     return errorMessage;
@@ -56,12 +57,10 @@ public class Helper {
                 } else if (networkResponse.statusCode == 500) {
                     errorMessage = message + " Something is getting wrong";
                     return errorMessage;
-                }
-                else if (networkResponse.statusCode == 300) {
+                } else if (networkResponse.statusCode == 300) {
                     errorMessage = message+" Session is expire.";
                     return errorMessage;
-                }
-                else if (message.equals("Invalid Auth Token")){
+                } else if (message.equals("Invalid Auth Token")){
                     errorMessage = "Your Session is expired,please login again.";
                     return errorMessage;
                 }
@@ -74,5 +73,23 @@ public class Helper {
         error.printStackTrace();
         return errorMessage;
 
+    }
+
+    public void parseError(String response) {
+        if (response != null) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                String status = jsonObject.getString("status");
+                String message = "";
+                if (jsonObject.has("message")) message = jsonObject.getString("message");
+
+                if (message.equals("Invalid Auth Token")) {
+                    Mualab.getInstance().getSessionManager().logout();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

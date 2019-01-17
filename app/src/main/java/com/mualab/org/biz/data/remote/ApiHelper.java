@@ -13,4 +13,6 @@ import java.util.HashMap;
 public interface ApiHelper {
 
     ANRequest doGetArtistBookingHistory(HashMap<String, String> header, HashMap<String, String> params);
+
+    ANRequest doGetBookingDetail(HashMap<String, String> header, HashMap<String, String> params);
 }

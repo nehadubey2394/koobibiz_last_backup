@@ -74,7 +74,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvPriceTxt"
-
         android:layout_marginBottom="5dp"
         android:fontFamily="@font/roboto_regular"
         android:text="$100"
@@ -107,7 +106,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvDateTxt"
-
         android:layout_marginBottom="5dp"
         android:fontFamily="@font/roboto_regular"
         android:text="28/11/2018 3:30pm - 4:00pm"

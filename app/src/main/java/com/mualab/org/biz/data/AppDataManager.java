@@ -64,4 +64,9 @@ public final class AppDataManager implements DataManager {
     public ANRequest doGetArtistBookingHistory(HashMap<String, String> header, HashMap<String, String> params) {
         return mApiHelper.doGetArtistBookingHistory(header, params);
     }
+
+    @Override
+    public ANRequest doGetBookingDetail(HashMap<String, String> header, HashMap<String, String> params) {
+        return mApiHelper.doGetBookingDetail(header, params);
+    }
 }

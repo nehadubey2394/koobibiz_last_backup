@@ -17,5 +17,5 @@ public class Staff implements Serializable{
 "job":"Beginner"
 },*/
     public String _id,staffId,staffName,staffImage,job,mediaAccess,holiday,status;
-    public  boolean isSelected;
+    public boolean isSelected;
 }
