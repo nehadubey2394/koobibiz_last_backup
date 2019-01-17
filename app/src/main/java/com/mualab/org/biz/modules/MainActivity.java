@@ -54,6 +54,7 @@ import com.mualab.org.biz.modules.new_booking.activity.PendingBookingActivity;
 import com.mualab.org.biz.modules.new_booking.adapter.FilterMenuAdapter;
 import com.mualab.org.biz.modules.new_booking.fragment.BookingsFragment;
 import com.mualab.org.biz.modules.new_booking.model.StaffFilter;
+import com.mualab.org.biz.modules.new_my_profile.MyProfileActivity;
 import com.mualab.org.biz.modules.profile_setup.activity.NewBusinessSetUpActivity;
 import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
@@ -64,6 +65,7 @@ import com.mualab.org.biz.util.Helper;
 import com.mualab.org.biz.util.LocationDetector;
 import com.mualab.org.biz.util.PermissionUtils;
 import com.mualab.org.biz.util.network.NetworkChangeReceiver;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +80,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
     private long mLastClickTime = 0;
     private ImageButton ibtnBookings,ibtnChart,ibtnAdd,ibtnNotification,ibtnUser;
     private ImageView ivHeaderBack, imgNotif, imgRight;
-    private ImageView ivDropDown;
+    private ImageView ivDropDown,ivUserProfile;
     private TextView tvHeaderTitle;
     private int clickedId = 0;
     private CardView topLayout1;
@@ -150,11 +152,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
         ivDropDown = findViewById(R.id.ivDropDown);
         imgNotif = findViewById(R.id.imgNotif);
         imgRight = findViewById(R.id.imgRight);
+
+        ivUserProfile = findViewById(R.id.ivUserProfile);
         // tv_msg = findViewById(R.id.tv_msg);
         ibtnBookings.setImageResource(R.drawable.active_calender_ico);
         spBizName = findViewById(R.id.spBizName);
 
-        setOnClickListener(ibtnBookings, ibtnChart, ibtnAdd, ibtnNotification, ibtnUser, ivHeaderBack, imgNotif, imgRight);
+        if (!user.profileImage.isEmpty()) {
+            Picasso.with(MainActivity.this).load(user.profileImage).placeholder(R.drawable.defoult_user_img).
+                    fit().into(ivUserProfile);
+        }
+
+        setOnClickListener(ibtnBookings, ibtnChart, ibtnAdd, ibtnNotification, ibtnUser, ivHeaderBack, imgNotif, imgRight,ivUserProfile);
 
         int index = Mualab.getInstance().getBusinessProfileSession().getStepIndex();
 
@@ -409,6 +418,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
                     clickedId = 5;
                     setInactiveTab();
                     ibtnUser.setImageResource(R.drawable.active_user_ico);
+                    ivUserProfile.setVisibility(View.VISIBLE);
                     replaceFragment(new BaseBusinessSetupFragment(), false);
                 }
                 break;
@@ -439,11 +449,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,O
 
                 popupFilter(p);
                 break;
+
+            case R.id.ivUserProfile:
+                startActivity(new Intent(this, MyProfileActivity.class));
+                break;
         }
     }
 
     private void setInactiveTab(){
         spBizName.setVisibility(View.GONE);
+        ivUserProfile.setVisibility(View.GONE);
         Mualab.getInstance().cancelAllPendingRequests();
 
         if (clickedId == 1) {
