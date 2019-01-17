@@ -17,7 +17,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -76,7 +75,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     private DrawerLayout drawer;
     private List<NavigationItem> navigationItems;
     private User user;
-    private ProgressBar progress_bar;
 
 
     @Override
@@ -98,8 +96,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         tv_dot1 =  findViewById(R.id.tv_dot1);
         tv_dot2 =  findViewById(R.id.tv_dot2);
         rvFeed =  findViewById(R.id.rvFeed);
-
-        progress_bar =  findViewById(R.id.progress_bar);
 
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);

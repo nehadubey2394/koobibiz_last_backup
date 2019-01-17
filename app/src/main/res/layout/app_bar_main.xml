@@ -200,15 +200,6 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="5dp" />
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:progressTintMode="multiply"
-                        android:progressTint="@color/colorPrimary"
-                        android:layout_gravity="center"
-                        tools:ignore="UnusedAttribute" />
-
                     <include
                         layout="@layout/profile_bottom_layout2"
                         android:layout_width="match_parent"
@@ -358,7 +349,6 @@
             android:layout_gravity="top|center"
             android:layout_marginTop="30dp"
             android:orientation="vertical"
-            android:visibility="gone"
             android:gravity="center"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

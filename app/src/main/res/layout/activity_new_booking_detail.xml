@@ -18,8 +18,10 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/rlMain"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tvCustInfo"
@@ -61,7 +63,6 @@
                     android:fontFamily="@font/roboto_medium"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="Hemant Sharma"
                     android:textColor="@color/text_color"
                     android:textSize="14sp" />
 
@@ -110,7 +111,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="@string/pending"
                 android:textColor="@color/colorOrange"
                 android:textSize="14sp" />
 
@@ -165,7 +165,6 @@
                     android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/imgLoc"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="akdhasdkj ahdjka shdk"
                     android:textColor="@color/text_color"
                     android:textSize="16sp" />
 
@@ -218,7 +217,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/imgVoucher"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="@string/in_call"
+                    android:text="@string/voucher_code"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -230,8 +229,18 @@
                     android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/imgVoucher"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="akdhasdkj ahdjka shdk"
                     android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tvVoucherAmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvVoucherTxt"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/tvVoucherCode"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/primary_green"
                     android:textSize="15sp" />
 
                 <View
@@ -272,7 +281,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/imgPay"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="@string/in_call"
+                    android:text="@string/payment_method"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -284,7 +293,6 @@
                     android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/imgPay"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="akdhasdkj ahdjka shdk"
                     android:textColor="@color/text_color"
                     android:textSize="15sp" />
 
@@ -326,7 +334,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/imgAmt"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="@string/in_call"
+                    android:text="@string/total_amount"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -338,7 +346,6 @@
                     android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/imgAmt"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="akdhasdkj ahdjka shdk"
                     android:textColor="@color/text_color"
                     android:textSize="15sp" />
 
@@ -378,18 +385,19 @@
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:id="@+id/ivLocation"
+                    android:id="@+id/ivAcceptNLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
-                    android:layout_toStartOf="@+id/ivCancle"
-                    android:background="@drawable/map_ico"
+                    android:layout_toStartOf="@+id/ivCancel"
+                    android:background="@drawable/accept_ico"
                     android:padding="5dp"
+                    android:visibility="gone"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:id="@+id/ivCancle"
+                    android:id="@+id/ivCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

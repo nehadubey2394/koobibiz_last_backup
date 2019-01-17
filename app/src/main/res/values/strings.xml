@@ -295,6 +295,10 @@
     <string name="incall">Incall</string>
     <string name="outcall">Outcall</string>
 
+    <string name="edit_profile">Edit Profile</string>
+    <string name="payment_history">Payment History</string>
+    <string name="rate_this_app">Rate this app</string>
+
     <string name="incall_p">Incall Price</string>
     <string name="outcall_p">Outcall Price</string>
 
@@ -404,5 +408,11 @@
     <string name="service_price">Service price</string>
     <string name="enter_business_email">Enter Business Email</string>
     <string name="enter_business_address">Enter Business Address</string>
+    <string name="onlinePayment">Online Payment</string>
+    <string name="offlinePayment">Offline Payment</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="view_more">...view more</string>
+    <string name="about_koobi">About Koobi</string>
 
 </resources>

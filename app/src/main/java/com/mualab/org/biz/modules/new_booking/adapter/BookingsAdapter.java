@@ -10,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.helper.Constants;
 import com.mualab.org.biz.modules.add_staff.adapter.LoadingViewHolder;
 import com.mualab.org.biz.modules.base.ItemClickListener;
 import com.mualab.org.biz.modules.new_booking.model.BookingHistory;
+import com.mualab.org.biz.util.CalanderUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -28,12 +30,11 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private final int VIEWTYPE_ITEM = 1;
     private final int VIEWTYPE_LOADER = 2;
+    public Boolean isAllBooking = false;
     private List<BookingHistory.DataBean> list;
     private boolean showLoader;
     private ItemClickListener clickListener;
-
-    private int lastPos = -1;
-    private boolean isClick = false;
+    private Boolean isClick = false;
 
     public BookingsAdapter(List<BookingHistory.DataBean> list, ItemClickListener clickListener) {
         this.list = list;
@@ -58,13 +59,63 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Picasso.with(holder.ivProfilePic.getContext()).load(mainBean.getUserDetail().get(0).getProfileImage()).placeholder(R.drawable.defoult_user_img).into(holder.ivProfilePic);
 
         holder.tvUserName.setText(mainBean.getUserDetail().get(0).getUserName());
-        holder.tvName.setText(mainBean.getBookingInfo().get(0).getStaffName());
-        holder.tvService.setText(mainBean.getBookingInfo().get(0).getArtistServiceName());
-        String serviceDate = "" + mainBean.getBookingInfo().get(0).getBookingDate() + " " +
-                mainBean.getBookingInfo().get(0).getStartTime() + " " + mainBean.getBookingInfo().get(0).getEndTime();
-        holder.tvServiceDate.setText(serviceDate);
         holder.tvBDate.setText(mainBean.getCreationDate());
         holder.tvBTime.setText(mainBean.getCreationTime());
+
+        if (isAllBooking)
+            holder.tvStatus.setText(getBookingStatus(holder.tvStatus, mainBean.getBookStatus()));
+        else holder.tvStatus.setText("");
+
+        try {
+            StringBuilder nameBuilder = new StringBuilder("");
+            int count = 1;
+            for (BookingHistory.DataBean.BookingInfoBean tempBean : mainBean.getBookingInfo()) {
+                nameBuilder.append(tempBean.getStaffName()).append(",");
+                if (count == 2) break;
+                count++;
+            }
+            String staffName = nameBuilder.toString().substring(0, nameBuilder.toString().length() - 1);
+
+            holder.tvViewMore.setVisibility(staffName.length() > 13 ? View.VISIBLE : View.GONE);
+
+            holder.tvName.setText(staffName);
+
+            //28/11/2018 3:30pm - 4:00pm
+            String bDate = mainBean.getBookingInfo().get(0).getBookingDate();
+            String date = bDate.contains("-") ? CalanderUtils.formatDate(bDate, Constants.SERVER_TIMESTAMP_FORMAT, Constants.TIMESTAMP_FORMAT) : bDate;
+            holder.tvService.setText(mainBean.getBookingInfo().get(0).getArtistServiceName());
+            String serviceDate = date + " " +
+                    mainBean.getBookingInfo().get(0).getStartTime().toLowerCase() + " " + mainBean.getBookingInfo().get(0).getEndTime().toLowerCase();
+            holder.tvServiceDate.setText(serviceDate);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private String getBookingStatus(TextView tvStatus, String bookStatus) {
+        //0 - pending, 1- accept, 2 - reject or cancel,3 - complete
+        String status = "";
+        switch (bookStatus) {
+            case "0":
+                status = "Pending";
+                tvStatus.setTextColor(tvStatus.getContext().getResources().getColor(R.color.darkorange));
+                break;
+
+            case "1":
+                status = "Confirmed";
+                tvStatus.setTextColor(tvStatus.getContext().getResources().getColor(R.color.text_color_green));
+                break;
+
+            case "2":
+                status = "Cancelled";
+                tvStatus.setTextColor(tvStatus.getContext().getResources().getColor(R.color.primary_red));
+                break;
+
+            case "3":
+                status = "Completed";
+                tvStatus.setTextColor(tvStatus.getContext().getResources().getColor(R.color.text_color_green));
+                break;
+        }
+        return status;
     }
 
     public void showLoading(boolean status) {
@@ -105,7 +156,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView ivProfilePic;
-        private TextView tvUserName, tvName, tvService, tvServiceDate, tvBDate, tvBTime;
+        private TextView tvUserName, tvName, tvService, tvServiceDate, tvBDate, tvBTime, tvStatus, tvViewMore;
 
         ViewHolder(@NonNull View view) {
             super(view);
@@ -117,6 +168,8 @@ public class BookingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvServiceDate = view.findViewById(R.id.tvServiceDate);
             tvBDate = view.findViewById(R.id.tvBDate);
             tvBTime = view.findViewById(R.id.tvBTime);
+            tvStatus = view.findViewById(R.id.tvStatus);
+            tvViewMore = view.findViewById(R.id.tvViewMore);
             view.setOnClickListener(this);
         }
 

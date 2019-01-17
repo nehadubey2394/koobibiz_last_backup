@@ -414,6 +414,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarBlack"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <activity android:name=".modules.new_my_profile.MyProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarBlack"
+            android:windowSoftInputMode="adjustPan|stateHidden" ></activity>
     </application>
 
 </manifest>

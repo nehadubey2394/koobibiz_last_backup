@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:orientation="horizontal"
         android:padding="2dp">
@@ -42,7 +42,7 @@
                 android:maxLines="2"
                 android:text="Jamie Bloggs"
                 android:textColor="@color/text_color"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvUserName"
@@ -53,8 +53,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="Henry"
                 android:textColor="@color/grey"
-                android:textSize="11sp"
-                tools:ignore="SmallSp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tvService"
@@ -65,8 +64,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="Hair brown color"
                 android:textColor="@color/grey"
-                android:textSize="11sp"
-                tools:ignore="SmallSp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tvServiceDate"
@@ -77,8 +75,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="28/11/2018 3:30pm - 4:00pm"
                 android:textColor="@color/grey"
-                android:textSize="11sp"
-                tools:ignore="SmallSp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -93,7 +90,7 @@
             android:padding="2dp">
 
             <TextView
-                android:id="@+id/tvDate"
+                android:id="@+id/tvBDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -106,7 +103,7 @@
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/tvTime"
+                android:id="@+id/tvBTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -116,7 +113,7 @@
                 android:maxLines="2"
                 android:text="10:00"
                 android:textColor="@color/grey"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -126,8 +123,7 @@
         android:id="@+id/rlBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/view"
-        android:layout_alignParentEnd="true">
+        android:layout_gravity="end">
 
         <Button
             android:id="@+id/btnAccept"
@@ -173,14 +169,13 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="5dp"
         android:background="@color/gray_line" />
 
-</RelativeLayout>
+</LinearLayout>
 
 
 
