@@ -296,7 +296,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/booking_ico"
+                        android:background="@drawable/ic_booking_ico"
                         android:padding="2dp" />
 
                 </LinearLayout>
