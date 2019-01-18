@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import com.mualab.org.biz.dialogs.Progress;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.listner.RecyclerViewScrollListener;
 import com.mualab.org.biz.model.User;
+import com.mualab.org.biz.modules.business_setup.add_edit_service.MyServicesActivity;
+import com.mualab.org.biz.modules.business_setup.certificate.AllCertificatesActivity;
 import com.mualab.org.biz.modules.my_profile.activity.CommentsActivity;
 import com.mualab.org.biz.modules.my_profile.activity.FollowersActivity;
 import com.mualab.org.biz.modules.my_profile.adapter.feeds.FeedAdapter;
@@ -39,12 +42,14 @@ import com.mualab.org.biz.modules.my_profile.model.Feeds;
 import com.mualab.org.biz.modules.my_profile.model.UserProfileData;
 import com.mualab.org.biz.modules.new_my_profile.adapter.NavigationMenuAdapter;
 import com.mualab.org.biz.modules.new_my_profile.model.NavigationItem;
+import com.mualab.org.biz.session.PreRegistrationSession;
 import com.mualab.org.biz.session.Session;
 import com.mualab.org.biz.task.HttpResponceListner;
 import com.mualab.org.biz.task.HttpTask;
 import com.mualab.org.biz.util.ConnectionDetector;
 import com.mualab.org.biz.util.Constant;
 import com.mualab.org.biz.util.Helper;
+import com.mualab.org.biz.util.WrapContentLinearLayoutManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -69,12 +74,13 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     private int CURRENT_FEED_STATE = 0,lastFeedTypeId;
     private String feedType = "";
     private FeedAdapter feedAdapter;
+    private ProgressBar progressBar;
     private List<Feeds> feeds;
     private boolean isPulltoRefrash = false;
     private  long mLastClickTime = 0;
     private DrawerLayout drawer;
     private List<NavigationItem> navigationItems;
-    private User user;
+    private PreRegistrationSession pSession;
 
 
     @Override
@@ -85,9 +91,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-
     private void initView(){
-        user = Mualab.getInstance().getSessionManager().getUser();
+        pSession = Mualab.getInstance().getBusinessProfileSession();
         feeds = new ArrayList<>();
         navigationItems = new ArrayList<>();
         tvImages = findViewById(R.id.tv_image);
@@ -96,6 +101,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         tv_dot1 =  findViewById(R.id.tv_dot1);
         tv_dot2 =  findViewById(R.id.tv_dot2);
         rvFeed =  findViewById(R.id.rvFeed);
+        progressBar =  findViewById(R.id.progressBar);
 
         ImageView ivHeaderBack = findViewById(R.id.ivHeaderBack);
         TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
@@ -172,7 +178,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
         // rvFeed.setNestedScrollingEnabled(false);
 
-       /* WrapContentLinearLayoutManager lm = new WrapContentLinearLayoutManager(MyProfileActivity.this, LinearLayoutManager.VERTICAL, false);
+        WrapContentLinearLayoutManager lm = new WrapContentLinearLayoutManager(MyProfileActivity.this, LinearLayoutManager.VERTICAL, false);
         rvFeed.setItemAnimator(null);
         rvFeed.setLayoutManager(lm);
         rvFeed.setHasFixedSize(true);
@@ -183,7 +189,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(feedAdapter!=null){
                     feedAdapter.showHideLoading(true);
-                    apiForGetAllFeeds(page, 10, false);
+                    // apiForGetAllFeeds(page, 10, false);
                 }
             }
 
@@ -198,7 +204,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
         mRefreshLayout =  findViewById(R.id.mSwipeRefreshLayout);
         mRefreshLayout.setNestedScrollingEnabled(false);
-        final CircleHeaderView header = new CircleHeaderView(MyProfileActivity.this);
+      /*  final CircleHeaderView header = new CircleHeaderView(MyProfileActivity.this);
         mRefreshLayout.addHeader(header);
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -228,8 +234,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            }});
-*/
+            }});*/
         lyImage.setOnClickListener(this);
         lyVideos.setOnClickListener(this);
         lyFeed.setOnClickListener(this);
@@ -274,7 +279,17 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.llServices:
-                //   startActivity(new Intent(MyProfileActivity.this,ArtistServicesActivity.class));
+                if (pSession.getServiceType()!=0 && pSession.getAddress()!=null){
+                    if (pSession.getBusinessProfile().dayForStaffs.size()!=0){
+                        Intent intent = new Intent(MyProfileActivity.this, MyServicesActivity.class);
+                        startActivity(intent);
+                    }else
+                        MyToast.getInstance(MyProfileActivity.this).showDasuAlert("Please add operation hours before adding services");
+
+
+                }else
+                    MyToast.getInstance(MyProfileActivity.this).showDasuAlert("Please update business info before adding services");
+
                 break;
 
             case R.id.llAboutUs:
@@ -282,8 +297,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.llCertificate:
-                //       Intent intent = new Intent(MyProfileActivity.this, CertificateActivity.class);
-                //    startActivityForResult(intent, 10);
+                startActivity(new Intent(MyProfileActivity.this,AllCertificatesActivity.class));
                 break;
 
             case R.id.llFollowing:
@@ -409,7 +423,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
             tvServiceCount.setText(profileData.serviceCount);
             rating.setRating(Float.parseFloat(profileData.ratingCount));
 
-            if (profileData.isCertificateVerify.equals("0")){
+            if (profileData.isCertificateVerify.equals("1")){
                 ivActive.setVisibility(View.VISIBLE);
             }
 
@@ -422,6 +436,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
             }else {
                 iv_Profile.setImageDrawable(mContext.getResources().getDrawable(R.drawable.defoult_user_img));
             }*/
+
             Session session = Mualab.getInstance().getSessionManager();
             User user = session.getUser();
             if (user.userType.equals("user")){
@@ -432,7 +447,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 tv_dot1.setVisibility(View.GONE);
                 tv_dot2.setVisibility(View.GONE);
                 // tv_distance.setVisibility(View.GONE);
-                ivActive.setVisibility(View.GONE);
             }else {
                 iv_profile_back.setVisibility(View.VISIBLE);
                 iv_profile_forward.setVisibility(View.VISIBLE);
@@ -441,7 +455,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 tv_dot1.setVisibility(View.VISIBLE);
                 tv_dot2.setVisibility(View.VISIBLE);
                 // tv_distance.setVisibility(View.VISIBLE);
-                ivActive.setVisibility(View.VISIBLE);
             }
         }
 
@@ -451,7 +464,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         tvVideos.setTextColor(getResources().getColor(R.color.text_color));
         tvImages.setTextColor(getResources().getColor(R.color.text_color));
         tvFeeds.setTextColor(getResources().getColor(R.color.text_color));
-        endlesScrollListener.resetState();
+//        endlesScrollListener.resetState();
         int prevSize = feeds.size();
 
         switch (id) {
@@ -464,7 +477,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                     feedType = "";
                     CURRENT_FEED_STATE = Constant.FEED_STATE;
                     feedAdapter.notifyItemRangeRemoved(0, prevSize);
-                    apiForGetAllFeeds(0, 10, true);
+                    //   apiForGetAllFeeds(0, 10, true);
                 }
                 break;
 
@@ -476,7 +489,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                     feedType = "image";
                     CURRENT_FEED_STATE = Constant.IMAGE_STATE;
                     feedAdapter.notifyItemRangeRemoved(0, prevSize);
-                    apiForGetAllFeeds( 0, 10, true);
+                    // apiForGetAllFeeds( 0, 10, true);
                 }
 
                 break;
@@ -489,7 +502,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                     feedType = "video";
                     CURRENT_FEED_STATE = Constant.VIDEO_STATE;
                     feedAdapter.notifyItemRangeRemoved(0, prevSize);
-                    apiForGetAllFeeds( 0, 10, true);
+                    // apiForGetAllFeeds( 0, 10, true);
                 }
                 break;
         }
@@ -501,7 +514,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     private void apiForGetProfile(){
         Session session = Mualab.getInstance().getSessionManager();
         User user = session.getUser();
-
+        progressBar.setVisibility(View.VISIBLE);
         if (!ConnectionDetector.isConnected()) {
             new NoConnectionDialog(MyProfileActivity.this, new NoConnectionDialog.Listner() {
                 @Override
@@ -524,7 +537,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 try {
                     if(feeds!=null && feeds.size()==0)
                         updateViewType(R.id.ly_feeds);
-
+                    progressBar.setVisibility(View.GONE);
                     JSONObject js = new JSONObject(response);
                     String status = js.getString("status");
                     String message = js.getString("message");
@@ -546,6 +559,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                     updateViewType(R.id.ly_feeds);
                 } catch (Exception e) {
                     Progress.hide(MyProfileActivity.this);
+                    progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
@@ -554,6 +568,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
             public void ErrorListener(VolleyError error) {
                 try{
                     updateViewType(R.id.ly_feeds);
+                    progressBar.setVisibility(View.GONE);
                     Helper helper = new Helper();
                     if (helper.error_Messages(error).contains("Session")){
                         Mualab.getInstance().getSessionManager().logout();

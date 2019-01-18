@@ -189,30 +189,36 @@ public class BusinessInfoActivity extends AppCompatActivity implements View.OnCl
             switch (profileData.serviceType) {
                 case "1":
                     tvBookingType.setText("Incall");
-                    splitTime(tvOutCallBreakTime,profileData.inCallpreprationTime);
+                    splitTime(tvInCallBreakTime,profileData.inCallpreprationTime,"Incall");
                     break;
                 case "2":
                     tvBookingType.setText("Outcall");
-                    splitTime(tvOutCallBreakTime,profileData.outCallpreprationTime);
+                    splitTime(tvOutCallBreakTime,profileData.outCallpreprationTime,"Outcall");
                     break;
                 case "3":
                     tvBookingType.setText("Incall / Outcall");
-                    splitTime(tvOutCallBreakTime,profileData.inCallpreprationTime);
-                    splitTime(tvOutCallBreakTime,profileData.outCallpreprationTime);
+                    splitTime(tvInCallBreakTime,profileData.inCallpreprationTime,"Incall");
+                    splitTime(tvOutCallBreakTime,profileData.outCallpreprationTime,"Outcall");
                     break;
             }
         }
     }
 
-    private void splitTime(TextView textView,String time){
+    private void splitTime(TextView textView,String time,String type){
         textView.setVisibility(View.VISIBLE);
         if (time.contains(":")){
             String[] separated = time.split(":");
-            String hours = separated[0];
-            String min = separated[1];
+            String hours = separated[0]+" hr ";
+            String min = separated[1]+" min";
 
-            textView.setText(hours+" hours"+min+" min");
+            if (hours.equals("00 hr "))
+                textView.setText(type+" - "+min);
+            else if (!hours.equals("00 hr ") && min.equals("00 min"))
+                textView.setText(type+" - "+hours);
+            else
+                textView.setText(type+" - "+hours+min);
 
         }
+
     }
 }

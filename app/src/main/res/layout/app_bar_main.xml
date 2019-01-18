@@ -160,6 +160,7 @@
                                 android:layout_marginTop="1dp"
                                 android:gravity="center"
                                 android:text="NA"
+                                android:fontFamily="@font/roboto_regular"
                                 android:textColor="@color/text_color"
                                 android:textSize="13sp" />
 
@@ -175,6 +176,7 @@
                             android:layout_marginTop="2dp"
                             android:gravity="center"
                             android:text="NA"
+                            android:fontFamily="@font/roboto_regular"
                             android:textColor="@color/text_color"
                             android:textSize="13sp"
                             />
@@ -190,6 +192,15 @@
                             android:tint="@color/text_color" />
 
                     </RelativeLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:progressTintMode="multiply"
+                        android:layout_gravity="center"
+                        android:progressTint="@color/colorPrimary"
+                        tools:ignore="UnusedAttribute" />
 
                     <include
                         layout="@layout/profile_bottom_layout"
@@ -350,6 +361,7 @@
             android:layout_marginTop="30dp"
             android:orientation="vertical"
             android:gravity="center"
+            android:visibility="gone"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <ProgressBar
@@ -376,18 +388,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             android:layout_marginTop="40dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:text="@string/no_data_available"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:textColor="@color/text_color" />
 
-        <FrameLayout
-            android:id="@+id/container1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="?attr/actionBarSize"
-            />
 
     </android.support.design.widget.CoordinatorLayout>
 

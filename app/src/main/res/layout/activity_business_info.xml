@@ -361,7 +361,7 @@
                         android:visibility="gone"
                         android:fontFamily="@font/roboto_regular"
                         android:text="@string/service_break"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/gray" />
 
                     <TextView
                         android:id="@+id/tvOutCallBreakTime"
@@ -372,7 +372,7 @@
                         android:visibility="gone"
                         android:fontFamily="@font/roboto_regular"
                         android:text="@string/service_break"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/gray" />
 
 
                 </LinearLayout>
@@ -384,7 +384,7 @@
                     android:layout_centerVertical="true"
                     android:rotation="180"
                     android:background="@drawable/back_icon"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
 
             </RelativeLayout>

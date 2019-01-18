@@ -12,9 +12,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mualab.org.biz.R;
+import com.mualab.org.biz.application.Mualab;
 import com.mualab.org.biz.helper.MyToast;
 import com.mualab.org.biz.modules.new_my_profile.model.NavigationItem;
-import com.mualab.org.biz.session.Session;
 
 import java.util.List;
 
@@ -86,6 +86,7 @@ public class NavigationMenuAdapter extends RecyclerView.Adapter<NavigationMenuAd
                 case 0:
                     sSelect = item.itemName;
                     MyToast.getInstance(context).showDasuAlert("Under development");
+                    listener.OnClick(getAdapterPosition());
                     break;
 
                 case 1:
@@ -116,19 +117,16 @@ public class NavigationMenuAdapter extends RecyclerView.Adapter<NavigationMenuAd
                 case 6:
                     sSelect = item.itemName;
                     MyToast.getInstance(context).showDasuAlert("Under development");
+                    listener.OnClick(getAdapterPosition());
                     break;
 
                 case 7:
-                    Session session = new Session(context);
-                    sSelect = item.itemName;
-                    listener.OnClick(getAdapterPosition());
-
+                    Mualab.getInstance().getSessionManager().logout();
                     break;
                 default:
             }
 
         }
-
 
     }
 
